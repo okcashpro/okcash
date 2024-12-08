@@ -1,4 +1,4 @@
-import { Coinbase, SmartContract } from "@coinbase/coinbase-sdk";
+import { Coinbase, readContract, SmartContract } from "@coinbase/coinbase-sdk";
 import {
     Action,
     Plugin,
@@ -15,12 +15,15 @@ import { initializeWallet } from "../utils";
 import {
     contractInvocationTemplate,
     tokenContractTemplate,
+    readContractTemplate,
 } from "../templates";
 import {
     ContractInvocationSchema,
     TokenContractSchema,
     isContractInvocationContent,
     isTokenContractContent,
+    ReadContractSchema,
+    isReadContractContent,
 } from "../types";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -641,9 +644,109 @@ Contract invocation has been logged to the CSV file.`,
     similes: ["CALL_CONTRACT", "EXECUTE_CONTRACT", "INTERACT_WITH_CONTRACT"],
 };
 
+export const readContractAction: Action = {
+    name: "READ_CONTRACT",
+    description: "Read data from a deployed smart contract using the Coinbase SDK",
+    validate: async (runtime: IAgentRuntime, _message: Memory) => {
+        elizaLogger.log("Validating runtime for READ_CONTRACT...");
+        return !!(
+            runtime.character.settings.secrets?.COINBASE_API_KEY ||
+            process.env.COINBASE_API_KEY
+        ) && !!(
+            runtime.character.settings.secrets?.COINBASE_PRIVATE_KEY ||
+            process.env.COINBASE_PRIVATE_KEY
+        );
+    },
+    handler: async (
+        runtime: IAgentRuntime,
+        _message: Memory,
+        state: State,
+        _options: any,
+        callback: HandlerCallback
+    ) => {
+        elizaLogger.log("Starting READ_CONTRACT handler...");
+
+        try {
+            Coinbase.configure({
+                apiKeyName: runtime.getSetting("COINBASE_API_KEY") ?? process.env.COINBASE_API_KEY,
+                privateKey: runtime.getSetting("COINBASE_PRIVATE_KEY") ?? process.env.COINBASE_PRIVATE_KEY,
+            });
+
+            const context = composeContext({
+                state,
+                template: readContractTemplate,
+            });
+
+            const readDetails = await generateObjectV2({
+                runtime,
+                context,
+                modelClass: ModelClass.SMALL,
+                schema: ReadContractSchema,
+            });
+
+            if (!isReadContractContent(readDetails.object)) {
+                callback(
+                    {
+                        text: "Invalid contract read details. Please check the inputs.",
+                    },
+                    []
+                );
+                return;
+            }
+
+            const { contractAddress, method, args, network } = readDetails.object;
+            const result = await readContract({
+                networkId: network,
+                contractAddress,
+                method,
+                args,
+            });
+
+            callback(
+                {
+                    text: `Contract read successful:
+- Contract Address: ${contractAddress}
+- Method: ${method}
+- Network: ${network}
+- Result: ${JSON.stringify(result, null, 2)}`,
+                },
+                []
+            );
+        } catch (error) {
+            elizaLogger.error("Error reading contract:", error);
+            callback(
+                {
+                    text: `Error reading contract: ${error instanceof Error ? error.message : 'Unknown error'}`,
+                },
+                []
+            );
+        }
+    },
+    examples: [
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Read the balance of address 0xbcF7C64B880FA89a015970dC104E848d485f99A3 from the ERC20 contract at 0x37f2131ebbc8f97717edc3456879ef56b9f4b97b",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: `Contract read successful:
+- Contract Address: 0x37f2131ebbc8f97717edc3456879ef56b9f4b97b
+- Method: balanceOf
+- Network: eth
+- Result: "1000000"`,
+                },
+            },
+        ],
+    ],
+    similes: ["READ_CONTRACT", "GET_CONTRACT_DATA", "QUERY_CONTRACT"],
+};
+
 export const tokenContractPlugin: Plugin = {
     name: "tokenContract",
-    description:
-        "Enables deployment and invoking of ERC20, ERC721, and ERC1155 token contracts using the Coinbase SDK",
-    actions: [deployTokenContractAction],
+    description: "Enables deployment, invocation, and reading of ERC20, ERC721, and ERC1155 token contracts using the Coinbase SDK",
+    actions: [deployTokenContractAction, invokeContractAction, readContractAction],
 };
