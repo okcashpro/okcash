@@ -1,4 +1,4 @@
-# Eliza (เอไลซ่า) 🤖
+# Eliza (อีไลซ่า) 🤖
 
 <div align="center">
   <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
@@ -24,8 +24,8 @@
 ## 🎯 ตัวอย่างการนำไปใช้
 
 -   🤖 แชทบอท
--   🕵️ AI เอเจนต์
--   📈 Agents ที่ืำงานด้วยตนเอง
+-   🕵️ เอเจนต์อิสระ (Autonomous Agent)
+-   📈 จัดการฝั่งธุรกิจ
 -   🎮 ตัวละครในเกมที่ไม่ใช่ผู้เล่น (NPC)
 -   🧠 การเทรด
 
