@@ -26,7 +26,7 @@ export default function ScoreIcon({ style, iconColor, iconSize, score }) {
             }}
         >
             <Flash size={iconSize} fill={iconColor} />
-            <div>{score || "NULL"}</div>
+            <div>{typeof score === "number" ? score : "NULL"}</div>
         </div>
     );
 }

@@ -98,14 +98,41 @@ const Contributors: React.FC = () => {
     };
 
     useEffect(() => {
-        const currentActivitySummaries = new Map(activitySummaries);
-        contributorsSpec.forEach((spec) => {
-            currentActivitySummaries.set(spec.contributor, {
-                score: spec.score,
-                activitySummary: spec.summary,
-            });
-        });
-        setActivitySummaries(currentActivitySummaries);
+        const fetchActivitySummaries = async () => {
+            try {
+                const response = await fetch(
+                    "https://ai16z.github.io/data/contributors.json",
+                );
+                if (!response.ok) {
+                    throw new Error(
+                        `Error fetching activity summaries: ${response.statusText}`,
+                    );
+                }
+                const specs = await response.json();
+
+                const currentActivitySummaries = new Map<
+                    string,
+                    ActivityDetails
+                >();
+                specs.forEach(
+                    (spec: {
+                        contributor: string;
+                        score: number;
+                        summary: string;
+                    }) => {
+                        currentActivitySummaries.set(spec.contributor, {
+                            score: spec.score,
+                            activitySummary: spec.summary,
+                        });
+                    },
+                );
+                setActivitySummaries(currentActivitySummaries);
+            } catch (err) {
+                console.log("Unknown error while fetching summaries");
+            }
+        };
+
+        fetchActivitySummaries();
         fetchContributors(pageRef.current);
     }, []);
 
