@@ -384,6 +384,22 @@ export const models: Models = {
             [ModelClass.EMBEDDING]: "doubao-embedding",
         },
     },
+    [ModelProviderName.NANOGPT]: {
+        endpoint: "https://nano-gpt.com/api/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            temperature: 0.6,
+        },
+        model: {
+            [ModelClass.SMALL]: "gpt-4o-mini",
+            [ModelClass.MEDIUM]: "gpt-4o",
+            [ModelClass.LARGE]: "gpt-4o",
+        }
+    },
 };
 
 export function getModel(provider: ModelProviderName, type: ModelClass) {
