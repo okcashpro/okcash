@@ -507,7 +507,11 @@ export const readContractAction: Action = {
             elizaLogger.info("Contract read result:", serializedResult);
 
             callback({
-                text: `Contract read successful: ${JSON.stringify(serializedResult, null, 2)}`
+                text: `Contract read successful:
+- Contract Address: ${contractAddress}
+- Method: ${method}
+- Network: ${networkId}
+- Result: ${JSON.stringify(serializedResult, null, 2)}`
             }, []);
 
         } catch (error) {
