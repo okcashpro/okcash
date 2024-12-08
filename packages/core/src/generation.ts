@@ -391,13 +391,13 @@ export async function generateText({
                 if(!baseURL){
                     switch(modelClass){
                         case ModelClass.SMALL:
-                            baseURL = "https://llama3b.gaia.domains/v1";
+                            baseURL = settings.SMALL_GAIANET_SERVER_URL || "https://llama3b.gaia.domains/v1";
                             break;
                         case ModelClass.MEDIUM:
-                            baseURL = "https://llama8b.gaia.domains/v1";
+                            baseURL = settings.MEDIUM_GAIANET_SERVER_URL || "https://llama8b.gaia.domains/v1";
                             break;
                         case ModelClass.LARGE:
-                            baseURL = "https://qwen72b.gaia.domains/v1";
+                            baseURL = settings.LARGE_GAIANET_SERVER_URL || "https://qwen72b.gaia.domains/v1";
                             break;
                     }
                 }

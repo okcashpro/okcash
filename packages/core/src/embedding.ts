@@ -197,7 +197,9 @@ export async function embed(runtime: IAgentRuntime, input: string) {
             endpoint:
                 runtime.character.modelEndpointOverride ||
                 models[ModelProviderName.GAIANET].endpoint ||
-                "https://qwen72b.gaia.domains/v1",
+                settings.SMALL_GAIANET_SERVER_URL ||
+                settings.MEDIUM_GAIANET_SERVER_URL ||
+                settings.LARGE_GAIANET_SERVER_URL,
             apiKey: settings.GAIANET_API_KEY || runtime.token,
             dimensions: config.dimensions,
         });

@@ -343,9 +343,9 @@ export const models: Models = {
         },
         endpoint: settings.GAIANET_SERVER_URL,
         model: {
-            [ModelClass.SMALL]: settings.GAIANET_MODEL || "llama3b",
-            [ModelClass.MEDIUM]: settings.GAIANET_MODEL || "llama",
-            [ModelClass.LARGE]: settings.GAIANET_MODEL || "qwen72b",
+            [ModelClass.SMALL]: settings.GAIANET_MODEL || settings.SMALL_GAIANET_MODEL || "llama3b",
+            [ModelClass.MEDIUM]: settings.GAIANET_MODEL || settings.MEDIUM_GAIANET_MODEL || "llama",
+            [ModelClass.LARGE]: settings.GAIANET_MODEL || settings.LARGE_GAIANET_MODEL || "qwen72b",
             [ModelClass.EMBEDDING]:
                 settings.GAIANET_EMBEDDING_MODEL || "nomic-embed",
         },
