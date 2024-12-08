@@ -289,11 +289,11 @@ export const models: Models = {
         },
         endpoint: "https://llm-gateway.heurist.xyz",
         model: {
-            [ModelClass.SMALL]: "meta-llama/llama-3-70b-instruct",
-            [ModelClass.MEDIUM]: "meta-llama/llama-3-70b-instruct",
-            [ModelClass.LARGE]: "meta-llama/llama-3.1-405b-instruct",
+            [ModelClass.SMALL]: settings.SMALL_HEURIST_LANGUAGE_MODEL || "meta-llama/llama-3-70b-instruct",
+            [ModelClass.MEDIUM]: settings.MEDIUM_HEURIST_LANGUAGE_MODEL || "meta-llama/llama-3-70b-instruct",
+            [ModelClass.LARGE]: settings.LARGE_HEURIST_LANGUAGE_MODEL || "meta-llama/llama-3.1-405b-instruct",
             [ModelClass.EMBEDDING]: "", //Add later,
-            [ModelClass.IMAGE]: "PepeXL",
+            [ModelClass.IMAGE]: settings.HEURIST_IMAGE_MODEL || "PepeXL",
         },
     },
     [ModelProviderName.GALADRIEL]: {
