@@ -326,21 +326,36 @@ Here are the recent user messages for context:
 
 export const readContractTemplate = `
 Extract the following details for reading from a smart contract using the Coinbase SDK:
-- **contractAddress** (string): The address of the contract to read from
+- **contractAddress** (string): The address of the contract to read from (must start with 0x)
 - **method** (string): The view/pure method to call on the contract
-- **network** (string): The blockchain network to use (e.g., base, eth, arb, pol)
-- **args** (object, optional): The arguments to pass to the contract method
+- **networkId** (string): The network ID based on networks configured in Coinbase SDK
+Allowed values are:
+    static networks: {
+        readonly BaseSepolia: "base-sepolia";
+        readonly BaseMainnet: "base-mainnet";
+        readonly EthereumHolesky: "ethereum-holesky";
+        readonly EthereumMainnet: "ethereum-mainnet";
+        readonly PolygonMainnet: "polygon-mainnet";
+        readonly SolanaDevnet: "solana-devnet";
+        readonly SolanaMainnet: "solana-mainnet";
+        readonly ArbitrumMainnet: "arbitrum-mainnet";
+    };
+- **args** (object): The arguments to pass to the contract method
+- **abi** (array, optional): The contract ABI if needed for complex interactions
 
 Provide the details in the following JSON format:
 
 \`\`\`json
 {
-    "contractAddress": "<contract_address>",
+    "contractAddress": "<0x-prefixed-address>",
     "method": "<method_name>",
-    "network": "<network>",
+    "networkId": "<network_id>",
     "args": {
         "<arg_name>": "<arg_value>"
-    }
+    },
+    "abi": [
+        // Optional ABI array
+    ]
 }
 \`\`\`
 
@@ -350,7 +365,7 @@ Example for reading the balance of an ERC20 token:
 {
     "contractAddress": "0x37f2131ebbc8f97717edc3456879ef56b9f4b97b",
     "method": "balanceOf",
-    "network": "eth",
+    "networkId": "eth-mainnet",
     "args": {
         "account": "0xbcF7C64B880FA89a015970dC104E848d485f99A3"
     }

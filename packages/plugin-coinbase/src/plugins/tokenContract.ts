@@ -29,12 +29,29 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createArrayCsvWriter } from "csv-writer";
 import fs from "fs";
+import { ABI } from "../constants";
 
 // Dynamically resolve the file path to the src/plugins directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const baseDir = path.resolve(__dirname, "../../plugin-coinbase/src/plugins");
 const contractsCsvFilePath = path.join(baseDir, "contracts.csv");
+
+// Add this helper at the top level
+const serializeBigInt = (value: any): any => {
+    if (typeof value === 'bigint') {
+        return value.toString();
+    }
+    if (Array.isArray(value)) {
+        return value.map(serializeBigInt);
+    }
+    if (typeof value === 'object' && value !== null) {
+        return Object.fromEntries(
+            Object.entries(value).map(([k, v]) => [k, serializeBigInt(v)])
+        );
+    }
+    return value;
+};
 
 export const deployTokenContractAction: Action = {
     name: "DEPLOY_TOKEN_CONTRACT",
@@ -332,228 +349,7 @@ export const invokeContractAction: Action = {
             const invocationOptions = {
                 contractAddress,
                 method,
-                abi: [
-                    {
-                        constant: true,
-                        inputs: [],
-                        name: "name",
-                        outputs: [
-                            {
-                                name: "",
-                                type: "string",
-                            },
-                        ],
-                        payable: false,
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                    {
-                        constant: false,
-                        inputs: [
-                            {
-                                name: "_spender",
-                                type: "address",
-                            },
-                            {
-                                name: "_value",
-                                type: "uint256",
-                            },
-                        ],
-                        name: "approve",
-                        outputs: [
-                            {
-                                name: "",
-                                type: "bool",
-                            },
-                        ],
-                        payable: false,
-                        stateMutability: "nonpayable",
-                        type: "function",
-                    },
-                    {
-                        constant: true,
-                        inputs: [],
-                        name: "totalSupply",
-                        outputs: [
-                            {
-                                name: "",
-                                type: "uint256",
-                            },
-                        ],
-                        payable: false,
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                    {
-                        constant: false,
-                        inputs: [
-                            {
-                                name: "_from",
-                                type: "address",
-                            },
-                            {
-                                name: "_to",
-                                type: "address",
-                            },
-                            {
-                                name: "_value",
-                                type: "uint256",
-                            },
-                        ],
-                        name: "transferFrom",
-                        outputs: [
-                            {
-                                name: "",
-                                type: "bool",
-                            },
-                        ],
-                        payable: false,
-                        stateMutability: "nonpayable",
-                        type: "function",
-                    },
-                    {
-                        constant: true,
-                        inputs: [],
-                        name: "decimals",
-                        outputs: [
-                            {
-                                name: "",
-                                type: "uint8",
-                            },
-                        ],
-                        payable: false,
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                    {
-                        constant: true,
-                        inputs: [
-                            {
-                                name: "_owner",
-                                type: "address",
-                            },
-                        ],
-                        name: "balanceOf",
-                        outputs: [
-                            {
-                                name: "balance",
-                                type: "uint256",
-                            },
-                        ],
-                        payable: false,
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                    {
-                        constant: true,
-                        inputs: [],
-                        name: "symbol",
-                        outputs: [
-                            {
-                                name: "",
-                                type: "string",
-                            },
-                        ],
-                        payable: false,
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                    {
-                        constant: false,
-                        inputs: [
-                            {
-                                name: "_to",
-                                type: "address",
-                            },
-                            {
-                                name: "_value",
-                                type: "uint256",
-                            },
-                        ],
-                        name: "transfer",
-                        outputs: [
-                            {
-                                name: "",
-                                type: "bool",
-                            },
-                        ],
-                        payable: false,
-                        stateMutability: "nonpayable",
-                        type: "function",
-                    },
-                    {
-                        constant: true,
-                        inputs: [
-                            {
-                                name: "_owner",
-                                type: "address",
-                            },
-                            {
-                                name: "_spender",
-                                type: "address",
-                            },
-                        ],
-                        name: "allowance",
-                        outputs: [
-                            {
-                                name: "",
-                                type: "uint256",
-                            },
-                        ],
-                        payable: false,
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                    {
-                        payable: true,
-                        stateMutability: "payable",
-                        type: "fallback",
-                    },
-                    {
-                        anonymous: false,
-                        inputs: [
-                            {
-                                indexed: true,
-                                name: "owner",
-                                type: "address",
-                            },
-                            {
-                                indexed: true,
-                                name: "spender",
-                                type: "address",
-                            },
-                            {
-                                indexed: false,
-                                name: "value",
-                                type: "uint256",
-                            },
-                        ],
-                        name: "Approval",
-                        type: "event",
-                    },
-                    {
-                        anonymous: false,
-                        inputs: [
-                            {
-                                indexed: true,
-                                name: "from",
-                                type: "address",
-                            },
-                            {
-                                indexed: true,
-                                name: "to",
-                                type: "address",
-                            },
-                            {
-                                indexed: false,
-                                name: "value",
-                                type: "uint256",
-                            },
-                        ],
-                        name: "Transfer",
-                        type: "event",
-                    },
-                ],
+                abi: ABI,
                 args,
                 ...(amount && assetId ? { amount, assetId } : {}),
             };
@@ -694,32 +490,59 @@ export const readContractAction: Action = {
                 return;
             }
 
-            const { contractAddress, method, args, network } = readDetails.object;
+            const { contractAddress, method, args, networkId, abi } = readDetails.object;
+            elizaLogger.log("Reading contract:", { contractAddress, method, args, networkId, abi });
+            // const result = await readContract({
+            //     networkId,
+            //     contractAddress,
+            //     method,
+            //     args,
+            //     abi: ABI as any,
+            // });
             const result = await readContract({
-                networkId: network,
-                contractAddress,
-                method,
-                args,
+                networkId: Coinbase.networks.EthereumMainnet,  // Network ID in the format "<chain>-<network>"
+                contractAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",  // USDC contract address
+                method: "balanceOf",  // Method name from the contract
+                args: {
+                    account: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"  // Example address (Vitalik's)
+                },
+                abi: [
+                    {
+                        "inputs": [
+                            {
+                                "name": "account",
+                                "type": "address",
+                                "internalType": "address"
+                            }
+                        ],
+                        "name": "balanceOf",
+                        "outputs": [
+                            {
+                                "name": "",
+                                "type": "uint256",
+                                "internalType": "uint256"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    }
+                ]
             });
 
-            callback(
-                {
-                    text: `Contract read successful:
-- Contract Address: ${contractAddress}
-- Method: ${method}
-- Network: ${network}
-- Result: ${JSON.stringify(result, null, 2)}`,
-                },
-                []
-            );
+            // Serialize the result before using it
+            const serializedResult = serializeBigInt(result);
+
+            elizaLogger.info("Contract read result:", serializedResult);
+
+            callback({
+                text: `Contract read successful: ${JSON.stringify(serializedResult, null, 2)}`
+            }, []);
+
         } catch (error) {
             elizaLogger.error("Error reading contract:", error);
-            callback(
-                {
-                    text: `Error reading contract: ${error instanceof Error ? error.message : 'Unknown error'}`,
-                },
-                []
-            );
+            callback({
+                text: `Failed to read contract: ${error instanceof Error ? error.message : "Unknown error"}`
+            }, []);
         }
     },
     examples: [
@@ -727,7 +550,7 @@ export const readContractAction: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Read the balance of address 0xbcF7C64B880FA89a015970dC104E848d485f99A3 from the ERC20 contract at 0x37f2131ebbc8f97717edc3456879ef56b9f4b97b",
+                    text: "Read the balance of address 0xbcF7C64B880FA89a015970dC104E848d485f99A3 from the ERC20 contract at 0x37f2131ebbc8f97717edc3456879ef56b9f4b97b for asset USDC on eth",
                 },
             },
             {
