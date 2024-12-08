@@ -10,7 +10,7 @@ import {
     type Action,
 } from "@ai16z/eliza";
 import { composeContext } from "@ai16z/eliza";
-import { generateObject } from "@ai16z/eliza";
+import { generateObjectDEPRECATED } from "@ai16z/eliza";
 import {
     Account,
     Aptos,
@@ -111,7 +111,7 @@ export default {
         });
 
         // Generate transfer content
-        const content = await generateObject({
+        const content = await generateObjectDEPRECATED({
             runtime,
             context: transferContext,
             modelClass: ModelClass.SMALL,
