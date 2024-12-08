@@ -41,8 +41,10 @@ export class FarcasterInteractionManager {
 
             this.timeout = setTimeout(
                 handleInteractionsLoop,
-                (Math.floor(Math.random() * (5 - 2 + 1)) + 2) * 60 * 1000
-            ); // Random interval between 2-5 minutes
+                Number(
+                    this.runtime.getSetting("FARCASTER_POLL_INTERVAL") || 120
+                ) * 1000 // Default to 2 minutes
+            );
         };
 
         handleInteractionsLoop();
@@ -206,6 +208,14 @@ export class FarcasterInteractionManager {
         response.inReplyTo = memoryId;
 
         if (!response.text) return;
+
+
+        if (this.runtime.getSetting("FARCASTER_DRY_RUN") === "true") {
+            elizaLogger.info(
+                `Dry run: would have responded to cast ${cast.hash} with ${response.text}`
+            );
+            return;
+        }
 
         try {
             elizaLogger.info(`Replying to cast ${cast.hash}.`);
