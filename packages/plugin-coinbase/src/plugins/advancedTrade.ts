@@ -21,12 +21,13 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import { createArrayCsvWriter } from "csv-writer";
 import { OrderSide, OrderConfiguration } from '../../advanced-sdk-ts/src/rest/types/common-types';
+import { CreateOrderResponse } from '../../advanced-sdk-ts/src/rest/types/orders-types';
 
 // File path setup remains the same
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const baseDir = path.resolve(__dirname, "../../plugin-coinbase/src/plugins");
-const tradeCsvFilePath = path.join(baseDir, "trades.csv");
+const tradeCsvFilePath = path.join(baseDir, "advanced_trades.csv");
 
 const tradeProvider: Provider = {
     get: async (runtime: IAgentRuntime, _message: Memory) => {
@@ -57,13 +58,10 @@ const tradeProvider: Provider = {
                 const csvWriter = createArrayCsvWriter({
                     path: tradeCsvFilePath,
                     header: [
-                        "Product ID",
-                        "Side",
-                        "Amount",
-                        "Price",
-                        "Status",
                         "Order ID",
-                        "Transaction URL"
+                        "Success",
+                        "Order Configuration",
+                        "Response",
                     ],
                 });
                 await csvWriter.writeRecords([]);
@@ -99,49 +97,78 @@ const tradeProvider: Provider = {
     },
 };
 
-async function appendTradeToCsv(tradeResult: any) {
+export async function appendTradeToCsv(tradeResult: any) {
     try {
         const csvWriter = createArrayCsvWriter({
             path: tradeCsvFilePath,
             header: [
-                "Product ID",
-                "Side",
-                "Amount",
-                "Price",
-                "Status",
                 "Order ID",
-                "Transaction URL"
+                "Success",
+                "Order Configuration",
+                "Response",
             ],
             append: true,
         });
+        elizaLogger.info("Trade result:", tradeResult);
 
+
+        // Format trade data based on success/failure
         const formattedTrade = [
-            tradeResult.product_id,
-            tradeResult.side,
-            tradeResult.size,
-            tradeResult.price,
-            tradeResult.status,
-            tradeResult.order_id,
-            `https://pro.coinbase.com/trade/${tradeResult.product_id}`
+            tradeResult.success_response?.order_id || tradeResult.failure_response?.order_id || '',
+            tradeResult.success,
+            // JSON.stringify(tradeResult.order_configuration || {}),
+            // JSON.stringify(tradeResult.success_response || tradeResult.failure_response || {})
         ];
 
+        elizaLogger.info("Formatted trade for CSV:", formattedTrade);
         await csvWriter.writeRecords([formattedTrade]);
+        elizaLogger.info("Trade written to CSV successfully");
     } catch (error) {
         elizaLogger.error("Error writing trade to CSV:", error);
+        // Log the actual error for debugging
+        if (error instanceof Error) {
+            elizaLogger.error("Error details:", error.message);
+        }
     }
 }
 
-async function hasEnoughBalance(client: RESTClient, currency: string, amount: number): Promise<boolean> {
+async function hasEnoughBalance(client: RESTClient, currency: string, amount: number, side: string): Promise<boolean> {
     try {
-        const accounts = await client.listAccounts({});
-        const account = accounts.accounts.find(acc => acc.currency === currency);
-        if (!account) return false;
+        const response = await client.listAccounts({});
+        const accounts = response;
+        elizaLogger.info("Accounts:", JSON.parse(accounts));
+        const checkCurrency = side === "BUY" ? "USD" : currency;
+        elizaLogger.info(`Checking balance for ${side} order of ${amount} ${checkCurrency}`);
+
+        // Find account with exact currency match
+        const account = JSON.parse(accounts)?.accounts.find(acc =>
+            acc.currency === "USD" &&
+            ("USD" === "USD" ? acc.type === "ACCOUNT_TYPE_FIAT" : acc.type === "ACCOUNT_TYPE_CRYPTO")
+        );
+
+        if (!account) {
+            elizaLogger.error(`No ${checkCurrency} account found`);
+            return false;
+        }
 
         const available = parseFloat(account.available_balance.value);
-        elizaLogger.info("Available balance:", available);
-        return available >= amount;
+        elizaLogger.info(`Available ${checkCurrency} balance: ${available}`);
+
+        // Add buffer for fees only on USD purchases
+        const requiredAmount = side === "BUY" ? amount * 1.01 : amount;
+        elizaLogger.info(`Required amount (including buffer): ${requiredAmount} ${checkCurrency}`);
+
+        const hasBalance = available >= requiredAmount;
+        elizaLogger.info(`Has sufficient balance: ${hasBalance}`);
+
+        return hasBalance;
     } catch (error) {
-        elizaLogger.error("Balance check failed:", error);
+        elizaLogger.error("Balance check failed with error:", {
+            error: error instanceof Error ? error.message : 'Unknown error',
+            currency,
+            amount,
+            side
+        });
         return false;
     }
 }
@@ -248,17 +275,17 @@ export const executeAdvancedTradeAction: Action = {
         }
 
         // Execute trade
-        let order;
+        let order: CreateOrderResponse;
         try {
-            // if (!(await hasEnoughBalance(client, side === "BUY" ? "USD" : productId.split('-')[0], amount))) {
-            //     callback({
-            //         text: "Insufficient balance to execute this trade"
-            //     }, []);
-            //     return;
-            // }
+            if (!(await hasEnoughBalance(client, productId.split('-')[0], amount, side))) {
+                callback({
+                    text: `Insufficient ${side === "BUY" ? "USD" : productId.split('-')[0]} balance to execute this trade`
+                }, []);
+                return;
+            }
 
             order = await client.createOrder({
-                clientOrderId: "00000001",
+                clientOrderId:  crypto.randomUUID(),
                 productId,
                 side: side === "BUY" ? OrderSide.BUY : OrderSide.SELL,
                 orderConfiguration
@@ -274,13 +301,7 @@ export const executeAdvancedTradeAction: Action = {
         }
             // Log trade to CSV
             try {
-                await appendTradeToCsv({
-                    ...order,
-                    product_id: productId,
-                    side,
-                    size: amount,
-                    price: limitPrice || "MARKET",
-                });
+                // await appendTradeToCsv(order);
                 elizaLogger.info("Trade logged to CSV");
             } catch (csvError) {
                 elizaLogger.warn("Failed to log trade to CSV:", csvError);
@@ -294,7 +315,10 @@ export const executeAdvancedTradeAction: Action = {
 - Side: ${side}
 - Amount: ${amount}
 - ${orderType === "LIMIT" ? `- Limit Price: ${limitPrice}\n` : ""}- Order ID: ${order.order_id}
-- Status: ${order.status}`
+- Status: ${order.success}
+- Order Id:  ${order.order_id}
+- Response: ${JSON.stringify(order.response)}
+- Order Configuration: ${JSON.stringify(order.order_configuration)}`
             }, []);
     },
     examples: [
@@ -312,7 +336,9 @@ export const executeAdvancedTradeAction: Action = {
 - Side: BUY
 - Amount: 1000
 - Order ID: CB-ADV-12345
-- Status: FILLED`
+- Success: true
+- Response: {"success_response":{}}
+- Order Configuration: {"market_market_ioc":{"quote_size":"1000"}}`
                 }
             }
         ],
@@ -331,7 +357,9 @@ export const executeAdvancedTradeAction: Action = {
 - Amount: 0.5
 - Limit Price: 2000
 - Order ID: CB-ADV-67890
-- Status: PENDING`
+- Success: true
+- Response: {"success_response":{}}
+- Order Configuration: {"limit_limit_gtc":{"baseSize":"0.5","limitPrice":"2000","postOnly":false}}`
                 }
             }
         ]
