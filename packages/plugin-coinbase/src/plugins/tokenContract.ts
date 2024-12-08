@@ -492,41 +492,13 @@ export const readContractAction: Action = {
 
             const { contractAddress, method, args, networkId, abi } = readDetails.object;
             elizaLogger.log("Reading contract:", { contractAddress, method, args, networkId, abi });
-            // const result = await readContract({
-            //     networkId,
-            //     contractAddress,
-            //     method,
-            //     args,
-            //     abi: ABI as any,
-            // });
+
             const result = await readContract({
-                networkId: Coinbase.networks.EthereumMainnet,  // Network ID in the format "<chain>-<network>"
-                contractAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",  // USDC contract address
-                method: "balanceOf",  // Method name from the contract
-                args: {
-                    account: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"  // Example address (Vitalik's)
-                },
-                abi: [
-                    {
-                        "inputs": [
-                            {
-                                "name": "account",
-                                "type": "address",
-                                "internalType": "address"
-                            }
-                        ],
-                        "name": "balanceOf",
-                        "outputs": [
-                            {
-                                "name": "",
-                                "type": "uint256",
-                                "internalType": "uint256"
-                            }
-                        ],
-                        "stateMutability": "view",
-                        "type": "function"
-                    }
-                ]
+                networkId,
+                contractAddress,
+                method,
+                args,
+                abi: ABI as any,
             });
 
             // Serialize the result before using it
@@ -550,7 +522,7 @@ export const readContractAction: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Read the balance of address 0xbcF7C64B880FA89a015970dC104E848d485f99A3 from the ERC20 contract at 0x37f2131ebbc8f97717edc3456879ef56b9f4b97b for asset USDC on eth",
+                    text: "Read the balance of address 0xbcF7C64B880FA89a015970dC104E848d485f99A3 from the ERC20 contract at 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 on eth",
                 },
             },
             {
