@@ -15,9 +15,7 @@ import NodeCache from "node-cache";
 import * as path from "path";
 import { toBN } from "../bignumber.ts";
 import { WalletProvider, Item } from "./wallet.ts";
-import { Connection, PublicKey } from "@solana/web3.js";
-import { DeriveKeyProvider } from "@ai16z/plugin-tee";
-import { TEEMode } from "@ai16z/plugin-tee";
+import { Connection } from "@solana/web3.js";
 import { getWalletKey } from "../keypairUtils.ts";
 
 const PROVIDER_CONFIG = {

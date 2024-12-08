@@ -1,7 +1,5 @@
-import bs58 from "bs58";
 import {
     Connection,
-    Keypair,
     PublicKey,
     VersionedTransaction,
 } from "@solana/web3.js";
@@ -24,8 +22,6 @@ import { TokenProvider } from "../providers/token.ts";
 import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { walletProvider, WalletProvider } from "../providers/wallet.ts";
 import { getTokenDecimals } from "./swapUtils.ts";
-import { TEEMode } from "@ai16z/plugin-tee";
-import { DeriveKeyProvider } from "@ai16z/plugin-tee";
 import { getWalletKey } from "../keypairUtils.ts";
 
 async function swapToken(

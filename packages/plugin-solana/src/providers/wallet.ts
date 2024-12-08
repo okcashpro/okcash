@@ -2,7 +2,6 @@ import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
 import { Connection, PublicKey } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import NodeCache from "node-cache";
-import { DeriveKeyProvider, TEEMode } from "@ai16z/plugin-tee";
 import { getWalletKey } from "../keypairUtils";
 
 // Provider configuration

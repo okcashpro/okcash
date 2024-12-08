@@ -6,8 +6,6 @@ import {
 } from "@ai16z/eliza";
 import { Connection, Keypair, PublicKey, Transaction } from "@solana/web3.js";
 import { getQuote } from "./swapUtils.ts";
-import { DeriveKeyProvider } from "@ai16z/plugin-tee";
-import { TEEMode } from "@ai16z/plugin-tee";
 import { getWalletKey } from "../keypairUtils.ts";
 
 async function invokeSwapDao(

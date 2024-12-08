@@ -12,7 +12,6 @@ import { IAgentRuntime } from "@ai16z/eliza";
 import { WalletProvider } from "./wallet.ts";
 import * as amqp from "amqplib";
 import { ProcessedTokenData } from "../types/token.ts";
-import { DeriveKeyProvider, TEEMode } from "@ai16z/plugin-tee";
 import { getWalletKey } from "../keypairUtils.ts";
 
 interface SellDetails {

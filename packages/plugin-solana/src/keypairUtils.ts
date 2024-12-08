@@ -62,6 +62,7 @@ export async function getWalletKey(
                 );
                 return { keypair: Keypair.fromSecretKey(secretKey) };
             } catch (e2) {
+                console.error("Error decoding private key: ", e2);
                 throw new Error("Invalid private key format");
             }
         }

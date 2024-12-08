@@ -5,7 +5,6 @@ import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { CreateTokenMetadata, PriorityFee, PumpFunSDK } from "pumpdotfun-sdk";
 
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
-import bs58 from "bs58";
 import {
     settings,
     ActionExample,
@@ -241,8 +240,6 @@ const promptConfirmation = async (): Promise<boolean> => {
 // Save the base64 data to a file
 import * as fs from "fs";
 import * as path from "path";
-import { DeriveKeyProvider } from "@ai16z/plugin-tee";
-import { TEEMode } from "@ai16z/plugin-tee";
 import { getWalletKey } from "../keypairUtils.ts";
 
 const pumpfunTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.

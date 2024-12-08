@@ -15,9 +15,7 @@ import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { TokenProvider } from "../providers/token.ts";
 import { WalletProvider } from "../providers/wallet.ts";
 import { TrustScoreDatabase } from "@ai16z/plugin-trustdb";
-import { Connection, PublicKey } from "@solana/web3.js";
-import { DeriveKeyProvider } from "@ai16z/plugin-tee";
-import { TEEMode } from "@ai16z/plugin-tee";
+import { Connection } from "@solana/web3.js";
 import { getWalletKey } from "../keypairUtils.ts";
 
 const shouldProcessTemplate =

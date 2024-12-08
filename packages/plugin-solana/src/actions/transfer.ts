@@ -2,12 +2,10 @@ import {
     getAssociatedTokenAddressSync,
     createTransferInstruction,
 } from "@solana/spl-token";
-import bs58 from "bs58";
 import { elizaLogger, settings } from "@ai16z/eliza";
 
 import {
     Connection,
-    Keypair,
     PublicKey,
     TransactionMessage,
     VersionedTransaction,
@@ -25,7 +23,6 @@ import {
 } from "@ai16z/eliza";
 import { composeContext } from "@ai16z/eliza";
 import { generateObject } from "@ai16z/eliza";
-import { DeriveKeyProvider, TEEMode } from "@ai16z/plugin-tee";
 import { getWalletKey } from "../keypairUtils";
 
 export interface TransferContent extends Content {
