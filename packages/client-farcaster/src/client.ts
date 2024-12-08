@@ -1,4 +1,4 @@
-import { IAgentRuntime } from "@ai16z/eliza";
+import { IAgentRuntime, elizaLogger } from "@ai16z/eliza";
 import { NeynarAPIClient, isApiErrorResponse } from "@neynar/nodejs-sdk";
 import { NeynarCastResponse, Cast, Profile, FidRequest, CastId } from "./types";
 
@@ -63,11 +63,11 @@ export class FarcasterClient {
             }
         } catch (err) {
             if (isApiErrorResponse(err)) {
-                console.log(err.response.data);
+                elizaLogger.error('Neynar error: ', err.response.data);
                 throw err.response.data;
             } else {
+                elizaLogger.error('Error: ', err);
                 throw err;
-                console.log(err);
             }
         }
     }
@@ -83,7 +83,6 @@ export class FarcasterClient {
         });
         const cast = {
             hash: response.cast.hash,
-            //parentHash: cast.parent_hash,
             authorFid: response.cast.author.fid,
             text: response.cast.text,
             profile: {
@@ -114,12 +113,10 @@ export class FarcasterClient {
             fid: request.fid,
             limit: request.pageSize,
         });
-        //console.log(response);
         response.casts.map((cast) => {
             this.cache.set(`farcaster/cast/${cast.hash}`, cast);
             timeline.push({
                 hash: cast.hash,
-                //parentHash: cast.parent_hash,
                 authorFid: cast.author.fid,
                 text: cast.text,
                 profile: {
@@ -175,9 +172,9 @@ export class FarcasterClient {
 
         const result = await this.neynar.fetchBulkUsers({ fids: [fid] });
         if (!result.users || result.users.length < 1) {
-            console.log("getUserDataByFid ERROR");
+            elizaLogger.error('Error fetching user by fid');
 
-            throw "getUserDataByFid ERROR";
+            throw "getProfile ERROR";
         }
 
         const neynarUserProfile = result.users[0];
