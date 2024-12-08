@@ -173,9 +173,19 @@ Extract the following details for invoking a smart contract using the Coinbase S
 - **method** (string): The method to invoke on the contract
 - **abi** (array): The ABI of the contract
 - **args** (object, optional): The arguments to pass to the contract method
-- **amount** (number, optional): The amount of the asset to send to a payable contract method
-- **assetId** (string, optional): The ID of the asset to send to a payable contract method
-- **network** (string): The blockchain network to use (e.g., base, eth, arb, pol)
+- **amount** (string, optional): The amount of the asset to send (as string to handle large numbers)
+- **assetId** (string, required): The ID of the asset to send (e.g., 'USDC')
+- **networkId** (string, required): The network ID to use in format "chain-network".
+ static networks: {
+        readonly BaseSepolia: "base-sepolia";
+        readonly BaseMainnet: "base-mainnet";
+        readonly EthereumHolesky: "ethereum-holesky";
+        readonly EthereumMainnet: "ethereum-mainnet";
+        readonly PolygonMainnet: "polygon-mainnet";
+        readonly SolanaDevnet: "solana-devnet";
+        readonly SolanaMainnet: "solana-mainnet";
+        readonly ArbitrumMainnet: "arbitrum-mainnet";
+    };
 
 Provide the details in the following JSON format:
 
@@ -187,17 +197,17 @@ Provide the details in the following JSON format:
     "args": {
         "<arg_name>": "<arg_value>"
     },
-    "amount": <amount>,
+    "amount": "<amount_as_string>",
     "assetId": "<asset_id>",
-    "network": "<network>"
+    "networkId": "<network_id>"
 }
 \`\`\`
 
-Example for invoking a transfer method on an ERC20 token contract:
+Example for invoking a transfer method on the USDC contract:
 
 \`\`\`json
 {
-    "contractAddress": "0x37f2131ebbc8f97717edc3456879ef56b9f4b97b",
+    "contractAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
     "method": "transfer",
     "abi": [
         {
@@ -208,7 +218,7 @@ Example for invoking a transfer method on an ERC20 token contract:
                     "type": "address"
                 },
                 {
-                    "name": "value",
+                    "name": "amount",
                     "type": "uint256"
                 }
             ],
@@ -225,10 +235,11 @@ Example for invoking a transfer method on an ERC20 token contract:
         }
     ],
     "args": {
-        "to": "0xRecipientAddressHere",
-        "value": 1000
+        "to": "0xbcF7C64B880FA89a015970dC104E848d485f99A3",
+        "amount": "1000000" // 1 USDC (6 decimals)
     },
-    "network": "eth"
+    "networkId": "ethereum-mainnet",
+    "assetId": "USDC"
 }
 \`\`\`
 
