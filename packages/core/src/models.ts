@@ -102,8 +102,8 @@ export const models: Models = {
         },
         model: {
             [ModelClass.SMALL]: "llama-3.1-8b-instant",
-            [ModelClass.MEDIUM]: "llama-3.1-70b-versatile",
-            [ModelClass.LARGE]: "llama-3.2-90b-text-preview",
+            [ModelClass.MEDIUM]: "llama-3.3-70b-versatile",
+            [ModelClass.LARGE]: "llama-3.2-90b-vision-preview",
             [ModelClass.EMBEDDING]: "llama-3.1-8b-instant",
         },
     },
