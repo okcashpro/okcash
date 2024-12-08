@@ -146,10 +146,25 @@ export class FarcasterInteractionManager {
             timeline
         );
 
+        const formattedConversation = thread
+            .map(
+                (cast) => `@${cast.profile.username} (${new Date(
+                    cast.timestamp
+                ).toLocaleString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    month: "short",
+                    day: "numeric",
+                })}):
+                ${cast.text}`
+            )
+            .join("\n\n");
+
         const state = await this.runtime.composeState(memory, {
             farcasterUsername: agent.username,
             timeline: formattedTimeline,
             currentPost,
+            formattedConversation
         });
 
         const shouldRespondContext = composeContext({
@@ -179,15 +194,15 @@ export class FarcasterInteractionManager {
             );
         }
 
-        const shouldRespond = await generateShouldRespond({
+        const shouldRespondResponse = await generateShouldRespond({
             runtime: this.runtime,
             context: shouldRespondContext,
             modelClass: ModelClass.SMALL,
         });
 
-        if (!shouldRespond) {
-            elizaLogger.info("Not responding to message");
-            return { text: "", action: "IGNORE" };
+        if (shouldRespondResponse === "IGNORE" || shouldRespondResponse === "STOP") {
+            elizaLogger.info(`Not responding to cast because generated ShouldRespond was ${shouldRespondResponse}`)
+            return;
         }
 
         const context = composeContext({
