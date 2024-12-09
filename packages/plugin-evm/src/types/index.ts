@@ -9,7 +9,33 @@ import type {
     WalletClient,
 } from "viem";
 
-export type SupportedChain = "ethereum" | "base";
+export type SupportedChain =
+    | "ethereum"
+    | "base"
+    | "sepolia"
+    | "bnbSmartChain"
+    | "arbitrumOne"
+    | "avalancheCChain"
+    | "polygon"
+    | "optimism"
+    | "cronos"
+    | "gnosis"
+    | "fantom"
+    | "klaytn"
+    | "celo"
+    | "moonbeam"
+    | "aurora"
+    | "harmony"
+    | "moonriver"
+    | "arbitrumNova"
+    | "mantle"
+    | "linea"
+    | "scroll"
+    | "filecoin"
+    | "taiko"
+    | "zksync"
+    | "canto";
+
 
 // Transaction types
 export interface Transaction {
@@ -85,8 +111,31 @@ export interface BridgeParams {
 // Plugin configuration
 export interface EvmPluginConfig {
     rpcUrl?: {
-        ethereum?: string;
+  ethereum?: string;
         base?: string;
+        sepolia?: string;
+        bnbSmartChain?: string;
+        arbitrumOne?: string;
+        avalancheCChain?: string;
+        polygon?: string;
+        optimism?: string;
+        cronos?: string;
+        gnosis?: string;
+        fantom?: string;
+        klaytn?: string;
+        celo?: string;
+        moonbeam?: string;
+        aurora?: string;
+        harmony?: string;
+        moonriver?: string;
+        arbitrumNova?: string;
+        mantle?: string;
+        linea?: string;
+        scroll?: string;
+        filecoin?: string;
+        taiko?: string;
+        zksync?: string;
+        canto?: string;
     };
     secrets?: {
         EVM_PRIVATE_KEY: string;
