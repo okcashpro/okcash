@@ -15,7 +15,7 @@ import {
     Memory,
     ModelClass,
     State,
-    generateObject,
+    generateObjectDEPRECATED,
     composeContext,
     type Action,
 } from "@okcashpro/okai";
@@ -302,7 +302,7 @@ export default {
             template: pumpfunTemplate,
         });
 
-        const content = await generateObject({
+        const content = await generateObjectDEPRECATED({
             runtime,
             context: pumpContext,
             modelClass: ModelClass.LARGE,

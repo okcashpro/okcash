@@ -2,7 +2,7 @@ import {
     composeContext,
     generateImage,
     generateText,
-    generateObject,
+    generateObjectDEPRECATED,
 } from "@okcashpro/okai";
 import {
     ActionExample,
@@ -148,7 +148,7 @@ export const executeCreateToken: Action = {
             template: createTokenTemplate,
         });
 
-        const response = await generateObject({
+        const response = await generateObjectDEPRECATED({
             runtime,
             context: createTokenContext,
             modelClass: ModelClass.LARGE,

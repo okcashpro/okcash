@@ -9,7 +9,7 @@ import {
     State,
     type Action,
     composeContext,
-    generateObject,
+    generateObjectDEPRECATED,
     Content,
     okaiLogger,
 } from "@okcashpro/okai";
@@ -107,7 +107,7 @@ export default {
         });
 
         // Generate transfer content
-        const content = await generateObject({
+        const content = await generateObjectDEPRECATED({
             runtime,
             context: transferContext,
             modelClass: ModelClass.MEDIUM,

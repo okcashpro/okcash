@@ -506,8 +506,14 @@ export const chargeProvider: Provider = {
             okaiLogger.log("Current Balances:", balances);
             okaiLogger.log("Last Transactions:", transactions);
         }
-        okaiLogger.log("Charges:", charges);
-        return { charges: charges.data, balances, transactions };
+        const formattedCharges = charges.map(charge => ({
+            id: charge.id,
+            name: charge.name,
+            description: charge.description,
+            pricing: charge.pricing,
+        }));
+        okaiLogger.log("Charges:", formattedCharges);
+        return { charges: formattedCharges, balances, transactions };
     },
 };
 

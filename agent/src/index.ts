@@ -34,6 +34,7 @@ import {
     tradePlugin,
     tokenContractPlugin,
     webhookPlugin,
+    advancedTradePlugin,
 } from "@okcashpro/plugin-coinbase";
 import { confluxPlugin } from "@okcashpro/plugin-conflux";
 import { imageGenerationPlugin } from "@okcashpro/plugin-image-generation";
@@ -400,7 +401,7 @@ export function createAgent(
                 : null,
             ...(getSecret(character, "COINBASE_API_KEY") &&
             getSecret(character, "COINBASE_PRIVATE_KEY")
-                ? [coinbaseMassPaymentsPlugin, tradePlugin, tokenContractPlugin]
+                ? [coinbaseMassPaymentsPlugin, tradePlugin, tokenContractPlugin, advancedTradePlugin]
                 : []),
             getSecret(character, "COINBASE_API_KEY") &&
             getSecret(character, "COINBASE_PRIVATE_KEY") &&

@@ -17,7 +17,7 @@ import {
     State,
     type Action,
     composeContext,
-    generateObject,
+    generateObjectDEPRECATED,
     settings,
 } from "@okcashpro/okai";
 import { TokenProvider } from "../providers/token.ts";
@@ -209,7 +209,7 @@ export const executeSwap: Action = {
             template: swapTemplate,
         });
 
-        const response = await generateObject({
+        const response = await generateObjectDEPRECATED({
             runtime,
             context: swapContext,
             modelClass: ModelClass.LARGE,

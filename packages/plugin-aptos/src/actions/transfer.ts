@@ -10,7 +10,7 @@ import {
     type Action,
 } from "@okcashpro/okai";
 import { composeContext } from "@okcashpro/okai";
-import { generateObject } from "@okcashpro/okai";
+import { generateObjectDEPRECATED } from "@okcashpro/okai";
 import {
     Account,
     Aptos,
@@ -111,7 +111,7 @@ export default {
         });
 
         // Generate transfer content
-        const content = await generateObject({
+        const content = await generateObjectDEPRECATED({
             runtime,
             context: transferContext,
             modelClass: ModelClass.SMALL,
