@@ -24,9 +24,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18,
+            decimals: 18
         },
-        blockExplorerUrl: "https://etherscan.io",
+        blockExplorerUrl: "https://etherscan.io"
     },
     base: {
         chainId: 8453,
@@ -36,11 +36,288 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18,
+            decimals: 18
         },
-        blockExplorerUrl: "https://basescan.org",
+        blockExplorerUrl: "https://basescan.org"
     },
+    sepolia: {
+        chainId: 11155111,
+        name: "Sepolia",
+        chain: sepolia,
+        rpcUrl: "https://rpc.sepolia.org",
+        nativeCurrency: {
+            name: "Sepolia Ether",
+            symbol: "ETH",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://sepolia.etherscan.io"
+    },
+    bnbSmartChain: {
+        chainId: 56,
+        name: "BNB Smart Chain",
+        chain: bnbSmartChain,
+        rpcUrl: "https://bsc-dataseed1.binance.org/",
+        nativeCurrency: {
+            name: "Binance Coin",
+            symbol: "BNB",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://bscscan.com"
+    },
+    arbitrumOne: {
+        chainId: 42161,
+        name: "Arbitrum One",
+        chain: arbitrumOne,
+        rpcUrl: "https://arb1.arbitrum.io/rpc",
+        nativeCurrency: {
+            name: "Ether",
+            symbol: "ETH",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://arbiscan.io"
+    },
+    avalancheCChain: {
+        chainId: 43114,
+        name: "Avalanche C-Chain",
+        chain: avalancheCChain,
+        rpcUrl: "https://api.avax.network/ext/bc/C/rpc",
+        nativeCurrency: {
+            name: "Avalanche",
+            symbol: "AVAX",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://snowtrace.io"
+    },
+    polygon: {
+        chainId: 137,
+        name: "Polygon",
+        chain: polygon,
+        rpcUrl: "https://polygon-rpc.com",
+        nativeCurrency: {
+            name: "MATIC",
+            symbol: "MATIC",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://polygonscan.com"
+    },
+    optimism: {
+        chainId: 10,
+        name: "Optimism",
+        chain: optimism,
+        rpcUrl: "https://mainnet.optimism.io",
+        nativeCurrency: {
+            name: "Ether",
+            symbol: "ETH",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://optimistic.etherscan.io"
+    },
+    cronos: {
+        chainId: 25,
+        name: "Cronos",
+        chain: cronos,
+        rpcUrl: "https://evm.cronos.org",
+        nativeCurrency: {
+            name: "Cronos",
+            symbol: "CRO",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://cronoscan.com"
+    },
+    gnosis: {
+        chainId: 100,
+        name: "Gnosis",
+        chain: gnosis,
+        rpcUrl: "https://rpc.gnosischain.com",
+        nativeCurrency: {
+            name: "xDAI",
+            symbol: "XDAI",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://gnosisscan.io"
+    },
+    fantom: {
+        chainId: 250,
+        name: "Fantom",
+        chain: fantom,
+        rpcUrl: "https://rpc.ftm.tools",
+        nativeCurrency: {
+            name: "Fantom",
+            symbol: "FTM",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://ftmscan.com"
+    },
+    klaytn: {
+        chainId: 8217,
+        name: "Klaytn",
+        chain: klaytn,
+        rpcUrl: "https://public-node-api.klaytnapi.com/v1/cypress",
+        nativeCurrency: {
+            name: "KLAY",
+            symbol: "KLAY",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://scope.klaytn.com"
+    },
+    celo: {
+        chainId: 42220,
+        name: "Celo",
+        chain: celo,
+        rpcUrl: "https://forno.celo.org",
+        nativeCurrency: {
+            name: "Celo",
+            symbol: "CELO",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://celoscan.io"
+    },
+    moonbeam: {
+        chainId: 1284,
+        name: "Moonbeam",
+        chain: moonbeam,
+        rpcUrl: "https://rpc.api.moonbeam.network",
+        nativeCurrency: {
+            name: "Glimmer",
+            symbol: "GLMR",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://moonscan.io"
+    },
+    aurora: {
+        chainId: 1313161554,
+        name: "Aurora",
+        chain: aurora,
+        rpcUrl: "https://mainnet.aurora.dev",
+        nativeCurrency: {
+            name: "Ether",
+            symbol: "ETH",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://aurorascan.dev"
+    },
+    harmony: {
+        chainId: 1666600000,
+        name: "Harmony",
+        chain: harmony,
+        rpcUrl: "https://api.harmony.one",
+        nativeCurrency: {
+            name: "ONE",
+            symbol: "ONE",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://explorer.harmony.one"
+    },
+    moonriver: {
+        chainId: 1285,
+        name: "Moonriver",
+        chain: moonriver,
+        rpcUrl: "https://rpc.api.moonriver.moonbeam.network",
+        nativeCurrency: {
+            name: "Moonriver",
+            symbol: "MOVR",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://moonriver.moonscan.io"
+    },
+    arbitrumNova: {
+        chainId: 42170,
+        name: "Arbitrum Nova",
+        chain: arbitrumNova,
+        rpcUrl: "https://nova.arbitrum.io/rpc",
+        nativeCurrency: {
+            name: "Ether",
+            symbol: "ETH",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://nova-explorer.arbitrum.io"
+    },
+    mantle: {
+        chainId: 5000,
+        name: "Mantle",
+        chain: mantle,
+        rpcUrl: "https://rpc.mantle.xyz",
+        nativeCurrency: {
+            name: "Mantle",
+            symbol: "MNT",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://explorer.mantle.xyz"
+    },
+    linea: {
+        chainId: 59144,
+        name: "Linea",
+        chain: linea,
+        rpcUrl: "https://linea-mainnet.rpc.build",
+        nativeCurrency: {
+            name: "Ether",
+            symbol: "ETH",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://lineascan.build"
+    },
+    scroll: {
+        chainId: 534353,
+        name: "Scroll Alpha Testnet",
+        chain: scroll,
+        rpcUrl: "https://alpha-rpc.scroll.io/l2",
+        nativeCurrency: {
+            name: "Ether",
+            symbol: "ETH",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://blockscout.scroll.io"
+    },
+    filecoin: {
+        chainId: 314,
+        name: "Filecoin",
+        chain: filecoin,
+        rpcUrl: "https://api.node.glif.io/rpc/v1",
+        nativeCurrency: {
+            name: "Filecoin",
+            symbol: "FIL",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://filfox.info/en"
+    },
+    taiko: {
+        chainId: 167005,
+        name: "Taiko (Alpha-3) Testnet",
+        chain: taiko,
+        rpcUrl: "https://rpc.a3.taiko.xyz",
+        nativeCurrency: {
+            name: "Ether",
+            symbol: "ETH",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://explorer.a3.taiko.xyz"
+    },
+    zksync: {
+        chainId: 324,
+        name: "zkSync Era",
+        chain: zkSync,
+        rpcUrl: "https://mainnet.era.zksync.io",
+        nativeCurrency: {
+            name: "Ether",
+            symbol: "ETH",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://explorer.zksync.io"
+    },
+    canto: {
+        chainId: 7700,
+        name: "Canto",
+        chain: canto,
+        rpcUrl: "https://canto.slingshot.finance",
+        nativeCurrency: {
+            name: "CANTO",
+            symbol: "CANTO",
+            decimals: 18
+        },
+        blockExplorerUrl: "https://tuber.build"
+    }
 } as const;
+
 
 export const getChainConfigs = (runtime: IAgentRuntime) => {
     return (
