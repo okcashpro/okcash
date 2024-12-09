@@ -58,28 +58,11 @@ export interface ChainConfig {
 }
 
 // Action parameters
-export interface TransferParams {
-    fromChain: SupportedChain;
-    toAddress: Address;
-    amount: string;
-    data?: `0x${string}`;
-}
-
-export interface SwapParams {
+// TODO: Add Story Action Types
+export interface RegisterIPParams {
+    contractAddress: Address;
+    tokenId: string;
     chain: SupportedChain;
-    fromToken: Address;
-    toToken: Address;
-    amount: string;
-    slippage?: number;
-}
-
-export interface BridgeParams {
-    fromChain: SupportedChain;
-    toChain: SupportedChain;
-    fromToken: Address;
-    toToken: Address;
-    amount: string;
-    toAddress?: Address;
 }
 
 // Plugin configuration
