@@ -107,7 +107,13 @@ else
 fi
 
 if [ -d "./agent" ]; then
-  COMMANDS+=("node -e \"setTimeout(() => process.exit(0), 5000)\" && pnpm --dir agent dev -- $*")
+  # Build the watch paths dynamically from WORKING_FOLDERS
+  WATCH_PATHS=()
+  for FOLDER in "${WORKING_FOLDERS[@]}"; do
+    WATCH_PATHS+=("--watch './packages/$FOLDER/dist'")
+  done
+
+  COMMANDS+=("nodemon ${WATCH_PATHS[@]} -e js,json,map --delay 2 --exec 'pnpm --dir agent dev -- $*'")
 else
   echo "Warning: 'agent' directory not found."
 fi
