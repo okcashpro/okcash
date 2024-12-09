@@ -9,7 +9,7 @@ import type {
     WalletClient,
 } from "viem";
 
-export type SupportedChain = "ethereum" | "base";
+export type SupportedChain = "odyssey";
 
 // Transaction types
 export interface Transaction {

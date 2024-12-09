@@ -11,34 +11,22 @@ import {
     type Address,
     Account,
 } from "viem";
-import { mainnet, base } from "viem/chains";
+import { mainnet, base, storyOdyssey } from "viem/chains";
 import type { SupportedChain, ChainConfig, ChainMetadata } from "../types";
 import { privateKeyToAccount } from "viem/accounts";
 
 export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
-    ethereum: {
-        chainId: 1,
-        name: "Ethereum",
-        chain: mainnet,
-        rpcUrl: "https://eth.llamarpc.com",
+    odyssey: {
+        chainId: 1516,
+        name: "Odyssey Testnet",
+        chain: storyOdyssey,
+        rpcUrl: "https://odyssey.storyrpc.io/",
         nativeCurrency: {
-            name: "Ether",
-            symbol: "ETH",
+            name: "IP",
+            symbol: "IP",
             decimals: 18,
         },
-        blockExplorerUrl: "https://etherscan.io",
-    },
-    base: {
-        chainId: 8453,
-        name: "Base",
-        chain: base,
-        rpcUrl: "https://base.llamarpc.com",
-        nativeCurrency: {
-            name: "Ether",
-            symbol: "ETH",
-            decimals: 18,
-        },
-        blockExplorerUrl: "https://basescan.org",
+        blockExplorerUrl: "https://odyssey-testnet-explorer.storyscan.xyz",
     },
 } as const;
 
@@ -51,7 +39,7 @@ export const getChainConfigs = (runtime: IAgentRuntime) => {
 
 export class WalletProvider {
     private chainConfigs: Record<SupportedChain, ChainConfig>;
-    private currentChain: SupportedChain = "ethereum";
+    private currentChain: SupportedChain = "odyssey";
     private address: Address;
     runtime: IAgentRuntime;
 
@@ -81,8 +69,7 @@ export class WalletProvider {
         };
 
         this.chainConfigs = {
-            ethereum: createClients("ethereum"),
-            base: createClients("base"),
+            odyssey: createClients("odyssey"),
         };
     }
 
