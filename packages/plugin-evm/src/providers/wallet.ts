@@ -11,7 +11,34 @@ import {
     type Address,
     Account,
 } from "viem";
-import { mainnet, base } from "viem/chains";
+import {
+    mainnet,
+    base,
+    sepolia,
+    bnbSmartChain,
+    arbitrumOne,
+    avalancheCChain,
+    polygon,
+    optimism,
+    cronos,
+    gnosis,
+    fantom,
+    klaytn,
+    celo,
+    moonbeam,
+    aurora,
+    harmony,
+    moonriver,
+    arbitrumNova,
+    mantle,
+    linea,
+    scroll,
+    filecoin,
+    taiko,
+    zkSync,
+    canto
+} from "viem/chains";
+
 import type { SupportedChain, ChainConfig, ChainMetadata } from "../types";
 import { privateKeyToAccount } from "viem/accounts";
 
@@ -360,6 +387,29 @@ export class WalletProvider {
         this.chainConfigs = {
             ethereum: createClients("ethereum"),
             base: createClients("base"),
+            sepolia: createClients("sepolia"),
+            bnbSmartChain: createClients("bnbSmartChain"),
+            arbitrumOne: createClients("arbitrumOne"),
+            avalancheCChain: createClients("avalancheCChain"),
+            polygon: createClients("polygon"),
+            optimism: createClients("optimism"),
+            cronos: createClients("cronos"),
+            gnosis: createClients("gnosis"),
+            fantom: createClients("fantom"),
+            klaytn: createClients("klaytn"),
+            celo: createClients("celo"),
+            moonbeam: createClients("moonbeam"),
+            aurora: createClients("aurora"),
+            harmony: createClients("harmony"),
+            moonriver: createClients("moonriver"),
+            arbitrumNova: createClients("arbitrumNova"),
+            mantle: createClients("mantle"),
+            linea: createClients("linea"),
+            scroll: createClients("scroll"),
+            filecoin: createClients("filecoin"),
+            taiko: createClients("taiko"),
+            zksync: createClients("zksync"),
+            canto: createClients("canto")
         };
     }
 
