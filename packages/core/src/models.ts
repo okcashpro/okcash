@@ -31,12 +31,9 @@ export const models: Models = {
             temperature: 0.6,
         },
         model: {
-            [ModelClass.SMALL]:
-                "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
-            [ModelClass.MEDIUM]:
-                "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
-            [ModelClass.LARGE]:
-                "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
+            [ModelClass.SMALL]: settings.ETERNALAI_MODEL,
+            [ModelClass.MEDIUM]: settings.ETERNALAI_MODEL,
+            [ModelClass.LARGE]: settings.ETERNALAI_MODEL,
             [ModelClass.EMBEDDING]: "",
             [ModelClass.IMAGE]: "",
         },
