@@ -395,9 +395,9 @@ export const models: Models = {
             temperature: 0.6,
         },
         model: {
-            [ModelClass.SMALL]: "gpt-4o-mini",
-            [ModelClass.MEDIUM]: "gpt-4o",
-            [ModelClass.LARGE]: "gpt-4o",
+            [ModelClass.SMALL]: settings.SMALL_NANOGPT_MODEL || "gpt-4o-mini",
+            [ModelClass.MEDIUM]: settings.MEDIUM_NANOGPT_MODEL || "gpt-4o",
+            [ModelClass.LARGE]: settings.LARGE_NANOGPT_MODEL || "gpt-4o",
         }
     },
 };
