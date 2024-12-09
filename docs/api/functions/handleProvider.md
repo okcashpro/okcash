@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / handleProvider
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / handleProvider
 
 # Function: handleProvider()
 
@@ -20,4 +20,4 @@ Configuration options specific to the provider.
 
 ## Defined in
 
-[packages/core/src/generation.ts:1150](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1150)
+[packages/core/src/generation.ts:1173](https://github.com/monilpat/eliza/blob/main/packages/core/src/generation.ts#L1173)

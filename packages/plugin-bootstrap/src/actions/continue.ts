@@ -138,7 +138,7 @@ export const continueAction: Action = {
         const response = await generateMessageResponse({
             runtime,
             context,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.LARGE,
         });
 
         response.inReplyTo = message.id;

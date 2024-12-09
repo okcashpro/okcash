@@ -115,8 +115,15 @@ export const createCoinbaseChargeAction: Action = {
         "GENERATE_CHARGE",
         "CREATE_TRANSACTION",
         "COINBASE_CHARGE",
+        "GENERATE_INVOICE",
+        "CREATE_PAYMENT",
+        "SETUP_BILLING",
+        "REQUEST_PAYMENT",
+        "CREATE_CHECKOUT",
+        "GET_CHARGE_STATUS",
+        "LIST_CHARGES",
     ],
-    description: "Create a charge using Coinbase Commerce.",
+    description: "Create and manage payment charges using Coinbase Commerce. Supports fixed and dynamic pricing, multiple currencies (USD, EUR, USDC), and provides charge status tracking and management features.",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
         const coinbaseCommerceKeyOk = !!runtime.getSetting(
             "COINBASE_COMMERCE_KEY"
@@ -147,7 +154,7 @@ export const createCoinbaseChargeAction: Action = {
         const chargeDetails = await generateObjectV2({
             runtime,
             context,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.LARGE,
             schema: ChargeSchema,
         });
         if (!isChargeContent(chargeDetails.object)) {
@@ -222,24 +229,83 @@ export const createCoinbaseChargeAction: Action = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Create a charge for $10.00 USD to Chris for dinner",
-                    data: {
-                        local_price: {
-                            amount: "10.00",
-                            currency: "USD",
-                        },
-                        pricing_type: "fixed_price",
-                        buyer_locale: "en-US",
-                        cancel_url: "https://example.com/cancel",
-                        redirect_url: "https://example.com/success",
-                    },
+                    text: "Create a charge for $100 USD for Digital Art NFT with description 'Exclusive digital artwork collection'",
                 },
             },
             {
                 user: "{{agentName}}",
                 content: {
-                    text: "Charge created successfully: {{charge.id}} for {{charge.amount}} {{charge.currency}}",
-                    action: "CREATE_CHARGE",
+                    text: "Charge created successfully:\n- Amount: $100 USD\n- Name: Digital Art NFT\n- Description: Exclusive digital artwork collection\n- Type: fixed_price\n- Charge URL: https://commerce.coinbase.com/charges/...",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Set up a dynamic price charge for Premium Membership named 'VIP Access Pass'",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Charge created successfully:\n- Type: dynamic_price\n- Name: VIP Access Pass\n- Description: Premium Membership\n- Charge URL: https://commerce.coinbase.com/charges/...",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Generate a payment request for 50 EUR for Workshop Registration",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Charge created successfully:\n- Amount: 50 EUR\n- Name: Workshop Registration\n- Type: fixed_price\n- Charge URL: https://commerce.coinbase.com/charges/...",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Create an invoice for 1000 USDC for Consulting Services",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Charge created successfully:\n- Amount: 1000 USDC\n- Name: Consulting Services\n- Type: fixed_price\n- Charge URL: https://commerce.coinbase.com/charges/...",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Check the status of charge abc-123-def",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Charge details retrieved:\n- ID: abc-123-def\n- Status: COMPLETED\n- Amount: 100 USD\n- Created: 2024-01-20T10:00:00Z\n- Expires: 2024-01-21T10:00:00Z",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "List all active charges",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Active charges retrieved:\n1. ID: abc-123 - $100 USD - Digital Art NFT\n2. ID: def-456 - 50 EUR - Workshop\n3. ID: ghi-789 - 1000 USDC - Consulting\n\nTotal active charges: 3",
                 },
             },
         ],
@@ -344,7 +410,7 @@ export const getChargeDetailsAction: Action = {
         const chargeDetails = await generateObjectV2({
             runtime,
             context,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.LARGE,
             schema: ChargeSchema,
         });
         if (!isChargeContent(chargeDetails.object)) {
@@ -440,8 +506,14 @@ export const chargeProvider: Provider = {
             elizaLogger.log("Current Balances:", balances);
             elizaLogger.log("Last Transactions:", transactions);
         }
-        elizaLogger.log("Charges:", charges);
-        return { charges: charges.data, balances, transactions };
+        const formattedCharges = charges.map(charge => ({
+            id: charge.id,
+            name: charge.name,
+            description: charge.description,
+            pricing: charge.pricing,
+        }));
+        elizaLogger.log("Charges:", formattedCharges);
+        return { charges: formattedCharges, balances, transactions };
     },
 };
 

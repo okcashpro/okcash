@@ -1,16 +1,15 @@
-import { Client, IAgentRuntime } from "@ai16z/eliza";
-import { Signer, NobleEd25519Signer } from "@farcaster/hub-nodejs";
-import { Hex, hexToBytes } from "viem";
+import { Client, IAgentRuntime, elizaLogger } from "@ai16z/eliza";
 import { FarcasterClient } from "./client";
 import { FarcasterPostManager } from "./post";
 import { FarcasterInteractionManager } from "./interactions";
+import { Configuration, NeynarAPIClient } from "@neynar/nodejs-sdk";
 
 export class FarcasterAgentClient implements Client {
     client: FarcasterClient;
     posts: FarcasterPostManager;
     interactions: FarcasterInteractionManager;
 
-    private signer: Signer;
+    private signerUuid: string;
 
     constructor(
         public runtime: IAgentRuntime,
@@ -18,9 +17,13 @@ export class FarcasterAgentClient implements Client {
     ) {
         const cache = new Map<string, any>();
 
-        this.signer = new NobleEd25519Signer(
-            hexToBytes(runtime.getSetting("FARCASTER_PRIVATE_KEY")! as Hex)
-        );
+        this.signerUuid = runtime.getSetting("FARCASTER_NEYNAR_SIGNER_UUID")!;
+
+        const neynarConfig = new Configuration({
+            apiKey: runtime.getSetting("FARCASTER_NEYNAR_API_KEY")!,
+        });
+
+        const neynarClient = new NeynarAPIClient(neynarConfig);
 
         this.client =
             client ??
@@ -30,20 +33,24 @@ export class FarcasterAgentClient implements Client {
                 url:
                     runtime.getSetting("FARCASTER_HUB_URL") ??
                     "hub.pinata.cloud",
+                neynar: neynarClient,
+                signerUuid: this.signerUuid,
                 cache,
             });
+
+        elizaLogger.info("Farcaster Neynar client initialized.")
 
         this.posts = new FarcasterPostManager(
             this.client,
             this.runtime,
-            this.signer,
+            this.signerUuid,
             cache
         );
 
         this.interactions = new FarcasterInteractionManager(
             this.client,
             this.runtime,
-            this.signer,
+            this.signerUuid,
             cache
         );
     }

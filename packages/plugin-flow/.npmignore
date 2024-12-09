@@ -1,0 +1,7 @@
+*
+
+!dist/**
+!package.json
+!flow.json
+!readme.md
+!tsup.config.ts

@@ -1,5 +1,100 @@
 # Changelog
 
+## [v0.1.5-alpha.5](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.5) (2024-12-07)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.4...v0.1.5-alpha.5)
+
+**Merged pull requests:**
+
+- feat: working farcaster client with neynar [\#570](https://github.com/ai16z/eliza/pull/570) ([sayangel](https://github.com/sayangel))
+
+## [v0.1.5-alpha.4](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.4) (2024-12-06)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.3...v0.1.5-alpha.4)
+
+**Fixed bugs:**
+
+- `pnpm  start` crashes if there is too much data in knowledge [\#866](https://github.com/ai16z/eliza/issues/866)
+- Twitter login some function not work.  [\#857](https://github.com/ai16z/eliza/issues/857)
+
+**Merged pull requests:**
+
+- docs: Add AI Agent Dev School Parts 2 and 3 summaries and timestamps [\#877](https://github.com/ai16z/eliza/pull/877) ([YoungPhlo](https://github.com/YoungPhlo))
+- Add google model env vars [\#875](https://github.com/ai16z/eliza/pull/875) ([peersky](https://github.com/peersky))
+- Update quickstart.md [\#872](https://github.com/ai16z/eliza/pull/872) ([oxSaturn](https://github.com/oxSaturn))
+- Remove duplicated coinbase CDP options in .env.example [\#863](https://github.com/ai16z/eliza/pull/863) ([juntao](https://github.com/juntao))
+- test: adding environment and knowledge tests [\#862](https://github.com/ai16z/eliza/pull/862) ([ai16z-demirix](https://github.com/ai16z-demirix))
+- Updated quickstart.md to contemplate common issue [\#861](https://github.com/ai16z/eliza/pull/861) ([fede2442](https://github.com/fede2442))
+- fix: Use LARGE models for responses [\#853](https://github.com/ai16z/eliza/pull/853) ([lalalune](https://github.com/lalalune))
+- Update Node version in local-development.md [\#850](https://github.com/ai16z/eliza/pull/850) ([oxSaturn](https://github.com/oxSaturn))
+- fix: plugins docs [\#848](https://github.com/ai16z/eliza/pull/848) ([cygaar](https://github.com/cygaar))
+- fix: run release workflow after a github release is created [\#846](https://github.com/ai16z/eliza/pull/846) ([cygaar](https://github.com/cygaar))
+- fix: Include scripts/postinstall.js in the final NPM package [\#843](https://github.com/ai16z/eliza/pull/843) ([martincik](https://github.com/martincik))
+- feat: add Aptos plugin [\#818](https://github.com/ai16z/eliza/pull/818) ([0xaptosj](https://github.com/0xaptosj))
+- feat: add coinbase  ERC20, ERC721, and ERC1155 tokenContract deployment / invokement plugin [\#803](https://github.com/ai16z/eliza/pull/803) ([monilpat](https://github.com/monilpat))
+- feat: coinbase webhook + add more examples + testing [\#801](https://github.com/ai16z/eliza/pull/801) ([monilpat](https://github.com/monilpat))
+
+## [v0.1.5-alpha.3](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.3) (2024-12-04)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.2...v0.1.5-alpha.3)
+
+**Merged pull requests:**
+
+- chore: bump version to 0.1.5-alpha.3 [\#838](https://github.com/ai16z/eliza/pull/838) ([cygaar](https://github.com/cygaar))
+- chore: Revert/viem version and bump @goat-sdk/plugin-erc20 [\#836](https://github.com/ai16z/eliza/pull/836) ([shakkernerd](https://github.com/shakkernerd))
+- chore: revert viem package version [\#834](https://github.com/ai16z/eliza/pull/834) ([shakkernerd](https://github.com/shakkernerd))
+
+## [v0.1.5-alpha.2](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.2) (2024-12-04)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.0...v0.1.5-alpha.2)
+
+**Implemented enhancements:**
+
+- feat: Add circuit breaker pattern for database operations [\#712](https://github.com/ai16z/eliza/issues/712)
+
+**Fixed bugs:**
+
+- 404 Localhost port 3000 [\#804](https://github.com/ai16z/eliza/issues/804)
+- actions examples selection does not select things properly [\#798](https://github.com/ai16z/eliza/issues/798)
+- recentPosts always empty [\#679](https://github.com/ai16z/eliza/issues/679)
+
+**Merged pull requests:**
+
+- chore: bump version to 0.1.5-alpha.1 [\#833](https://github.com/ai16z/eliza/pull/833) ([cygaar](https://github.com/cygaar))
+- fix: pin all node dependencies + update @solana/web3.js to safe version [\#832](https://github.com/ai16z/eliza/pull/832) ([cygaar](https://github.com/cygaar))
+- fix: docker-setup.md [\#826](https://github.com/ai16z/eliza/pull/826) ([Freytes](https://github.com/Freytes))
+- fix: twitter cache expires [\#824](https://github.com/ai16z/eliza/pull/824) ([palsp](https://github.com/palsp))
+- feat: \(core\) Add circuit breaker pattern for database operations -… [\#812](https://github.com/ai16z/eliza/pull/812) ([augchan42](https://github.com/augchan42))
+- fix: lerna publish command [\#811](https://github.com/ai16z/eliza/pull/811) ([cygaar](https://github.com/cygaar))
+
+## [v0.1.5-alpha.0](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.0) (2024-12-03)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5...v0.1.5-alpha.0)
+
+**Fixed bugs:**
+
+- Plugin system in character.plugins is not working [\#795](https://github.com/ai16z/eliza/issues/795)
+
+**Closed issues:**
+
+- State should use a cosine similarity of messages in the DB  [\#471](https://github.com/ai16z/eliza/issues/471)
+
+**Merged pull requests:**
+
+- fix: update package version to v0.1.5-alpha.0 [\#808](https://github.com/ai16z/eliza/pull/808) ([cygaar](https://github.com/cygaar))
+- fix: release workflow part 3 [\#807](https://github.com/ai16z/eliza/pull/807) ([cygaar](https://github.com/cygaar))
+- fix: part 2 of updating the npm publish workflow [\#806](https://github.com/ai16z/eliza/pull/806) ([cygaar](https://github.com/cygaar))
+- fix: update npm publication workflow [\#805](https://github.com/ai16z/eliza/pull/805) ([cygaar](https://github.com/cygaar))
+- fix: swap type error, create user trust on first message in telegram [\#800](https://github.com/ai16z/eliza/pull/800) ([MarcoMandar](https://github.com/MarcoMandar))
+- refactor: Improve actions samples random selection [\#799](https://github.com/ai16z/eliza/pull/799) ([dievardump](https://github.com/dievardump))
+- fix: Docker default non-interactive mode for Cloud instances [\#796](https://github.com/ai16z/eliza/pull/796) ([rarepepi](https://github.com/rarepepi))
+- fix: dev command [\#793](https://github.com/ai16z/eliza/pull/793) ([shakkernerd](https://github.com/shakkernerd))
+- chore: update README\_KOR.md to match latest README.md [\#789](https://github.com/ai16z/eliza/pull/789) ([mike0295](https://github.com/mike0295))
+- fix: enviroment -\> environment [\#787](https://github.com/ai16z/eliza/pull/787) ([tomguluson92](https://github.com/tomguluson92))
+- Update generation.ts to fix TOGETHER/LLAMACLOUD image generation [\#786](https://github.com/ai16z/eliza/pull/786) ([ProphetX10](https://github.com/ProphetX10))
+- fixs: uuid compatible for number [\#785](https://github.com/ai16z/eliza/pull/785) ([tomguluson92](https://github.com/tomguluson92))
+- fix: When the plugins field in the .character.json file is configured with plugin name. [\#784](https://github.com/ai16z/eliza/pull/784) ([xwxtwd](https://github.com/xwxtwd))
+
 ## [v0.1.5](https://github.com/ai16z/eliza/tree/v0.1.5) (2024-12-02)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.4-alpha.3...v0.1.5)

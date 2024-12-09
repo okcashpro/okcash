@@ -28,22 +28,23 @@ const twitterPostTemplate = `
 
 # Task: Generate a post in the voice and style and perspective of {{agentName}} @{{twitterUserName}}.
 Write a 1-3 sentence post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}. Do not add commentary or acknowledge this request, just write the post.
-Your response should not contain any questions. Brief, concise statements only. The total character count MUST be less than 280. No emojis. Use \\n\\n (double spaces) between statements.`;
-
-const MAX_TWEET_LENGTH = 280;
+Your response should not contain any questions. Brief, concise statements only. The total character count MUST be less than {{maxTweetLength}}. No emojis. Use \\n\\n (double spaces) between statements.`;
 
 /**
  * Truncate text to fit within the Twitter character limit, ensuring it ends at a complete sentence.
  */
-function truncateToCompleteSentence(text: string): string {
-    if (text.length <= MAX_TWEET_LENGTH) {
+function truncateToCompleteSentence(
+    text: string,
+    maxTweetLength: number
+): string {
+    if (text.length <= maxTweetLength) {
         return text;
     }
 
     // Attempt to truncate at the last period within the limit
     const truncatedAtPeriod = text.slice(
         0,
-        text.lastIndexOf(".", MAX_TWEET_LENGTH) + 1
+        text.lastIndexOf(".", maxTweetLength) + 1
     );
     if (truncatedAtPeriod.trim().length > 0) {
         return truncatedAtPeriod.trim();
@@ -52,14 +53,14 @@ function truncateToCompleteSentence(text: string): string {
     // If no period is found, truncate to the nearest whitespace
     const truncatedAtSpace = text.slice(
         0,
-        text.lastIndexOf(" ", MAX_TWEET_LENGTH)
+        text.lastIndexOf(" ", maxTweetLength)
     );
     if (truncatedAtSpace.trim().length > 0) {
         return truncatedAtSpace.trim() + "...";
     }
 
     // Fallback: Hard truncate and add ellipsis
-    return text.slice(0, MAX_TWEET_LENGTH - 3).trim() + "...";
+    return text.slice(0, maxTweetLength - 3).trim() + "...";
 }
 
 export class TwitterPostClient {
@@ -147,6 +148,7 @@ export class TwitterPostClient {
                 },
                 {
                     twitterUserName: this.client.profile.username,
+                    maxTweetLength: this.runtime.getSetting("MAX_TWEET_LENGTH"),
                 }
             );
 
@@ -171,7 +173,10 @@ export class TwitterPostClient {
                 .trim();
 
             // Use the helper function to truncate to complete sentence
-            const content = truncateToCompleteSentence(formattedTweet);
+            const content = truncateToCompleteSentence(
+                formattedTweet,
+                Number(this.runtime.getSetting("MAX_TWEET_LENGTH"))
+            );
 
             if (this.runtime.getSetting("TWITTER_DRY_RUN") === "true") {
                 elizaLogger.info(
