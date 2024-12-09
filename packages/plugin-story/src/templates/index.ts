@@ -6,8 +6,8 @@ export const registerIPTemplate = `Given the recent messages and wallet informat
 {{walletInfo}}
 
 Extract the following information about the requested IP registration:
-- Contract address and Tokoen ID to register
-- Chain to execute on (odyssey)
+- Contract address and Token ID to register (ERC 721)
+- Chain Id to execute on (odyssey: 1516)
 
 Respond with a JSON markdown block containing only the extracted values:
 
@@ -15,7 +15,7 @@ Respond with a JSON markdown block containing only the extracted values:
 {
     "contractAddress": string | null,
     "tokenId": string | null,
-    "chain": "odyssey" | null
+    "chainId": number | null
 }
 \`\`\`
 `;
