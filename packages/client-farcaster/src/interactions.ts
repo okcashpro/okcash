@@ -5,7 +5,7 @@ import {
     Memory,
     ModelClass,
     stringToUuid,
-    elizaLogger,
+    okaiLogger,
     type IAgentRuntime,
 } from "@okcashpro/okai";
 import type { FarcasterClient } from "./client";
@@ -35,7 +35,7 @@ export class FarcasterInteractionManager {
             try {
                 await this.handleInteractions();
             } catch (error) {
-                elizaLogger.error(error)
+                okaiLogger.error(error)
                 return;
             }
 
@@ -125,12 +125,12 @@ export class FarcasterInteractionManager {
         thread: Cast[]
     }) {
         if (cast.profile.fid === agent.fid) {
-            elizaLogger.info("skipping cast from bot itself", cast.hash)
+            okaiLogger.info("skipping cast from bot itself", cast.hash)
             return;
         }
 
         if (!memory.content.text) {
-            elizaLogger.info("skipping cast with no text", cast.hash);
+            okaiLogger.info("skipping cast with no text", cast.hash);
             return { text: "", action: "IGNORE" };
         }
 
@@ -201,7 +201,7 @@ export class FarcasterInteractionManager {
         });
 
         if (shouldRespondResponse === "IGNORE" || shouldRespondResponse === "STOP") {
-            elizaLogger.info(`Not responding to cast because generated ShouldRespond was ${shouldRespondResponse}`)
+            okaiLogger.info(`Not responding to cast because generated ShouldRespond was ${shouldRespondResponse}`)
             return;
         }
 
@@ -226,14 +226,14 @@ export class FarcasterInteractionManager {
 
 
         if (this.runtime.getSetting("FARCASTER_DRY_RUN") === "true") {
-            elizaLogger.info(
+            okaiLogger.info(
                 `Dry run: would have responded to cast ${cast.hash} with ${response.text}`
             );
             return;
         }
 
         try {
-            elizaLogger.info(`Replying to cast ${cast.hash}.`);
+            okaiLogger.info(`Replying to cast ${cast.hash}.`);
 
             const results = await sendCast({
                 runtime: this.runtime,
@@ -262,7 +262,7 @@ export class FarcasterInteractionManager {
                 newState
             );
         } catch (error) {
-            elizaLogger.error(`Error sending response cast: ${error}`);
+            okaiLogger.error(`Error sending response cast: ${error}`);
         }
     }
 }

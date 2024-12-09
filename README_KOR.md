@@ -6,7 +6,7 @@
 
 <div align="center">
 
-  📖 [문서](https://okcashpro.github.io/okai/) | 🎯 [예시](https://github.com/thejoven/awesome-okai)
+  📖 [문서](https://okcashpro.github.io/okai/) | 🎯 [예시](https://github.com/okcashpro/awesome-okai)
 
 </div>
 

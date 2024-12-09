@@ -121,7 +121,7 @@ export class FarcasterPostManager {
 
 
             if (this.runtime.getSetting("FARCASTER_DRY_RUN") === "true") {
-                elizaLogger.info(
+                okaiLogger.info(
                     `Dry run: would have cast: ${content}`
                 );
                 return;
@@ -149,7 +149,7 @@ export class FarcasterPostManager {
                     roomId
                 );
 
-                elizaLogger.info(`[Farcaster Neynar Client] Published cast ${cast.hash}`);
+                okaiLogger.info(`[Farcaster Neynar Client] Published cast ${cast.hash}`);
 
                 await this.runtime.messageManager.createMemory(
                     createCastMemory({

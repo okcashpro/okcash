@@ -63,10 +63,10 @@ export class FarcasterClient {
             }
         } catch (err) {
             if (isApiErrorResponse(err)) {
-                elizaLogger.error('Neynar error: ', err.response.data);
+                okaiLogger.error('Neynar error: ', err.response.data);
                 throw err.response.data;
             } else {
-                elizaLogger.error('Error: ', err);
+                okaiLogger.error('Error: ', err);
                 throw err;
             }
         }
@@ -172,7 +172,7 @@ export class FarcasterClient {
 
         const result = await this.neynar.fetchBulkUsers({ fids: [fid] });
         if (!result.users || result.users.length < 1) {
-            elizaLogger.error('Error fetching user by fid');
+            okaiLogger.error('Error fetching user by fid');
 
             throw "getProfile ERROR";
         }

@@ -2,7 +2,7 @@ import { RESTClient } from '../../advanced-sdk-ts/src/rest';
 import {
     Action,
     Plugin,
-    elizaLogger,
+    okaiLogger,
     IAgentRuntime,
     Memory,
     HandlerCallback,
@@ -11,7 +11,7 @@ import {
     generateObjectV2,
     ModelClass,
     Provider,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { advancedTradeTemplate } from "../templates";
 import { isAdvancedTradeContent, AdvancedTradeSchema } from "../types";
 import { readFile } from "fs/promises";
@@ -42,14 +42,14 @@ const tradeProvider: Provider = {
             try {
                 accounts = await client.listAccounts({});
             } catch (error) {
-                elizaLogger.error("Error fetching accounts:", error);
+                okaiLogger.error("Error fetching accounts:", error);
                 return [];
             }
 
             try {
                 products = await client.listProducts({});
             } catch (error) {
-                elizaLogger.error("Error fetching products:", error);
+                okaiLogger.error("Error fetching products:", error);
                 return [];
             }
 
@@ -71,7 +71,7 @@ const tradeProvider: Provider = {
             try {
                 csvData = await readFile(tradeCsvFilePath, "utf-8");
             } catch (error) {
-                elizaLogger.error("Error reading CSV file:", error);
+                okaiLogger.error("Error reading CSV file:", error);
                 return [];
             }
 
@@ -81,7 +81,7 @@ const tradeProvider: Provider = {
                     skip_empty_lines: true,
                 });
             } catch (error) {
-                elizaLogger.error("Error parsing CSV data:", error);
+                okaiLogger.error("Error parsing CSV data:", error);
                 return [];
             }
 
@@ -91,7 +91,7 @@ const tradeProvider: Provider = {
                 trades: records
             };
         } catch (error) {
-            elizaLogger.error("Error in tradeProvider:", error);
+            okaiLogger.error("Error in tradeProvider:", error);
             return [];
         }
     },
@@ -109,7 +109,7 @@ export async function appendTradeToCsv(tradeResult: any) {
             ],
             append: true,
         });
-        elizaLogger.info("Trade result:", tradeResult);
+        okaiLogger.info("Trade result:", tradeResult);
 
 
         // Format trade data based on success/failure
@@ -120,14 +120,14 @@ export async function appendTradeToCsv(tradeResult: any) {
             // JSON.stringify(tradeResult.success_response || tradeResult.failure_response || {})
         ];
 
-        elizaLogger.info("Formatted trade for CSV:", formattedTrade);
+        okaiLogger.info("Formatted trade for CSV:", formattedTrade);
         await csvWriter.writeRecords([formattedTrade]);
-        elizaLogger.info("Trade written to CSV successfully");
+        okaiLogger.info("Trade written to CSV successfully");
     } catch (error) {
-        elizaLogger.error("Error writing trade to CSV:", error);
+        okaiLogger.error("Error writing trade to CSV:", error);
         // Log the actual error for debugging
         if (error instanceof Error) {
-            elizaLogger.error("Error details:", error.message);
+            okaiLogger.error("Error details:", error.message);
         }
     }
 }
@@ -136,9 +136,9 @@ async function hasEnoughBalance(client: RESTClient, currency: string, amount: nu
     try {
         const response = await client.listAccounts({});
         const accounts = JSON.parse(response);
-        elizaLogger.info("Accounts:", accounts);
+        okaiLogger.info("Accounts:", accounts);
         const checkCurrency = side === "BUY" ? "USD" : currency;
-        elizaLogger.info(`Checking balance for ${side} order of ${amount} ${checkCurrency}`);
+        okaiLogger.info(`Checking balance for ${side} order of ${amount} ${checkCurrency}`);
 
         // Find account with exact currency match
         const account = accounts?.accounts.find(acc =>
@@ -147,21 +147,21 @@ async function hasEnoughBalance(client: RESTClient, currency: string, amount: nu
         );
 
         if (!account) {
-            elizaLogger.error(`No ${checkCurrency} account found`);
+            okaiLogger.error(`No ${checkCurrency} account found`);
             return false;
         }
 
         const available = parseFloat(account.available_balance.value);
         // Add buffer for fees only on USD purchases
         const requiredAmount = side === "BUY" ? amount * 1.01 : amount;
-        elizaLogger.info(`Required amount (including buffer): ${requiredAmount} ${checkCurrency}`);
+        okaiLogger.info(`Required amount (including buffer): ${requiredAmount} ${checkCurrency}`);
 
         const hasBalance = available >= requiredAmount;
-        elizaLogger.info(`Has sufficient balance: ${hasBalance}`);
+        okaiLogger.info(`Has sufficient balance: ${hasBalance}`);
 
         return hasBalance;
     } catch (error) {
-        elizaLogger.error("Balance check failed with error:", {
+        okaiLogger.error("Balance check failed with error:", {
             error: error instanceof Error ? error.message : 'Unknown error',
             currency,
             amount,
@@ -200,9 +200,9 @@ export const executeAdvancedTradeAction: Action = {
                 runtime.getSetting("COINBASE_API_KEY") ?? process.env.COINBASE_API_KEY,
                 runtime.getSetting("COINBASE_PRIVATE_KEY") ?? process.env.COINBASE_PRIVATE_KEY
             );
-            elizaLogger.info("Advanced trade client initialized");
+            okaiLogger.info("Advanced trade client initialized");
         } catch (error) {
-            elizaLogger.error("Client initialization failed:", error);
+            okaiLogger.error("Client initialization failed:", error);
             callback({
                 text: "Failed to initialize trading client. Please check your API credentials."
             }, []);
@@ -218,9 +218,9 @@ export const executeAdvancedTradeAction: Action = {
                 modelClass: ModelClass.LARGE,
                 schema: AdvancedTradeSchema,
             });
-            elizaLogger.info("Trade details generated:", tradeDetails.object);
+            okaiLogger.info("Trade details generated:", tradeDetails.object);
         } catch (error) {
-            elizaLogger.error("Trade details generation failed:", error);
+            okaiLogger.error("Trade details generation failed:", error);
             callback({
                 text: "Failed to generate trade details. Please provide valid trading parameters."
             }, []);
@@ -229,7 +229,7 @@ export const executeAdvancedTradeAction: Action = {
 
         // Validate trade content
         if (!isAdvancedTradeContent(tradeDetails.object)) {
-            elizaLogger.error("Invalid trade content:", tradeDetails.object);
+            okaiLogger.error("Invalid trade content:", tradeDetails.object);
             callback({
                 text: "Invalid trade details. Please check your input parameters."
             }, []);
@@ -263,9 +263,9 @@ export const executeAdvancedTradeAction: Action = {
                     }
                 };
             }
-            elizaLogger.info("Order configuration created:", orderConfiguration);
+            okaiLogger.info("Order configuration created:", orderConfiguration);
         } catch (error) {
-            elizaLogger.error("Order configuration failed:", error);
+            okaiLogger.error("Order configuration failed:", error);
             callback({
                 text: error instanceof Error ? error.message : "Failed to configure order parameters."
             }, []);
@@ -289,9 +289,9 @@ export const executeAdvancedTradeAction: Action = {
                 orderConfiguration
             });
 
-            elizaLogger.info("Trade executed successfully:", order);
+            okaiLogger.info("Trade executed successfully:", order);
         } catch (error) {
-            elizaLogger.error("Trade execution failed:", error?.message);
+            okaiLogger.error("Trade execution failed:", error?.message);
             callback({
                 text: `Failed to execute trade: ${error instanceof Error ? error.message : "Unknown error occurred"}`
             }, []);
@@ -300,9 +300,9 @@ export const executeAdvancedTradeAction: Action = {
             // Log trade to CSV
             try {
                 // await appendTradeToCsv(order);
-                elizaLogger.info("Trade logged to CSV");
+                okaiLogger.info("Trade logged to CSV");
             } catch (csvError) {
-                elizaLogger.warn("Failed to log trade to CSV:", csvError);
+                okaiLogger.warn("Failed to log trade to CSV:", csvError);
                 // Continue execution as this is non-critical
             }
 
