@@ -1,13 +1,8 @@
-export * from "./actions/bridge";
-export * from "./actions/swap";
-export * from "./actions/transfer";
+// TODO: Add story actions
 export * from "./providers/wallet";
 export * from "./types";
 
 import type { Plugin } from "@ai16z/eliza";
-import { bridgeAction } from "./actions/bridge";
-import { swapAction } from "./actions/swap";
-import { transferAction } from "./actions/transfer";
 import { evmWalletProvider } from "./providers/wallet";
 
 export const evmPlugin: Plugin = {
@@ -16,7 +11,8 @@ export const evmPlugin: Plugin = {
     providers: [evmWalletProvider],
     evaluators: [],
     services: [],
-    actions: [transferAction, bridgeAction, swapAction],
+    // TODO: Add actions
+    actions: [],
 };
 
 export default evmPlugin;
