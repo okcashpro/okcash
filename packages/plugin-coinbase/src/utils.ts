@@ -356,9 +356,8 @@ export async function getWalletDetails(
         }));
 
         // Fetch the wallet's recent transactions
-        const walletAddress = await wallet.getDefaultAddress();
-        const transactions = await walletAddress.listTransactions();
-        const transactionsData = transactions?.data ?? [];
+
+        const transactionsData = [];
         const formattedTransactions = transactionsData.map((transaction) => {
             const content = transaction.content();
             return {
