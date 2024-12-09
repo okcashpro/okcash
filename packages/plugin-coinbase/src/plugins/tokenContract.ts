@@ -447,7 +447,7 @@ export const readContractAction: Action = {
     name: "READ_CONTRACT",
     description: "Read data from a deployed smart contract using the Coinbase SDK",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
-        elizaLogger.log("Validating runtime for READ_CONTRACT...");
+        okaiLogger.log("Validating runtime for READ_CONTRACT...");
         return !!(
             runtime.character.settings.secrets?.COINBASE_API_KEY ||
             process.env.COINBASE_API_KEY
@@ -463,7 +463,7 @@ export const readContractAction: Action = {
         _options: any,
         callback: HandlerCallback
     ) => {
-        elizaLogger.log("Starting READ_CONTRACT handler...");
+        okaiLogger.log("Starting READ_CONTRACT handler...");
 
         try {
             Coinbase.configure({
@@ -494,7 +494,7 @@ export const readContractAction: Action = {
             }
 
             const { contractAddress, method, args, networkId, abi } = readDetails.object;
-            elizaLogger.log("Reading contract:", { contractAddress, method, args, networkId, abi });
+            okaiLogger.log("Reading contract:", { contractAddress, method, args, networkId, abi });
 
             const result = await readContract({
                 networkId,
@@ -507,7 +507,7 @@ export const readContractAction: Action = {
             // Serialize the result before using it
             const serializedResult = serializeBigInt(result);
 
-            elizaLogger.info("Contract read result:", serializedResult);
+            okaiLogger.info("Contract read result:", serializedResult);
 
             callback({
                 text: `Contract read successful:
@@ -518,7 +518,7 @@ export const readContractAction: Action = {
             }, []);
 
         } catch (error) {
-            elizaLogger.error("Error reading contract:", error);
+            okaiLogger.error("Error reading contract:", error);
             callback({
                 text: `Failed to read contract: ${error instanceof Error ? error.message : "Unknown error"}`
             }, []);
