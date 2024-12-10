@@ -15,9 +15,9 @@ import {
     mainnet,
     base,
     sepolia,
-    bnbSmartChain,
-    arbitrumOne,
-    avalancheCChain,
+    bsc,
+    arbitrum,
+    avalanche,
     polygon,
     optimism,
     cronos,
@@ -27,7 +27,7 @@ import {
     celo,
     moonbeam,
     aurora,
-    harmony,
+    harmonyOne,
     moonriver,
     arbitrumNova,
     mantle,
@@ -35,8 +35,8 @@ import {
     scroll,
     filecoin,
     taiko,
-    zkSync,
-    canto
+    zksync,
+    canto,
 } from "viem/chains";
 
 import type { SupportedChain, ChainConfig, ChainMetadata } from "../types";
@@ -51,9 +51,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://etherscan.io"
+        blockExplorerUrl: "https://etherscan.io",
     },
     base: {
         chainId: 8453,
@@ -63,9 +63,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://basescan.org"
+        blockExplorerUrl: "https://basescan.org",
     },
     sepolia: {
         chainId: 11155111,
@@ -75,45 +75,45 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Sepolia Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://sepolia.etherscan.io"
+        blockExplorerUrl: "https://sepolia.etherscan.io",
     },
-    bnbSmartChain: {
+    bsc: {
         chainId: 56,
         name: "BNB Smart Chain",
-        chain: bnbSmartChain,
+        chain: bsc,
         rpcUrl: "https://bsc-dataseed1.binance.org/",
         nativeCurrency: {
             name: "Binance Coin",
             symbol: "BNB",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://bscscan.com"
+        blockExplorerUrl: "https://bscscan.com",
     },
-    arbitrumOne: {
+    arbitrum: {
         chainId: 42161,
         name: "Arbitrum One",
-        chain: arbitrumOne,
+        chain: arbitrum,
         rpcUrl: "https://arb1.arbitrum.io/rpc",
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://arbiscan.io"
+        blockExplorerUrl: "https://arbiscan.io",
     },
-    avalancheCChain: {
+    avalanche: {
         chainId: 43114,
         name: "Avalanche C-Chain",
-        chain: avalancheCChain,
+        chain: avalanche,
         rpcUrl: "https://api.avax.network/ext/bc/C/rpc",
         nativeCurrency: {
             name: "Avalanche",
             symbol: "AVAX",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://snowtrace.io"
+        blockExplorerUrl: "https://snowtrace.io",
     },
     polygon: {
         chainId: 137,
@@ -123,9 +123,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "MATIC",
             symbol: "MATIC",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://polygonscan.com"
+        blockExplorerUrl: "https://polygonscan.com",
     },
     optimism: {
         chainId: 10,
@@ -135,9 +135,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://optimistic.etherscan.io"
+        blockExplorerUrl: "https://optimistic.etherscan.io",
     },
     cronos: {
         chainId: 25,
@@ -147,9 +147,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Cronos",
             symbol: "CRO",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://cronoscan.com"
+        blockExplorerUrl: "https://cronoscan.com",
     },
     gnosis: {
         chainId: 100,
@@ -159,9 +159,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "xDAI",
             symbol: "XDAI",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://gnosisscan.io"
+        blockExplorerUrl: "https://gnosisscan.io",
     },
     fantom: {
         chainId: 250,
@@ -171,9 +171,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Fantom",
             symbol: "FTM",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://ftmscan.com"
+        blockExplorerUrl: "https://ftmscan.com",
     },
     klaytn: {
         chainId: 8217,
@@ -183,9 +183,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "KLAY",
             symbol: "KLAY",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://scope.klaytn.com"
+        blockExplorerUrl: "https://scope.klaytn.com",
     },
     celo: {
         chainId: 42220,
@@ -195,9 +195,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Celo",
             symbol: "CELO",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://celoscan.io"
+        blockExplorerUrl: "https://celoscan.io",
     },
     moonbeam: {
         chainId: 1284,
@@ -207,9 +207,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Glimmer",
             symbol: "GLMR",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://moonscan.io"
+        blockExplorerUrl: "https://moonscan.io",
     },
     aurora: {
         chainId: 1313161554,
@@ -219,21 +219,21 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://aurorascan.dev"
+        blockExplorerUrl: "https://aurorascan.dev",
     },
-    harmony: {
+    harmonyOne: {
         chainId: 1666600000,
-        name: "Harmony",
-        chain: harmony,
-        rpcUrl: "https://api.harmony.one",
+        name: "harmonyOne",
+        chain: harmonyOne,
+        rpcUrl: "https://api.harmonyOne.one",
         nativeCurrency: {
             name: "ONE",
             symbol: "ONE",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://explorer.harmony.one"
+        blockExplorerUrl: "https://explorer.harmonyOne.one",
     },
     moonriver: {
         chainId: 1285,
@@ -243,9 +243,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Moonriver",
             symbol: "MOVR",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://moonriver.moonscan.io"
+        blockExplorerUrl: "https://moonriver.moonscan.io",
     },
     arbitrumNova: {
         chainId: 42170,
@@ -255,9 +255,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://nova-explorer.arbitrum.io"
+        blockExplorerUrl: "https://nova-explorer.arbitrum.io",
     },
     mantle: {
         chainId: 5000,
@@ -267,9 +267,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Mantle",
             symbol: "MNT",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://explorer.mantle.xyz"
+        blockExplorerUrl: "https://explorer.mantle.xyz",
     },
     linea: {
         chainId: 59144,
@@ -279,9 +279,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://lineascan.build"
+        blockExplorerUrl: "https://lineascan.build",
     },
     scroll: {
         chainId: 534353,
@@ -291,9 +291,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://blockscout.scroll.io"
+        blockExplorerUrl: "https://blockscout.scroll.io",
     },
     filecoin: {
         chainId: 314,
@@ -303,9 +303,9 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Filecoin",
             symbol: "FIL",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://filfox.info/en"
+        blockExplorerUrl: "https://filfox.info/en",
     },
     taiko: {
         chainId: 167005,
@@ -315,21 +315,21 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://explorer.a3.taiko.xyz"
+        blockExplorerUrl: "https://explorer.a3.taiko.xyz",
     },
     zksync: {
         chainId: 324,
-        name: "zkSync Era",
-        chain: zkSync,
+        name: "zksync Era",
+        chain: zksync,
         rpcUrl: "https://mainnet.era.zksync.io",
         nativeCurrency: {
             name: "Ether",
             symbol: "ETH",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://explorer.zksync.io"
+        blockExplorerUrl: "https://explorer.zksync.io",
     },
     canto: {
         chainId: 7700,
@@ -339,12 +339,11 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
         nativeCurrency: {
             name: "CANTO",
             symbol: "CANTO",
-            decimals: 18
+            decimals: 18,
         },
-        blockExplorerUrl: "https://tuber.build"
-    }
+        blockExplorerUrl: "https://tuber.build",
+    },
 } as const;
-
 
 export const getChainConfigs = (runtime: IAgentRuntime) => {
     return (
@@ -388,9 +387,9 @@ export class WalletProvider {
             ethereum: createClients("ethereum"),
             base: createClients("base"),
             sepolia: createClients("sepolia"),
-            bnbSmartChain: createClients("bnbSmartChain"),
-            arbitrumOne: createClients("arbitrumOne"),
-            avalancheCChain: createClients("avalancheCChain"),
+            bsc: createClients("bsc"),
+            arbitrum: createClients("arbitrum"),
+            avalanche: createClients("avalanche"),
             polygon: createClients("polygon"),
             optimism: createClients("optimism"),
             cronos: createClients("cronos"),
@@ -400,7 +399,7 @@ export class WalletProvider {
             celo: createClients("celo"),
             moonbeam: createClients("moonbeam"),
             aurora: createClients("aurora"),
-            harmony: createClients("harmony"),
+            harmonyOne: createClients("harmonyOne"),
             moonriver: createClients("moonriver"),
             arbitrumNova: createClients("arbitrumNova"),
             mantle: createClients("mantle"),
@@ -409,7 +408,7 @@ export class WalletProvider {
             filecoin: createClients("filecoin"),
             taiko: createClients("taiko"),
             zksync: createClients("zksync"),
-            canto: createClients("canto")
+            canto: createClients("canto"),
         };
     }
 
