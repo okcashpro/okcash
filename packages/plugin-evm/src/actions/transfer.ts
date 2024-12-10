@@ -2,7 +2,15 @@ import { ByteArray, parseEther, type Hex } from "viem";
 import { WalletProvider } from "../providers/wallet";
 import type { Transaction, TransferParams } from "../types";
 import { transferTemplate } from "../templates";
-import type { IAgentRuntime, Memory, State } from "@ai16z/eliza";
+import {
+    composeContext,
+    generateObjectDEPRECATED,
+    HandlerCallback,
+    ModelClass,
+    type IAgentRuntime,
+    type Memory,
+    type State,
+} from "@ai16z/eliza";
 
 export { transferTemplate };
 export class TransferAction {
@@ -14,6 +22,10 @@ export class TransferAction {
     ): Promise<Transaction> {
         const walletClient = this.walletProvider.getWalletClient();
         const [fromAddress] = await walletClient.getAddresses();
+
+        if (!params.data) {
+            params.data = "0x";
+        }
 
         await this.walletProvider.switchChain(runtime, params.fromChain);
 
@@ -57,11 +69,51 @@ export const transferAction = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any
+        options: any,
+        callback?: HandlerCallback
     ) => {
+        console.log("Transfer action handler called");
         const walletProvider = new WalletProvider(runtime);
         const action = new TransferAction(walletProvider);
-        return action.transfer(runtime, options);
+
+        // Compose transfer context
+        const transferContext = composeContext({
+            state,
+            template: transferTemplate,
+        });
+
+        // Generate transfer content
+        const content = await generateObjectDEPRECATED({
+            runtime,
+            context: transferContext,
+            modelClass: ModelClass.LARGE,
+        });
+
+        const paramOptions: TransferParams = {
+            fromChain: content.fromChain,
+            toAddress: content.toAddress,
+            amount: content.amount,
+            data: content.data,
+        };
+
+        try {
+            const transferResp = await action.transfer(runtime, paramOptions);
+            if (callback) {
+                callback({
+                    text: `Successfully transferred ${paramOptions.amount} tokens to ${paramOptions.toAddress}\nTransaction Hash: ${transferResp.hash}`,
+                });
+            }
+            return true;
+        } catch (error) {
+            console.error("Error during token transfer:", error);
+            if (callback) {
+                callback({
+                    text: `Error transferring tokens: ${error.message}`,
+                    content: { error: error.message },
+                });
+            }
+            return false;
+        }
     },
     template: transferTemplate,
     validate: async (runtime: IAgentRuntime) => {
