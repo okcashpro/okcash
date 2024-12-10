@@ -96,7 +96,7 @@ export class FarcasterInteractionManager {
             });
 
             const memory: Memory = {
-                content: { text: mention.text },
+                content: { text: mention.text, hash: mention.hash },
                 agentId: this.runtime.agentId,
                 userId,
                 roomId,
