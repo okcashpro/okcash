@@ -2,12 +2,10 @@ import {
     getAssociatedTokenAddressSync,
     createTransferInstruction,
 } from "@solana/spl-token";
-import bs58 from "bs58";
 import { okaiLogger, settings } from "@okcashpro/okai";
 
 import {
     Connection,
-    Keypair,
     PublicKey,
     TransactionMessage,
     VersionedTransaction,
@@ -24,6 +22,7 @@ import {
     type Action,
 } from "@okcashpro/okai";
 import { composeContext } from "@okcashpro/okai";
+import { getWalletKey } from "../keypairUtils";
 import { generateObjectDEPRECATED } from "@okcashpro/okai";
 
 export interface TransferContent extends Content {
@@ -138,11 +137,10 @@ export default {
         }
 
         try {
-            const privateKeyString =
-                runtime.getSetting("SOLANA_PRIVATE_KEY") ??
-                runtime.getSetting("WALLET_PRIVATE_KEY");
-            const secretKey = bs58.decode(privateKeyString);
-            const senderKeypair = Keypair.fromSecretKey(secretKey);
+            const { keypair: senderKeypair } = await getWalletKey(
+                runtime,
+                true
+            );
 
             const connection = new Connection(settings.RPC_URL!);
 
