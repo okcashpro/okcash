@@ -9,20 +9,14 @@ export { transferTemplate };
 export class TransferAction {
     constructor(private walletProvider: WalletProvider) {}
 
-    async transfer(
-        runtime: IAgentRuntime,
-        params: TransferParams
-    ): Promise<Transaction> {
+    async transfer(params: TransferParams): Promise<Transaction> {
         const walletClient = this.walletProvider.getWalletClient(
             params.fromChain
         );
-        const [fromAddress] = await walletClient.getAddresses();
-
-        this.walletProvider.switchChain(params.fromChain);
 
         try {
             const hash = await walletClient.sendTransaction({
-                account: fromAddress,
+                account: walletClient.account,
                 to: params.toAddress,
                 value: parseEther(params.amount),
                 data: params.data as Hex,
@@ -42,7 +36,7 @@ export class TransferAction {
 
             return {
                 hash,
-                from: fromAddress,
+                from: walletClient.account.address,
                 to: params.toAddress,
                 value: parseEther(params.amount),
                 data: params.data as Hex,
@@ -67,7 +61,7 @@ export const transferAction = {
         ) as `0x${string}`;
         const walletProvider = new WalletProvider(privateKey);
         const action = new TransferAction(walletProvider);
-        return action.transfer(runtime, options);
+        return action.transfer(options);
     },
     template: transferTemplate,
     validate: async (runtime: IAgentRuntime) => {
