@@ -566,7 +566,8 @@ export class AgentRuntime implements IAgentRuntime {
      * Evaluate the message and state using the registered evaluators.
      * @param message The message to evaluate.
      * @param state The state of the agent.
-     * @param didRespond Whether the agent responded to the message.
+     * @param didRespond Whether the agent responded to the message.~
+     * @param callback The handler callback
      * @returns The results of the evaluation.
      */
     async evaluate(
