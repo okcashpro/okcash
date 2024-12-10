@@ -460,7 +460,7 @@ export class MessageManager {
                                     this.runtime.agentId
                             ),
                             agentId,
-                            userId,
+                            userId: agentId,
                             roomId,
                             content: {
                                 ...content,
