@@ -129,7 +129,6 @@ export async function generateText({
             case ModelProviderName.ALI_BAILIAN:
             case ModelProviderName.VOLENGINE:
             case ModelProviderName.LLAMACLOUD:
-            case ModelProviderName.TOGETHER:
             case ModelProviderName.NANOGPT:
             case ModelProviderName.HYPERBOLIC:
             case ModelProviderName.TOGETHER: {
