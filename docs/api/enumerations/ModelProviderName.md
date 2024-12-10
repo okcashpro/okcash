@@ -12,7 +12,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:214](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L214)
+[packages/core/src/types.ts:215](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L215)
 
 ***
 
@@ -22,7 +22,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:215](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L215)
+[packages/core/src/types.ts:216](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L216)
 
 ***
 
@@ -32,7 +32,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:216](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L216)
+[packages/core/src/types.ts:217](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L217)
 
 ***
 
@@ -42,7 +42,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:217](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L217)
+[packages/core/src/types.ts:218](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L218)
 
 ***
 
@@ -52,7 +52,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:218](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L218)
+[packages/core/src/types.ts:219](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L219)
 
 ***
 
@@ -62,7 +62,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:219](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L219)
+[packages/core/src/types.ts:220](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L220)
 
 ***
 
@@ -72,7 +72,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:220](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L220)
+[packages/core/src/types.ts:221](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L221)
 
 ***
 
@@ -82,7 +82,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:221](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L221)
+[packages/core/src/types.ts:222](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L222)
 
 ***
 
@@ -92,7 +92,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:222](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L222)
+[packages/core/src/types.ts:223](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L223)
 
 ***
 
@@ -102,7 +102,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:223](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L223)
+[packages/core/src/types.ts:224](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L224)
 
 ***
 
@@ -112,7 +112,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:224](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L224)
+[packages/core/src/types.ts:225](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L225)
 
 ***
 
@@ -122,7 +122,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:225](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L225)
+[packages/core/src/types.ts:226](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L226)
 
 ***
 
@@ -132,7 +132,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:226](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L226)
+[packages/core/src/types.ts:227](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L227)
 
 ***
 
@@ -142,7 +142,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:227](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L227)
+[packages/core/src/types.ts:228](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L228)
 
 ***
 
@@ -152,7 +152,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:228](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L228)
+[packages/core/src/types.ts:229](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L229)
 
 ***
 
@@ -162,7 +162,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:229](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L229)
+[packages/core/src/types.ts:230](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L230)
 
 ***
 
@@ -172,7 +172,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:230](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L230)
+[packages/core/src/types.ts:231](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L231)
 
 ***
 
@@ -182,7 +182,7 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:231](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L231)
+[packages/core/src/types.ts:232](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L232)
 
 ***
 
@@ -192,4 +192,14 @@ Available model providers
 
 #### Defined in
 
-[packages/core/src/types.ts:232](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L232)
+[packages/core/src/types.ts:233](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L233)
+
+***
+
+### HYPERBOLIC
+
+> **HYPERBOLIC**: `"hyperbolic"`
+
+#### Defined in
+
+[packages/core/src/types.ts:234](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L234)
