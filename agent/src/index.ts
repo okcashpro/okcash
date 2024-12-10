@@ -25,7 +25,7 @@ import {
     validateCharacterConfig,
 } from "@ai16z/eliza";
 import { zgPlugin } from "@ai16z/plugin-0g";
-import { goatPlugin } from "@ai16z/plugin-goat";
+import createGoatPlugin from "@ai16z/plugin-goat";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
 // import { buttplugPlugin } from "@ai16z/plugin-buttplug";
 import {
@@ -275,6 +275,11 @@ export function getTokenForProvider(
                 character.settings?.secrets?.NANOGPT_API_KEY ||
                 settings.NANOGPT_API_KEY
             );
+        case ModelProviderName.HYPERBOLIC:
+            return (
+                character.settings?.secrets?.HYPERBOLIC_API_KEY ||
+                settings.HYPERBOLIC_API_KEY
+            );
     }
 }
 
@@ -359,7 +364,7 @@ function getSecret(character: Character, secret: string) {
 
 let nodePlugin: any | undefined;
 
-export function createAgent(
+export async function createAgent(
     character: Character,
     db: IDatabaseAdapter,
     cache: ICacheManager,
@@ -372,6 +377,10 @@ export function createAgent(
     );
 
     nodePlugin ??= createNodePlugin();
+
+    const goatPlugin = await createGoatPlugin((secret) =>
+        getSecret(character, secret)
+    );
 
     return new AgentRuntime({
         databaseAdapter: db,
@@ -392,7 +401,7 @@ export function createAgent(
                 : null,
             getSecret(character, "EVM_PRIVATE_KEY") ||
             (getSecret(character, "WALLET_PUBLIC_KEY") &&
-                !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
+                getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
                 ? evmPlugin
                 : null,
             getSecret(character, "ZEROG_PRIVATE_KEY") ? zgPlugin : null,
@@ -460,7 +469,7 @@ async function startAgent(character: Character, directClient) {
         await db.init();
 
         const cache = intializeDbCache(character, db);
-        const runtime = createAgent(character, db, cache, token);
+        const runtime = await createAgent(character, db, cache, token);
 
         await runtime.initialize();
 

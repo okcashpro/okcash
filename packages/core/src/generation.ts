@@ -130,7 +130,9 @@ export async function generateText({
             case ModelProviderName.VOLENGINE:
             case ModelProviderName.LLAMACLOUD:
             case ModelProviderName.TOGETHER:
-            case ModelProviderName.NANOGPT: {
+            case ModelProviderName.NANOGPT:
+            case ModelProviderName.HYPERBOLIC:
+            case ModelProviderName.TOGETHER: {
                 elizaLogger.debug("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
 

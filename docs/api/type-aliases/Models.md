@@ -84,6 +84,10 @@ Model configurations by provider
 
 > **volengine**: [`Model`](Model.md)
 
+### hyperbolic
+
+> **hyperbolic**: [`Model`](Model.md)
+
 ## Defined in
 
 [packages/core/src/types.ts:188](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L188)
