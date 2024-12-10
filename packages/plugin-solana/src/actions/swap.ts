@@ -144,7 +144,7 @@ Respond with a JSON markdown block containing only the extracted values. Use nul
 
 // get all the tokens in the wallet using the wallet provider
 async function getTokensInWallet(runtime: IAgentRuntime) {
-    const publicKey = await getPublicKey(runtime);
+    const { publicKey } = await getWalletKey(runtime, false);
     const walletProvider = new WalletProvider(
         new Connection("https://api.mainnet-beta.solana.com"),
         publicKey

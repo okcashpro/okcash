@@ -159,7 +159,6 @@ const deriveKeyProvider: Provider = {
                 return "";
             }
 
-            let keypair: Keypair;
             try {
                 const secretSalt =
                     runtime.getSetting("WALLET_SECRET_SALT") || "secret_salt";
@@ -181,8 +180,6 @@ const deriveKeyProvider: Provider = {
                 console.error("Error creating PublicKey:", error);
                 return "";
             }
-
-            return keypair;
         } catch (error) {
             console.error("Error in derive key provider:", error.message);
             return `Failed to fetch derive key information: ${error instanceof Error ? error.message : "Unknown error"}`;
