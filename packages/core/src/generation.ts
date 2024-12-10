@@ -129,6 +129,7 @@ export async function generateText({
             case ModelProviderName.ALI_BAILIAN:
             case ModelProviderName.VOLENGINE:
             case ModelProviderName.LLAMACLOUD:
+            case ModelProviderName.HYPERBOLIC:
             case ModelProviderName.TOGETHER: {
                 elizaLogger.debug("Initializing OpenAI model.");
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
@@ -386,6 +387,24 @@ export async function generateText({
             }
             case ModelProviderName.GAIANET: {
                 elizaLogger.debug("Initializing GAIANET model.");
+
+                var baseURL = models[provider].endpoint;
+                if(!baseURL){
+                    switch(modelClass){
+                        case ModelClass.SMALL:
+                            baseURL = settings.SMALL_GAIANET_SERVER_URL || "https://llama3b.gaia.domains/v1";
+                            break;
+                        case ModelClass.MEDIUM:
+                            baseURL = settings.MEDIUM_GAIANET_SERVER_URL || "https://llama8b.gaia.domains/v1";
+                            break;
+                        case ModelClass.LARGE:
+                            baseURL = settings.LARGE_GAIANET_SERVER_URL || "https://qwen72b.gaia.domains/v1";
+                            break;
+                    }
+                }
+
+                elizaLogger.debug("Using GAIANET model with baseURL:", baseURL);
+
                 const openai = createOpenAI({ apiKey, baseURL: endpoint });
 
                 const { text: openaiResponse } = await aiGenerateText({
@@ -672,7 +691,7 @@ export async function generateTextArray({
     }
 }
 
-export async function generateObject({
+export async function generateObjectDEPRECATED({
     runtime,
     context,
     modelClass,
@@ -682,7 +701,7 @@ export async function generateObject({
     modelClass: string;
 }): Promise<any> {
     if (!context) {
-        elizaLogger.error("generateObject context is empty");
+        elizaLogger.error("generateObjectDEPRECATED context is empty");
         return null;
     }
     let retryDelay = 1000;
@@ -778,6 +797,7 @@ export async function generateMessageResponse({
                 context,
                 modelClass,
             });
+
             // try parsing the response as JSON, if null then try again
             const parsedContent = parseJSONObjectFromText(response) as Content;
             if (!parsedContent) {
@@ -884,33 +904,41 @@ export const generateImage = async (
             });
 
             // Add type assertion to handle the response properly
-            const togetherResponse = response as unknown as TogetherAIImageResponse;
+            const togetherResponse =
+                response as unknown as TogetherAIImageResponse;
 
-            if (!togetherResponse.data || !Array.isArray(togetherResponse.data)) {
+            if (
+                !togetherResponse.data ||
+                !Array.isArray(togetherResponse.data)
+            ) {
                 throw new Error("Invalid response format from Together AI");
             }
 
             // Rest of the code remains the same...
-            const base64s = await Promise.all(togetherResponse.data.map(async (image) => {
-                if (!image.url) {
-                    elizaLogger.error("Missing URL in image data:", image);
-                    throw new Error("Missing URL in Together AI response");
-                }
+            const base64s = await Promise.all(
+                togetherResponse.data.map(async (image) => {
+                    if (!image.url) {
+                        elizaLogger.error("Missing URL in image data:", image);
+                        throw new Error("Missing URL in Together AI response");
+                    }
 
-                // Fetch the image from the URL
-                const imageResponse = await fetch(image.url);
-                if (!imageResponse.ok) {
-                    throw new Error(`Failed to fetch image: ${imageResponse.statusText}`);
-                }
+                    // Fetch the image from the URL
+                    const imageResponse = await fetch(image.url);
+                    if (!imageResponse.ok) {
+                        throw new Error(
+                            `Failed to fetch image: ${imageResponse.statusText}`
+                        );
+                    }
 
-                // Convert to blob and then to base64
-                const blob = await imageResponse.blob();
-                const arrayBuffer = await blob.arrayBuffer();
-                const base64 = Buffer.from(arrayBuffer).toString('base64');
-                
-                // Return with proper MIME type
-                return `data:image/jpeg;base64,${base64}`;
-            }));
+                    // Convert to blob and then to base64
+                    const blob = await imageResponse.blob();
+                    const arrayBuffer = await blob.arrayBuffer();
+                    const base64 = Buffer.from(arrayBuffer).toString("base64");
+
+                    // Return with proper MIME type
+                    return `data:image/jpeg;base64,${base64}`;
+                })
+            );
 
             if (base64s.length === 0) {
                 throw new Error("No images generated by Together AI");
@@ -976,7 +1004,13 @@ export const generateImage = async (
             ) {
                 targetSize = "1024x1024";
             }
-            const openai = new OpenAI({ apiKey: apiKey as string });
+            const openaiApiKey = runtime.getSetting("OPENAI_API_KEY") as string;
+            if (!openaiApiKey) {
+                throw new Error("OPENAI_API_KEY is not set");
+            }
+            const openai = new OpenAI({
+                apiKey: openaiApiKey as string,
+            });
             const response = await openai.images.generate({
                 model,
                 prompt: data.prompt,
@@ -1096,7 +1130,7 @@ export const generateObjectV2 = async ({
     mode = "json",
 }: GenerationOptions): Promise<GenerateObjectResult<unknown>> => {
     if (!context) {
-        const errorMessage = "generateObject context is empty";
+        const errorMessage = "generateObjectV2 context is empty";
         console.error(errorMessage);
         throw new Error(errorMessage);
     }
@@ -1189,7 +1223,7 @@ export async function handleProvider(
         case ModelProviderName.GROQ:
             return await handleGroq(options);
         case ModelProviderName.LLAMALOCAL:
-            return await generateObject({
+            return await generateObjectDEPRECATED({
                 runtime,
                 context,
                 modelClass,

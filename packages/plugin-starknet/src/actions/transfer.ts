@@ -7,7 +7,7 @@ import {
     composeContext,
     Content,
     elizaLogger,
-    generateObject,
+    generateObjectDEPRECATED,
     HandlerCallback,
     IAgentRuntime,
     Memory,
@@ -136,7 +136,7 @@ export default {
         });
 
         // Generate transfer content
-        const content = await generateObject({
+        const content = await generateObjectDEPRECATED({
             runtime,
             context: transferContext,
             modelClass: ModelClass.MEDIUM,
