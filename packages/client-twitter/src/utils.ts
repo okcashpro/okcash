@@ -4,6 +4,7 @@ import { Content, Memory, UUID } from "@ai16z/eliza";
 import { stringToUuid } from "@ai16z/eliza";
 import { ClientBase } from "./base";
 import { elizaLogger } from "@ai16z/eliza";
+import { DEFAULT_MAX_TWEET_LENGTH } from "./environment";
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     const waitTime =
@@ -170,7 +171,8 @@ export async function sendTweet(
 ): Promise<Memory[]> {
     const tweetChunks = splitTweetContent(
         content.text,
-        Number(client.runtime.getSetting("MAX_TWEET_LENGTH"))
+        Number(client.runtime.getSetting("MAX_TWEET_LENGTH")) ||
+            DEFAULT_MAX_TWEET_LENGTH
     );
     const sentTweets: Tweet[] = [];
     let previousTweetId = inReplyTo;
