@@ -13,9 +13,9 @@ export type SupportedChain =
     | "ethereum"
     | "base"
     | "sepolia"
-    | "bnbSmartChain"
-    | "arbitrumOne"
-    | "avalancheCChain"
+    | "bsc"
+    | "arbitrum"
+    | "avalanche"
     | "polygon"
     | "optimism"
     | "cronos"
@@ -25,7 +25,7 @@ export type SupportedChain =
     | "celo"
     | "moonbeam"
     | "aurora"
-    | "harmony"
+    | "harmonyOne"
     | "moonriver"
     | "arbitrumNova"
     | "mantle"
@@ -35,7 +35,6 @@ export type SupportedChain =
     | "taiko"
     | "zksync"
     | "canto";
-
 
 // Transaction types
 export interface Transaction {
@@ -111,12 +110,12 @@ export interface BridgeParams {
 // Plugin configuration
 export interface EvmPluginConfig {
     rpcUrl?: {
-  ethereum?: string;
+        ethereum?: string;
         base?: string;
         sepolia?: string;
-        bnbSmartChain?: string;
-        arbitrumOne?: string;
-        avalancheCChain?: string;
+        bsc?: string;
+        arbitrum?: string;
+        avalanche?: string;
         polygon?: string;
         optimism?: string;
         cronos?: string;
@@ -126,7 +125,7 @@ export interface EvmPluginConfig {
         celo?: string;
         moonbeam?: string;
         aurora?: string;
-        harmony?: string;
+        harmonyOne?: string;
         moonriver?: string;
         arbitrumNova?: string;
         mantle?: string;
