@@ -35,7 +35,7 @@ export class FarcasterInteractionManager {
             try {
                 await this.handleInteractions();
             } catch (error) {
-                elizaLogger.error(error)
+                elizaLogger.error(error);
                 return;
             }
 
@@ -106,7 +106,7 @@ export class FarcasterInteractionManager {
                 agent,
                 cast: mention,
                 memory,
-                thread
+                thread,
             });
         }
 
@@ -117,15 +117,15 @@ export class FarcasterInteractionManager {
         agent,
         cast,
         memory,
-        thread
+        thread,
     }: {
         agent: Profile;
         cast: Cast;
         memory: Memory;
-        thread: Cast[]
+        thread: Cast[];
     }) {
         if (cast.profile.fid === agent.fid) {
-            elizaLogger.info("skipping cast from bot itself", cast.hash)
+            elizaLogger.info("skipping cast from bot itself", cast.hash);
             return;
         }
 
@@ -164,7 +164,7 @@ export class FarcasterInteractionManager {
             farcasterUsername: agent.username,
             timeline: formattedTimeline,
             currentPost,
-            formattedConversation
+            formattedConversation,
         });
 
         const shouldRespondContext = composeContext({
@@ -200,8 +200,13 @@ export class FarcasterInteractionManager {
             modelClass: ModelClass.SMALL,
         });
 
-        if (shouldRespondResponse === "IGNORE" || shouldRespondResponse === "STOP") {
-            elizaLogger.info(`Not responding to cast because generated ShouldRespond was ${shouldRespondResponse}`)
+        if (
+            shouldRespondResponse === "IGNORE" ||
+            shouldRespondResponse === "STOP"
+        ) {
+            elizaLogger.info(
+                `Not responding to cast because generated ShouldRespond was ${shouldRespondResponse}`
+            );
             return;
         }
 
@@ -223,7 +228,6 @@ export class FarcasterInteractionManager {
         response.inReplyTo = memoryId;
 
         if (!response.text) return;
-
 
         if (this.runtime.getSetting("FARCASTER_DRY_RUN") === "true") {
             elizaLogger.info(
@@ -247,6 +251,8 @@ export class FarcasterInteractionManager {
                     hash: cast.hash,
                 },
             });
+            // sendCast lost response action, so we need to add it back here
+            results[0].memory.content.action = response.action;
 
             const newState = await this.runtime.updateRecentMessageState(state);
 
