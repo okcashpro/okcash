@@ -37,7 +37,7 @@ jobs:
       - name: Merge OKai into OKcash
         run: |
           cd okcash-repo
-          git subtree pull --prefix=okai okai main
+          git subtree pull --prefix=okai okai main --allow-unrelated-histories
 
       - name: Push Changes
         run: |
