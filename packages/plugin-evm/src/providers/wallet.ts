@@ -37,24 +37,26 @@ export class WalletProvider {
         return this.chains[this.currentChain];
     }
 
-    getPublicClient(chainName: SupportedChain): PublicClient<HttpTransport, Chain, Account | undefined> {
+    getPublicClient(
+        chainName: SupportedChain
+    ): PublicClient<HttpTransport, Chain, Account | undefined> {
         const transport = this.createHttpTransport(chainName);
 
         const publicClient = createPublicClient({
             chain: this.chains[chainName],
             transport,
-        })
+        });
         return publicClient;
     }
 
-    getWalletClient(chainName: SupportedChain):WalletClient {
+    getWalletClient(chainName: SupportedChain): WalletClient {
         const transport = this.createHttpTransport(chainName);
 
         const walletClient = createWalletClient({
             chain: this.chains[chainName],
             transport,
             account: this.account,
-        })
+        });
 
         return walletClient;
     }
@@ -191,28 +193,29 @@ const genChainsFromRuntime = (
     return chains;
 };
 
+export const initWalletProvider = (runtime: IAgentRuntime) => {
+    const privateKey = runtime.getSetting("EVM_PRIVATE_KEY");
+    if (!privateKey) {
+        return null;
+    }
+
+    const chains = genChainsFromRuntime(runtime);
+
+    return new WalletProvider(privateKey as `0x${string}`, chains);
+};
+
 export const evmWalletProvider: Provider = {
     async get(
         runtime: IAgentRuntime,
         message: Memory,
         state?: State
     ): Promise<string | null> {
-        const privateKey = runtime.getSetting("EVM_PRIVATE_KEY");
-        if (!privateKey) {
-            return null;
-        }
-
-        const chains = genChainsFromRuntime(runtime);
-
         try {
-            const walletProvider = new WalletProvider(
-                privateKey as `0x${string}`,
-                chains
-            );
+            const walletProvider = initWalletProvider(runtime);
             const address = walletProvider.getAddress();
             const balance = await walletProvider.getWalletBalance();
             const chain = walletProvider.getCurrentChain();
-            return `EVM Wallet Address: ${address}\nBalance: ${balance} ETH\nChain ID: ${chain.id}, Name: ${chain.name}, Native Currency: ${chain.nativeCurrency}`;
+            return `EVM Wallet Address: ${address}\nBalance: ${balance} ${chain.nativeCurrency.symbol}\nChain ID: ${chain.id}, Name: ${chain.name}`;
         } catch (error) {
             console.error("Error in EVM wallet provider:", error);
             return null;

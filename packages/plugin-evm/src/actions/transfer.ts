@@ -1,7 +1,15 @@
-import { ByteArray, parseEther, type Hex } from "viem";
-import type { IAgentRuntime, Memory, State } from "@ai16z/eliza";
+import { ByteArray, formatEther, parseEther, type Hex } from "viem";
+import {
+    composeContext,
+    generateObjectDEPRECATED,
+    HandlerCallback,
+    ModelClass,
+    type IAgentRuntime,
+    type Memory,
+    type State,
+} from "@ai16z/eliza";
 
-import { WalletProvider } from "../providers/wallet";
+import { initWalletProvider, WalletProvider } from "../providers/wallet";
 import type { Transaction, TransferParams } from "../types";
 import { transferTemplate } from "../templates";
 
@@ -54,14 +62,49 @@ export const transferAction = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any
+        options: any,
+        callback?: HandlerCallback
     ) => {
-        const privateKey = runtime.getSetting(
-            "EVM_PRIVATE_KEY"
-        ) as `0x${string}`;
-        const walletProvider = new WalletProvider(privateKey);
-        const action = new TransferAction(walletProvider);
-        return action.transfer(options);
+        try {
+            const walletProvider = initWalletProvider(runtime);
+            const action = new TransferAction(walletProvider);
+
+            const context = composeContext({
+                state,
+                template: transferTemplate,
+            });
+
+            const transferDetails = await generateObjectDEPRECATED({
+                runtime,
+                context,
+                modelClass: ModelClass.SMALL,
+            });
+
+            const tx = await action.transfer(transferDetails);
+
+            if (callback) {
+                callback({
+                    text: `Successfully transferred ${formatEther(tx.value)} tokens to ${tx.to}\nTransaction hash: ${tx.hash}`,
+                    content: {
+                        success: true,
+                        hash: tx.hash,
+                        amount: formatEther(tx.value),
+                        recipient: tx.to,
+                    },
+                });
+            }
+
+            return true;
+        } catch (error) {
+            console.error("Error during token transfer:", error);
+            if (callback) {
+                callback({
+                    text: `Error transferring tokens: ${error.message}`,
+                    content: { error: error.message },
+                });
+            }
+            return false;
+        }
     },
     template: transferTemplate,
     validate: async (runtime: IAgentRuntime) => {
