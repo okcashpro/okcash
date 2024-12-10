@@ -26,7 +26,7 @@ import {
     canto,
 } from "viem/chains";
 import type { ChainMetadata, SupportedChain } from "../types";
-import type { IAgentRuntime } from "@ai16z/eliza";
+import type { IAgentRuntime } from "@okcashpro/okai";
 
 export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
     ethereum: {

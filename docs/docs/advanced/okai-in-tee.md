@@ -2,17 +2,17 @@
 sidebar_position: 17
 ---
 
-# 🫖 Eliza in TEE
+# 🫖 OKai in TEE
 
-![](/img/eliza_in_tee.jpg)
+![](/img/okai_in_tee.jpg)
 
 ## Overview
 
-The Eliza agent can be deployed in a TEE environment to ensure the security and privacy of the agent's data. This guide will walk you through the process of setting up and running an Eliza agent in a TEE environment by utilizing the TEE Plugin in the Eliza Framework.
+The OKai agent can be deployed in a TEE environment to ensure the security and privacy of the agent's data. This guide will walk you through the process of setting up and running an OKai agent in a TEE environment by utilizing the TEE Plugin in the OKai Framework.
 
 ### Background
 
-The TEE Plugin in the Eliza Framework is built on top of the [Dstack SDK](https://github.com/Dstack-TEE/dstack), which is designed to simplify the steps for developers to deploy programs to CVM (Confidential VM), and to follow the security best practices by default. The main features include:
+The TEE Plugin in the OKai Framework is built on top of the [Dstack SDK](https://github.com/Dstack-TEE/dstack), which is designed to simplify the steps for developers to deploy programs to CVM (Confidential VM), and to follow the security best practices by default. The main features include:
 
 - Convert any docker container to a CVM image to deploy on supported TEEs
 - Remote Attestation API and a chain-of-trust visualization on Web UI
@@ -23,7 +23,7 @@ The TEE Plugin in the Eliza Framework is built on top of the [Dstack SDK](https:
 
 ## Core Components
 
-Eliza's TEE implementation consists of two primary providers that handle secure key managementoperations and remote attestations.
+OKai's TEE implementation consists of two primary providers that handle secure key managementoperations and remote attestations.
 
 These components work together to provide:
 
@@ -98,7 +98,7 @@ const quote = await provider.generateAttestation(reportData);
 
 ### Prerequisites
 
-Before getting started with Eliza, ensure you have:
+Before getting started with OKai, ensure you have:
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Orbstack](https://orbstack.dev/) (Orbstack is recommended)
 - For Mac/Windows: Check the prerequisites from [Quickstart Guide](./quickstart.md)
@@ -140,11 +140,11 @@ To set up your environment for TEE development:
     docker run --rm -p 8090:8090 phalanetwork/tappd-simulator:latest
     ```
 
-### Run an Eliza Agent Locally with TEE Simulator
+### Run an OKai Agent Locally with TEE Simulator
 
-1. **Configure Eliza Agent**
+1. **Configure OKai Agent**
 
-   Go through the [configuration guide](./configuration.md) to set up your Eliza agent.
+   Go through the [configuration guide](./configuration.md) to set up your OKai agent.
 2. **Start the TEE Simulator**
    Follow the simulator setup instructions above based on your TEE mode.
 
@@ -160,7 +160,7 @@ To set up your environment for TEE development:
 
 4. **Verify TEE Attestation**
 
-   You can verify the TEE attestation quote by going to the [TEE RA Explorer](https://ra-quote-explorer.vercel.app/) and pasting the attestation quote from the agent logs. Here's an example of interacting with the Eliza agent to ask for the agent's wallet address:
+   You can verify the TEE attestation quote by going to the [TEE RA Explorer](https://ra-quote-explorer.vercel.app/) and pasting the attestation quote from the agent logs. Here's an example of interacting with the OKai agent to ask for the agent's wallet address:
 
    ```bash
    You: what's your wallet address?
@@ -186,9 +186,9 @@ To set up your environment for TEE development:
 
    ![](https://i.imgur.com/BugdNUy.png)
 
-### Build, Test, and Publish an Eliza Agent Docker Image
+### Build, Test, and Publish an OKai Agent Docker Image
 
-Now that we have run the Eliza agent in the TEE simulator, we can build and publish an Eliza agent Docker image to prepare for deployment to a real TEE environment.
+Now that we have run the OKai agent in the TEE simulator, we can build and publish an OKai agent Docker image to prepare for deployment to a real TEE environment.
 
 First, you need to create a Docker account and publish your image to a container registry. Here we will use [Docker Hub](https://hub.docker.com/) as an example.
 
@@ -202,13 +202,13 @@ Build the Docker image:
 
 ```bash
 # For Linux/AMD64 machines run
-docker build -t username/eliza-agent:latest .
+docker build -t username/okai-agent:latest .
 
 # For architecture other than AMD64, run
-docker buildx build --platform=linux/amd64 -t username/eliza-agent:latest .
+docker buildx build --platform=linux/amd64 -t username/okai-agent:latest .
 ```
 
-For Linux/AMD64 machines, you can now test the agent locally by updating the `TEE_MODE` environment variable to `DOCKER` and setting the environment variables in the [docker-compose.yaml](https://github.com/ai16z/eliza/blob/main/docker-compose.yaml) file. Once you have done that, you can start the agent by running:
+For Linux/AMD64 machines, you can now test the agent locally by updating the `TEE_MODE` environment variable to `DOCKER` and setting the environment variables in the [docker-compose.yaml](https://github.com/okcashpro/okai/blob/main/docker-compose.yaml) file. Once you have done that, you can start the agent by running:
 
 > **Note**: Make sure the TEE simulator is running before starting the agent through docker compose.
 
@@ -219,14 +219,14 @@ docker compose up
 Publish the Docker image to a container registry:
 
 ```bash
-docker push username/eliza-agent:latest
+docker push username/okai-agent:latest
 ```
 
-Now we are ready to deploy the Eliza agent to a real TEE environment.
+Now we are ready to deploy the OKai agent to a real TEE environment.
 
-### Run an Eliza Agent in a Real TEE Environment
+### Run an OKai Agent in a Real TEE Environment
 
-Before deploying the Eliza agent to a real TEE environment, you need to create a new TEE account on the [TEE Cloud](https://teehouse.vercel.app). Reach out to Phala Network on [Discord](https://discord.gg/phalanetwork) if you need help.
+Before deploying the OKai agent to a real TEE environment, you need to create a new TEE account on the [TEE Cloud](https://teehouse.vercel.app). Reach out to Phala Network on [Discord](https://discord.gg/phalanetwork) if you need help.
 
 Next, you will need to take the docker-compose.yaml file in the root folder of the project and edit it based on your agent configuration.
 
@@ -237,7 +237,7 @@ Next, you will need to take the docker-compose.yaml file in the root folder of t
 services:
     tee:
         command: ["pnpm", "start", "--character=./characters/yourcharacter.character.json"]
-        image: username/eliza-agent:latest
+        image: username/okai-agent:latest
         stdin_open: true
         tty: true
         volumes:
@@ -279,7 +279,7 @@ volumes:
     tee:
 ```
 
-Now you can deploy the Eliza agent to a real TEE environment. Go to the [TEE Cloud](https://teehouse.vercel.app) and click on the `Create VM` button to configure your Eliza agent deployment.
+Now you can deploy the OKai agent to a real TEE environment. Go to the [TEE Cloud](https://teehouse.vercel.app) and click on the `Create VM` button to configure your OKai agent deployment.
 
 Click on the `Compose Manifest Mode` tab and paste the docker-compose.yaml file content into the `Compose Manifest` field.
 
@@ -291,9 +291,9 @@ Next, go to the `Resources` tab and configure your VM resources.
 
 ![Resources](https://i.imgur.com/HsmupO1.png)
 
-Finally, click on the `Submit` button to deploy your Eliza agent.
+Finally, click on the `Submit` button to deploy your OKai agent.
 
-This will take a few minutes to complete. Once the deployment is complete, you can click on the `View` button to view your Eliza agent.
+This will take a few minutes to complete. Once the deployment is complete, you can click on the `View` button to view your OKai agent.
 
 Here is an example of a deployed agent named `vitailik2077`:
 
@@ -311,4 +311,4 @@ Now we can verify the REAL TEE attestation quote by going to the [TEE RA Explore
 
 ![TEE RA Explorer](https://i.imgur.com/TJ5299l.png)
 
-Congratulations! You have successfully run an Eliza agent in a real TEE environment.
+Congratulations! You have successfully run an OKai agent in a real TEE environment.

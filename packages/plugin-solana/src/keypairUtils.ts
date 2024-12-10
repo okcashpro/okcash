@@ -1,7 +1,7 @@
 import { Keypair, PublicKey } from "@solana/web3.js";
-import { DeriveKeyProvider, TEEMode } from "@ai16z/plugin-tee";
+import { DeriveKeyProvider, TEEMode } from "@okcashpro/plugin-tee";
 import bs58 from "bs58";
-import { IAgentRuntime } from "@ai16z/eliza";
+import { IAgentRuntime } from "@okcashpro/okai";
 
 export interface KeypairResult {
     keypair?: Keypair;

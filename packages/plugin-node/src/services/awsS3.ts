@@ -3,7 +3,7 @@ import {
     IAwsS3Service,
     Service,
     ServiceType,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import {
     GetObjectCommand,
     PutObjectCommand,

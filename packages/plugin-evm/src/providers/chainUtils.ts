@@ -1,5 +1,5 @@
 import { createPublicClient, createWalletClient, http } from "viem";
-import type { IAgentRuntime } from "@ai16z/eliza";
+import type { IAgentRuntime } from "@okcashpro/okai";
 import type {
     Account,
     Chain,

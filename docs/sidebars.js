@@ -109,8 +109,8 @@ const sidebars = {
         },
         {
             type: "doc",
-            id: "advanced/eliza-in-tee",
-            label: "Eliza in TEE",
+            id: "advanced/okai-in-tee",
+            label: "OKai in TEE",
           },
       ],
     },
