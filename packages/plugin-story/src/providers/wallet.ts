@@ -11,9 +11,10 @@ import {
     type Address,
     Account,
 } from "viem";
-import { mainnet, base, storyOdyssey } from "viem/chains";
-import type { SupportedChain, ChainConfig, ChainMetadata } from "../types";
+import { storyOdyssey } from "viem/chains";
+import type { SupportedChain, ChainMetadata } from "../types";
 import { privateKeyToAccount } from "viem/accounts";
+import { StoryClient, StoryConfig } from "@story-protocol/core-sdk";
 
 export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
     odyssey: {
@@ -26,51 +27,50 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
             symbol: "IP",
             decimals: 18,
         },
-        blockExplorerUrl: "https://odyssey-testnet-explorer.storyscan.xyz",
+        blockExplorerUrl: "https://odyssey.storyscan.xyz",
     },
 } as const;
 
-export const getChainConfigs = (runtime: IAgentRuntime) => {
-    return (
-        (runtime.character.settings.chains?.evm as ChainConfig[]) ||
-        DEFAULT_CHAIN_CONFIGS
-    );
-};
-
 export class WalletProvider {
-    private chainConfigs: Record<SupportedChain, ChainConfig>;
-    private currentChain: SupportedChain = "odyssey";
+    private storyClient: StoryClient;
+    private publicClient: PublicClient<
+        HttpTransport,
+        Chain,
+        Account | undefined
+    >;
+    private walletClient: WalletClient;
     private address: Address;
     runtime: IAgentRuntime;
 
     constructor(runtime: IAgentRuntime) {
-        const privateKey = runtime.getSetting("EVM_PRIVATE_KEY");
-        if (!privateKey) throw new Error("EVM_PRIVATE_KEY not configured");
+        const privateKey = runtime.getSetting("STORY_PRIVATE_KEY");
+        if (!privateKey) throw new Error("STORY_PRIVATE_KEY not configured");
 
         this.runtime = runtime;
 
         const account = privateKeyToAccount(privateKey as `0x${string}`);
         this.address = account.address;
 
-        const createClients = (chain: SupportedChain): ChainConfig => {
-            const transport = http(getChainConfigs(runtime)[chain].rpcUrl);
-            return {
-                chain: getChainConfigs(runtime)[chain].chain,
-                publicClient: createPublicClient<HttpTransport>({
-                    chain: getChainConfigs(runtime)[chain].chain,
-                    transport,
-                }) as PublicClient<HttpTransport, Chain, Account | undefined>,
-                walletClient: createWalletClient<HttpTransport>({
-                    chain: getChainConfigs(runtime)[chain].chain,
-                    transport,
-                    account,
-                }),
-            };
+        const config: StoryConfig = {
+            account: account,
+            transport: http(DEFAULT_CHAIN_CONFIGS.odyssey.rpcUrl),
+            chainId: "odyssey",
         };
+        this.storyClient = StoryClient.newClient(config);
 
-        this.chainConfigs = {
-            odyssey: createClients("odyssey"),
-        };
+        const baseConfig = {
+            chain: storyOdyssey,
+            transport: http(DEFAULT_CHAIN_CONFIGS.odyssey.rpcUrl),
+        } as const;
+        this.publicClient = createPublicClient<HttpTransport>(
+            baseConfig
+        ) as PublicClient<HttpTransport, Chain, Account | undefined>;
+
+        this.walletClient = createWalletClient<HttpTransport>({
+            chain: storyOdyssey,
+            transport: http(DEFAULT_CHAIN_CONFIGS.odyssey.rpcUrl),
+            account: account,
+        });
     }
 
     getAddress(): Address {
@@ -79,10 +79,8 @@ export class WalletProvider {
 
     async getWalletBalance(): Promise<string | null> {
         try {
-            const client = this.getPublicClient(this.currentChain);
-            const walletClient = this.getWalletClient();
-            const balance = await client.getBalance({
-                address: walletClient.account.address,
+            const balance = await this.publicClient.getBalance({
+                address: this.address,
             });
             return formatUnits(balance, 18);
         } catch (error) {
@@ -92,78 +90,32 @@ export class WalletProvider {
     }
 
     async connect(): Promise<`0x${string}`> {
-        return this.runtime.getSetting("EVM_PRIVATE_KEY") as `0x${string}`;
+        return this.runtime.getSetting("STORY_PRIVATE_KEY") as `0x${string}`;
     }
 
-    async switchChain(
-        runtime: IAgentRuntime,
-        chain: SupportedChain
-    ): Promise<void> {
-        const walletClient = this.chainConfigs[this.currentChain].walletClient;
-        if (!walletClient) throw new Error("Wallet not connected");
-
-        try {
-            await walletClient.switchChain({
-                id: getChainConfigs(runtime)[chain].chainId,
-            });
-        } catch (error: any) {
-            if (error.code === 4902) {
-                console.log(
-                    "[WalletProvider] Chain not added to wallet (error 4902) - attempting to add chain first"
-                );
-                await walletClient.addChain({
-                    chain: {
-                        ...getChainConfigs(runtime)[chain].chain,
-                        rpcUrls: {
-                            default: {
-                                http: [getChainConfigs(runtime)[chain].rpcUrl],
-                            },
-                            public: {
-                                http: [getChainConfigs(runtime)[chain].rpcUrl],
-                            },
-                        },
-                    },
-                });
-                await walletClient.switchChain({
-                    id: getChainConfigs(runtime)[chain].chainId,
-                });
-            } else {
-                throw error;
-            }
-        }
-
-        this.currentChain = chain;
-    }
-
-    getPublicClient(
-        chain: SupportedChain
-    ): PublicClient<HttpTransport, Chain, Account | undefined> {
-        return this.chainConfigs[chain].publicClient;
+    getPublicClient(): PublicClient<HttpTransport, Chain, Account | undefined> {
+        return this.publicClient;
     }
 
     getWalletClient(): WalletClient {
-        const walletClient = this.chainConfigs[this.currentChain].walletClient;
-        if (!walletClient) throw new Error("Wallet not connected");
-        return walletClient;
+        if (!this.walletClient) throw new Error("Wallet not connected");
+        return this.walletClient;
     }
 
-    getCurrentChain(): SupportedChain {
-        return this.currentChain;
-    }
-
-    getChainConfig(chain: SupportedChain) {
-        return getChainConfigs(this.runtime)[chain];
+    getStoryClient(): StoryClient {
+        if (!this.storyClient) throw new Error("StoryClient not connected");
+        return this.storyClient;
     }
 }
 
-export const evmWalletProvider: Provider = {
+export const storyWalletProvider: Provider = {
     async get(
         runtime: IAgentRuntime,
         message: Memory,
         state?: State
     ): Promise<string | null> {
-        // Check if the user has an EVM wallet
-        if (!runtime.getSetting("EVM_PRIVATE_KEY")) {
+        // Check if the user has a Story wallet
+        if (!runtime.getSetting("STORY_PRIVATE_KEY")) {
             return null;
         }
 
@@ -171,9 +123,9 @@ export const evmWalletProvider: Provider = {
             const walletProvider = new WalletProvider(runtime);
             const address = walletProvider.getAddress();
             const balance = await walletProvider.getWalletBalance();
-            return `EVM Wallet Address: ${address}\nBalance: ${balance} ETH`;
+            return `Story Wallet Address: ${address}\nBalance: ${balance} IP`;
         } catch (error) {
-            console.error("Error in EVM wallet provider:", error);
+            console.error("Error in Story wallet provider:", error);
             return null;
         }
     },

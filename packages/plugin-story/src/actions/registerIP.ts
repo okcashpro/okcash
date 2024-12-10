@@ -1,91 +1,102 @@
-import type { IAgentRuntime, Memory, State } from "@ai16z/eliza";
 import {
-    ChainId,
-    createConfig,
-    executeRoute,
-    ExtendedChain,
-    getRoutes,
-} from "@lifi/sdk";
-import { getChainConfigs, WalletProvider } from "../providers/wallet";
+    composeContext,
+    elizaLogger,
+    generateObjectDEPRECATED,
+    HandlerCallback,
+    ModelClass,
+    type IAgentRuntime,
+    type Memory,
+    type State,
+} from "@ai16z/eliza";
+import { WalletProvider } from "../providers/wallet";
 import { registerIPTemplate } from "../templates";
-import { RegisterIPParams, Transaction } from "../types";
-import { Hash } from "viem";
+import { RegisterIPParams } from "../types";
+import { RegisterIpResponse } from "@story-protocol/core-sdk";
 
 export { registerIPTemplate };
 
 export class RegisterIPAction {
-    private config;
+    constructor(private walletProvider: WalletProvider) {}
 
-    constructor(private walletProvider: WalletProvider) {
-        this.config = createConfig({
-            integrator: "eliza",
-            chains: Object.values(
-                getChainConfigs(this.walletProvider.runtime)
-            ).map((config) => ({
-                id: config.chainId,
-                name: config.name,
-                key: config.name.toLowerCase(),
-                chainType: "EVM",
-                nativeToken: {
-                    ...config.nativeCurrency,
-                    chainId: config.chainId,
-                    address: "0x0000000000000000000000000000000000000000",
-                    coinKey: config.nativeCurrency.symbol,
-                },
-                metamask: {
-                    chainId: `0x${config.chainId.toString(16)}`,
-                    chainName: config.name,
-                    nativeCurrency: config.nativeCurrency,
-                    rpcUrls: [config.rpcUrl],
-                    blockExplorerUrls: [config.blockExplorerUrl],
-                },
-                diamondAddress: "0x0000000000000000000000000000000000000000",
-                coin: config.nativeCurrency.symbol,
-                mainnet: true,
-            })) as ExtendedChain[],
+    async registerIP(params: RegisterIPParams): Promise<RegisterIpResponse> {
+        const storyClient = this.walletProvider.getStoryClient();
+
+        const response = await storyClient.ipAsset.register({
+            nftContract: params.contractAddress,
+            tokenId: params.tokenId,
+            txOptions: { waitForTransaction: true },
         });
-    }
 
-    async registerIP(params: RegisterIPParams): Promise<{ txHash: Hash }> {
-        const walletClient = this.walletProvider.getWalletClient();
-        const [fromAddress] = await walletClient.getAddresses();
-
-        // TODO: Implement IP registration
-        return {
-            // TODO: replace with actual txn response
-            txHash: "0x0000000000000000000000000000000000000000000000000000000000000000",
-        };
+        return response;
     }
 }
 
 export const registerIPAction = {
-    name: "registerIP",
-    description: "Register an IP address on the Odyssey chain",
+    name: "REGISTER_IP",
+    description: "Register an NFT as an IP Asset on Story",
     handler: async (
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any
-    ) => {
+        options: any,
+        callback?: HandlerCallback
+    ): Promise<boolean> => {
+        elizaLogger.log("Starting REGISTER_IP handler...");
+
+        // initialize or update state
+        if (!state) {
+            state = (await runtime.composeState(message)) as State;
+        } else {
+            state = await runtime.updateRecentMessageState(state);
+        }
+
+        const registerIPContext = composeContext({
+            state,
+            template: registerIPTemplate,
+        });
+
+        const content = await generateObjectDEPRECATED({
+            runtime,
+            context: registerIPContext,
+            modelClass: ModelClass.SMALL,
+        });
+
         const walletProvider = new WalletProvider(runtime);
         const action = new RegisterIPAction(walletProvider);
-        return action.registerIP(options);
+        try {
+            const response = await action.registerIP(content);
+            callback?.({
+                text: `Successfully registered IP ID: ${response.ipId}\nTransaction Hash: ${response.txHash}`,
+            });
+            return true;
+        } catch (e) {
+            elizaLogger.error("Error registering IP:", e.message);
+            callback?.({ text: `Error registering IP: ${e.message}` });
+            return false;
+        }
     },
     template: registerIPTemplate,
     validate: async (runtime: IAgentRuntime) => {
-        const privateKey = runtime.getSetting("EVM_PRIVATE_KEY");
+        const privateKey = runtime.getSetting("STORY_PRIVATE_KEY");
         return typeof privateKey === "string" && privateKey.startsWith("0x");
     },
     examples: [
         [
             {
+                user: "assistant",
+                content: {
+                    text: "Ill help you register an NFT with contract address 0x041B4F29183317Fd352AE57e331154b73F8a1D73 and token id 209 as IP",
+                    action: "REGISTER_IP",
+                },
+            },
+            {
                 user: "user",
                 content: {
-                    text: "Bridge 1 ETH from Ethereum to Base",
-                    action: "CROSS_CHAIN_TRANSFER",
+                    text: "Register an NFT with contract address 0x041B4F29183317Fd352AE57e331154b73F8a1D73 and token id 209 as IP",
+                    action: "REGISTER_IP",
                 },
             },
         ],
     ],
-    similes: ["CROSS_CHAIN_TRANSFER", "CHAIN_BRIDGE", "MOVE_CROSS_CHAIN"],
-}; // TODO: add more examples / similies
+    similes: ["REGISTER_IP", "REGISTER_NFT"],
+};

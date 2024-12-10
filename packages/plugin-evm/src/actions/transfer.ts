@@ -59,6 +59,7 @@ export const transferAction = {
         state: State,
         options: any
     ) => {
+        console.log("Transfer action options:", options);
         const walletProvider = new WalletProvider(runtime);
         const action = new TransferAction(walletProvider);
         return action.transfer(runtime, options);
