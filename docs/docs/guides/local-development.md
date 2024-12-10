@@ -12,7 +12,7 @@ Before you begin, ensure you have:
 
 ```bash
 # Required
-Node.js 22+
+Node.js 23+
 pnpm
 Git
 
@@ -93,6 +93,24 @@ pnpm run test          # Run tests
 pnpm run test:watch    # Run tests in watch mode
 pnpm run lint          # Lint code
 ```
+
+### Direct Client Chat UI
+
+```
+# Open a terminal and Start with specific character
+pnpm run dev --characters="characters/my-character.json"
+```
+```
+# Open a 2nd terminal and go to the client directory
+cd client
+pnpm install
+pnpm run dev
+```
+
+Look for the message:
+`  ➜  Local:   http://localhost:5173/`
+Click on that link or open a browser window to that location.  Once you do that you should see the chat interface connect with the system and you can start interacting with your character.
+
 
 ## Database Development
 
