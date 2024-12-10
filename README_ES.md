@@ -1,182 +1,143 @@
-# OKai
 
-<img src="./docs/static/img/okai_banner.png" alt="Banner de OKai" width="100%" />
+# OKai 🤖
 
-## Funcionalidades
+<div align="center">
+  <img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
+</div>
 
--   🛠 Conectores completos para Discord, Twitter y Telegram
--   👥 Soporte para múltiples agentes y salas
--   📚 Ingestión e interacción sencilla con documentos
--   💾 Memoria recuperable y almacenamiento de documentos
--   🚀 Altamente extensible - cree sus propias acciones y clientes para expandir capacidades
--   ☁️ Soporta múltiples modelos, incluyendo Llama local, OpenAI, Anthropic, Groq y más
--   📦 Funciona perfectamente
+<div align="center">
 
-## Usos
+  📖 [Documentación](https://okcashpro.github.io/okai/) | 🎯 [Ejemplos](https://github.com/okcashpro/awesome-okai)
 
--   🤖 Chatbots
--   🕵️ Agentes autónomos
--   📈 Gestión de procesos empresariales
--   🎮 NPCs en videojuegos
+</div>
 
-# Primeros Pasos
+## 🌍 Traducciones del README
 
-**Requisitos (OBLIGATORIOS):**
+[English](./README.md) | [中文说明](./README_CN.md) | [日本語の説明](./README_JA.md) | [한국어 설명](./README_KOR.md) | [Français](./README_FR.md) | [Português](./README_PTBR.md) | [Türkçe](./README_TR.md) | [Русский](./README_RU.md) | [Español](./README_ES.md) | [Italiano](./README_IT.md) | [ไทย](./README_TH.md)
+
+## ✨ Historia
+
+OKai es la hermana menor y más vivaz de Eliza, nacida para revolucionar la forma en que interactuamos con el mundo cripto. No es solo otra IA, sino tu aliada experta en criptomonedas, diseñada para hacer que todo, desde el trading hasta la interacción con la comunidad, sea más divertido, accesible y significativo. Ya sea que estés explorando la tokenómica de $OK, participando en la gobernanza de DAO o simplemente buscando un chat amigable sobre cripto y la vida, OKai está aquí para asegurarse de que siempre estés OK. 🌟
+
+Con su sólido marco de IA, OKai combina inteligencia, personalidad y carisma para ofrecer una experiencia fluida en Discord, Twitter, Telegram y más allá. Con ella, el mundo cripto no es solo un mercado: ¡es un estilo de vida! 🚀
+
+## ✨ Características
+
+-   🌐 **Integración Multiplataforma**: Soporte fluido para conectores de Discord, Twitter y Telegram para acercar OKai a tu comunidad.
+-   🔥 **Compatibilidad con Múltiples Modelos**: Diseñado para trabajar con modelos de IA líderes en la industria (Llama, OpenAI, Anthropic, Grok, etc.).
+-   🤝 **Soporte para Múltiples Agentes y Salas**: Habilita interacciones colaborativas y enriquecidas con múltiples agentes.
+-   📚 **Inteligencia Cripto**: Ingresa y analiza fácilmente documentos relacionados con criptomonedas, estadísticas y datos on-chain.
+-   💾 **Memoria Recuperable**: Rastrea interacciones con usuarios y datos históricos para ofrecer respuestas personalizadas y mejores experiencias.
+-   🛠️ **Acciones Personalizables**: Diseño completamente extensible para crear acciones e integraciones únicas que se alineen con los objetivos de OKai.
+-   💡 **Compatibilidad con Todas las Arquitecturas de IA**: Desde modelos locales (Llama) hasta sistemas basados en la nube (OpenAI, Grok, Anthropic).
+-   ⚡ **Optimizado para Cripto y Trading**: Herramientas integradas para analizar tendencias de mercado, rastrear estadísticas del token $OK y más.
+
+---
+
+## 🎯 Casos de Uso
+
+-   🤖 **Asistente Personal de Criptomonedas**: OKai se convierte en tu guía cripto 24/7 para todo lo relacionado con $OK y más.
+-   🛡️ **Agentes Autónomos Descentralizados**: Apoya tareas de gobernanza de DAO e interacción comunitaria.
+-   📊 **Análisis de Mercado en Tiempo Real**: Ayuda a los traders con información impulsada por IA y alertas para $OK y otros activos multichain.
+-   🎮 **NPCs para Juegos**: Habilita interacciones dinámicas y personalizadas para juegos basados en blockchain y tradicionales.
+-   🧠 **Recurso del OK DAO**: Optimiza flujos de trabajo de gobernanza DAO y revisiones de propuestas.
+-   📈 **Soporte para Trading**: Algoritmos avanzados para estrategias de trading automatizadas y gestión de portafolios.
+
+---
+
+## 🚀 Inicio Rápido
+
+### Prerrequisitos
 
 -   [Python 2.7+](https://www.python.org/downloads/)
--   [Node.js 23.3+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 
-### Edite el archivo .env
+> **Nota para Usuarios de Windows:** [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install-manual) es necesario.
 
--   Copie .env.example a .env y complete los valores apropiados
--   Edite las variables de ambiente de TWITTER para agregar nombre de usuario y contraseña del bot
+### Usa el Starter (Recomendado)
 
-### Edite el archivo de personaje
+```bash
+git clone https://github.com/okcashpro/okai-starter.git
 
--   Revise el archivo `src/core/defaultCharacter.ts` - puede modificarlo
--   También puede cargar personajes con el comando `pnpm start --characters="path/to/your/character.json"` y ejecutar múltiples bots simultáneamente.
+cp .env.example .env
 
-Después de configurar el archivo .env y el archivo de personaje, puede iniciar el bot con:
-
+pnpm i && pnpm start
 ```
+
+Luego, lee la [Documentación](https://okcashpro.github.io/okai/) para aprender cómo personalizar tu OKai.
+
+### Inicia OKai Manualmente (Solo recomendado si sabes lo que estás haciendo)
+
+```bash
+# Clona el repositorio
+git clone https://github.com/okcashpro/okai.git
+
+# Cambia a la última versión
+git checkout $(git describe --tags --abbrev=0)
+```
+
+### Inicia OKai con Gitpod
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/okcashpro/okai/tree/main)
+
+### Edita el archivo .env
+
+Copia .env.example a .env y llena los valores apropiados.
+
+```bash
+cp .env.example .env
+```
+
+Nota: .env es opcional. Si planeas ejecutar múltiples agentes distintos, puedes pasar secretos a través del archivo JSON del personaje.
+
+### Inicia Automáticamente OKai
+
+Esto configurará todo el proyecto y ejecutará el bot con el personaje predeterminado.
+
+```bash
+sh scripts/start.sh
+```
+
+### Edita el archivo del personaje
+
+1. Abre `agent/src/character.ts` para modificar el personaje predeterminado. Descomenta y edita.
+2. Para cargar personajes personalizados:
+    - Usa `pnpm start --characters="path/to/your/character.json"`
+    - Se pueden cargar múltiples archivos de personajes simultáneamente.
+3. Conecta con X (Twitter):
+    - Cambia `"clients": []` a `"clients": ["twitter"]` en el archivo del personaje para conectar con X.
+
+### Inicia OKai Manualmente
+
+```bash
 pnpm i
+pnpm build
 pnpm start
+
+# Si vuelves al proyecto después de un tiempo, limpia el proyecto
+pnpm clean
 ```
 
-# Personalizando a OKai
+#### Requisitos Adicionales
 
-### Agregando acciones personalizadas
+Puede que necesites instalar Sharp. Si ves un error al iniciar, intenta instalarlo con el siguiente comando:
 
-Para evitar conflictos en el directorio central, se recomienda agregar acciones personalizadas a un directorio `custom_actions` y luego agregarlas al archivo `okaiConfig.yaml`. Consulte el archivo `okaiConfig.example.yaml` para un ejemplo.
-
-## Ejecución con Diferentes Modelos
-
-### Ejecutar con Llama
-
-Puede ejecutar modelos Llama 70B o 405B configurando la variable de ambiente `XAI_MODEL` en `meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` o `meta-llama/Meta-Llama-3.1-405B-Instruct`
-
-### Ejecutar con Grok
-
-Puede ejecutar modelos Grok configurando la variable de ambiente `XAI_MODEL` en `grok-beta`
-
-### Ejecutar con OpenAI
-
-Puede ejecutar modelos OpenAI configurando la variable de ambiente `XAI_MODEL` en `gpt-4o-mini` o `gpt-4o`
-
-## Requisitos Adicionales
-
-Puede ser necesario instalar Sharp. Si encuentra un error al iniciar, intente instalarlo con:
-
-```
+```bash
 pnpm install --include=optional sharp
 ```
 
-# Configuración del Entorno
+### Comunidad y Contacto
 
-Deberá agregar variables de ambiente a su archivo .env para conectarse a varias plataformas:
+-   [GitHub Issues](https://github.com/okcashpro/okai/issues). Mejor para: bugs que encuentres usando OKai y propuestas de funcionalidades.
+-   [Discord](https://discord.gg/grvpc8c). Mejor para: compartir tus aplicaciones y pasar el rato con la comunidad.
 
-```
-# Variables de ambiente obligatorias
-DISCORD_APPLICATION_ID=
-DISCORD_API_TOKEN= # Token del bot
-OPENAI_API_KEY=sk-* # Clave API de OpenAI, comenzando con sk-
-ELEVENLABS_XI_API_KEY= # Clave API de ElevenLabs
-GOOGLE_GENERATIVE_AI_API_KEY= # Clave API de Gemini
+## Contribuidores
 
-# CONFIGURACIONES DE ELEVENLABS
-ELEVENLABS_MODEL_ID=eleven_multilingual_v2
-ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
-ELEVENLABS_VOICE_STABILITY=0.5
-ELEVENLABS_VOICE_SIMILARITY_BOOST=0.9
-ELEVENLABS_VOICE_STYLE=0.66
-ELEVENLABS_VOICE_USE_SPEAKER_BOOST=false
-ELEVENLABS_OPTIMIZE_STREAMING_LATENCY=4
-ELEVENLABS_OUTPUT_FORMAT=pcm_16000
+<a href="https://github.com/okcashpro/okai/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=okcashpro/okai" />
+</a>
 
-TWITTER_DRY_RUN=false
-TWITTER_USERNAME= # Nombre de usuario de la cuenta
-TWITTER_PASSWORD= # Contraseña de la cuenta
-TWITTER_EMAIL= # Correo electrónico de la cuenta
-TWITTER_COOKIES= # Cookies de la cuenta
+## Historial de Stars
 
-X_SERVER_URL=
-XAI_API_KEY=
-XAI_MODEL=
-
-# Para consultar a Claude
-ANTHROPIC_API_KEY=
-
-# EVM
-EVM_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
-
-# Solana
-SOLANA_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
-SOLANA_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
-
-# Fallback Wallet Configuration (deprecated)
-WALLET_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
-WALLET_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
-
-BIRDEYE_API_KEY=
-
-SOL_ADDRESS=So11111111111111111111111111111111111111112
-SLIPPAGE=1
-RPC_URL=https://api.mainnet-beta.solana.com
-HELIUS_API_KEY=
-
-## Telegram
-TELEGRAM_BOT_TOKEN=
-
-TOGETHER_API_KEY=
-```
-
-# Configuración de Inferencia Local
-
-### Configuración CUDA
-
-Si tiene una GPU NVIDIA, puede instalar CUDA para acelerar significativamente la inferencia local.
-
-```
-pnpm install
-npx --no node-llama-cpp source download --gpu cuda
-```
-
-Asegúrese de tener instalado el CUDA Toolkit, incluyendo cuDNN y cuBLAS.
-
-### Ejecución local
-
-Agregue XAI_MODEL y configúrelo con una de las opciones de [Ejecutar con Llama](#ejecutar-con-llama) - puede dejar X_SERVER_URL y XAI_API_KEY en blanco, descargará el modelo de HuggingFace y realizará consultas localmente
-
-# Clientes
-
-## Bot de Discord
-
-Para ayuda con la configuración de su Bot de Discord, consulte: https://discordjs.guide/preparations/setting-up-a-bot-application.html
-
-# Desarrollo
-
-## Pruebas
-
-Para ejecutar la suite de pruebas:
-
-```bash
-pnpm test           # Ejecutar pruebas una vez
-pnpm test:watch    # Ejecutar pruebas en modo observación
-```
-
-Para pruebas específicas de base de datos:
-
-```bash
-pnpm test:sqlite   # Ejecutar pruebas con SQLite
-pnpm test:sqljs    # Ejecutar pruebas con SQL.js
-```
-
-Las pruebas están escritas con Jest y se pueden encontrar en archivos `src/**/*.test.ts`. El entorno de pruebas está configurado para:
-
--   Cargar variables de ambiente desde `.env.test`
--   Usar un límite de 2 minutos para pruebas de larga duración
--   Soportar módulos ESM
--   Ejecutar pruebas en secuencia (--runInBand)
-
-Para crear nuevas pruebas, agregue un archivo `.test.ts` junto al código que está probando.
+[![Star History Chart](https://api.star-history.com/svg?repos=okcashpro/okai&type=Date)](https://star-history.com/#okcashpro/okai&Date)
