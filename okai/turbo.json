@@ -1,0 +1,26 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "tasks": {
+        "check-types": {
+            "dependsOn": ["build"]
+        },
+        "@okcashpro/agent#check-types": {
+            "dependsOn": ["@okcashpro/plugin-solana#build"]
+        },
+        "build": {
+            "outputs": ["dist/**"],
+            "dependsOn": ["^@okcashpro/okai#build"]
+        },
+        "@okcashpro/plugin-solana#build": {
+            "outputs": ["dist/**"],
+            "dependsOn": ["@okcashpro/plugin-trustdb#build"]
+        },
+        "okai-docs#build": {
+            "outputs": ["build/**"]
+        },
+        "dev": {
+            "persistent": true,
+            "cache": false
+        }
+    }
+}
