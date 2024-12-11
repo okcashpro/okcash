@@ -7,8 +7,6 @@ sidebar_position: 2
 ## Prerequisites
 
 Before getting started with Eliza, ensure you have:
-
-- [Python 2.7+](https://www.python.org/downloads/)
 - [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [pnpm 9+](https://pnpm.io/installation)
 - Git for version control
