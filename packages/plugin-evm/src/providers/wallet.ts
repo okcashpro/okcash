@@ -196,7 +196,7 @@ const genChainsFromRuntime = (
 export const initWalletProvider = (runtime: IAgentRuntime) => {
     const privateKey = runtime.getSetting("EVM_PRIVATE_KEY");
     if (!privateKey) {
-        return null;
+        throw new Error("EVM_PRIVATE_KEY is missing")
     }
 
     const chains = genChainsFromRuntime(runtime);
