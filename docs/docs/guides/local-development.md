@@ -101,7 +101,7 @@ pnpm run lint          # Lint code
 pnpm run dev --characters="characters/my-character.json"
 ```
 ```
-# Open a 2nd terminal and go to the client directory
+# Open a 2nd terminal and start the client
 pnpm start:client
 ```
 
