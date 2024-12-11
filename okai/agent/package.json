@@ -29,7 +29,7 @@
         "@okcashpro/plugin-0g": "workspace:*",
         "@okcashpro/plugin-aptos": "workspace:*",
         "@okcashpro/plugin-bootstrap": "workspace:*",
-        "@okcashpro/plugin-buttplug": "workspace:*",
+        "@okcashpro/plugin-intiface": "workspace:*",
         "@okcashpro/plugin-coinbase": "workspace:*",
         "@okcashpro/plugin-conflux": "workspace:*",
         "@okcashpro/plugin-evm": "workspace:*",

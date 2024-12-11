@@ -683,7 +683,7 @@ export type Character = {
     /** Optional configuration */
     settings?: {
         secrets?: { [key: string]: string };
-        buttplug?: boolean;
+        intiface?: boolean;
         voice?: {
             model?: string; // For VITS
             url?: string; // Legacy VITS support
@@ -1025,7 +1025,8 @@ export interface IAgentRuntime {
     evaluate(
         message: Memory,
         state?: State,
-        didRespond?: boolean
+        didRespond?: boolean,
+        callback?: HandlerCallback
     ): Promise<string[]>;
 
     ensureParticipantExists(userId: UUID, roomId: UUID): Promise<void>;
@@ -1120,6 +1121,15 @@ export interface IPdfService extends Service {
     convertPdfToText(pdfBuffer: Buffer): Promise<string>;
 }
 
+export interface IAwsS3Service extends Service {
+    uploadFile(imagePath: string, useSignedUrl: boolean, expiresIn: number ): Promise<{
+        success: boolean;
+        url?: string;
+        error?: string;
+    }>;
+    generateSignedUrl(fileName: string, expiresIn: number): Promise<string>
+}
+
 export type SearchResult = {
     title: string;
     url: string;
@@ -1145,7 +1155,8 @@ export enum ServiceType {
     BROWSER = "browser",
     SPEECH_GENERATION = "speech_generation",
     PDF = "pdf",
-    BUTTPLUG = "buttplug",
+    INTIFACE = "intiface",
+    AWS_S3 = "aws_s3",
 }
 
 export enum LoggingLevel {

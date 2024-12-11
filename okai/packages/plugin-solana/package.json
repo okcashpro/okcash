@@ -5,6 +5,9 @@
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
+        "@okcashpro/okai": "workspace:*",
+        "@okcashpro/plugin-trustdb": "workspace:*",
+        "@okcashpro/plugin-tee": "workspace:*",
         "@coral-xyz/anchor": "0.30.1",
         "@okcashpro/okai": "workspace:*",
         "@okcashpro/plugin-trustdb": "workspace:*",

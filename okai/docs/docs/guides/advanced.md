@@ -399,3 +399,4 @@ debug("Detailed operation info: %O", {
 - [Trust Engine Documentation](../advanced/trust-engine.md) for scoring system
 - [Autonomous Trading Guide](../advanced/autonomous-trading.md) for trading features
 - [Fine-tuning Guide](../advanced/fine-tuning.md) for model optimization
+- [OKai in TEE](../advanced/okai-in-tee.md) for TEE integration

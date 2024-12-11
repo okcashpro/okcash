@@ -4,8 +4,7 @@ import { Content, Memory, UUID } from "@okcashpro/okai";
 import { stringToUuid } from "@okcashpro/okai";
 import { ClientBase } from "./base";
 import { okaiLogger } from "@okcashpro/okai";
-
-const MAX_TWEET_LENGTH = 280; // Updated to Twitter's current character limit
+import { DEFAULT_MAX_TWEET_LENGTH } from "./environment";
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     const waitTime =
@@ -170,7 +169,11 @@ export async function sendTweet(
     twitterUsername: string,
     inReplyTo: string
 ): Promise<Memory[]> {
-    const tweetChunks = splitTweetContent(content.text);
+    const tweetChunks = splitTweetContent(
+        content.text,
+        Number(client.runtime.getSetting("MAX_TWEET_LENGTH")) ||
+            DEFAULT_MAX_TWEET_LENGTH
+    );
     const sentTweets: Tweet[] = [];
     let previousTweetId = inReplyTo;
 
@@ -236,8 +239,7 @@ export async function sendTweet(
     return memories;
 }
 
-function splitTweetContent(content: string): string[] {
-    const maxLength = MAX_TWEET_LENGTH;
+function splitTweetContent(content: string, maxLength: number): string[] {
     const paragraphs = content.split("\n\n").map((p) => p.trim());
     const tweets: string[] = [];
     let currentTweet = "";

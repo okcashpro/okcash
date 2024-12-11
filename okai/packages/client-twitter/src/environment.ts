@@ -1,7 +1,7 @@
 import { IAgentRuntime } from "@okcashpro/okai";
 import { z } from "zod";
 
-const DEFAULT_MAX_TWEET_LENGTH = 280;
+export const DEFAULT_MAX_TWEET_LENGTH = 280;
 
 export const twitterEnvSchema = z.object({
     TWITTER_DRY_RUN: z

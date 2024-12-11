@@ -107,6 +107,11 @@ const sidebars = {
           id: "advanced/autonomous-trading",
           label: "Autonomous Trading",
         },
+        {
+            type: "doc",
+            id: "advanced/okai-in-tee",
+            label: "OKai in TEE",
+          },
       ],
     },
     {

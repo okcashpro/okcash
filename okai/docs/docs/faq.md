@@ -16,7 +16,7 @@ To begin building your own AI agents with OKai, follow these steps:
 
 1.  **Install Python, Node.js and pnpm**: Ensure you have the necessary software prerequisites installed on your system. We use node v23.
 2.  **Set up your environment**: Create a `.env` file and populate it with the required API keys, database configuration, and platform-specific tokens.
-3.  **Install OKai**: Use the command `npm install okai` or `pnpm install okai` to install the OKai package.
+3.  **Install OKai**: Use the command `npm install @okcashpro/okai` or `pnpm add @okcashpro/okai` to install the OKai package.
 4.  **Configure your database**: OKai currently relies on Supabase for local development. Follow the instructions in the documentation to set up your Supabase project and database.
 5.  **Define your agent's character**: Create a character file using the provided JSON format to specify your agent's personality, knowledge, and behavior.
 6.  **Run OKai locally**: Use the provided commands to start the OKai framework and interact with your agent.
