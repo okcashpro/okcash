@@ -6,7 +6,7 @@
 
 # dev branch
 
-<img src="./docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
+<img src="../docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />
 
 _As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)_
 
