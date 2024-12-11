@@ -1,6 +1,6 @@
-# @ai16z/client-linkedin
+# @okcashpro/client-linkedin
 
-LinkedIn client integration for AI16Z agents. This package provides functionality for AI agents to interact with LinkedIn, including:
+LinkedIn client integration for OK agents. This package provides functionality for AI agents to interact with LinkedIn, including:
 
 - Automated post creation and scheduling
 - Professional interaction management
@@ -11,7 +11,7 @@ LinkedIn client integration for AI16Z agents. This package provides functionalit
 ## Installation
 
 ```bash
-pnpm add @ai16z/client-linkedin
+pnpm add @okcashpro/client-linkedin
 ```
 
 ## Configuration
@@ -29,7 +29,7 @@ POST_INTERVAL_MAX=72
 ## Usage
 
 ```typescript
-import { LinkedInClientInterface } from '@ai16z/client-linkedin';
+import { LinkedInClientInterface } from '@okcashpro/client-linkedin';
 
 // Initialize the client
 const manager = await LinkedInClientInterface.start(runtime);

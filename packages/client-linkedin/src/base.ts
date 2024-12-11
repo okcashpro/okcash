@@ -1,8 +1,8 @@
 import { EventEmitter } from "events";
 // @ts-ignore
 import { Client as LinkedInClient } from "linkedin-api";
-import { elizaLogger } from "@ai16z/eliza";
-import { stringToUuid, getEmbeddingZeroVector } from "@ai16z/eliza";
+import { okaiLogger } from "@okcashpro/okai";
+import { stringToUuid, getEmbeddingZeroVector } from "@okcashpro/okai";
 
 class RequestQueue {
     private queue: (() => Promise<any>)[] = [];
@@ -81,14 +81,14 @@ export class ClientBase extends EventEmitter {
             throw new Error("LinkedIn credentials not configured");
         }
 
-        elizaLogger.log("Logging into LinkedIn...");
+        okaiLogger.log("Logging into LinkedIn...");
 
         try {
             await this.linkedInClient.login(username, password);
             this.profile = await this.fetchProfile();
 
             if (this.profile) {
-                elizaLogger.log(
+                okaiLogger.log(
                     "LinkedIn profile loaded:",
                     JSON.stringify(this.profile, null, 2)
                 );
@@ -105,7 +105,7 @@ export class ClientBase extends EventEmitter {
 
             await this.loadInitialState();
         } catch (error) {
-            elizaLogger.error("LinkedIn login failed:", error);
+            okaiLogger.error("LinkedIn login failed:", error);
             throw error;
         }
     }

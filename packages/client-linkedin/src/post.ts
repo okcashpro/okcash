@@ -3,8 +3,8 @@ import {
   generateText,
   ModelClass,
   stringToUuid,
-  elizaLogger
-} from '@ai16z/eliza';
+  okaiLogger
+} from '@okcashpro/okai';
 
 const linkedInPostTemplate = `{{timeline}}
 
@@ -24,7 +24,7 @@ About {{agentName}} (LinkedIn Profile):
 {{characterPostExamples}}
 
 # Task: Generate a professional LinkedIn post in the voice and style of {{agentName}}
-Write a post that is {{adjective}} about {{topic}}, from the perspective of {{agentName}}. 
+Write a post that is {{adjective}} about {{topic}}, from the perspective of {{agentName}}.
 The post should be professional and industry-relevant.
 Do not add commentary or acknowledge this request, just write the post.
 Keep the tone professional but engaging.`;
@@ -61,7 +61,7 @@ export class LinkedInPostClient {
         generateNewPostLoop();
       }, delay);
 
-      elizaLogger.log(`Next LinkedIn post scheduled in ${randomHours} hours`);
+      okaiLogger.log(`Next LinkedIn post scheduled in ${randomHours} hours`);
     };
 
     if (postImmediately) {
@@ -72,7 +72,7 @@ export class LinkedInPostClient {
   }
 
   async generateNewPost() {
-    elizaLogger.log('Generating new LinkedIn post');
+    okaiLogger.log('Generating new LinkedIn post');
 
     try {
       const recentPosts = await this.client.linkedInClient.getFeedPosts();
@@ -108,7 +108,7 @@ ${post.text}
         template: this.runtime.character.templates?.linkedInPostTemplate || linkedInPostTemplate
       });
 
-      elizaLogger.debug('Generate post prompt:\n' + context);
+      okaiLogger.debug('Generate post prompt:\n' + context);
 
       const newPostContent = await generateText({
         runtime: this.runtime,
@@ -117,13 +117,13 @@ ${post.text}
       });
 
       if (this.runtime.getSetting('LINKEDIN_DRY_RUN') === 'true') {
-        elizaLogger.info(`Dry run: would have posted: ${newPostContent}`);
+        okaiLogger.info(`Dry run: would have posted: ${newPostContent}`);
         return;
       }
 
       try {
-        elizaLogger.log(`Posting new LinkedIn post:\n${newPostContent}`);
-        
+        okaiLogger.log(`Posting new LinkedIn post:\n${newPostContent}`);
+
         const result = await this.client.requestQueue.add(
           async () => await this.client.linkedInClient.createPost(newPostContent)
         );
@@ -150,12 +150,12 @@ ${post.text}
           createdAt: Date.now()
         });
 
-        elizaLogger.log(`LinkedIn post created: ${result.url}`);
+        okaiLogger.log(`LinkedIn post created: ${result.url}`);
       } catch (error) {
-        elizaLogger.error('Error creating LinkedIn post:', error);
+        okaiLogger.error('Error creating LinkedIn post:', error);
       }
     } catch (error) {
-      elizaLogger.error('Error generating new LinkedIn post:', error);
+      okaiLogger.error('Error generating new LinkedIn post:', error);
     }
   }
 }

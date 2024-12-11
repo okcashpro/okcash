@@ -1,4 +1,4 @@
-import { elizaLogger } from '@ai16z/eliza';
+import { okaiLogger } from '@okcashpro/okai';
 import { ClientBase } from './base';
 import { LinkedInPostClient } from './post';
 import { LinkedInInteractionClient } from './interactions';
@@ -19,18 +19,18 @@ class LinkedInManager {
 export const LinkedInClientInterface = {
   async start(runtime: any) {
     await validateLinkedInConfig(runtime);
-    elizaLogger.log('LinkedIn client started');
-    
+    okaiLogger.log('LinkedIn client started');
+
     const manager = new LinkedInManager(runtime);
     await manager.client.init();
     await manager.post.start();
     await manager.interaction.start();
-    
+
     return manager;
   },
 
   async stop(runtime: any) {
-    elizaLogger.warn('LinkedIn client stop not implemented yet');
+    okaiLogger.warn('LinkedIn client stop not implemented yet');
   }
 };
 

@@ -6,8 +6,8 @@ import {
   shouldRespondFooter,
   ModelClass,
   stringToUuid,
-  elizaLogger
-} from '@ai16z/eliza';
+  okaiLogger
+} from '@okcashpro/okai';
 
 const linkedInMessageTemplate = `{{timeline}}
 
@@ -82,7 +82,7 @@ export class LinkedInInteractionClient {
   }
 
   async handleLinkedInInteractions() {
-    elizaLogger.log('Checking LinkedIn interactions');
+    okaiLogger.log('Checking LinkedIn interactions');
 
     try {
       // Check messages
@@ -102,7 +102,7 @@ export class LinkedInInteractionClient {
         }
       }
     } catch (error) {
-      elizaLogger.error('Error handling LinkedIn interactions:', error);
+      okaiLogger.error('Error handling LinkedIn interactions:', error);
     }
   }
 
@@ -140,7 +140,7 @@ export class LinkedInInteractionClient {
     });
 
     if (shouldRespond !== 'RESPOND') {
-      elizaLogger.log('Not responding to message');
+      okaiLogger.log('Not responding to message');
       return;
     }
 
@@ -158,7 +158,7 @@ export class LinkedInInteractionClient {
     if (response.text) {
       try {
         await this.client.linkedInClient.sendMessage(message.conversationId, response.text);
-        
+
         await this.runtime.messageManager.createMemory({
           id: stringToUuid(`${Date.now()}-${this.runtime.agentId}`),
           userId: this.runtime.agentId,
@@ -172,7 +172,7 @@ export class LinkedInInteractionClient {
           createdAt: Date.now()
         });
       } catch (error) {
-        elizaLogger.error('Error sending LinkedIn message:', error);
+        okaiLogger.error('Error sending LinkedIn message:', error);
       }
     }
   }
@@ -211,7 +211,7 @@ export class LinkedInInteractionClient {
     });
 
     if (shouldRespond !== 'RESPOND') {
-      elizaLogger.log('Not responding to comment');
+      okaiLogger.log('Not responding to comment');
       return;
     }
 
@@ -229,7 +229,7 @@ export class LinkedInInteractionClient {
     if (response.text) {
       try {
         await this.client.linkedInClient.replyToComment(post.id, comment.id, response.text);
-        
+
         await this.runtime.messageManager.createMemory({
           id: stringToUuid(`${Date.now()}-${this.runtime.agentId}`),
           userId: this.runtime.agentId,
@@ -243,14 +243,14 @@ export class LinkedInInteractionClient {
           createdAt: Date.now()
         });
       } catch (error) {
-        elizaLogger.error('Error replying to LinkedIn comment:', error);
+        okaiLogger.error('Error replying to LinkedIn comment:', error);
       }
     }
   }
 
   private async getConversationHistory(conversationId: string): Promise<string> {
     const messages = await this.client.linkedInClient.getConversationMessages(conversationId);
-    return messages.map((msg: any) => 
+    return messages.map((msg: any) =>
       `${msg.senderName} (${new Date(msg.timestamp).toLocaleString()}): ${msg.text}`
     ).join('\n\n');
   }
