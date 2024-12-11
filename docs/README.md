@@ -1,8 +1,8 @@
 # OKai - Multi-agent simulation framework
 
-# https://github.com/okcashpro/okai
+# <https://github.com/okcashpro/okai>
 
-# Visit https://okai.builders for support
+# Visit <https://okai.builders> for support
 
 # dev branch
 
@@ -28,7 +28,7 @@ _As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAInd
 - [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [pnpm](https://pnpm.io/installation)
 
-### Edit the .env file
+## Edit the .env file
 
 - Copy .env.example to .env and fill in the appropriate values
 - Edit the TWITTER environment variables to add your bot's username and password
@@ -45,7 +45,7 @@ pnpm i
 pnpm start
 ```
 
-# Customising OKai
+## Customising OKai
 
 ### Adding custom actions
 
@@ -127,7 +127,7 @@ TOGETHER_API_KEY=
 
 # Local Inference Setup
 
-### CUDA Setup
+## CUDA Setup
 
 If you have an NVIDIA GPU, you can install CUDA to speed up local inference dramatically.
 
@@ -148,7 +148,7 @@ downloads the model from huggingface and queries it locally
 
 ## Discord Bot
 
-For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html
+For help with setting up your Discord Bot, check out here: <https://discordjs.guide/preparations/setting-up-a-bot-application.html>
 
 # Development
 
