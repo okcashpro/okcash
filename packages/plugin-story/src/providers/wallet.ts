@@ -48,7 +48,7 @@ export class WalletProvider {
 
         this.runtime = runtime;
 
-        const account = privateKeyToAccount(privateKey as `0x${string}`);
+        const account = privateKeyToAccount(privateKey as Address);
         this.address = account.address;
 
         const config: StoryConfig = {
