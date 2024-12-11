@@ -384,9 +384,12 @@ export async function createAgent(
         throw new Error("Invalid TEE configuration");
     }
 
-    const goatPlugin = await createGoatPlugin((secret) =>
-        getSecret(character, secret)
-    );
+    let goatPlugin: any | undefined;
+    if (getSecret(character, "ALCHEMY_API_KEY")) {
+        goatPlugin = await createGoatPlugin((secret) =>
+            getSecret(character, secret)
+        );
+    }
 
     return new AgentRuntime({
         databaseAdapter: db,
