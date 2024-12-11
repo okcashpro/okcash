@@ -27,7 +27,7 @@ import {
 import { zgPlugin } from "@okcashpro/plugin-0g";
 import createGoatPlugin from "@okcashpro/plugin-goat";
 import { bootstrapPlugin } from "@okcashpro/plugin-bootstrap";
-// import { buttplugPlugin } from "@okcashpro/plugin-buttplug";
+// import { intifacePlugin } from "@okcashpro/plugin-intiface";
 import {
     coinbaseCommercePlugin,
     coinbaseMassPaymentsPlugin,
