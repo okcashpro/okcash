@@ -328,6 +328,7 @@ export const models: Models = {
             [ModelClass.MEDIUM]: "llama3.1:70b",
             [ModelClass.LARGE]: "llama3.1:405b",
             [ModelClass.EMBEDDING]: "gte-large-en-v1.5",
+            [ModelClass.IMAGE]: "stabilityai/stable-diffusion-xl-base-1.0",
         },
     },
     [ModelProviderName.FAL]: {

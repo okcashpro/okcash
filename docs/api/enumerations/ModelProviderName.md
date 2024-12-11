@@ -146,9 +146,9 @@ Available model providers
 
 ---
 
-### GALADRIEL
+### 
 
-> **GALADRIEL**: `"galadriel"`
+> ****: `""`
 
 #### Defined in
 
