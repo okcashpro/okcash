@@ -9,11 +9,3 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Reverts
 
 * Revert "v0.1.5-alpha.7" ([f431514](https://github.com/okcashpro/okai/commit/f4315147c500ec571745bb5ba5b102f67db78d0b))
-
-
-
-
-
-## 0.1.5-alpha.6 (2024-12-08)
-
-**Note:** Version bump only for package create-okai-app
