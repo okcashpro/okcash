@@ -76,27 +76,49 @@ export async function generateText({
         runtime.character.modelEndpointOverride || models[provider].endpoint;
     let model = models[provider].model[modelClass];
 
-    // if runtime.getSetting("LLAMACLOUD_MODEL_LARGE") is true and modelProvider is LLAMACLOUD, then use the large model
-    if (
-        (runtime.getSetting("LLAMACLOUD_MODEL_LARGE") &&
-            provider === ModelProviderName.LLAMACLOUD) ||
-        (runtime.getSetting("TOGETHER_MODEL_LARGE") &&
-            provider === ModelProviderName.TOGETHER)
-    ) {
-        model =
-            runtime.getSetting("LLAMACLOUD_MODEL_LARGE") ||
-            runtime.getSetting("TOGETHER_MODEL_LARGE");
-    }
-
-    if (
-        (runtime.getSetting("LLAMACLOUD_MODEL_SMALL") &&
-            provider === ModelProviderName.LLAMACLOUD) ||
-        (runtime.getSetting("TOGETHER_MODEL_SMALL") &&
-            provider === ModelProviderName.TOGETHER)
-    ) {
-        model =
-            runtime.getSetting("LLAMACLOUD_MODEL_SMALL") ||
-            runtime.getSetting("TOGETHER_MODEL_SMALL");
+    // allow character.json settings => secrets to override models
+    // FIXME: add MODEL_MEDIUM support
+    switch(provider) {
+        // if runtime.getSetting("LLAMACLOUD_MODEL_LARGE") is true and modelProvider is LLAMACLOUD, then use the large model
+        case ModelProviderName.LLAMACLOUD: {
+            switch(modelClass) {
+                case ModelClass.LARGE: {
+                    model = runtime.getSetting("LLAMACLOUD_MODEL_LARGE") || model;
+                }
+                break;
+                case ModelClass.SMALL: {
+                    model = runtime.getSetting("LLAMACLOUD_MODEL_SMALL") || model;
+                }
+                break;
+            }
+        }
+        break;
+        case ModelProviderName.TOGETHER: {
+            switch(modelClass) {
+                case ModelClass.LARGE: {
+                    model = runtime.getSetting("TOGETHER_MODEL_LARGE") || model;
+                }
+                break;
+                case ModelClass.SMALL: {
+                    model = runtime.getSetting("TOGETHER_MODEL_SMALL") || model;
+                }
+                break;
+            }
+        }
+        break;
+        case ModelProviderName.OPENROUTER: {
+            switch(modelClass) {
+                case ModelClass.LARGE: {
+                    model = runtime.getSetting("LARGE_OPENROUTER_MODEL") || model;
+                }
+                break;
+                case ModelClass.SMALL: {
+                    model = runtime.getSetting("SMALL_OPENROUTER_MODEL") || model;
+                }
+                break;
+            }
+        }
+        break;
     }
 
     elizaLogger.info("Selected model:", model);
@@ -389,16 +411,22 @@ export async function generateText({
                 elizaLogger.debug("Initializing GAIANET model.");
 
                 var baseURL = models[provider].endpoint;
-                if(!baseURL){
-                    switch(modelClass){
+                if (!baseURL) {
+                    switch (modelClass) {
                         case ModelClass.SMALL:
-                            baseURL = settings.SMALL_GAIANET_SERVER_URL || "https://llama3b.gaia.domains/v1";
+                            baseURL =
+                                settings.SMALL_GAIANET_SERVER_URL ||
+                                "https://llama3b.gaia.domains/v1";
                             break;
                         case ModelClass.MEDIUM:
-                            baseURL = settings.MEDIUM_GAIANET_SERVER_URL || "https://llama8b.gaia.domains/v1";
+                            baseURL =
+                                settings.MEDIUM_GAIANET_SERVER_URL ||
+                                "https://llama8b.gaia.domains/v1";
                             break;
                         case ModelClass.LARGE:
-                            baseURL = settings.LARGE_GAIANET_SERVER_URL || "https://qwen72b.gaia.domains/v1";
+                            baseURL =
+                                settings.LARGE_GAIANET_SERVER_URL ||
+                                "https://qwen72b.gaia.domains/v1";
                             break;
                     }
                 }
