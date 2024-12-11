@@ -8,7 +8,7 @@ import {
     type Memory,
     type State,
 } from "@ai16z/eliza";
-import { WalletProvider } from "../providers/wallet";
+import { storyWalletProvider, WalletProvider } from "../providers/wallet";
 import { attachTermsTemplate } from "../templates";
 import {
     AttachLicenseTermsResponse,
@@ -93,6 +93,13 @@ export const attachTermsAction = {
             state = await runtime.updateRecentMessageState(state);
         }
 
+        const walletInfo = await storyWalletProvider.get(
+            runtime,
+            message,
+            state
+        );
+        state.walletInfo = walletInfo;
+
         const attachTermsContext = composeContext({
             state,
             template: attachTermsTemplate,
@@ -133,13 +140,6 @@ export const attachTermsAction = {
     },
     examples: [
         [
-            {
-                user: "assistant",
-                content: {
-                    text: "Ill help you attach commercial, 10% rev share license terms to IP Asset 0x2265F2b8e47F98b3Bdf7a1937EAc27282954A4Db",
-                    action: "ATTACH_TERMS",
-                },
-            },
             {
                 user: "user",
                 content: {

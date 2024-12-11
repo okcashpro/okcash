@@ -8,7 +8,7 @@ import {
     type Memory,
     type State,
 } from "@ai16z/eliza";
-import { WalletProvider } from "../providers/wallet";
+import { storyWalletProvider, WalletProvider } from "../providers/wallet";
 import { licenseIPTemplate } from "../templates";
 import { LicenseIPParams } from "../types";
 import { MintLicenseTokensResponse } from "@story-protocol/core-sdk";
@@ -64,6 +64,13 @@ export const licenseIPAction = {
             state = await runtime.updateRecentMessageState(state);
         }
 
+        const walletInfo = await storyWalletProvider.get(
+            runtime,
+            message,
+            state
+        );
+        state.walletInfo = walletInfo;
+
         const licenseIPContext = composeContext({
             state,
             template: licenseIPTemplate,
@@ -96,13 +103,6 @@ export const licenseIPAction = {
     },
     examples: [
         [
-            {
-                user: "assistant",
-                content: {
-                    text: "Ill help you license an IP Asset 0x2265F2b8e47F98b3Bdf7a1937EAc27282954A4Db with license terms 1",
-                    action: "LICENSE_IP",
-                },
-            },
             {
                 user: "user",
                 content: {

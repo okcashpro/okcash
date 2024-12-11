@@ -8,7 +8,7 @@ import {
     type Memory,
     type State,
 } from "@ai16z/eliza";
-import { WalletProvider } from "../providers/wallet";
+import { storyWalletProvider, WalletProvider } from "../providers/wallet";
 import { registerIPTemplate } from "../templates";
 import { RegisterIPParams } from "../types";
 import { RegisterIpResponse } from "@story-protocol/core-sdk";
@@ -54,7 +54,7 @@ export class RegisterIPAction {
         // register ip
         const response =
             await storyClient.ipAsset.mintAndRegisterIpAssetWithPilTerms({
-                spgNftContract: "0xc89775f80BA9D1c7901a490a62483282813aeE06",
+                spgNftContract: "0xC81B2cbEFD1aA0227bf513729580d3CF40fd61dF",
                 terms: [],
                 ipMetadata: {
                     ipMetadataURI: `https://ipfs.io/ipfs/${ipIpfsHash}`,
@@ -87,6 +87,13 @@ export const registerIPAction = {
         } else {
             state = await runtime.updateRecentMessageState(state);
         }
+
+        const walletInfo = await storyWalletProvider.get(
+            runtime,
+            message,
+            state
+        );
+        state.walletInfo = walletInfo;
 
         const registerIPContext = composeContext({
             state,
@@ -121,13 +128,6 @@ export const registerIPAction = {
     },
     examples: [
         [
-            {
-                user: "assistant",
-                content: {
-                    text: "Ill help you register your IP titled 'My IP' with the description 'This is my IP'",
-                    action: "REGISTER_IP",
-                },
-            },
             {
                 user: "user",
                 content: {
