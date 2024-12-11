@@ -59,14 +59,22 @@ export interface ChainConfig {
 
 // Action parameters
 export interface RegisterIPParams {
-    contractAddress: Address;
-    tokenId: string;
+    title: string;
+    description: string;
+    ipType: string;
 }
 
 export interface LicenseIPParams {
     licensorIpId: Address;
     licenseTermsId: string;
     amount: number;
+}
+
+export interface AttachTermsParams {
+    ipId: Address;
+    mintingFee: number;
+    commercialUse: boolean;
+    commercialRevShare: number;
 }
 
 // Plugin configuration

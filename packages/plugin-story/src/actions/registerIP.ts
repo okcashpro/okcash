@@ -8,24 +8,62 @@ import {
     type Memory,
     type State,
 } from "@ai16z/eliza";
-import { WalletProvider } from "../providers/wallet";
+import { storyWalletProvider, WalletProvider } from "../providers/wallet";
 import { registerIPTemplate } from "../templates";
 import { RegisterIPParams } from "../types";
 import { RegisterIpResponse } from "@story-protocol/core-sdk";
+import { PinataProvider } from "../providers/pinata";
+import { createHash } from "crypto";
 
 export { registerIPTemplate };
 
 export class RegisterIPAction {
-    constructor(private walletProvider: WalletProvider) {}
+    constructor(
+        private walletProvider: WalletProvider,
+        private pinataProvider: PinataProvider
+    ) {}
 
     async registerIP(params: RegisterIPParams): Promise<RegisterIpResponse> {
         const storyClient = this.walletProvider.getStoryClient();
 
-        const response = await storyClient.ipAsset.register({
-            nftContract: params.contractAddress,
-            tokenId: params.tokenId,
-            txOptions: { waitForTransaction: true },
+        // configure ip metadata
+        const ipMetadata = storyClient.ipAsset.generateIpMetadata({
+            title: params.title,
+            description: params.description,
+            ipType: params.ipType ? params.ipType : undefined,
         });
+
+        // configure nft metadata
+        const nftMetadata = {
+            name: params.title,
+            description: params.description,
+        };
+
+        // upload metadata to ipfs
+        const ipIpfsHash =
+            await this.pinataProvider.uploadJSONToIPFS(ipMetadata);
+        const ipHash = createHash("sha256")
+            .update(JSON.stringify(ipMetadata))
+            .digest("hex");
+        const nftIpfsHash =
+            await this.pinataProvider.uploadJSONToIPFS(nftMetadata);
+        const nftHash = createHash("sha256")
+            .update(JSON.stringify(nftMetadata))
+            .digest("hex");
+
+        // register ip
+        const response =
+            await storyClient.ipAsset.mintAndRegisterIpAssetWithPilTerms({
+                spgNftContract: "0xC81B2cbEFD1aA0227bf513729580d3CF40fd61dF",
+                terms: [],
+                ipMetadata: {
+                    ipMetadataURI: `https://ipfs.io/ipfs/${ipIpfsHash}`,
+                    ipMetadataHash: `0x${ipHash}`,
+                    nftMetadataURI: `https://ipfs.io/ipfs/${nftIpfsHash}`,
+                    nftMetadataHash: `0x${nftHash}`,
+                },
+                txOptions: { waitForTransaction: true },
+            });
 
         return response;
     }
@@ -50,6 +88,13 @@ export const registerIPAction = {
             state = await runtime.updateRecentMessageState(state);
         }
 
+        const walletInfo = await storyWalletProvider.get(
+            runtime,
+            message,
+            state
+        );
+        state.walletInfo = walletInfo;
+
         const registerIPContext = composeContext({
             state,
             template: registerIPTemplate,
@@ -62,7 +107,8 @@ export const registerIPAction = {
         });
 
         const walletProvider = new WalletProvider(runtime);
-        const action = new RegisterIPAction(walletProvider);
+        const pinataProvider = new PinataProvider(runtime);
+        const action = new RegisterIPAction(walletProvider, pinataProvider);
         try {
             const response = await action.registerIP(content);
             callback?.({
@@ -83,16 +129,9 @@ export const registerIPAction = {
     examples: [
         [
             {
-                user: "assistant",
-                content: {
-                    text: "Ill help you register an NFT with contract address 0x041B4F29183317Fd352AE57e331154b73F8a1D73 and token id 209 as IP",
-                    action: "REGISTER_IP",
-                },
-            },
-            {
                 user: "user",
                 content: {
-                    text: "Register an NFT with contract address 0x041B4F29183317Fd352AE57e331154b73F8a1D73 and token id 209 as IP",
+                    text: "Register my IP titled 'My IP' with the description 'This is my IP'",
                     action: "REGISTER_IP",
                 },
             },

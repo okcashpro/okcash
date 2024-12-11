@@ -1,0 +1,153 @@
+import {
+    composeContext,
+    elizaLogger,
+    generateObjectDEPRECATED,
+    HandlerCallback,
+    ModelClass,
+    type IAgentRuntime,
+    type Memory,
+    type State,
+} from "@ai16z/eliza";
+import { storyWalletProvider, WalletProvider } from "../providers/wallet";
+import { attachTermsTemplate } from "../templates";
+import {
+    AttachLicenseTermsResponse,
+    LicenseTerms,
+    RegisterPILResponse,
+} from "@story-protocol/core-sdk";
+import { AttachTermsParams } from "../types";
+import { zeroAddress } from "viem";
+
+export { attachTermsTemplate };
+
+export class AttachTermsAction {
+    constructor(private walletProvider: WalletProvider) {}
+
+    async attachTerms(params: AttachTermsParams): Promise<{
+        attachTermsResponse: AttachLicenseTermsResponse;
+        registerPilTermsResponse: RegisterPILResponse;
+    }> {
+        const storyClient = this.walletProvider.getStoryClient();
+
+        console.log("params", params);
+
+        const licenseTerms: LicenseTerms = {
+            transferable: true,
+            royaltyPolicy: params.commercialUse
+                ? "0x28b4F70ffE5ba7A26aEF979226f77Eb57fb9Fdb6"
+                : zeroAddress,
+            defaultMintingFee: params.mintingFee
+                ? BigInt(params.mintingFee)
+                : BigInt(0),
+            expiration: BigInt(0),
+            commercialUse: params.commercialUse || false,
+            commercialAttribution: false,
+            commercializerChecker: zeroAddress,
+            commercializerCheckerData: zeroAddress,
+            commercialRevShare: params.commercialUse
+                ? params.commercialRevShare
+                : 0,
+            commercialRevCeiling: BigInt(0),
+            derivativesAllowed: true,
+            derivativesAttribution: true,
+            derivativesApproval: false,
+            derivativesReciprocal: true,
+            derivativeRevCeiling: BigInt(0),
+            currency: "0xC0F6E387aC0B324Ec18EAcf22EE7271207dCE3d5",
+            uri: "",
+        };
+
+        const registerPilTermsResponse =
+            await storyClient.license.registerPILTerms({
+                ...licenseTerms,
+                txOptions: { waitForTransaction: true },
+            });
+
+        const attachTermsResponse =
+            await storyClient.license.attachLicenseTerms({
+                ipId: params.ipId,
+                licenseTermsId: registerPilTermsResponse.licenseTermsId,
+                txOptions: { waitForTransaction: true },
+            });
+
+        return { attachTermsResponse, registerPilTermsResponse };
+    }
+}
+
+export const attachTermsAction = {
+    name: "ATTACH_TERMS",
+    description: "Attach license terms to an IP Asset on Story",
+    handler: async (
+        runtime: IAgentRuntime,
+        message: Memory,
+        state: State,
+        options: any,
+        callback?: HandlerCallback
+    ): Promise<boolean> => {
+        elizaLogger.log("Starting ATTACH_TERMS handler...");
+
+        // initialize or update state
+        if (!state) {
+            state = (await runtime.composeState(message)) as State;
+        } else {
+            state = await runtime.updateRecentMessageState(state);
+        }
+
+        const walletInfo = await storyWalletProvider.get(
+            runtime,
+            message,
+            state
+        );
+        state.walletInfo = walletInfo;
+
+        const attachTermsContext = composeContext({
+            state,
+            template: attachTermsTemplate,
+        });
+
+        const content = await generateObjectDEPRECATED({
+            runtime,
+            context: attachTermsContext,
+            modelClass: ModelClass.SMALL,
+        });
+
+        const walletProvider = new WalletProvider(runtime);
+        const action = new AttachTermsAction(walletProvider);
+        try {
+            const response = await action.attachTerms(content);
+            // if license terms were attached
+            if (response.attachTermsResponse.success) {
+                callback?.({
+                    text: `Successfully attached license terms: ${response.registerPilTermsResponse.licenseTermsId}\nTransaction Hash: ${response.attachTermsResponse.txHash}`,
+                });
+                return true;
+            }
+            // if license terms were already attached
+            callback?.({
+                text: `License terms ${response.registerPilTermsResponse.licenseTermsId} were already attached to IP Asset ${content.ipId}`,
+            });
+            return true;
+        } catch (e) {
+            elizaLogger.error("Error licensing IP:", e.message);
+            callback?.({ text: `Error licensing IP: ${e.message}` });
+            return false;
+        }
+    },
+    template: attachTermsTemplate,
+    validate: async (runtime: IAgentRuntime) => {
+        const privateKey = runtime.getSetting("STORY_PRIVATE_KEY");
+        return typeof privateKey === "string" && privateKey.startsWith("0x");
+    },
+    examples: [
+        [
+            {
+                user: "user",
+                content: {
+                    text: "Attach commercial, 10% rev share license terms to IP Asset 0x2265F2b8e47F98b3Bdf7a1937EAc27282954A4Db",
+                    action: "ATTACH_TERMS",
+                },
+            },
+        ],
+    ],
+    similes: ["ATTACH_TERMS", "ATTACH_TERMS_TO_IP"],
+};
