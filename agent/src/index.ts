@@ -371,7 +371,12 @@ export async function createAgent(
         character.name
     );
 
-    nodePlugin ??= createNodePlugin();
+    nodePlugin ??= (
+        getSecret(character, "AWS_ACCESS_KEY_ID") &&
+        getSecret(character, "AWS_SECRET_ACCESS_KEY") &&
+        getSecret(character, "AWS_REGION") &&
+        getSecret(character, "AWS_S3_BUCKET")
+    ) ? createNodePlugin() : undefined;
 
     const teeMode = getSecret(character, "TEE_MODE") || "OFF";
     const walletSecretSalt = getSecret(character, "WALLET_SECRET_SALT");
@@ -384,9 +389,12 @@ export async function createAgent(
         throw new Error("Invalid TEE configuration");
     }
 
-    const goatPlugin = await createGoatPlugin((secret) =>
-        getSecret(character, secret)
-    );
+    let goatPlugin: any | undefined;
+    if (getSecret(character, "ALCHEMY_API_KEY")) {
+        goatPlugin = await createGoatPlugin((secret) =>
+            getSecret(character, secret)
+        );
+    }
 
     return new AgentRuntime({
         databaseAdapter: db,
