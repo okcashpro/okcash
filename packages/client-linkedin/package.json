@@ -1,6 +1,6 @@
 {
     "name": "@okcashpro/client-linkedin",
-    "version": "0.1.0-alpha.1",
+    "version": "0.1.5-alpha.8",
     "description": "LinkedIn client integration for OK agents",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

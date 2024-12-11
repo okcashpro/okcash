@@ -9,11 +9,3 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Reverts
 
 * Revert "v0.1.5-alpha.7" ([6ae2e65](https://github.com/okcashpro/okai/commit/6ae2e65b31a23c7f2fed9965db8b4384292ef576))
-
-
-
-
-
-## 0.1.5-alpha.7 (2024-12-08)
-
-**Note:** Version bump only for package @okcashpro/plugin-aptos

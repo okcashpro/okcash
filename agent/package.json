@@ -1,6 +1,6 @@
 {
     "name": "@okcashpro/agent",
-    "version": "0.1.5-alpha.7",
+    "version": "0.1.5-alpha.8",
     "main": "src/index.ts",
     "type": "module",
     "scripts": {
@@ -29,7 +29,6 @@
         "@okcashpro/plugin-0g": "workspace:*",
         "@okcashpro/plugin-aptos": "workspace:*",
         "@okcashpro/plugin-bootstrap": "workspace:*",
-        "@okcashpro/plugin-intiface": "workspace:*",
         "@okcashpro/plugin-coinbase": "workspace:*",
         "@okcashpro/plugin-conflux": "workspace:*",
         "@okcashpro/plugin-evm": "workspace:*",
@@ -37,6 +36,7 @@
         "@okcashpro/plugin-goat": "workspace:*",
         "@okcashpro/plugin-icp": "workspace:*",
         "@okcashpro/plugin-image-generation": "workspace:*",
+        "@okcashpro/plugin-intiface": "workspace:*",
         "@okcashpro/plugin-node": "workspace:*",
         "@okcashpro/plugin-solana": "workspace:*",
         "@okcashpro/plugin-starknet": "workspace:*",
