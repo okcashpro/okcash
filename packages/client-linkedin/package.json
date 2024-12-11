@@ -6,8 +6,7 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
-        "test": "jest",
-        "lint": "eslint src --ext .ts"
+        "test": "jest"
     },
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
