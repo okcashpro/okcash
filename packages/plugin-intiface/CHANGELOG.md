@@ -5,12 +5,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## 0.1.5-alpha.7 (2024-12-11)
 
-**Note:** Version bump only for package create-okai-app
-
-
-
-
-
-## 0.1.5-alpha.6 (2024-12-08)
-
-**Note:** Version bump only for package create-okai-app
+**Note:** Version bump only for package @okcashpro/plugin-intiface
