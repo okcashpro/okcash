@@ -371,12 +371,7 @@ export async function createAgent(
         character.name
     );
 
-    nodePlugin ??= (
-        getSecret(character, "AWS_ACCESS_KEY_ID") &&
-        getSecret(character, "AWS_SECRET_ACCESS_KEY") &&
-        getSecret(character, "AWS_REGION") &&
-        getSecret(character, "AWS_S3_BUCKET")
-    ) ? createNodePlugin() : undefined;
+    nodePlugin ??= createNodePlugin();
 
     const teeMode = getSecret(character, "TEE_MODE") || "OFF";
     const walletSecretSalt = getSecret(character, "WALLET_SECRET_SALT");
