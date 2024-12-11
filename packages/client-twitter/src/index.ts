@@ -13,7 +13,7 @@ class TwitterManager {
     constructor(runtime: IAgentRuntime) {
         this.client = new ClientBase(runtime);
         this.post = new TwitterPostClient(this.client, runtime);
-        this.search = new TwitterSearchClient(this.client, runtime); // don't start the search client by default
+        //this.search = new TwitterSearchClient(this.client, runtime); // don't start the search client by default
         // this searches topics from character file, but kind of violates consent of random users
         // burns your rate limit and can get your account banned
         // use at your own risk
@@ -35,7 +35,7 @@ export const TwitterClientInterface: Client = {
 
         await manager.interaction.start();
 
-        await manager.search.start(); // don't run the search by default
+        //await manager.search.start(); // don't run the search by default
 
         return manager;
     },
