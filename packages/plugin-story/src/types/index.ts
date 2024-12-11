@@ -70,6 +70,13 @@ export interface LicenseIPParams {
     amount: number;
 }
 
+export interface AttachTermsParams {
+    ipId: Address;
+    mintingFee: number;
+    commercialUse: boolean;
+    commercialRevShare: number;
+}
+
 // Plugin configuration
 export interface EvmPluginConfig {
     rpcUrl?: {
