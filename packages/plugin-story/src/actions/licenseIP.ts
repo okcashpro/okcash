@@ -64,13 +64,6 @@ export const licenseIPAction = {
             state = await runtime.updateRecentMessageState(state);
         }
 
-        const walletInfo = await storyWalletProvider.get(
-            runtime,
-            message,
-            state
-        );
-        state.walletInfo = walletInfo;
-
         const licenseIPContext = composeContext({
             state,
             template: licenseIPTemplate,

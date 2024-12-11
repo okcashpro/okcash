@@ -1,8 +1,6 @@
-export const registerIPTemplate = `Given the recent messages and wallet information below:
+export const registerIPTemplate = `Given the recent messages below:
 
 {{recentMessages}}
-
-{{walletInfo}}
 
 Extract the following information about the requested IP registration:
 - Field "title": The title of your IP
@@ -22,11 +20,9 @@ Respond with a JSON markdown block containing only the extracted values. A user 
 \`\`\`
 `;
 
-export const licenseIPTemplate = `Given the recent messages and wallet information below:
+export const licenseIPTemplate = `Given the recent messages below:
 
 {{recentMessages}}
-
-{{walletInfo}}
 
 Extract the following information about the requested IP licensing:
 - Field "licensorIpId": The IP Asset that you want to mint a license from
@@ -44,11 +40,9 @@ Respond with a JSON markdown block containing only the extracted values. A user 
 \`\`\`
 `;
 
-export const attachTermsTemplate = `Given the recent messages and wallet information below:
+export const attachTermsTemplate = `Given the recent messages below:
 
 {{recentMessages}}
-
-{{walletInfo}}
 
 Extract the following information about attaching license terms to an IP Asset:
 - Field "ipId": The IP Asset that you want to attach the license terms to

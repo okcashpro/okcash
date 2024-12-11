@@ -12,8 +12,8 @@ import { storyWalletProvider, WalletProvider } from "../providers/wallet";
 import { registerIPTemplate } from "../templates";
 import { RegisterIPParams } from "../types";
 import { RegisterIpResponse } from "@story-protocol/core-sdk";
-import { PinataProvider } from "../providers/pinata";
 import { createHash } from "crypto";
+import { PinataProvider } from "../providers/pinata";
 
 export { registerIPTemplate };
 
@@ -87,13 +87,6 @@ export const registerIPAction = {
         } else {
             state = await runtime.updateRecentMessageState(state);
         }
-
-        const walletInfo = await storyWalletProvider.get(
-            runtime,
-            message,
-            state
-        );
-        state.walletInfo = walletInfo;
 
         const registerIPContext = composeContext({
             state,

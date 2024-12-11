@@ -93,13 +93,6 @@ export const attachTermsAction = {
             state = await runtime.updateRecentMessageState(state);
         }
 
-        const walletInfo = await storyWalletProvider.get(
-            runtime,
-            message,
-            state
-        );
-        state.walletInfo = walletInfo;
-
         const attachTermsContext = composeContext({
             state,
             template: attachTermsTemplate,
