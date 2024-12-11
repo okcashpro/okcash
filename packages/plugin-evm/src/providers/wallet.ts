@@ -1,4 +1,9 @@
-import { formatUnits } from "viem";
+import {
+    createPublicClient,
+    createWalletClient,
+    formatUnits,
+    http,
+} from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import type { IAgentRuntime, Provider, Memory, State } from "@ai16z/eliza";
 import type {
@@ -11,7 +16,6 @@ import type {
     PrivateKeyAccount,
 } from "viem";
 import * as viemChains from "viem/chains";
-import { privateKeyToAccount } from "viem/accounts";
 
 import type { SupportedChain } from "../types";
 
@@ -196,7 +200,7 @@ const genChainsFromRuntime = (
 export const initWalletProvider = (runtime: IAgentRuntime) => {
     const privateKey = runtime.getSetting("EVM_PRIVATE_KEY");
     if (!privateKey) {
-        throw new Error("EVM_PRIVATE_KEY is missing")
+        throw new Error("EVM_PRIVATE_KEY is missing");
     }
 
     const chains = genChainsFromRuntime(runtime);
