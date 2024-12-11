@@ -102,9 +102,7 @@ pnpm run dev --characters="characters/my-character.json"
 ```
 ```
 # Open a 2nd terminal and go to the client directory
-cd client
-pnpm install
-pnpm run dev
+pnpm start:client
 ```
 
 Look for the message:

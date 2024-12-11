@@ -125,20 +125,11 @@ You set which model to use inside the character JSON file
 
 3. **Interact with the Agent**
 
-   Now you're ready to start a conversation with your agent! Follow these steps:
+   Now you're ready to start a conversation with your agent!
+   Open a new terminal window
 
-1. Open a new terminal window
-2. Navigate to the client directory:
    ```bash
-   cd client
-   ```
-3. Install dependencies (first time only):
-   ```bash
-   pnpm install
-   ```
-4. Start the UI client:
-   ```bash
-   pnpm run dev
+   pnpm start:client
    ```
 
    Once the client is running, you'll see a message like this:

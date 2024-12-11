@@ -4,7 +4,7 @@
         "preinstall": "npx only-allow pnpm",
         "build": "turbo run build",
         "start": "pnpm --filter \"@ai16z/agent\" start --isRoot",
-        "start:client": "pnpm --dir client start --isRoot",
+        "start:client": "pnpm --dir client dev",
         "start:debug": "cross-env NODE_ENV=development VERBOSE=true DEBUG=eliza:* pnpm --filter \"@ai16z/agent\" start --isRoot",
         "dev": "turbo check-types dev --concurrency 25",
         "lint": "bash ./scripts/lint.sh",
