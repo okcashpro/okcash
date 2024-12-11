@@ -31,9 +31,15 @@ export const models: Models = {
             temperature: 0.6,
         },
         model: {
-            [ModelClass.SMALL]: settings.ETERNALAI_MODEL || "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
-            [ModelClass.MEDIUM]: settings.ETERNALAI_MODEL || "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
-            [ModelClass.LARGE]: settings.ETERNALAI_MODEL || "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
+            [ModelClass.SMALL]:
+                settings.ETERNALAI_MODEL ||
+                "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
+            [ModelClass.MEDIUM]:
+                settings.ETERNALAI_MODEL ||
+                "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
+            [ModelClass.LARGE]:
+                settings.ETERNALAI_MODEL ||
+                "neuralmagic/Meta-Llama-3.1-405B-Instruct-quantized.w4a16",
             [ModelClass.EMBEDDING]: "",
             [ModelClass.IMAGE]: "",
         },
@@ -98,10 +104,14 @@ export const models: Models = {
             temperature: 0.7,
         },
         model: {
-            [ModelClass.SMALL]: settings.SMALL_GROQ_MODEL || "llama-3.1-8b-instant",
-            [ModelClass.MEDIUM]: settings.MEDIUM_GROQ_MODEL || "llama-3.3-70b-versatile",
-            [ModelClass.LARGE]: settings.LARGE_GROQ_MODEL || "llama-3.2-90b-vision-preview",
-            [ModelClass.EMBEDDING]: settings.EMBEDDING_GROQ_MODEL || "llama-3.1-8b-instant",
+            [ModelClass.SMALL]:
+                settings.SMALL_GROQ_MODEL || "llama-3.1-8b-instant",
+            [ModelClass.MEDIUM]:
+                settings.MEDIUM_GROQ_MODEL || "llama-3.3-70b-versatile",
+            [ModelClass.LARGE]:
+                settings.LARGE_GROQ_MODEL || "llama-3.2-90b-vision-preview",
+            [ModelClass.EMBEDDING]:
+                settings.EMBEDDING_GROQ_MODEL || "llama-3.1-8b-instant",
         },
     },
     [ModelProviderName.LLAMACLOUD]: {
@@ -115,7 +125,7 @@ export const models: Models = {
         imageSettings: {
             steps: 4,
         },
-        endpoint: "https://api.together.ai/v1",
+        endpoint: "https://api.llamacloud.com/v1",
         model: {
             [ModelClass.SMALL]: "meta-llama/Llama-3.2-3B-Instruct-Turbo",
             [ModelClass.MEDIUM]: "meta-llama-3.1-8b-instruct",
@@ -176,18 +186,22 @@ export const models: Models = {
             temperature: 0.7,
         },
         model: {
-            [ModelClass.SMALL]: settings.SMALL_GOOGLE_MODEL ||
-            settings.GOOGLE_MODEL ||
-            "gemini-1.5-flash-latest",
-            [ModelClass.MEDIUM]: settings.MEDIUM_GOOGLE_MODEL ||
-            settings.GOOGLE_MODEL ||
-            "gemini-1.5-flash-latest",
-            [ModelClass.LARGE]: settings.LARGE_GOOGLE_MODEL ||
-            settings.GOOGLE_MODEL ||
-            "gemini-1.5-pro-latest",
-            [ModelClass.EMBEDDING]: settings.EMBEDDING_GOOGLE_MODEL ||
-            settings.GOOGLE_MODEL ||
-            "text-embedding-004",
+            [ModelClass.SMALL]:
+                settings.SMALL_GOOGLE_MODEL ||
+                settings.GOOGLE_MODEL ||
+                "gemini-1.5-flash-latest",
+            [ModelClass.MEDIUM]:
+                settings.MEDIUM_GOOGLE_MODEL ||
+                settings.GOOGLE_MODEL ||
+                "gemini-1.5-flash-latest",
+            [ModelClass.LARGE]:
+                settings.LARGE_GOOGLE_MODEL ||
+                settings.GOOGLE_MODEL ||
+                "gemini-1.5-pro-latest",
+            [ModelClass.EMBEDDING]:
+                settings.EMBEDDING_GOOGLE_MODEL ||
+                settings.GOOGLE_MODEL ||
+                "text-embedding-004",
         },
     },
     [ModelProviderName.REDPILL]: {
@@ -204,17 +218,17 @@ export const models: Models = {
         // To test other models, change the models below
         model: {
             [ModelClass.SMALL]:
-            settings.SMALL_REDPILL_MODEL ||
-            settings.REDPILL_MODEL ||
-            "gpt-4o-mini",
+                settings.SMALL_REDPILL_MODEL ||
+                settings.REDPILL_MODEL ||
+                "gpt-4o-mini",
             [ModelClass.MEDIUM]:
-            settings.MEDIUM_REDPILL_MODEL ||
-            settings.REDPILL_MODEL ||
-            "gpt-4o",
+                settings.MEDIUM_REDPILL_MODEL ||
+                settings.REDPILL_MODEL ||
+                "gpt-4o",
             [ModelClass.LARGE]:
-            settings.LARGE_REDPILL_MODEL ||
-            settings.REDPILL_MODEL ||
-            "gpt-4o",
+                settings.LARGE_REDPILL_MODEL ||
+                settings.REDPILL_MODEL ||
+                "gpt-4o",
             [ModelClass.EMBEDDING]: "text-embedding-3-small",
         },
     },
@@ -232,17 +246,17 @@ export const models: Models = {
         // To test other models, change the models below
         model: {
             [ModelClass.SMALL]:
-            settings.SMALL_OPENROUTER_MODEL ||
-            settings.OPENROUTER_MODEL ||
-            "nousresearch/hermes-3-llama-3.1-405b",
+                settings.SMALL_OPENROUTER_MODEL ||
+                settings.OPENROUTER_MODEL ||
+                "nousresearch/hermes-3-llama-3.1-405b",
             [ModelClass.MEDIUM]:
-            settings.MEDIUM_OPENROUTER_MODEL ||
-            settings.OPENROUTER_MODEL ||
-            "nousresearch/hermes-3-llama-3.1-405b",
+                settings.MEDIUM_OPENROUTER_MODEL ||
+                settings.OPENROUTER_MODEL ||
+                "nousresearch/hermes-3-llama-3.1-405b",
             [ModelClass.LARGE]:
-            settings.LARGE_OPENROUTER_MODEL ||
-            settings.OPENROUTER_MODEL ||
-            "nousresearch/hermes-3-llama-3.1-405b",
+                settings.LARGE_OPENROUTER_MODEL ||
+                settings.OPENROUTER_MODEL ||
+                "nousresearch/hermes-3-llama-3.1-405b",
             [ModelClass.EMBEDDING]: "text-embedding-3-small",
         },
     },
@@ -258,19 +272,19 @@ export const models: Models = {
         endpoint: settings.OLLAMA_SERVER_URL || "http://localhost:11434",
         model: {
             [ModelClass.SMALL]:
-            settings.SMALL_OLLAMA_MODEL ||
-            settings.OLLAMA_MODEL ||
-            "llama3.2",
+                settings.SMALL_OLLAMA_MODEL ||
+                settings.OLLAMA_MODEL ||
+                "llama3.2",
             [ModelClass.MEDIUM]:
-            settings.MEDIUM_OLLAMA_MODEL ||
-            settings.OLLAMA_MODEL ||
-            "hermes3",
+                settings.MEDIUM_OLLAMA_MODEL ||
+                settings.OLLAMA_MODEL ||
+                "hermes3",
             [ModelClass.LARGE]:
-            settings.LARGE_OLLAMA_MODEL ||
-            settings.OLLAMA_MODEL ||
-            "hermes3:70b",
+                settings.LARGE_OLLAMA_MODEL ||
+                settings.OLLAMA_MODEL ||
+                "hermes3:70b",
             [ModelClass.EMBEDDING]:
-            settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large",
+                settings.OLLAMA_EMBEDDING_MODEL || "mxbai-embed-large",
         },
     },
     [ModelProviderName.HEURIST]: {
@@ -286,9 +300,15 @@ export const models: Models = {
         },
         endpoint: "https://llm-gateway.heurist.xyz",
         model: {
-            [ModelClass.SMALL]: settings.SMALL_HEURIST_MODEL || "meta-llama/llama-3-70b-instruct",
-            [ModelClass.MEDIUM]: settings.MEDIUM_HEURIST_MODEL || "meta-llama/llama-3-70b-instruct",
-            [ModelClass.LARGE]: settings.LARGE_HEURIST_MODEL || "meta-llama/llama-3.1-405b-instruct",
+            [ModelClass.SMALL]:
+                settings.SMALL_HEURIST_MODEL ||
+                "meta-llama/llama-3-70b-instruct",
+            [ModelClass.MEDIUM]:
+                settings.MEDIUM_HEURIST_MODEL ||
+                "meta-llama/llama-3-70b-instruct",
+            [ModelClass.LARGE]:
+                settings.LARGE_HEURIST_MODEL ||
+                "meta-llama/llama-3.1-405b-instruct",
             [ModelClass.EMBEDDING]: "", //Add later,
             [ModelClass.IMAGE]: settings.HEURIST_IMAGE_MODEL || "PepeXL",
         },
@@ -340,11 +360,20 @@ export const models: Models = {
         },
         endpoint: settings.GAIANET_SERVER_URL,
         model: {
-            [ModelClass.SMALL]: settings.GAIANET_MODEL || settings.SMALL_GAIANET_MODEL || "llama3b",
-            [ModelClass.MEDIUM]: settings.GAIANET_MODEL || settings.MEDIUM_GAIANET_MODEL || "llama",
-            [ModelClass.LARGE]: settings.GAIANET_MODEL || settings.LARGE_GAIANET_MODEL || "qwen72b",
+            [ModelClass.SMALL]:
+                settings.GAIANET_MODEL ||
+                settings.SMALL_GAIANET_MODEL ||
+                "llama3b",
+            [ModelClass.MEDIUM]:
+                settings.GAIANET_MODEL ||
+                settings.MEDIUM_GAIANET_MODEL ||
+                "llama",
+            [ModelClass.LARGE]:
+                settings.GAIANET_MODEL ||
+                settings.LARGE_GAIANET_MODEL ||
+                "qwen72b",
             [ModelClass.EMBEDDING]:
-            settings.GAIANET_EMBEDDING_MODEL || "nomic-embed",
+                settings.GAIANET_EMBEDDING_MODEL || "nomic-embed",
         },
     },
     [ModelProviderName.ALI_BAILIAN]: {
@@ -390,10 +419,19 @@ export const models: Models = {
             temperature: 0.6,
         },
         model: {
-            [ModelClass.SMALL]: "meta-llama/Llama-3.2-3B-Instruct",
-            [ModelClass.MEDIUM]: "meta-llama/Meta-Llama-3.1-70B-Instruct",
-            [ModelClass.LARGE]: "meta-llama/Meta-Llama-3.1-405-Instruct",
-            [ModelClass.IMAGE]: "FLUX.1-dev",
+            [ModelClass.SMALL]:
+                settings.SMALL_HYPERBOLIC_MODEL ||
+                settings.HYPERBOLIC_MODEL ||
+                "meta-llama/Llama-3.2-3B-Instruct",
+            [ModelClass.MEDIUM]:
+                settings.MEDIUM_HYPERBOLIC_MODEL ||
+                settings.HYPERBOLIC_MODEL ||
+                "meta-llama/Meta-Llama-3.1-70B-Instruct",
+            [ModelClass.LARGE]:
+                settings.LARGE_HYPERBOLIC_MODEL ||
+                settings.HYPERBOLIC_MODEL ||
+                "meta-llama/Meta-Llama-3.1-405-Instruct",
+            [ModelClass.IMAGE]: settings.IMAGE_HYPERBOLIC_MODEL || "FLUX.1-dev",
         },
     },
 };

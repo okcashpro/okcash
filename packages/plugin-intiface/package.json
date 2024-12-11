@@ -1,5 +1,5 @@
 {
-    "name": "@ai16z/plugin-buttplug",
+    "name": "@ai16z/plugin-intiface",
     "version": "0.1.5-alpha.5",
     "main": "dist/index.js",
     "type": "module",
