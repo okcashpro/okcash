@@ -13,7 +13,7 @@ Respond with a JSON markdown block containing only the extracted values:
 
 \`\`\`json
 {
-    "fromChain": "ethereum" | "base" | ...,
+    "fromChain": "mainnet" | "base" | ...,
     "amount": string,
     "toAddress": string
 }
