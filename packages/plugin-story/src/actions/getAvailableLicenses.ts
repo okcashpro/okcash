@@ -111,8 +111,25 @@ export const getAvailableLicensesAction = {
             const response = await action.getAvailableLicenses(content);
 
             // TODO: need to format this better into human understandable terms
+            const formattedResponse = response.data
+                .map((license) => {
+                    const terms = license.terms;
+                    return `License ID: ${license.id}
+- Terms:
+  • Commercial Use: ${terms.commercialUse ? "Allowed" : "Not Allowed"}
+  • Commercial Attribution: ${terms.commercialAttribution ? "Required" : "Not Required"}
+  • Derivatives: ${terms.derivativesAllowed ? "Allowed" : "Not Allowed"}
+  • Derivatives Attribution: ${terms.derivativesAttribution ? "Required" : "Not Required"}
+  • Derivatives Approval: ${terms.derivativesApproval ? "Required" : "Not Required"}
+  • Revenue Share: ${terms.commercialRevenueShare ? terms.commercialRevenueShare + "%" : "Not Required"}
+`;
+                })
+                .join("\n");
+
             callback?.({
-                text: JSON.stringify(response, null, 2), // Pretty print the JSON
+                text: formattedResponse,
+                action: "GET_AVAILABLE_LICENSES",
+                source: "Story Protocol API",
             });
             return true;
         } catch (e) {
