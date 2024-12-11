@@ -151,6 +151,7 @@ export async function generateText({
             case ModelProviderName.ALI_BAILIAN:
             case ModelProviderName.VOLENGINE:
             case ModelProviderName.LLAMACLOUD:
+            case ModelProviderName.NANOGPT:
             case ModelProviderName.HYPERBOLIC:
             case ModelProviderName.TOGETHER: {
                 elizaLogger.debug("Initializing OpenAI model.");
@@ -1243,6 +1244,7 @@ export async function handleProvider(
         case ModelProviderName.VOLENGINE:
         case ModelProviderName.LLAMACLOUD:
         case ModelProviderName.TOGETHER:
+        case ModelProviderName.NANOGPT:
             return await handleOpenAI(options);
         case ModelProviderName.ANTHROPIC:
             return await handleAnthropic(options);

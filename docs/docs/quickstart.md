@@ -7,8 +7,6 @@ sidebar_position: 2
 ## Prerequisites
 
 Before getting started with Eliza, ensure you have:
-
-- [Python 2.7+](https://www.python.org/downloads/)
 - [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [pnpm 9+](https://pnpm.io/installation)
 - Git for version control
@@ -124,6 +122,22 @@ You set which model to use inside the character JSON file
    ```bash
    pnpm start --characters="characters/trump.character.json,characters/tate.character.json"
    ```
+
+3. **Interact with the Agent**
+
+   Now you're ready to start a conversation with your agent!
+   Open a new terminal window
+
+   ```bash
+   pnpm start:client
+   ```
+
+   Once the client is running, you'll see a message like this:
+```
+➜  Local:   http://localhost:5173/
+```
+
+   Simply click the link or open your browser to `http://localhost:5173/`. You'll see the chat interface connect to the system, and you can begin interacting with your character.
 
 ## Platform Integration
 
