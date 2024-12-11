@@ -231,7 +231,6 @@ export class TwitterSearchClient {
                     .getService<IImageDescriptionService>(
                         ServiceType.IMAGE_DESCRIPTION
                     )
-                    .getInstance()
                     .describeImage(photo.url);
                 imageDescriptions.push(description);
             }
