@@ -59,8 +59,9 @@ export interface ChainConfig {
 
 // Action parameters
 export interface RegisterIPParams {
-    contractAddress: Address;
-    tokenId: string;
+    title: string;
+    description: string;
+    ipType: string;
 }
 
 export interface LicenseIPParams {
