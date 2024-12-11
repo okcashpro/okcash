@@ -9,12 +9,12 @@ import {
     State,
     type Action,
     composeContext,
-    generateObject,
+    generateObjectDEPRECATED,
     Content,
     elizaLogger,
 } from "@ai16z/eliza";
 import { getStarknetAccount } from "../utils";
-import { validateStarknetConfig } from "../enviroment";
+import { validateStarknetConfig } from "../environment";
 import { getTransferSubdomainCall, isStarkDomain } from "../utils/starknetId";
 
 export interface SubdomainCreationContent extends Content {
@@ -107,7 +107,7 @@ export default {
         });
 
         // Generate transfer content
-        const content = await generateObject({
+        const content = await generateObjectDEPRECATED({
             runtime,
             context: transferContext,
             modelClass: ModelClass.MEDIUM,

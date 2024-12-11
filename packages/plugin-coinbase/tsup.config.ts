@@ -5,22 +5,44 @@ export default defineConfig({
     outDir: "dist",
     sourcemap: true,
     clean: true,
-    format: ["esm"], // Ensure you're targeting CommonJS
+    format: ["cjs", "esm"],
+    dts: true,
+    splitting: false,
+    bundle: true,
+    minify: false,
     external: [
-        "dotenv", // Externalize dotenv to prevent bundling
-        "fs", // Externalize fs to use Node.js built-in module
-        "path", // Externalize other built-ins if necessary
+        "@coinbase/coinbase-sdk",
+        "form-data",
+        "combined-stream",
+        "axios",
+        "util",
+        "stream",
+        "http",
+        "https",
+        "events",
+        "crypto",
+        "buffer",
+        "url",
+        "zlib",
+        "querystring",
+        "os",
         "@reflink/reflink",
         "@node-llama-cpp",
-        "https",
-        "http",
         "agentkeepalive",
-        "@coinbase/coinbase-sdk",
         "fs/promises",
         "csv-writer",
         "csv-parse/sync",
-        "path",
-        "url",
-        // Add other modules you want to externalize
+        "dotenv",
+        "coinbase-advanced-sdk",
+        "advanced-sdk-ts",
+        "jsonwebtoken",
+        "whatwg-url"
     ],
+    platform: 'node',
+    target: 'node18',
+    esbuildOptions(options) {
+        options.bundle = true;
+        options.platform = 'node';
+        options.target = 'node18';
+    }
 });

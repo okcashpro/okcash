@@ -1,14 +1,14 @@
 {
     "name": "@ai16z/plugin-tee",
-    "version": "0.1.4-alpha.3",
+    "version": "0.1.5-alpha.5",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@phala/dstack-sdk": "0.1.4",
+        "@phala/dstack-sdk": "0.1.6",
         "@solana/spl-token": "0.4.9",
-        "@solana/web3.js": "1.95.5",
+        "@solana/web3.js": "1.95.8",
         "bignumber": "1.1.0",
         "bignumber.js": "9.1.2",
         "bs58": "6.0.0",
@@ -19,7 +19,8 @@
     },
     "scripts": {
         "build": "tsup --format esm --dts",
-        "dev": "tsup --watch"
+        "dev": "tsup --format esm --dts --watch",
+        "lint": "eslint . --fix"
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"

@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / Character
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Character
 
 # Type Alias: Character
 
@@ -342,4 +342,4 @@ Optional Twitter profile
 
 ## Defined in
 
-[packages/core/src/types.ts:607](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L607)
+[packages/core/src/types.ts:609](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L609)

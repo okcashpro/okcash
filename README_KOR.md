@@ -1,10 +1,19 @@
-# Eliza
+# Eliza 🤖
 
-<img src="./docs/static/img/eliza_banner.jpg" alt="eliza banner" width="100%"/>
+<div align="center">
+  <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
+</div>
 
-## 기능
+<div align="center">
+
+  📖 [문서](https://ai16z.github.io/eliza/) | 🎯 [예시](https://github.com/thejoven/awesome-eliza)
+
+</div>
+
+## ✨ 기능
 
 -   🛠 SNS 지원: 디스코드, 트위터, 텔레그램 모두 지원됩니다.
+- 🔗 다양한 모델 지원 (Llama, Grok, OpenAI, Anthropic 등)
 -   👥 다중 지원: 다중 에이전트 및 채팅방이 지원됩니다.
 -   📚 높은 유연성: 개발자가 쉽게 데이터를 추가하고, 이를 활용해 다양한 기능을 만들 수 있습니다.
 -   💾 검색 지원: 당신의 데이터와 작업을 쉽게 찾아볼 수 있도록, 검색 기능을 지원합니다.
@@ -12,177 +21,108 @@
 -   ☁️ 다양한 AI 모델 지원: local Llama, OpenAI, Anthropic, Groq 등 다양한 AI 모델을 지원합니다
 -   📦 즐겁게 개발해 봐요!
 
-## eliza로 어떤걸 만들 수 있을까요?
+## 🎯 eliza로 어떤걸 만들 수 있을까요?
 
 -   🤖 챗봇 개발
 -   🕵 ️AI가 자율적으로 결과를 만들어줘요!
 -   📈 업무처리 자동화
 -   🎮 비디오 게임 NPC
+-   🧠 트레이딩
 
-# 사용시작
+## 🚀 빠른 시작
 
-**필수 요구사항:**
+### 필수 요구사항:
 
 -   [Python 2.7+](https://www.python.org/downloads/)
 -   [Node.js 23.3+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm](https://pnpm.io/installation)
 
-## .env 파일 편집
+> **Windows 사용자 참고:** [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install-manual) 필요.
 
--   .env.example을 복사해서 필요한 값들을 채워넣어 .env파일을 만드세요.
--   트위터 환경변수 값을 채워, 봇의 트위터 사용자 이름과 비밀번호를 설정하세요.
+### Starter 사용 (권장)
 
-## character file 편집
+```bash
+git clone https://github.com/ai16z/eliza-starter.git
 
--   캐릭터 파일 경로: `src/core/defaultCharacter.ts ` - 캐릭터 파일을 필요에 맞게 수정하세요.
--   동시 실행 지원: `pnpm start --characters="path/to/your/character.json"` - 다음의 명령어를 사용하면, 여러 캐릭터 파일을 한번에 불러와, 다양한 봇을 동시에 실행 시킬 수 있습니다.
+cp .env.example .env
 
-모두 설정하셨으면, 아래의 커맨드를 입력하여 로봇을 실행시켜주세요:
+pnpm i && pnpm start
+```
+
+[문서](https://ai16z.github.io/eliza/)를 참고하여 Eliza를 커스마이징 방법을 확인하세요.
+
+### 직접 실행하기 (경험자만 권장)
+
+```bash
+# 리포지토리 클론
+git clone https://github.com/ai16z/eliza.git
+
+# 최신 릴리스로 체크아웃
+# 프로젝트가 빠르게 수정되므로 최신 릴리스를 체크아웃하는 것을 권장합니다.
+git checkout $(git describe --tags --abbrev=0)
+```
+
+### Gitpod로 Eliza 시작
+
+[![Gitpod로 열기](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ai16z/eliza/tree/main)
+
+### .env 파일 편집
+
+.env.example을 복사해서 필요한 값들을 채워넣어 .env파일을 만드세요.
 
 ```
+cp .env.example .env
+```
+
+참고: .env는 선택 사항입니다. 여러 개의 에이전트를 실행하려는 경우, 캐릭터 JSON 파일을 통해 비밀 변수를 전달할 수 있습니다.
+
+### Eliza 자동 시작
+
+아래 명령은 프로젝트를 설정하고 기본 캐릭터와 함께 봇을 시작합니다.
+```bash
+sh scripts/start.sh
+```
+
+### character file 편집
+
+1.	`agent/src/character.ts`를 열어 기본 캐릭터를 수정하세요. 주석을 해제하고 수정하시면 됩니다.
+
+2. 커스텀 캐릭터 로드하기:
+    - `pnpm start --characters="path/to/your/character.json"`을 사용합니다.
+	- 여러 캐릭터 파일을 동시에 로드할 수 있습니다.
+3. X (Twitter) 연결:
+    - 캐릭터 파일에서 `"clients": []`를 `"clients": ["twitter"]`로 변경합니다.
+
+### Eliza 수동 시작
+
+```bash
 pnpm i
+pnpm build
 pnpm start
+
+# 프로젝트가 빠르게 수정되므로 프로젝트를 clean해야 할 수도 있습니다.
+pnpm clean
 ```
 
-# Eliza 커스텀하기
+#### 추가 요구 사항
 
-### 커스텀 기능 추가하기
-
-메인 디렉토리의 git 충돌을 방지하기 위해 커스텀 동작은 `custom_actions` 디렉토리에 추가하신 후, 추가하신 내용을 `elizaConfig.yaml` 파일에 작성하세요. `elizaConfig.example.yaml` 파일에 예시가 있습니다.
-
-### AI 모델 실행 방법
-
-### Run with Llama
-
-`XAI_MODEL`환경 변수를`meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` 또는 `meta-llama/Meta-Llama-3.1-405B-Instruct`로 설정하여 Llama 70B 혹은 405B 모델을 실행시킬 수 있습니다.
-
-### Run with Grok
-
-`XAI_MODEL` 환경변수를 `grok-beta`로 설정하여 Grok 모델을 실행시킬 수 있습니다.
-
-### Run with OpenAI
-
-`XAI_MODEL` 환경변수를 `gpt-4o-mini` 혹은 `gpt-4o` 로 설정하여, OpenAI model을 실행시킬 수 있습니다.
-
-## 기타 요구 사항
-
-시작시 오류가 발견되면, 아래의 명령어로 Sharp를 설치해보세요:
+시작 시 에러가 발생하면 Sharp를 설치해야 할 수 있습니다. 아래 명령어를 사용하여 설치하세요:
 
 ```
 pnpm install --include=optional sharp
 ```
 
-# 환경 셋업
+### Community & contact
 
-다양한 플랫폼에 연결하기 위해 .env 파일에 다음의 환경 변수들을 채워 넣어야 합니다:
+-   [Github Issues](https://github.com/ai16z/eliza/issues). 용도: Eliza 사용 중 발견된 버그 리포트, 기능 제안.
+-   [Discord](https://discord.gg/ai16z). 용도: 애플리케이션 공유 및 커뮤니티 활동.
 
-```
-# Required environment variables
-DISCORD_APPLICATION_ID=
-DISCORD_API_TOKEN= # Bot token
-OPENAI_API_KEY=sk-* # OpenAI API key, starting with sk-
-ELEVENLABS_XI_API_KEY= # API key from elevenlabs
-GOOGLE_GENERATIVE_AI_API_KEY= # Gemini API key
+## 컨트리뷰터
 
-# ELEVENLABS SETTINGS
-ELEVENLABS_MODEL_ID=eleven_multilingual_v2
-ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
-ELEVENLABS_VOICE_STABILITY=0.5
-ELEVENLABS_VOICE_SIMILARITY_BOOST=0.9
-ELEVENLABS_VOICE_STYLE=0.66
-ELEVENLABS_VOICE_USE_SPEAKER_BOOST=false
-ELEVENLABS_OPTIMIZE_STREAMING_LATENCY=4
-ELEVENLABS_OUTPUT_FORMAT=pcm_16000
+<a href="https://github.com/ai16z/eliza/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ai16z/eliza" />
+</a>
 
-TWITTER_DRY_RUN=false
-TWITTER_USERNAME= # Account username
-TWITTER_PASSWORD= # Account password
-TWITTER_EMAIL= # Account email
-TWITTER_COOKIES= # Account cookies
+## 스타 기록
 
-X_SERVER_URL=
-XAI_API_KEY=
-XAI_MODEL=
-
-
-# For asking Claude stuff
-ANTHROPIC_API_KEY=
-
-# EVM
-EVM_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
-
-# Solana
-SOLANA_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
-SOLANA_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
-
-# Fallback Wallet Configuration (deprecated)
-WALLET_PRIVATE_KEY=EXAMPLE_WALLET_PRIVATE_KEY
-WALLET_PUBLIC_KEY=EXAMPLE_WALLET_PUBLIC_KEY
-
-BIRDEYE_API_KEY=
-
-SOL_ADDRESS=So11111111111111111111111111111111111111112
-SLIPPAGE=1
-RPC_URL=https://api.mainnet-beta.solana.com
-HELIUS_API_KEY=
-
-
-## Telegram
-TELEGRAM_BOT_TOKEN=
-
-TOGETHER_API_KEY=
-```
-
-# 로컬 인터페이스 설정
-
-### CUDA 셋업
-
-고성능 NVIDIA GPU를 가지고 있는 분들은, CUDA 를 설치하시면 당신의 로컬 인터페이스를 놀랍도록 가속 시킬 수 있습니다.
-
-```
-pnpm install
-npx --no node-llama-cpp source download --gpu cuda
-```
-
-설치 후에는 당신의 CUDA Toolkit에 cuDNN and cuBLAS 이 포함되었는지 다시 한번 확인하세요.
-
-### 로컬 실행
-
-다음 중 한가지 옵션을 선택하여 XAI_MODEL 을 추가하세요. [Run with
-Llama](#run-with-llama) - X_SERVER_URL 와 XAI_API_KEY 는 비워둬도 됩니다.
-이 파일을 통해 huggingface 에서 모델이 다운로드 되며, 로컬로 쿼리 됩니다.
-
-# 클라이언트
-
-## Discord Bot
-
-디스코드 봇을 세팅하는 방법을 알고싶으면 아래의 링크를 통해 확인하세요:
-https://discordjs.guide/preparations/setting-up-a-bot-application.html
-
-# 개발하기
-
-## 테스트 방법
-
-일반 테스트에 적합한 커맨드:
-
-```bash
-pnpm test           # Run tests once
-pnpm test:watch    # Run tests in watch mode
-```
-
-데이터베이스에 특화된 테스트 커맨드:
-
-```bash
-pnpm test:sqlite   # Run tests with SQLite
-pnpm test:sqljs    # Run tests with SQL.js
-```
-
-테스트 결과는 Jest를 통해 작성되며, `src/**/*.test.ts` 파일에서 확인할 수 있습니다.
-테스트 환경 구성단계:
-
--   `.env.test` 에서 환경변수가 불러와집니다.
--   테스트 타임아웃 시간은 2분으로 설정되어있습니다.
--   ESM 모듈이 지원됩니다.
--   순차적으로 테스트가 실행됩니다. (--runInBand)
-
-새 테스트를 만들려면, 테스트 중인 코드 옆에 `.test.ts` 파일을 추가하세요.
+[![Star History Chart](https://api.star-history.com/svg?repos=ai16z/eliza&type=Date)](https://star-history.com/#ai16z/eliza&Date)

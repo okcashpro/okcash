@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / findNearestEnvFile
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / findNearestEnvFile
 
 # Function: findNearestEnvFile()
 
@@ -21,4 +21,4 @@ Path to the nearest .env file or null if not found
 
 ## Defined in
 
-[packages/core/src/settings.ts:43](https://github.com/ai16z/eliza/blob/main/packages/core/src/settings.ts#L43)
+[packages/core/src/settings.ts:43](https://github.com/monilpat/eliza/blob/main/packages/core/src/settings.ts#L43)
