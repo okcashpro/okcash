@@ -50,7 +50,7 @@ git clone https://github.com/ai16z/eliza-starter.git
 
 cp .env.example .env
 
-pnpm i && pnpm start
+pnpm i && pnpm build && pnpm start
 ```
 
 Then read the [Documentation](https://ai16z.github.io/eliza/) to learn how to customize your Eliza.
