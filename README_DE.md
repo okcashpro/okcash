@@ -1,12 +1,12 @@
-# Eliza 🤖
+# OKai 🤖
 
 <div align="center">
-  <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
+  <img src="./docs/static/img/okai_banner.jpg" alt="OKai Banner" width="100%" />
 </div>
 
 <div align="center">
 
-  📖 [Dokumentation](https://ai16z.github.io/eliza/) | 🎯 [Beispiele](https://github.com/thejoven/awesome-eliza)
+  📖 [Dokumentation](https://okcashpro.github.io/okai/) | 🎯 [Beispiele](https://github.com/thejoven/awesome-okai)
 
 </div>
 
@@ -41,29 +41,29 @@
 ### Nutzung des Starters (Empfohlen)
 
 ```bash
-git clone https://github.com/ai16z/eliza-starter.git
+git clone https://github.com/okcashpro/okai-starter.git
 
 cp .env.example .env
 
 pnpm i && pnpm start
 ```
 
-Lies dann die [Dokumentation](https://ai16z.github.io/eliza/), um zu erfahren, wie du Eliza anpassen kannst.
+Lies dann die [Dokumentation](https://okcashpro.github.io/okai/), um zu erfahren, wie du OKai anpassen kannst.
 
-### Manuelles Starten von Eliza (Nur empfohlen, wenn du genau weißt, was du tust)
+### Manuelles Starten von OKai (Nur empfohlen, wenn du genau weißt, was du tust)
 
 ```bash
 # Repository klonen
-git clone https://github.com/ai16z/eliza.git
+git clone https://github.com/okcashpro/okai.git
 
 # Wechsle zur neuesten Version
 # Dieses Projekt entwickelt sich schnell weiter, daher empfehlen wir, die neueste Version zu verwenden
 git checkout $(git describe --tags --abbrev=0)
 ```
 
-### Eliza mit Gitpod starten
+### OKai mit Gitpod starten
 
-[![In Gitpod öffnen](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ai16z/eliza/tree/main)
+[![In Gitpod öffnen](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/okcashpro/okai/tree/main)
 
 ### Bearbeite die .env-Datei
 
@@ -75,7 +75,7 @@ cp .env.example .env
 
 Hinweis: .env ist optional. Wenn du vorhast, mehrere unterschiedliche Agenten auszuführen, kannst du Geheimnisse über die Charakter-JSON übergeben.
 
-### Eliza automatisch starten
+### OKai automatisch starten
 
 Dies führt alle notwendigen Schritte aus, um das Projekt einzurichten und den Bot mit dem Standardcharakter zu starten.
 
@@ -93,7 +93,7 @@ sh scripts/start.sh
 3. Verbinde mit  X (Twitter)
     - Ändere `"clients": []` zu `"clients": ["twitter"]` in der Charakterdatei, um eine Verbindung mit X herzustellen.
 
-### Eliza manuell starten
+### OKai manuell starten
 
 ```bash
 pnpm i
@@ -114,15 +114,15 @@ pnpm install --include=optional sharp
 
 ### Community & Kontakt
 
--   [GitHub Issues](https://github.com/ai16z/eliza/issues). Am besten geeignet für: Bugs, die du bei der Nutzung von Eliza findest, und Feature-Vorschläge.
--   [Discord](https://discord.gg/ai16z). Am besten geeignet für: das Teilen deiner Anwendungen und den Austausch mit der Community.
+-   [GitHub Issues](https://github.com/okcashpro/okai/issues). Am besten geeignet für: Bugs, die du bei der Nutzung von OKai findest, und Feature-Vorschläge.
+-   [Discord](https://discord.gg/okcashpro). Am besten geeignet für: das Teilen deiner Anwendungen und den Austausch mit der Community.
 
 ## Contributors
 
-<a href="https://github.com/ai16z/eliza/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ai16z/eliza" />
+<a href="https://github.com/okcashpro/okai/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=okcashpro/okai" />
 </a>
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ai16z/eliza&type=Date)](https://star-history.com/#ai16z/eliza&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=okcashpro/okai&type=Date)](https://star-history.com/#okcashpro/okai&Date)

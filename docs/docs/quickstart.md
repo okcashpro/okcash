@@ -6,7 +6,7 @@ sidebar_position: 2
 
 ## Prerequisites
 
-Before getting started with Eliza, ensure you have:
+Before getting started with OKai, ensure you have:
 
 -   [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 -   [pnpm 9+](https://pnpm.io/installation)
