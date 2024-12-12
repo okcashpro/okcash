@@ -80,47 +80,68 @@ export async function generateText({
 
     // allow character.json settings => secrets to override models
     // FIXME: add MODEL_MEDIUM support
-    switch(provider) {
+    switch (provider) {
         // if runtime.getSetting("LLAMACLOUD_MODEL_LARGE") is true and modelProvider is LLAMACLOUD, then use the large model
-        case ModelProviderName.LLAMACLOUD: {
-            switch(modelClass) {
-                case ModelClass.LARGE: {
-                    model = runtime.getSetting("LLAMACLOUD_MODEL_LARGE") || model;
+        case ModelProviderName.LLAMACLOUD:
+            {
+                switch (modelClass) {
+                    case ModelClass.LARGE:
+                        {
+                            model =
+                                runtime.getSetting("LLAMACLOUD_MODEL_LARGE") ||
+                                model;
+                        }
+                        break;
+                    case ModelClass.SMALL:
+                        {
+                            model =
+                                runtime.getSetting("LLAMACLOUD_MODEL_SMALL") ||
+                                model;
+                        }
+                        break;
                 }
-                break;
-                case ModelClass.SMALL: {
-                    model = runtime.getSetting("LLAMACLOUD_MODEL_SMALL") || model;
-                }
-                break;
             }
-        }
-        break;
-        case ModelProviderName.TOGETHER: {
-            switch(modelClass) {
-                case ModelClass.LARGE: {
-                    model = runtime.getSetting("TOGETHER_MODEL_LARGE") || model;
+            break;
+        case ModelProviderName.TOGETHER:
+            {
+                switch (modelClass) {
+                    case ModelClass.LARGE:
+                        {
+                            model =
+                                runtime.getSetting("TOGETHER_MODEL_LARGE") ||
+                                model;
+                        }
+                        break;
+                    case ModelClass.SMALL:
+                        {
+                            model =
+                                runtime.getSetting("TOGETHER_MODEL_SMALL") ||
+                                model;
+                        }
+                        break;
                 }
-                break;
-                case ModelClass.SMALL: {
-                    model = runtime.getSetting("TOGETHER_MODEL_SMALL") || model;
-                }
-                break;
             }
-        }
-        break;
-        case ModelProviderName.OPENROUTER: {
-            switch(modelClass) {
-                case ModelClass.LARGE: {
-                    model = runtime.getSetting("LARGE_OPENROUTER_MODEL") || model;
+            break;
+        case ModelProviderName.OPENROUTER:
+            {
+                switch (modelClass) {
+                    case ModelClass.LARGE:
+                        {
+                            model =
+                                runtime.getSetting("LARGE_OPENROUTER_MODEL") ||
+                                model;
+                        }
+                        break;
+                    case ModelClass.SMALL:
+                        {
+                            model =
+                                runtime.getSetting("SMALL_OPENROUTER_MODEL") ||
+                                model;
+                        }
+                        break;
                 }
-                break;
-                case ModelClass.SMALL: {
-                    model = runtime.getSetting("SMALL_OPENROUTER_MODEL") || model;
-                }
-                break;
             }
-        }
-        break;
+            break;
     }
 
     elizaLogger.info("Selected model:", model);
@@ -157,7 +178,11 @@ export async function generateText({
             case ModelProviderName.HYPERBOLIC:
             case ModelProviderName.TOGETHER: {
                 elizaLogger.debug("Initializing OpenAI model.");
-                const openai = createOpenAI({ apiKey, baseURL: endpoint });
+                const openai = createOpenAI({
+                    apiKey,
+                    baseURL: endpoint,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
@@ -178,7 +203,9 @@ export async function generateText({
             }
 
             case ModelProviderName.GOOGLE: {
-                const google = createGoogleGenerativeAI();
+                const google = createGoogleGenerativeAI({
+                    fetch: runtime.fetch,
+                });
 
                 const { text: googleResponse } = await aiGenerateText({
                     model: google(model),
@@ -201,7 +228,10 @@ export async function generateText({
             case ModelProviderName.ANTHROPIC: {
                 elizaLogger.debug("Initializing Anthropic model.");
 
-                const anthropic = createAnthropic({ apiKey });
+                const anthropic = createAnthropic({
+                    apiKey,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: anthropicResponse } = await aiGenerateText({
                     model: anthropic.languageModel(model),
@@ -224,7 +254,10 @@ export async function generateText({
             case ModelProviderName.CLAUDE_VERTEX: {
                 elizaLogger.debug("Initializing Claude Vertex model.");
 
-                const anthropic = createAnthropic({ apiKey });
+                const anthropic = createAnthropic({
+                    apiKey,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: anthropicResponse } = await aiGenerateText({
                     model: anthropic.languageModel(model),
@@ -248,7 +281,11 @@ export async function generateText({
 
             case ModelProviderName.GROK: {
                 elizaLogger.debug("Initializing Grok model.");
-                const grok = createOpenAI({ apiKey, baseURL: endpoint });
+                const grok = createOpenAI({
+                    apiKey,
+                    baseURL: endpoint,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: grokResponse } = await aiGenerateText({
                     model: grok.languageModel(model, {
@@ -271,7 +308,7 @@ export async function generateText({
             }
 
             case ModelProviderName.GROQ: {
-                const groq = createGroq({ apiKey });
+                const groq = createGroq({ apiKey, fetch: runtime.fetch });
 
                 const { text: groqResponse } = await aiGenerateText({
                     model: groq.languageModel(model),
@@ -318,7 +355,11 @@ export async function generateText({
             case ModelProviderName.REDPILL: {
                 elizaLogger.debug("Initializing RedPill model.");
                 const serverUrl = models[provider].endpoint;
-                const openai = createOpenAI({ apiKey, baseURL: serverUrl });
+                const openai = createOpenAI({
+                    apiKey,
+                    baseURL: serverUrl,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: redpillResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
@@ -341,7 +382,11 @@ export async function generateText({
             case ModelProviderName.OPENROUTER: {
                 elizaLogger.debug("Initializing OpenRouter model.");
                 const serverUrl = models[provider].endpoint;
-                const openrouter = createOpenAI({ apiKey, baseURL: serverUrl });
+                const openrouter = createOpenAI({
+                    apiKey,
+                    baseURL: serverUrl,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: openrouterResponse } = await aiGenerateText({
                     model: openrouter.languageModel(model),
@@ -367,6 +412,7 @@ export async function generateText({
 
                     const ollamaProvider = createOllama({
                         baseURL: models[provider].endpoint + "/api",
+                        fetch: runtime.fetch,
                     });
                     const ollama = ollamaProvider(model);
 
@@ -391,6 +437,7 @@ export async function generateText({
                 const heurist = createOpenAI({
                     apiKey: apiKey,
                     baseURL: endpoint,
+                    fetch: runtime.fetch,
                 });
 
                 const { text: heuristResponse } = await aiGenerateText({
@@ -436,7 +483,11 @@ export async function generateText({
 
                 elizaLogger.debug("Using GAIANET model with baseURL:", baseURL);
 
-                const openai = createOpenAI({ apiKey, baseURL: endpoint });
+                const openai = createOpenAI({
+                    apiKey,
+                    baseURL: endpoint,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
@@ -461,6 +512,7 @@ export async function generateText({
                 const galadriel = createOpenAI({
                     apiKey: apiKey,
                     baseURL: endpoint,
+                    fetch: runtime.fetch,
                 });
 
                 const { text: galadrielResponse } = await aiGenerateText({
