@@ -60,10 +60,36 @@ describe("Model Provider Configuration", () => {
             expect(anthropicModels[ModelClass.LARGE]).toBe("claude-3-5-sonnet-20241022");
         });
 
-        test("should have correct token limits", () => {
+        test("should have correct settings configuration", () => {
             const settings = models[ModelProviderName.ANTHROPIC].settings;
             expect(settings.maxInputTokens).toBe(200000);
             expect(settings.maxOutputTokens).toBe(4096);
+            expect(settings.temperature).toBe(0.7);
+            expect(settings.frequency_penalty).toBe(0.4);
+            expect(settings.presence_penalty).toBe(0.4);
+        });
+    });
+
+    describe("LlamaCloud Provider", () => {
+        test("should have correct endpoint", () => {
+            expect(models[ModelProviderName.LLAMACLOUD].endpoint).toBe("https://api.llamacloud.com/v1");
+        });
+
+        test("should have correct model mappings", () => {
+            const llamaCloudModels = models[ModelProviderName.LLAMACLOUD].model;
+            expect(llamaCloudModels[ModelClass.SMALL]).toBe("meta-llama/Llama-3.2-3B-Instruct-Turbo");
+            expect(llamaCloudModels[ModelClass.MEDIUM]).toBe("meta-llama-3.1-8b-instruct");
+            expect(llamaCloudModels[ModelClass.LARGE]).toBe("meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo");
+            expect(llamaCloudModels[ModelClass.EMBEDDING]).toBe("togethercomputer/m2-bert-80M-32k-retrieval");
+            expect(llamaCloudModels[ModelClass.IMAGE]).toBe("black-forest-labs/FLUX.1-schnell");
+        });
+
+        test("should have correct settings configuration", () => {
+            const settings = models[ModelProviderName.LLAMACLOUD].settings;
+            expect(settings.maxInputTokens).toBe(128000);
+            expect(settings.maxOutputTokens).toBe(8192);
+            expect(settings.temperature).toBe(0.7);
+            expect(settings.repetition_penalty).toBe(0.4);
         });
     });
 
@@ -79,10 +105,10 @@ describe("Model Provider Configuration", () => {
 
 describe("Model Retrieval Functions", () => {
     describe("getModel function", () => {
-        test("should retrieve correct models for all providers", () => {
+        test("should retrieve correct models for different providers and classes", () => {
             expect(getModel(ModelProviderName.OPENAI, ModelClass.SMALL)).toBe("gpt-4o-mini");
             expect(getModel(ModelProviderName.ANTHROPIC, ModelClass.LARGE)).toBe("claude-3-5-sonnet-20241022");
-            expect(getModel(ModelProviderName.GOOGLE, ModelClass.MEDIUM)).toBe("gemini-1.5-flash-latest");
+            expect(getModel(ModelProviderName.LLAMACLOUD, ModelClass.MEDIUM)).toBe("meta-llama-3.1-8b-instruct");
         });
 
         test("should handle environment variable overrides", () => {
@@ -97,9 +123,10 @@ describe("Model Retrieval Functions", () => {
     });
 
     describe("getEndpoint function", () => {
-        test("should retrieve correct endpoints for all providers", () => {
+        test("should retrieve correct endpoints for different providers", () => {
             expect(getEndpoint(ModelProviderName.OPENAI)).toBe("https://api.openai.com/v1");
             expect(getEndpoint(ModelProviderName.ANTHROPIC)).toBe("https://api.anthropic.com/v1");
+            expect(getEndpoint(ModelProviderName.LLAMACLOUD)).toBe("https://api.llamacloud.com/v1");
             expect(getEndpoint(ModelProviderName.ETERNALAI)).toBe("https://mock.eternal.ai");
         });
 
