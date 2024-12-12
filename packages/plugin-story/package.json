@@ -18,5 +18,8 @@
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.1"
     }
 }

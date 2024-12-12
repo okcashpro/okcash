@@ -40,6 +40,24 @@ Respond with a JSON markdown block containing only the extracted values. A user 
 \`\`\`
 `;
 
+export const getAvailableLicensesTemplate = `Given the recent messages and wallet information below:
+
+{{recentMessages}}
+
+{{walletInfo}}
+
+Extract the following information about the requested IP licensing:
+- Field "ipid": The IP Asset that you want to mint a license from
+
+Respond with a JSON markdown block containing only the extracted values:
+
+\`\`\`json
+{
+    "ipid": string | null
+}
+\`\`\`
+`;
+
 export const attachTermsTemplate = `Given the recent messages below:
 
 {{recentMessages}}
