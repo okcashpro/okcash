@@ -231,7 +231,7 @@ export class ClientBase extends EventEmitter {
         elizaLogger.debug("fetching home timeline");
         const homeTimeline = await this.twitterClient.fetchHomeTimeline(count, []);
 
-        //console.dir(homeTimeline, { depth: Infinity });
+        elizaLogger.debug(homeTimeline, { depth: Infinity });
         const processedTimeline = homeTimeline
         .filter((t) => t.__typename !== "TweetWithVisibilityResults") // what's this about?
         .map((tweet) => {
