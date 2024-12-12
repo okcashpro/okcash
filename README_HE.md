@@ -37,8 +37,11 @@
 <div align="right">
 -   🚀 ניתן להרחבה רבה - יצירת פעולות ולקוחות משלך
 </div>
+<div align="right">
 -   ☁️ תומך בהרבה מודלים (local Llama, OpenAI, Anthropic, Groq ,
 וכו')
+</div>
+<div align="right">
 -   📦 פשוט עובד!
 </div>
 
