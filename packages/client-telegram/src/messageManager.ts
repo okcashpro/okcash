@@ -920,8 +920,6 @@ export class MessageManager {
                                     "-" +
                                     this.runtime.agentId
                             ),
-                            // agentId,
-                            // userId,
                             agentId: this.runtime.agentId,
                             userId: this.runtime.agentId,
                             roomId,
