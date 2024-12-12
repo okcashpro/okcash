@@ -22,6 +22,9 @@ export async function getResource(
     options?: QueryOptions
 ) {
     try {
+        elizaLogger.log(
+            `Fetching resource ${API_URL}/${resourceName}/${resourceId}`
+        );
         const res = await fetch(`${API_URL}/${resourceName}/${resourceId}`, {
             method: "GET",
             headers: {
@@ -31,7 +34,12 @@ export async function getResource(
             },
         });
         if (res.ok) {
+            elizaLogger.log("Response is ok");
             return res.json();
+        } else {
+            elizaLogger.log("Response is not ok");
+            elizaLogger.log(JSON.stringify(res));
+            throw new Error(`HTTP error! status: ${res.status}`);
         }
     } catch (error) {
         console.error(error);
