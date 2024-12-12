@@ -78,7 +78,9 @@
 
 > **הערה למשתמשי Windows:** נדרש [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install-manual)
 
+</div>
 
+<div align="right">
 ### שימוש ב-Starter (מומלץ)
 
 <div align="right">
