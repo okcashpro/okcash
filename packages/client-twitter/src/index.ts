@@ -16,8 +16,10 @@ class TwitterManager {
 
         if (enableSearch) {
           // this searches topics from character file
-          elizaLogger.warn('Twitter/X client running in a mode that violates consent of random users')
-          elizaLogger.warn('burns your rate limit and can get your account banned')
+          elizaLogger.warn('Twitter/X client running in a mode that:')
+          elizaLogger.warn('1. violates consent of random users')
+          elizaLogger.warn('2. burns your rate limit')
+          elizaLogger.warn('3. can get your account banned')
           elizaLogger.warn('use at your own risk')
           this.search = new TwitterSearchClient(this.client, runtime); // don't start the search client by default
         }
