@@ -59,7 +59,7 @@ export const TradeSchema = z.object({
     amount: z.number(),
     sourceAsset: z.enum(assetValues),
     targetAsset: z.enum(assetValues),
-    leverage: z.number().optional(), // Optional leverage for leveraged trades
+    side: z.enum(["BUY", "SELL"]),
 });
 
 export interface TradeContent {
@@ -67,6 +67,8 @@ export interface TradeContent {
     amount: number;
     sourceAsset: string;
     targetAsset: string;
+    side: "BUY" | "SELL";
+
 }
 
 export const isTradeContent = (object: any): object is TradeContent => {
@@ -122,9 +124,9 @@ export interface ContractInvocationContent {
     method: string;
     abi: any[];
     args?: Record<string, any>;
-    amount?: number;
-    assetId?: string;
-    network: string;
+    amount?: string;
+    assetId: string;
+    networkId: string;
 }
 
 export const ContractInvocationSchema = z.object({
@@ -132,9 +134,9 @@ export const ContractInvocationSchema = z.object({
     method: z.string().describe("The method to invoke on the contract"),
     abi: z.array(z.any()).describe("The ABI of the contract"),
     args: z.record(z.string(), z.any()).optional().describe("The arguments to pass to the contract method"),
-    amount: z.number().optional().describe("The amount of the asset to send to a payable contract method"),
-    assetId: z.string().optional().describe("The ID of the asset to send to a payable contract method"),
-    network: z.string().describe("The blockchain network to use"),
+    amount: z.string().optional().describe("The amount of the asset to send (as string to handle large numbers)"),
+    assetId: z.string().describe("The ID of the asset to send (e.g., 'USDC')"),
+    networkId: z.string().describe("The network ID to use (e.g., 'ethereum-mainnet')")
 });
 
 export const isContractInvocationContent = (obj: any): obj is ContractInvocationContent => {
@@ -153,4 +155,44 @@ export type WebhookContent = z.infer<typeof WebhookSchema>;
 
 export const isWebhookContent = (object: any): object is WebhookContent => {
     return WebhookSchema.safeParse(object).success;
+};
+
+export const AdvancedTradeSchema = z.object({
+    productId: z.string(),
+    side: z.enum(["BUY", "SELL"]),
+    amount: z.number(),
+    orderType: z.enum(["MARKET", "LIMIT"]),
+    limitPrice: z.number().optional(),
+});
+
+export interface AdvancedTradeContent {
+    productId: string;
+    side: "BUY" | "SELL";
+    amount: number;
+    orderType: "MARKET" | "LIMIT";
+    limitPrice?: number;
+}
+
+export const isAdvancedTradeContent = (object: any): object is AdvancedTradeContent => {
+    return AdvancedTradeSchema.safeParse(object).success;
+};
+
+export interface ReadContractContent {
+    contractAddress: `0x${string}`;
+    method: string;
+    networkId: string;
+    args: Record<string, any>;
+    abi?: any[];
+}
+
+export const ReadContractSchema = z.object({
+    contractAddress: z.string().describe("The address of the contract to read from"),
+    method: z.string().describe("The view/pure method to call on the contract"),
+    networkId: z.string().describe("The network ID to use"),
+    args: z.record(z.string(), z.any()).describe("The arguments to pass to the contract method"),
+    abi: z.array(z.any()).optional().describe("The contract ABI (optional)")
+});
+
+export const isReadContractContent = (obj: any): obj is ReadContractContent => {
+    return ReadContractSchema.safeParse(obj).success;
 };
