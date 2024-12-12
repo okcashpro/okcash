@@ -81,7 +81,7 @@
 
 ### שימוש ב-Starter (מומלץ)
 
-<div align="right">
+<div align="rtl">
 
 ```bash
 git clone https://github.com/ai16z/eliza-starter.git
@@ -99,7 +99,7 @@ pnpm i && pnpm start
 ### התחלה ידנית של אלייזה (מומלץ רק למי שיודע מה הוא עושה)
 <div align="right">
 
-```bash
+```
 # שכפול המאגר
 git clone https://github.com/ai16z/eliza.git
 
