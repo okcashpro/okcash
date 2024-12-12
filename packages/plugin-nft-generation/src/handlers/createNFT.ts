@@ -126,7 +126,10 @@ export async function createNFTMetadata({
         );
 
         nftInfo.uri = jsonFilePath.url;
-        return nftInfo;
+        return {
+            ...nftInfo,
+            imageUri: nftImage.url
+        };
     }
     return null;
 }

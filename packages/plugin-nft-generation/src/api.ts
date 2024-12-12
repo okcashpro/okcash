@@ -2,7 +2,7 @@ import express from "express";
 
 import { AgentRuntime } from "@ai16z/eliza";
 import { createCollection } from "./handlers/createCollection.ts";
-import { createNFT } from "./handlers/createNFT.ts";
+import { createNFT, createNFTMetadata } from "./handlers/createNFT.ts";
 import { verifyNFT } from "./handlers/verifyNFT.ts";
 
 export function createNFTApiRouter(agents: Map<string, AgentRuntime>) {
@@ -28,6 +28,48 @@ export function createNFTApiRouter(agents: Map<string, AgentRuntime>) {
                 res.json({
                     success: true,
                     data: collectionAddressRes,
+                });
+            } catch (e: any) {
+                console.log(e);
+                res.json({
+                    success: false,
+                    data: JSON.stringify(e),
+                });
+            }
+        }
+    );
+
+
+    router.post(
+        "/api/nft-generation/create-nft-metadata",
+        async (req: express.Request, res: express.Response) => {
+            const agentId = req.body.agentId;
+            const collectionName = req.body.collectionName;
+            const collectionAddress = req.body.collectionAddress;
+            const collectionAdminPublicKey = req.body.collectionAdminPublicKey;
+            const collectionFee = req.body.collectionFee;
+            const tokenId = req.body.tokenId;
+            const runtime = agents.get(agentId);
+            if (!runtime) {
+                res.status(404).send("Agent not found");
+                return;
+            }
+
+            try {
+                const nftInfo = await createNFTMetadata({
+                    runtime,
+                    collectionName,
+                    collectionAdminPublicKey,
+                    collectionFee,
+                    tokenId,
+                });
+
+                res.json({
+                    success: true,
+                    data: {
+                        ...nftInfo,
+                        collectionAddress,
+                    },
                 });
             } catch (e: any) {
                 console.log(e);
