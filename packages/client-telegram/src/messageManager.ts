@@ -166,12 +166,12 @@ export class MessageManager {
         this.bot = bot;
         this.runtime = runtime;
 
-        this.initializeTeamMemberUsernames().catch(error =>
+        this._initializeTeamMemberUsernames().catch(error =>
             elizaLogger.error("Error initializing team member usernames:", error)
         );
     }
 
-    private async initializeTeamMemberUsernames(): Promise<void> {
+    private async _initializeTeamMemberUsernames(): Promise<void> {
         if (!this.runtime.character.clientConfig?.telegram?.isPartOfTeam) return;
 
         const teamAgentIds = this.runtime.character.clientConfig.telegram.teamAgentIds || [];
@@ -189,7 +189,7 @@ export class MessageManager {
         }
     }
 
-    private getTeamMemberUsername(id: string): string | undefined {
+    private _getTeamMemberUsername(id: string): string | undefined {
         return this.teamMemberUsernames.get(id);
     }
 
@@ -749,7 +749,7 @@ export class MessageManager {
             );
 
             const mentionedTeamMember = otherTeamMembers.find(id => {
-                const username = this.getTeamMemberUsername(id);
+                const username = this._getTeamMemberUsername(id);
                 return username && messageText?.includes(`@${username}`);
             });
 

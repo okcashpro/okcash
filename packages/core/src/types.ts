@@ -724,6 +724,8 @@ export type Character = {
             shouldIgnoreBotMessages?: boolean;
             shouldIgnoreDirectMessages?: boolean;
             shouldRespondOnlyToMentions?: boolean;
+            shouldOnlyJoinInAllowedGroups?: boolean;
+            allowedGroupIds?: string[];
             messageSimilarityThreshold?: number;
             isPartOfTeam?: boolean;
             teamAgentIds?: string[];
