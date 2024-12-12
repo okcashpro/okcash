@@ -49,7 +49,7 @@ pnpm install -r
 pnpm build
 
 OUTFILE="$(mktemp)"
-(sleep 2; echo "exit") | pnpm start --character=characters/trump.character.json > "$OUTFILE"
+(echo "exit"; sleep 2) | pnpm start --character=characters/trump.character.json > "$OUTFILE"
 RESULT=$?
 
 echo "----- OUTPUT START -----"
