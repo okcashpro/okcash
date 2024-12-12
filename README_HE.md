@@ -2,11 +2,11 @@
 
 # אלייזה 🤖
 
-<div align="right">
+<div align="center">
   <img src="./docs/static/img/eliza_banner.jpg" alt="אלייזה באנר" width="100%" />
 </div>
 
-<div align="right">
+<div align="center">
 
 📖 [תיעוד](https://ai16z.github.io/eliza/) | 🎯 [דוגמאות](https://github.com/thejoven/awesome-eliza)
 </div>
@@ -94,8 +94,8 @@ pnpm i && pnpm start
 לאחר מכן קרא את [התיעוד](https://ai16z.github.io/eliza/) כדי ללמוד כיצד להתאים את אלייזה.
 
 ### התחלה ידנית של אלייזה (מומלץ רק למי שיודע מה הוא עושה)
-<div align="right">  
-    
+<div align="right">
+
 ```bash
 # שכפול המאגר
 git clone https://github.com/ai16z/eliza.git
@@ -143,6 +143,7 @@ sh scripts/start.sh
 <!-- </div> -->
 
 ### התחלה ידנית של אלייזה
+<div align="right">
 
 ```bash
 pnpm i
@@ -152,6 +153,7 @@ pnpm start
 # לעיתים צריך לנקות את הפרויקט אם חוזרים אליו לאחר זמן
 pnpm clean
 ```
+</div>
 
 #### דרישות נוספות
 
@@ -163,11 +165,11 @@ pnpm install --include=optional sharp
 
 ### קהילה ויצירת קשר
 
-<div align="right"  >
--   [GitHub Issues](https://github.com/ai16z/eliza/issues). מתאים ביותר עבור: באגים ופרופוזיציות לתכונות.
-</div>
-<!-- <div align="right"> -->
--   [Discord](https://discord.gg/ai16z). מתאים ביותר עבור: שיתוף היישומים שלך והשתתפות בקהילה.
+<div align="right">
+
+[GitHub Issues](https://github.com/ai16z/eliza/issues) מתאים ביותר עבור: באגים ופרופוזיציות לתכונות -
+
+[Discord](https://discord.gg/ai16z) מתאים ביותר עבור: שיתוף היישומים שלך והשתתפות בקהילה -
 </div>
 
 ## תורמים
