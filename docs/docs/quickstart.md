@@ -6,83 +6,82 @@ sidebar_position: 2
 
 ## Prerequisites
 
-Before getting started with OKai, ensure you have:
+Before getting started with Eliza, ensure you have:
 
-- [Python 2.7+](https://www.python.org/downloads/)
-- [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- [pnpm 9+](https://pnpm.io/installation)
-- Git for version control
-- A code editor ([VS Code](https://code.visualstudio.com/) or [VSCodium](https://vscodium.com) recommended)
-- [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) (optional, for GPU acceleration)
+-   [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+-   [pnpm 9+](https://pnpm.io/installation)
+-   Git for version control
+-   A code editor ([VS Code](https://code.visualstudio.com/) or [VSCodium](https://vscodium.com) recommended)
+-   [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) (optional, for GPU acceleration)
 
 ## Installation
 
 1. **Clone and Install**
 
-   Please be sure to check what the [latest available stable version tag](https://github.com/okcashpro/okai/tags) is.
+    Please be sure to check what the [latest available stable version tag](https://github.com/okcashpro/okai/tags) is.
 
-   Clone the repository
+    Clone the repository
 
-   ```bash
-   git clone https://github.com/okcashpro/okai.git
-   ```
+    ```bash
+    git clone https://github.com/okcashpro/okai.git
+    ```
 
-   Enter directory
+    Enter directory
 
-   ```bash
-   cd okai
-   ```
+    ```bash
+    cd okai
+    ```
 
-   Switch to latest tagged release
+    Switch to latest tagged release
 
-   ```bash
-    # Checkout the latest release
-    # This project iterates fast, so we recommend checking out the latest release
-    git checkout $(git describe --tags --abbrev=0)
-   ```
+    ```bash
+     # Checkout the latest release
+     # This project iterates fast, so we recommend checking out the latest release
+     git checkout $(git describe --tags --abbrev=0)
+    ```
 
-   Install dependencies
+    Install dependencies
 
-   ```bash
-   pnpm install
-   ```
+    ```bash
+    pnpm install
+    ```
 
-   Build the local libraries
+    Build the local libraries
 
-   ```bash
-   pnpm build
-   ```
+    ```bash
+    pnpm build
+    ```
 
 2. **Configure Environment**
 
-   Copy example environment file
+    Copy example environment file
 
-   ```bash
-   cp .env.example .env
-   ```
+    ```bash
+    cp .env.example .env
+    ```
 
-   Edit `.env` and add your values:
+    Edit `.env` and add your values:
 
-   ```bash
-   # Suggested quickstart environment variables
-   DISCORD_APPLICATION_ID=  # For Discord integration
-   DISCORD_API_TOKEN=      # Bot token
-   HEURIST_API_KEY=       # Heurist API key for LLM and image generation
-   OPENAI_API_KEY=        # OpenAI API key
-   GROK_API_KEY=          # Grok API key
-   ELEVENLABS_XI_API_KEY= # API key from elevenlabs (for voice)
-   ```
+    ```bash
+    # Suggested quickstart environment variables
+    DISCORD_APPLICATION_ID=  # For Discord integration
+    DISCORD_API_TOKEN=      # Bot token
+    HEURIST_API_KEY=       # Heurist API key for LLM and image generation
+    OPENAI_API_KEY=        # OpenAI API key
+    GROK_API_KEY=          # Grok API key
+    ELEVENLABS_XI_API_KEY= # API key from elevenlabs (for voice)
+    ```
 
 ## Choose Your Model
 
 OKai supports multiple AI models:
 
-- **Heurist**: Set `modelProvider: "heurist"` in your character file. Most models are uncensored.
-  - LLM: Select available LLMs [here](https://docs.heurist.ai/dev-guide/supported-models#large-language-models-llms) and configure `SMALL_HEURIST_MODEL`,`MEDIUM_HEURIST_MODEL`,`LARGE_HEURIST_MODEL`
-  - Image Generation: Select available Stable Diffusion or Flux models [here](https://docs.heurist.ai/dev-guide/supported-models#image-generation-models) and configure `HEURIST_IMAGE_MODEL` (default is FLUX.1-dev)
-- **Llama**: Set `XAI_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo`
-- **Grok**: Set `XAI_MODEL=grok-beta`
-- **OpenAI**: Set `XAI_MODEL=gpt-4o-mini` or `gpt-4o`
+-   **Heurist**: Set `modelProvider: "heurist"` in your character file. Most models are uncensored.
+    -   LLM: Select available LLMs [here](https://docs.heurist.ai/dev-guide/supported-models#large-language-models-llms) and configure `SMALL_HEURIST_MODEL`,`MEDIUM_HEURIST_MODEL`,`LARGE_HEURIST_MODEL`
+    -   Image Generation: Select available Stable Diffusion or Flux models [here](https://docs.heurist.ai/dev-guide/supported-models#image-generation-models) and configure `HEURIST_IMAGE_MODEL` (default is FLUX.1-dev)
+-   **Llama**: Set `XAI_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo`
+-   **Grok**: Set `XAI_MODEL=grok-beta`
+-   **OpenAI**: Set `XAI_MODEL=gpt-4o-mini` or `gpt-4o`
 
 You set which model to use inside the character JSON file
 
@@ -106,24 +105,41 @@ You set which model to use inside the character JSON file
 
 1. **Create a Character File**
 
-   Check out `characters/trump.character.json` or `characters/tate.character.json` as a template you can use to copy and customize your agent's personality and behavior.
-   Additionally you can read `core/src/core/defaultCharacter.ts` (in 0.0.10 but post-refactor will be in `packages/core/src/defaultCharacter.ts`)
+    Check out `characters/trump.character.json` or `characters/tate.character.json` as a template you can use to copy and customize your agent's personality and behavior.
+    Additionally you can read `core/src/core/defaultCharacter.ts` (in 0.0.10 but post-refactor will be in `packages/core/src/defaultCharacter.ts`)
 
-   📝 [Character Documentation](./core/characterfile.md)
+    📝 [Character Documentation](./core/characterfile.md)
 
 2. **Start the Agent**
 
-   Inform it which character you want to run:
+    Inform it which character you want to run:
 
-   ```bash
-   pnpm start --character="characters/trump.character.json"
-   ```
+    ```bash
+    pnpm start --character="characters/trump.character.json"
+    ```
 
-   You can also load multiple characters with the characters option with a comma separated list:
+    You can also load multiple characters with the characters option with a comma separated list:
 
-   ```bash
-   pnpm start --characters="characters/trump.character.json,characters/tate.character.json"
-   ```
+    ```bash
+    pnpm start --characters="characters/trump.character.json,characters/tate.character.json"
+    ```
+
+3. **Interact with the Agent**
+
+    Now you're ready to start a conversation with your agent!
+    Open a new terminal window
+
+    ```bash
+    pnpm start:client
+    ```
+
+    Once the client is running, you'll see a message like this:
+
+```
+➜  Local:   http://localhost:5173/
+```
+
+Simply click the link or open your browser to `http://localhost:5173/`. You'll see the chat interface connect to the system, and you can begin interacting with your character.
 
 ## Platform Integration
 
@@ -194,86 +210,86 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
 
 1. **Node.js Version**
 
-   - Ensure Node.js 23.3.0 is installed
-   - Use `node -v` to check version
-   - Consider using [nvm](https://github.com/nvm-sh/nvm) to manage Node versions
+    - Ensure Node.js 23.3.0 is installed
+    - Use `node -v` to check version
+    - Consider using [nvm](https://github.com/nvm-sh/nvm) to manage Node versions
 
 2. **Sharp Installation**
    If you see Sharp-related errors:
 
-   ```bash
-   pnpm install --include=optional sharp
-   ```
+    ```bash
+    pnpm install --include=optional sharp
+    ```
 
 3. **CUDA Setup**
 
-   - Verify CUDA Toolkit installation
-   - Check GPU compatibility with toolkit
-   - Ensure proper environment variables are set
+    - Verify CUDA Toolkit installation
+    - Check GPU compatibility with toolkit
+    - Ensure proper environment variables are set
 
 4. **Exit Status 1**
    If you see
 
-   ```
-   triggerUncaughtException(
-   ^
-   [Object: null prototype] {
-   [Symbol(nodejs.util.inspect.custom)]: [Function: [nodejs.util.inspect.custom]]
-   }
-   ```
+    ```
+    triggerUncaughtException(
+    ^
+    [Object: null prototype] {
+    [Symbol(nodejs.util.inspect.custom)]: [Function: [nodejs.util.inspect.custom]]
+    }
+    ```
 
-   You can try these steps, which aim to add `@types/node` to various parts of the project
+    You can try these steps, which aim to add `@types/node` to various parts of the project
 
-   ```
-   # Add dependencies to workspace root
-   pnpm add -w -D ts-node typescript @types/node
+    ```
+    # Add dependencies to workspace root
+    pnpm add -w -D ts-node typescript @types/node
 
-   # Add dependencies to the agent package specifically
-   pnpm add -D ts-node typescript @types/node --filter "@okcashpro/agent"
+    # Add dependencies to the agent package specifically
+    pnpm add -D ts-node typescript @types/node --filter "@okcashpro/agent"
 
-   # Also add to the core package since it's needed there too
-   pnpm add -D ts-node typescript @types/node --filter "@okcashpro/okai"
+    # Also add to the core package since it's needed there too
+    pnpm add -D ts-node typescript @types/node --filter "@okcashpro/okai"
 
-   # First clean everything
-   pnpm clean
+    # First clean everything
+    pnpm clean
 
-   # Install all dependencies recursively
-   pnpm install -r
+    # Install all dependencies recursively
+    pnpm install -r
 
-   # Build the project
-   pnpm build
+    # Build the project
+    pnpm build
 
-   # Then try to start
-   pnpm start
-   ```
+    # Then try to start
+    pnpm start
+    ```
 
 5. **Better sqlite3 was compiled against a different Node.js version**
    If you see
 
-   ```
-   Error starting agents: Error: The module '.../okai-agents/dv/okai/node_modules/better-sqlite3/build/Release/better_sqlite3.node'
-   was compiled against a different Node.js version using
-   NODE_MODULE_VERSION 131. This version of Node.js requires
-   NODE_MODULE_VERSION 127. Please try re-compiling or re-installing
-   ```
+    ```
+    Error starting agents: Error: The module '.../okai-agents/dv/okai/node_modules/better-sqlite3/build/Release/better_sqlite3.node'
+    was compiled against a different Node.js version using
+    NODE_MODULE_VERSION 131. This version of Node.js requires
+    NODE_MODULE_VERSION 127. Please try re-compiling or re-installing
+    ```
 
-   You can try this, which will attempt to rebuild better-sqlite3.
+    You can try this, which will attempt to rebuild better-sqlite3.
 
-   ```bash
-   pnpm rebuild better-sqlite3
-   ```
+    ```bash
+    pnpm rebuild better-sqlite3
+    ```
 
-   If that doesn't work, try clearing your node_modules in the root folder
+    If that doesn't work, try clearing your node_modules in the root folder
 
-   ```bash
-   rm -fr node_modules; pnpm store prune
-   ```
+    ```bash
+    rm -fr node_modules; pnpm store prune
+    ```
 
-   Then reinstall the requirements
+    Then reinstall the requirements
 
-   ```bash
-   pnpm i
-   ```
+    ```bash
+    pnpm i
+    ```
 
 ## Next Steps
 

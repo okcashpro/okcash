@@ -2,7 +2,7 @@ import {
     composeContext,
     Content,
     okaiLogger,
-    generateObjectDEPRECATED,
+    generateObjectArray,
     ModelClass,
     type Action,
     type ActionExample,
@@ -87,11 +87,16 @@ export class TransferAction {
         });
 
         // Generate transfer content
-        const content = await generateObjectDEPRECATED({
+        const recommendations = await generateObjectArray({
             runtime,
             context: transferContext,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.MEDIUM,
         });
+
+        okaiLogger.debug("Recommendations", recommendations);
+
+        // Convert array to object
+        const content = recommendations[recommendations.length - 1];
 
         // Validate transfer content
         if (!isTransferContent(runtime, content)) {
