@@ -81,9 +81,9 @@
 
 ### שימוש ב-Starter (מומלץ)
 
-<div align="rtl">
+<div align="right">
 
-```bash
+```
 git clone https://github.com/ai16z/eliza-starter.git
 
 cp .env.example .env
