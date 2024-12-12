@@ -49,9 +49,21 @@ pnpm install -r
 pnpm build
 
 OUTFILE="$(mktemp)"
-(echo "exit"; sleep 2) | pnpm start --character=characters/trump.character.json > "$OUTFILE"
-RESULT=$?
+echo $OUTFILE
+(
+  # Wait for the ready message
+  while true; do
+    if grep -q "Chat started" "$OUTFILE"; then
+      echo "exit"; sleep 2
+      break
+    fi
+    sleep 0.5
+  done
+) | pnpm start --character=characters/trump.character.json > "$OUTFILE" &
 
+# Wait for process to finish
+wait $!
+RESULT=$?
 echo "----- OUTPUT START -----"
 cat "$OUTFILE"
 echo "----- OUTPUT END -----"
