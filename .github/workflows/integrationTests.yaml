@@ -47,4 +47,9 @@ jobs:
               env:
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
-                  pnpm run integrationTests
+                  if [ -z "$OPENAI_API_KEY" ]; then
+                    echo "Skipping integration tests due to missing required API keys"
+                    exit 0
+                  else
+                    pnpm run integrationTests
+                  fi
