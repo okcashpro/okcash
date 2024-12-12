@@ -62,7 +62,7 @@ git clone https://github.com/okcashpro/okai-starter.git
 
 cp .env.example .env
 
-pnpm i && pnpm start
+pnpm i && pnpm build && pnpm start
 ```
 
 Then read the [Documentation](https://okcashpro.github.io/okai/) to learn how to customize your OKai.
