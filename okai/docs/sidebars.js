@@ -80,6 +80,11 @@ const sidebars = {
           id: "guides/local-development",
           label: "Local Development",
         },
+        {
+            type: "doc",
+            id: "guides/wsl",
+            label: "WSL Setup",
+        },
       ],
     },
     {

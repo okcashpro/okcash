@@ -13,11 +13,11 @@ export const models: Models = {
             temperature: 0.6,
         },
         model: {
-            [ModelClass.SMALL]: "gpt-4o-mini",
-            [ModelClass.MEDIUM]: "gpt-4o",
-            [ModelClass.LARGE]: "gpt-4o",
-            [ModelClass.EMBEDDING]: "text-embedding-3-small",
-            [ModelClass.IMAGE]: "dall-e-3",
+            [ModelClass.SMALL]: settings.SMALL_OPENAI_MODEL || "gpt-4o-mini",
+            [ModelClass.MEDIUM]: settings.MEDIUM_OPENAI_MODEL || "gpt-4o",
+            [ModelClass.LARGE]: settings.LARGE_OPENAI_MODEL || "gpt-4o",
+            [ModelClass.EMBEDDING]: settings.EMBEDDING_OPENAI_MODEL || "text-embedding-3-small",
+            [ModelClass.IMAGE]: settings.IMAGE_OPENAI_MODEL || "dall-e-3",
         },
     },
     [ModelProviderName.ETERNALAI]: {
@@ -55,9 +55,9 @@ export const models: Models = {
         },
         endpoint: "https://api.anthropic.com/v1",
         model: {
-            [ModelClass.SMALL]: "claude-3-haiku-20240307",
-            [ModelClass.MEDIUM]: "claude-3-5-sonnet-20241022",
-            [ModelClass.LARGE]: "claude-3-5-sonnet-20241022",
+            [ModelClass.SMALL]: settings.SMALL_ANTHROPIC_MODEL || "claude-3-haiku-20240307",
+            [ModelClass.MEDIUM]: settings.MEDIUM_ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022",
+            [ModelClass.LARGE]: settings.LARGE_ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022",
         },
     },
     [ModelProviderName.CLAUDE_VERTEX]: {
@@ -328,6 +328,7 @@ export const models: Models = {
             [ModelClass.MEDIUM]: "llama3.1:70b",
             [ModelClass.LARGE]: "llama3.1:405b",
             [ModelClass.EMBEDDING]: "gte-large-en-v1.5",
+            [ModelClass.IMAGE]: "stabilityai/stable-diffusion-xl-base-1.0",
         },
     },
     [ModelProviderName.FAL]: {
@@ -409,6 +410,22 @@ export const models: Models = {
             [ModelClass.LARGE]: "doubao-pro-128k",
             [ModelClass.EMBEDDING]: "doubao-embedding",
         },
+    },
+    [ModelProviderName.NANOGPT]: {
+        endpoint: "https://nano-gpt.com/api/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            temperature: 0.6,
+        },
+        model: {
+            [ModelClass.SMALL]: settings.SMALL_NANOGPT_MODEL || "gpt-4o-mini",
+            [ModelClass.MEDIUM]: settings.MEDIUM_NANOGPT_MODEL || "gpt-4o",
+            [ModelClass.LARGE]: settings.LARGE_NANOGPT_MODEL || "gpt-4o",
+        }
     },
     [ModelProviderName.HYPERBOLIC]: {
         endpoint: "https://api.hyperbolic.xyz/v1",
