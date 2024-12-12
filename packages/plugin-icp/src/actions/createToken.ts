@@ -2,7 +2,7 @@ import {
     composeContext,
     generateImage,
     generateText,
-    generateObject,
+    generateObjectDEPRECATED,
 } from "@ai16z/eliza";
 import {
     ActionExample,
@@ -20,17 +20,14 @@ import { unwrapOption, wrapOption } from "../utils/common/types/options";
 import { unwrapRustResultMap } from "../utils/common/types/results";
 import { icpWalletProvider } from "../providers/wallet";
 import { uploadFileToWeb3Storage } from "../apis/uploadFile";
-import { createTokenTemplate, logoPromptTemplate } from './prompts/token';
-import { CANISTER_IDS } from '../constants/canisters';
+import { createTokenTemplate, logoPromptTemplate } from "./prompts/token";
+import { CANISTER_IDS } from "../constants/canisters";
 
 async function createTokenTransaction(
     creator: ActorCreator,
     tokenInfo: CreateMemeTokenArg
 ) {
-    const actor: _SERVICE = await creator(
-        idlFactory,
-        CANISTER_IDS.PICK_PUMP
-    );
+    const actor: _SERVICE = await creator(idlFactory, CANISTER_IDS.PICK_PUMP);
     const result = await actor.create_token({
         ...tokenInfo,
         name: tokenInfo.name,
@@ -123,7 +120,9 @@ export const executeCreateToken: Action = {
                 : message.content.text || ""
         ).toLowerCase();
 
-        return keywords.some((keyword) => messageText.includes(keyword.toLowerCase()));
+        return keywords.some((keyword) =>
+            messageText.includes(keyword.toLowerCase())
+        );
     },
     handler: async (
         runtime: IAgentRuntime,
@@ -149,7 +148,7 @@ export const executeCreateToken: Action = {
             template: createTokenTemplate,
         });
 
-        const response = await generateObject({
+        const response = await generateObjectDEPRECATED({
             runtime,
             context: createTokenContext,
             modelClass: ModelClass.LARGE,
@@ -166,7 +165,7 @@ export const executeCreateToken: Action = {
         const logoPrompt = await generateText({
             runtime,
             context: logoPromptContext,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.LARGE,
         });
 
         const logo = await generateTokenLogo(logoPrompt, runtime);

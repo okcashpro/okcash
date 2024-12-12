@@ -1,6 +1,6 @@
 {
     "name": "@ai16z/adapter-sqlite",
-    "version": "0.1.4-alpha.3",
+    "version": "0.1.5-alpha.5",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",

@@ -5,10 +5,12 @@ import { DirectClientInterface } from "@ai16z/client-direct";
 import { DiscordClientInterface } from "@ai16z/client-discord";
 import { TelegramClientInterface } from "@ai16z/client-telegram";
 import { TwitterClientInterface } from "@ai16z/client-twitter";
+import { FarcasterAgentClient } from "@ai16z/client-farcaster";
 import {
     AgentRuntime,
     CacheManager,
     Character,
+    Clients,
     DbCacheAdapter,
     FsCacheAdapter,
     IAgentRuntime,
@@ -23,20 +25,25 @@ import {
     validateCharacterConfig,
 } from "@ai16z/eliza";
 import { zgPlugin } from "@ai16z/plugin-0g";
-import { goatPlugin } from "@ai16z/plugin-goat";
+import createGoatPlugin from "@ai16z/plugin-goat";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
-// import { buttplugPlugin } from "@ai16z/plugin-buttplug";
+// import { intifacePlugin } from "@ai16z/plugin-intiface";
 import {
     coinbaseCommercePlugin,
     coinbaseMassPaymentsPlugin,
     tradePlugin,
+    tokenContractPlugin,
+    webhookPlugin,
+    advancedTradePlugin,
 } from "@ai16z/plugin-coinbase";
 import { confluxPlugin } from "@ai16z/plugin-conflux";
 import { imageGenerationPlugin } from "@ai16z/plugin-image-generation";
 import { evmPlugin } from "@ai16z/plugin-evm";
 import { createNodePlugin } from "@ai16z/plugin-node";
 import { solanaPlugin } from "@ai16z/plugin-solana";
-import { teePlugin } from "@ai16z/plugin-tee";
+import { teePlugin, TEEMode } from "@ai16z/plugin-tee";
+import { aptosPlugin, TransferAptosToken } from "@ai16z/plugin-aptos";
+import { flowPlugin } from "@ai16z/plugin-flow";
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
@@ -263,6 +270,16 @@ export function getTokenForProvider(
                 character.settings?.secrets?.VOLENGINE_API_KEY ||
                 settings.VOLENGINE_API_KEY
             );
+        case ModelProviderName.NANOGPT:
+            return (
+                character.settings?.secrets?.NANOGPT_API_KEY ||
+                settings.NANOGPT_API_KEY
+            );
+        case ModelProviderName.HYPERBOLIC:
+            return (
+                character.settings?.secrets?.HYPERBOLIC_API_KEY ||
+                settings.HYPERBOLIC_API_KEY
+            );
     }
 }
 
@@ -322,6 +339,12 @@ export async function initializeClients(
         clients.push(twitterClients);
     }
 
+    if (clientTypes.includes("farcaster")) {
+        const farcasterClients = new FarcasterAgentClient(runtime);
+        farcasterClients.start();
+        clients.push(farcasterClients);
+    }
+
     if (character.plugins?.length > 0) {
         for (const plugin of character.plugins) {
             if (plugin.clients) {
@@ -341,7 +364,7 @@ function getSecret(character: Character, secret: string) {
 
 let nodePlugin: any | undefined;
 
-export function createAgent(
+export async function createAgent(
     character: Character,
     db: IDatabaseAdapter,
     cache: ICacheManager,
@@ -354,6 +377,24 @@ export function createAgent(
     );
 
     nodePlugin ??= createNodePlugin();
+
+    const teeMode = getSecret(character, "TEE_MODE") || "OFF";
+    const walletSecretSalt = getSecret(character, "WALLET_SECRET_SALT");
+
+    // Validate TEE configuration
+    if (teeMode !== TEEMode.OFF && !walletSecretSalt) {
+        elizaLogger.error(
+            "WALLET_SECRET_SALT required when TEE_MODE is enabled"
+        );
+        throw new Error("Invalid TEE configuration");
+    }
+
+    let goatPlugin: any | undefined;
+    if (getSecret(character, "ALCHEMY_API_KEY")) {
+        goatPlugin = await createGoatPlugin((secret) =>
+            getSecret(character, secret)
+        );
+    }
 
     return new AgentRuntime({
         databaseAdapter: db,
@@ -374,7 +415,7 @@ export function createAgent(
                 : null,
             getSecret(character, "EVM_PRIVATE_KEY") ||
             (getSecret(character, "WALLET_PUBLIC_KEY") &&
-                !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
+                getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
                 ? evmPlugin
                 : null,
             getSecret(character, "ZEROG_PRIVATE_KEY") ? zgPlugin : null,
@@ -388,10 +429,27 @@ export function createAgent(
                 : null,
             ...(getSecret(character, "COINBASE_API_KEY") &&
             getSecret(character, "COINBASE_PRIVATE_KEY")
-                ? [coinbaseMassPaymentsPlugin, tradePlugin]
+                ? [
+                      coinbaseMassPaymentsPlugin,
+                      tradePlugin,
+                      tokenContractPlugin,
+                      advancedTradePlugin,
+                  ]
                 : []),
-            getSecret(character, "WALLET_SECRET_SALT") ? teePlugin : null,
+            ...(teeMode !== TEEMode.OFF && walletSecretSalt
+                ? [teePlugin, solanaPlugin]
+                : []),
+            getSecret(character, "COINBASE_API_KEY") &&
+            getSecret(character, "COINBASE_PRIVATE_KEY") &&
+            getSecret(character, "COINBASE_NOTIFICATION_URI")
+                ? webhookPlugin
+                : null,
             getSecret(character, "ALCHEMY_API_KEY") ? goatPlugin : null,
+            getSecret(character, "FLOW_ADDRESS") &&
+            getSecret(character, "FLOW_PRIVATE_KEY")
+                ? flowPlugin
+                : null,
+            getSecret(character, "APTOS_PRIVATE_KEY") ? aptosPlugin : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
@@ -401,14 +459,14 @@ export function createAgent(
     });
 }
 
-function intializeFsCache(baseDir: string, character: Character) {
+function initializeFsCache(baseDir: string, character: Character) {
     const cacheDir = path.resolve(baseDir, character.id, "cache");
 
     const cache = new CacheManager(new FsCacheAdapter(cacheDir));
     return cache;
 }
 
-function intializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
+function initializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
     const cache = new CacheManager(new DbCacheAdapter(db, character.id));
     return cache;
 }
@@ -431,8 +489,8 @@ async function startAgent(character: Character, directClient) {
 
         await db.init();
 
-        const cache = intializeDbCache(character, db);
-        const runtime = createAgent(character, db, cache, token);
+        const cache = initializeDbCache(character, db);
+        const runtime = await createAgent(character, db, cache, token);
 
         await runtime.initialize();
 
@@ -485,7 +543,9 @@ const startAgents = async () => {
     }
 
     elizaLogger.log("Chat started. Type 'exit' to quit.");
-    chat();
+    if (!args["non-interactive"]) {
+        chat();
+    }
 };
 
 startAgents().catch((error) => {

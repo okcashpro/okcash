@@ -15,7 +15,8 @@ import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
 import { TokenProvider } from "../providers/token.ts";
 import { WalletProvider } from "../providers/wallet.ts";
 import { TrustScoreDatabase } from "@ai16z/plugin-trustdb";
-import { Connection, PublicKey } from "@solana/web3.js";
+import { Connection } from "@solana/web3.js";
+import { getWalletKey } from "../keypairUtils.ts";
 
 const shouldProcessTemplate =
     `# Task: Decide if the recent messages should be processed for token recommendations.
@@ -53,9 +54,9 @@ These are an examples of the expected output of this task:
 Extract any new recommendations from the conversation that are not already present in the list of known recommendations below:
 {{recentRecommendations}}
 
-- Include the recommender's username 
+- Include the recommender's username
 - Try not to include already-known recommendations. If you think a recommendation is already known, but you're not sure, respond with alreadyKnown: true.
-- Set the conviction to 'none', 'low', 'medium' or 'high'  
+- Set the conviction to 'none', 'low', 'medium' or 'high'
 - Set the recommendation type to 'buy', 'dont_buy', 'sell', or 'dont_sell'
 - Include the contract address and/or ticker if available
 
@@ -67,13 +68,13 @@ Response should be a JSON object array inside a JSON markdown block. Correct res
 [
   {
     "recommender": string,
-    "ticker": string | null, 
+    "ticker": string | null,
     "contractAddress": string | null,
     "type": enum<buy|dont_buy|sell|dont_sell>,
     "conviction": enum<none|low|medium|high>,
     "alreadyKnown": boolean
   },
-  ...  
+  ...
 ]
 \`\`\``;
 
@@ -144,6 +145,8 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
         );
     });
 
+    const { publicKey } = await getWalletKey(runtime, false);
+
     for (const rec of filteredRecommendations) {
         // create the wallet provider and token provider
         const walletProvider = new WalletProvider(
@@ -151,10 +154,7 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
                 runtime.getSetting("RPC_URL") ||
                     "https://api.mainnet-beta.solana.com"
             ),
-            new PublicKey(
-                runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                    runtime.getSetting("WALLET_PUBLIC_KEY")
-            )
+            publicKey
         );
         const tokenProvider = new TokenProvider(
             rec.contractAddress,
@@ -259,7 +259,6 @@ async function handler(runtime: IAgentRuntime, message: Memory) {
                     runtime,
                     rec.contractAddress,
                     userId,
-                    account.username, // we need this to create the recommender account in the BE
                     {
                         buy_amount: rec.buyAmount,
                         is_simulation: true,
@@ -301,7 +300,7 @@ export const trustEvaluator: Evaluator = {
     examples: [
         {
             context: `Actors in the scene:
-{{user1}}: Experienced DeFi degen. Constantly chasing high yield farms.  
+{{user1}}: Experienced DeFi degen. Constantly chasing high yield farms.
 {{user2}}: New to DeFi, learning the ropes.
 
 Recommendations about the actors:
@@ -332,7 +331,7 @@ None`,
     "recommender": "{{user1}}",
     "ticker": "SOLARUG",
     "contractAddress": "FCweoTfJ128jGgNEXgdfTXdEZVk58Bz9trCemr6sXNx9",
-    "type": "buy", 
+    "type": "buy",
     "conviction": "medium",
     "alreadyKnown": false
   }
@@ -341,7 +340,7 @@ None`,
         },
 
         {
-            context: `Actors in the scene:  
+            context: `Actors in the scene:
 {{user1}}: Solana maximalist. Believes Solana will flip Ethereum.
 {{user2}}: Multichain proponent. Holds both SOL and ETH.
 
@@ -370,25 +369,25 @@ Recommendations about the actors:
             outcome: `\`\`\`json
 [
   {
-    "recommender": "{{user1}}",    
+    "recommender": "{{user1}}",
     "ticker": "COPETOKEN",
     "contractAddress": null,
     "type": "sell",
-    "conviction": "low", 
+    "conviction": "low",
     "alreadyKnown": true
   },
   {
-    "recommender": "{{user1}}",    
+    "recommender": "{{user1}}",
     "ticker": "SOYLENT",
     "contractAddress": null,
     "type": "sell",
-    "conviction": "low", 
+    "conviction": "low",
     "alreadyKnown": true
   },
   {
     "recommender": "{{user1}}",
     "ticker": "SOLVAULT",
-    "contractAddress": "7tRzKud6FBVFEhYqZS3CuQ2orLRM21bdisGykL5Sr4Dx", 
+    "contractAddress": "7tRzKud6FBVFEhYqZS3CuQ2orLRM21bdisGykL5Sr4Dx",
     "type": "buy",
     "conviction": "high",
     "alreadyKnown": false
@@ -399,7 +398,7 @@ Recommendations about the actors:
 
         {
             context: `Actors in the scene:
-{{user1}}: Self-proclaimed Solana alpha caller. Allegedly has insider info.  
+{{user1}}: Self-proclaimed Solana alpha caller. Allegedly has insider info.
 {{user2}}: Degen gambler. Will ape into any hyped token.
 
 Recommendations about the actors:
@@ -419,25 +418,25 @@ None`,
                 },
             ] as ActionExample[],
             outcome: `\`\`\`json
-[  
+[
   {
     "recommender": "{{user1}}",
     "ticker": "ROULETTE",
-    "contractAddress": "48vV5y4DRH1Adr1bpvSgFWYCjLLPtHYBqUSwNc2cmCK2", 
+    "contractAddress": "48vV5y4DRH1Adr1bpvSgFWYCjLLPtHYBqUSwNc2cmCK2",
     "type": "buy",
     "conviction": "high",
-    "alreadyKnown": false    
+    "alreadyKnown": false
   }
-]  
+]
 \`\`\``,
         },
 
         {
             context: `Actors in the scene:
-{{user1}}: NFT collector and trader. Bullish on Solana NFTs.  
+{{user1}}: NFT collector and trader. Bullish on Solana NFTs.
 {{user2}}: Only invests based on fundamentals. Sees all NFTs as worthless JPEGs.
 
-Recommendations about the actors:  
+Recommendations about the actors:
 None
 `,
             messages: [
@@ -473,22 +472,22 @@ None
                 },
             ],
             outcome: `\`\`\`json
-[  
+[
   {
-    "recommender": "{{user1}}",  
+    "recommender": "{{user1}}",
     "ticker": "PIXELAPE",
     "contractAddress": "3hAKKmR6XyBooQBPezCbUMhrmcyTkt38sRJm2thKytWc",
     "type": "buy",
-    "conviction": "high", 
+    "conviction": "high",
     "alreadyKnown": false
-  }  
+  }
 ]
 \`\`\``,
         },
 
         {
             context: `Actors in the scene:
-{{user1}}: Contrarian investor. Bets against hyped projects.  
+{{user1}}: Contrarian investor. Bets against hyped projects.
 {{user2}}: Trend follower. Buys tokens that are currently popular.
 
 Recommendations about the actors:
@@ -519,13 +518,13 @@ None`,
                     },
                 },
             ],
-            outcome: `\`\`\`json  
+            outcome: `\`\`\`json
 [
   {
     "recommender": "{{user2}}",
     "ticker": "SAMOYED",
     "contractAddress": "5TQwHyZbedaH4Pcthj1Hxf5GqcigL6qWuB7YEsBtqvhr",
-    "type": "buy", 
+    "type": "buy",
     "conviction": "medium",
     "alreadyKnown": false
   },
@@ -533,10 +532,10 @@ None`,
     "recommender": "{{user1}}",
     "ticker": "SAMOYED",
     "contractAddress": "5TQwHyZbedaH4Pcthj1Hxf5GqcigL6qWuB7YEsBtqvhr",
-    "type": "dont_buy", 
+    "type": "dont_buy",
     "conviction": "high",
     "alreadyKnown": false
-  }  
+  }
 ]
 \`\`\``,
         },

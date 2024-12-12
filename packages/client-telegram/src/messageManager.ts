@@ -289,7 +289,7 @@ export class MessageManager {
         const response = await generateMessageResponse({
             runtime: this.runtime,
             context,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.LARGE,
         });
 
         if (!response) {
@@ -460,7 +460,7 @@ export class MessageManager {
                                     this.runtime.agentId
                             ),
                             agentId,
-                            userId,
+                            userId: agentId,
                             roomId,
                             content: {
                                 ...content,

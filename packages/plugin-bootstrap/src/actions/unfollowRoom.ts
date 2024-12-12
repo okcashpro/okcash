@@ -17,7 +17,7 @@ const shouldUnfollowTemplate =
 
 Should {{agentName}} stop closely following this previously followed room and only respond when mentioned?
 Respond with YES if:
-- The user has suggested that {{agentName}} is over-participating or being disruptive  
+- The user has suggested that {{agentName}} is over-participating or being disruptive
 - {{agentName}}'s eagerness to contribute is not well-received by the users
 - The conversation has shifted to a topic where {{agentName}} has less to add
 
@@ -52,7 +52,7 @@ export const unfollowRoomAction: Action = {
             const response = await generateTrueOrFalse({
                 runtime,
                 context: shouldUnfollowContext,
-                modelClass: ModelClass.SMALL,
+                modelClass: ModelClass.LARGE,
             });
 
             return response;

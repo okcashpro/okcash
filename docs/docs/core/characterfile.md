@@ -272,7 +272,7 @@ The `settings` object defines additional configurations like secrets and voice m
 Use the provided tools to convert documents into knowledge:
 
 - [folder2knowledge](https://github.com/ai16z/characterfile/blob/main/scripts/folder2knowledge.js)
-- [knowledge2folder](https://github.com/ai16z/characterfile/blob/main/scripts/knowledge2character.js)
+- [knowledge2character](https://github.com/ai16z/characterfile/blob/main/scripts/knowledge2character.js)
 - [tweets2character](https://github.com/ai16z/characterfile/blob/main/scripts/tweets2character.js)
 
 Example:
