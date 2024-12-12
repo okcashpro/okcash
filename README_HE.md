@@ -93,7 +93,8 @@ pnpm i && pnpm start
 לאחר מכן קרא את [התיעוד](https://ai16z.github.io/eliza/) כדי ללמוד כיצד להתאים את אלייזה.
 
 ### התחלה ידנית של אלייזה (מומלץ רק למי שיודע מה הוא עושה)
-
+<div align="right">  
+    
 ```bash
 # שכפול המאגר
 git clone https://github.com/ai16z/eliza.git
@@ -101,6 +102,7 @@ git clone https://github.com/ai16z/eliza.git
 # מעבר לגרסה האחרונה
 git checkout $(git describe --tags --abbrev=0)
 ```
+</div>
 
 ### התחלת אלייזה עם Gitpod
 
