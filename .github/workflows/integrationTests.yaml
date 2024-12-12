@@ -43,11 +43,9 @@ jobs:
             - name: Build packages
               run: pnpm build
 
-            - name: Configure an environment
+            - name: Run integration tests
               env:
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
                   env
-
-            - name: Run integration tests
-              run: pnpm run integrationTests
+                  pnpm run integrationTests
