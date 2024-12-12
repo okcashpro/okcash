@@ -62,15 +62,18 @@ const MAX_TWEET_LENGTH = 240;
 /**
  * Truncate text to fit within the Twitter character limit, ensuring it ends at a complete sentence.
  */
-function truncateToCompleteSentence(text: string): string {
-    if (text.length <= MAX_TWEET_LENGTH) {
+function truncateToCompleteSentence(
+    text: string,
+    maxTweetLength: number
+): string {
+    if (text.length <= maxTweetLength) {
         return text;
     }
 
     // Attempt to truncate at the last period within the limit
     const truncatedAtPeriod = text.slice(
         0,
-        text.lastIndexOf(".", MAX_TWEET_LENGTH) + 1
+        text.lastIndexOf(".", maxTweetLength) + 1
     );
     if (truncatedAtPeriod.trim().length > 0) {
         return truncatedAtPeriod.trim();
@@ -79,15 +82,16 @@ function truncateToCompleteSentence(text: string): string {
     // If no period is found, truncate to the nearest whitespace
     const truncatedAtSpace = text.slice(
         0,
-        text.lastIndexOf(" ", MAX_TWEET_LENGTH)
+        text.lastIndexOf(" ", maxTweetLength)
     );
     if (truncatedAtSpace.trim().length > 0) {
         return truncatedAtSpace.trim() + "...";
     }
 
     // Fallback: Hard truncate and add ellipsis
-    return text.slice(0, MAX_TWEET_LENGTH - 3).trim() + "...";
+    return text.slice(0, maxTweetLength - 3).trim() + "...";
 }
+
 
 export class TwitterPostClient {
     client: ClientBase;
@@ -113,9 +117,9 @@ export class TwitterPostClient {
 
             const lastPostTimestamp = lastPost?.timestamp ?? 0;
             const minMinutes =
-                parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 1;
+                parseInt(this.runtime.getSetting("POST_INTERVAL_MIN")) || 90;
             const maxMinutes =
-                parseInt(this.runtime.getSetting("POST_INTERVAL_MAX")) || 2;
+                parseInt(this.runtime.getSetting("POST_INTERVAL_MAX")) || 180;
             const randomMinutes =
                 Math.floor(Math.random() * (maxMinutes - minMinutes + 1)) +
                 minMinutes;
@@ -227,7 +231,6 @@ export class TwitterPostClient {
             });
 
             elizaLogger.debug("generate post prompt:\n" + context);
-            console.log("generate post prompt:\n" + context);
 
             const newTweetContent = await generateText({
                 runtime: this.runtime,
@@ -264,7 +267,7 @@ export class TwitterPostClient {
             }
 
             // Use the helper function to truncate to complete sentence
-            const content = truncateToCompleteSentence(cleanedContent);
+            const content = truncateToCompleteSentence(cleanedContent, MAX_TWEET_LENGTH);
 
             const removeQuotes = (str: string) =>
                 str.replace(/^['"](.*)['"]$/, "$1");
