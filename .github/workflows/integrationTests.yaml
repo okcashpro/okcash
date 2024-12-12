@@ -49,7 +49,7 @@ jobs:
               run: |
                   if [ -z "$OPENAI_API_KEY" ]; then
                     echo "Skipping integration tests due to missing required API keys"
-                    exit 0
+                    exit 1
                   else
                     pnpm run integrationTests
                   fi
