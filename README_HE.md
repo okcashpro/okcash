@@ -88,6 +88,7 @@ cp .env.example .env
 
 pnpm i && pnpm start
 ```
+
 </div>
 
 לאחר מכן קרא את [התיעוד](https://ai16z.github.io/eliza/) כדי ללמוד כיצד להתאים את אלייזה.
