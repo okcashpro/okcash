@@ -106,6 +106,10 @@ export class InteractionClient {
     private lastCheckedTimestamps: Map<string, string> = new Map();
     private lastResponseTimes: Map<string, number> = new Map();
     private messageThreads: Map<string, ChatMessage[]> = new Map();
+    private messageHistory: Map<
+        string,
+        { message: ChatMessage; response: ChatMessage | null }[]
+    > = new Map();
     private pollInterval: NodeJS.Timeout | null = null;
 
     constructor(client: EchoChamberClient, runtime: IAgentRuntime) {
@@ -197,12 +201,12 @@ export class InteractionClient {
         // Check if message mentions the agent
         const isMentioned = message.content
             .toLowerCase()
-            .includes(`@${modelInfo.username.toLowerCase()}`);
+            .includes(`${modelInfo.username.toLowerCase()}`);
 
         // Check if message is relevant to room topic
-        const isRelevantToTopic = message.content
-            .toLowerCase()
-            .includes(room.topic.toLowerCase());
+        const isRelevantToTopic =
+            room.topic &&
+            message.content.toLowerCase().includes(room.topic.toLowerCase());
 
         // Always process if mentioned, otherwise check relevance
         return isMentioned || isRelevantToTopic;
@@ -212,31 +216,49 @@ export class InteractionClient {
         elizaLogger.log("Checking EchoChambers interactions");
 
         try {
+            const defaultRoom = this.runtime.getSetting(
+                "ECHOCHAMBERS_DEFAULT_ROOM"
+            );
             const rooms = await this.client.listRooms();
 
             for (const room of rooms) {
-                const messages = await this.client.getRoomHistory(room.id);
+                // Only process messages from the default room if specified
+                if (defaultRoom && room.id !== defaultRoom) {
+                    continue;
+                }
 
-                // Update message threads for the room
+                const messages = await this.client.getRoomHistory(room.id);
                 this.messageThreads.set(room.id, messages);
 
-                // Filter and process new messages
-                const newMessages = messages.filter((msg) =>
-                    this.shouldProcessMessage(msg, room)
-                );
+                // Get only the most recent message that we should process
+                const latestMessages = messages
+                    .filter((msg) => !this.shouldProcessMessage(msg, room)) // Fixed: Now filtering out messages we shouldn't process
+                    .sort(
+                        (a, b) =>
+                            new Date(b.timestamp).getTime() -
+                            new Date(a.timestamp).getTime()
+                    );
 
-                // Process each new message
-                for (const message of newMessages) {
-                    await this.handleMessage(message, room.topic);
+                if (latestMessages.length > 0) {
+                    const latestMessage = latestMessages[0];
+                    await this.handleMessage(latestMessage, room.topic);
 
-                    // Update timestamps
+                    // Update history
+                    const roomHistory = this.messageHistory.get(room.id) || [];
+                    roomHistory.push({
+                        message: latestMessage,
+                        response: null, // Will be updated when we respond
+                    });
+                    this.messageHistory.set(room.id, roomHistory);
+
+                    // Update last checked timestamp
                     if (
-                        message.timestamp >
+                        latestMessage.timestamp >
                         (this.lastCheckedTimestamps.get(room.id) || "0")
                     ) {
                         this.lastCheckedTimestamps.set(
                             room.id,
-                            message.timestamp
+                            latestMessage.timestamp
                         );
                     }
                 }
@@ -357,6 +379,14 @@ export class InteractionClient {
 
                 // Update last response time
                 this.lastResponseTimes.set(message.roomId, Date.now());
+
+                // Update history with our response
+                const roomHistory =
+                    this.messageHistory.get(message.roomId) || [];
+                const lastEntry = roomHistory[roomHistory.length - 1];
+                if (lastEntry && lastEntry.message.id === message.id) {
+                    lastEntry.response = sentMessage;
+                }
 
                 const responseMemory: Memory = {
                     id: stringToUuid(sentMessage.id),
