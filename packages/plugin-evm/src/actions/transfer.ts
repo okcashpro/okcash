@@ -19,7 +19,7 @@ export class TransferAction {
 
     async transfer(params: TransferParams): Promise<Transaction> {
         console.log(
-            `Transferring: ${params.amount} tokens to  (${params.toAddress} on ${params.fromChain})`
+            `Transferring: ${params.amount} tokens to (${params.toAddress} on ${params.fromChain})`
         );
 
         const walletClient = this.walletProvider.getWalletClient(
@@ -59,6 +59,43 @@ export class TransferAction {
     }
 }
 
+const buildTransferDetails = async (
+    state: State,
+    runtime: IAgentRuntime,
+    wp: WalletProvider
+): Promise<TransferParams> => {
+    const context = composeContext({
+        state,
+        template: transferTemplate,
+    });
+
+    const chains = Object.keys(wp.chains);
+
+    const contextWithChains = context.replace(
+        "SUPPORTED_CHAINS",
+        chains.toString()
+    );
+
+    const transferDetails = (await generateObjectDEPRECATED({
+        runtime,
+        context: contextWithChains,
+        modelClass: ModelClass.SMALL,
+    })) as TransferParams;
+
+    const existingChain = wp.chains[transferDetails.fromChain];
+
+    if (!existingChain) {
+        throw new Error(
+            "The chain " +
+                transferDetails.fromChain +
+                " not configured yet. Add the chain or choose one from configured: " +
+                chains.toString()
+        );
+    }
+
+    return transferDetails;
+};
+
 export const transferAction = {
     name: "transfer",
     description: "Transfer tokens between addresses on the same chain",
@@ -72,28 +109,22 @@ export const transferAction = {
         try {
             const walletProvider = initWalletProvider(runtime);
             const action = new TransferAction(walletProvider);
-
-            const context = composeContext({
+            const transferDetails = await buildTransferDetails(
                 state,
-                template: transferTemplate,
-            });
-
-            const transferDetails = await generateObjectDEPRECATED({
                 runtime,
-                context,
-                modelClass: ModelClass.SMALL,
-            });
-
+                walletProvider
+            );
             const tx = await action.transfer(transferDetails);
 
             if (callback) {
                 callback({
-                    text: `Successfully transferred ${formatEther(tx.value)} tokens to ${tx.to}\nTransaction hash: ${tx.hash}`,
+                    text: `Successfully transferred ${formatEther(tx.value)} tokens to ${tx.to}\nTransaction hash: ${tx.hash}\nChain: ${transferDetails.fromChain}`,
                     content: {
                         success: true,
                         hash: tx.hash,
                         amount: formatEther(tx.value),
                         recipient: tx.to,
+                        chain: transferDetails.fromChain,
                     },
                 });
             }
