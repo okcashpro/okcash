@@ -68,7 +68,7 @@ const Contributors: React.FC = () => {
         loadingRef.current = true;
         try {
             const response = await fetch(
-                `https://api.github.com/repos/ai16z/eliza/contributors?per_page=${GITHUB_PAGE_LIMIT}&page=${page}`,
+                `https://api.github.com/repos/okcashpro/okai/contributors?per_page=${GITHUB_PAGE_LIMIT}&page=${page}`,
                 {
                     method: "GET",
                     headers: {
@@ -101,7 +101,7 @@ const Contributors: React.FC = () => {
         const fetchActivitySummaries = async () => {
             try {
                 const response = await fetch(
-                    "https://ai16z.github.io/data/contributors.json",
+                    "https://okcashpro.github.io/data/contributors.json",
                 );
                 if (!response.ok) {
                     throw new Error(

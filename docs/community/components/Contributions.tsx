@@ -81,7 +81,7 @@ const Contributions = ({
     const fetchCommits = async (page: number) => {
         try {
             const commitResponse = await fetch(
-                `https://api.github.com/repos/ai16z/eliza/commits?author=${contributor.login}&page=${page}`,
+                `https://api.github.com/repos/okcashpro/okai/commits?author=${contributor.login}&page=${page}`,
                 {
                     method: "GET",
                     headers: {
@@ -109,7 +109,7 @@ const Contributions = ({
     const fetchPRs = async (page: number) => {
         try {
             const prResponse = await fetch(
-                `https://api.github.com/search/issues?q=type:pr+author:${contributor.login}+repo:ai16z/eliza&page=${page}`,
+                `https://api.github.com/search/issues?q=type:pr+author:${contributor.login}+repo:okcashpro/okai&page=${page}`,
                 {
                     method: "GET",
                     headers: {
@@ -144,7 +144,7 @@ const Contributions = ({
     const fetchIssues = async (page: number) => {
         try {
             const issueResponse = await fetch(
-                `https://api.github.com/search/issues?q=type:issue+author:${contributor.login}+repo:ai16z/eliza&page=${page}`,
+                `https://api.github.com/search/issues?q=type:issue+author:${contributor.login}+repo:okcashpro/okai&page=${page}`,
                 {
                     method: "GET",
                     headers: {

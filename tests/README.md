@@ -1,6 +1,6 @@
 # Integration tests
 
-This directory contains smoke and integration tests for Eliza project.
+This directory contains smoke and integration tests for OKai project.
 
 ## Smoke tests
 - Should always be run on a freshly cloned project (i.e. no local changes)

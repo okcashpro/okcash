@@ -1522,20 +1522,20 @@ export async function generateTweetActions({
                 console.debug("Parsed tweet actions:", actions);
                 return actions;
             } else {
-                elizaLogger.debug("generateTweetActions no valid response");
+                okaiLogger.debug("generateTweetActions no valid response");
             }
         } catch (error) {
-            elizaLogger.error("Error in generateTweetActions:", error);
+            okaiLogger.error("Error in generateTweetActions:", error);
             if (
                 error instanceof TypeError &&
                 error.message.includes("queueTextCompletion")
             ) {
-                elizaLogger.error(
+                okaiLogger.error(
                     "TypeError: Cannot read properties of null (reading 'queueTextCompletion')"
                 );
             }
         }
-        elizaLogger.log(`Retrying in ${retryDelay}ms...`);
+        okaiLogger.log(`Retrying in ${retryDelay}ms...`);
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
         retryDelay *= 2;
     }

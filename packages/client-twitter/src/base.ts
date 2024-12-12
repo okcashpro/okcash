@@ -272,7 +272,7 @@ export class ClientBase extends EventEmitter {
     }
 
     async fetchFeedTimeline(count: number): Promise<string> {
-        elizaLogger.debug("fetching home timeline");
+        okaiLogger.debug("fetching home timeline");
         const homeTimeline = await this.twitterClient.fetchHomeTimeline(count, []);
         return homeTimeline
             .filter(tweet => tweet.text || tweet.legacy?.full_text)
@@ -289,7 +289,7 @@ export class ClientBase extends EventEmitter {
     }
 
     async fetchTimelineForActions(count: number): Promise<Tweet[]> {
-        elizaLogger.debug("fetching timeline for actions");
+        okaiLogger.debug("fetching timeline for actions");
         const homeTimeline = await this.twitterClient.fetchHomeTimeline(count, []);
 
         return homeTimeline.map(tweet => ({
