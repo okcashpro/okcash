@@ -41,7 +41,7 @@ export class WalletSolana {
         this.cache = new NodeCache({ stdTTL: 300 }); // Cache TTL set to 5 minutes
 
         if (!connection) {
-            this.cluster = (process.env.SOLANA_CLUSTER as Cluster)  || "devnet"
+            this.cluster = (process.env.SOLANA_CLUSTER as Cluster) || "devnet";
             this.connection = new Connection(clusterApiUrl(this.cluster), {
                 commitment: "finalized",
             });
@@ -125,12 +125,14 @@ export class WalletSolana {
         collectionAddress,
         adminPublicKey,
         name,
+        symbol,
         uri,
         fee,
     }: {
         collectionAddress: string;
         adminPublicKey: string;
         name: string;
+        symbol: string;
         uri: string;
         fee: number;
     }): Promise<any> {
@@ -152,6 +154,7 @@ export class WalletSolana {
         const info = {
             name,
             uri,
+            symbol,
         };
         transaction = transaction.add(
             createNft(umi, {

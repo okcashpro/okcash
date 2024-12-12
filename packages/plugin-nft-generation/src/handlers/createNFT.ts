@@ -110,7 +110,7 @@ export async function createNFTMetadata({
         const nftInfo = {
             name: `${collectionName} #${tokenId}`,
             description: `${collectionName} #${tokenId}`,
-            symbol: `${collectionName.toUpperCase()[0]}`,
+            symbol: `#${tokenId}`,
             adminPublicKey: collectionAdminPublicKey,
             fee: collectionFee,
             uri: "",
@@ -162,6 +162,7 @@ export async function createNFT({
         const nftAddressRes = await wallet.mintNFT({
             name: nftInfo.name,
             uri: nftInfo.uri,
+            symbol: nftInfo.symbol,
             collectionAddress,
             adminPublicKey: collectionAdminPublicKey,
             fee: collectionFee,
