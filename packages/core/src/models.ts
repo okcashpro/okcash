@@ -463,7 +463,6 @@ export const models: Models = {
             [ModelClass.SMALL]: settings.SMALL_VENICE_MODEL || "llama-3.3-70b",
             [ModelClass.MEDIUM]: settings.MEDIUM_VENICE_MODEL || "llama-3.3-70b",
             [ModelClass.LARGE]: settings.LARGE_VENICE_MODEL || "llama-3.1-405b",
-            [ModelClass.IMAGE]: settings.IMAGE_VENICE_MODEL || "fluently-xl",
         },
     },
 };
