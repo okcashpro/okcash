@@ -2,7 +2,7 @@ import { PassThrough, Readable } from "stream";
 import { IAgentRuntime, ISpeechService, ServiceType } from "@ai16z/eliza";
 import { getWavHeader } from "./audioUtils.ts";
 import { Service } from "@ai16z/eliza";
-import { validateNodeConfig } from "../enviroment.ts";
+import { validateNodeConfig } from "../environment.ts";
 import * as Echogarden from "echogarden";
 import { elizaLogger } from "@ai16z/eliza";
 

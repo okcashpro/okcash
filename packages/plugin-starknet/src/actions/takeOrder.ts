@@ -10,7 +10,7 @@ import {
     settings,
 } from "@ai16z/eliza";
 import * as fs from "fs";
-import { validateStarknetConfig } from "../enviroment";
+import { validateStarknetConfig } from "../environment";
 
 interface Order {
     userId: string;
@@ -84,7 +84,7 @@ const take_order: Action = {
         const convictionResponse = await generateText({
             runtime,
             context: context,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.LARGE,
         });
 
         // TODOL parse and validate the JSON

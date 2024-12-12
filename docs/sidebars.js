@@ -80,6 +80,11 @@ const sidebars = {
           id: "guides/local-development",
           label: "Local Development",
         },
+        {
+            type: "doc",
+            id: "guides/wsl",
+            label: "WSL Setup",
+        },
       ],
     },
     {
@@ -107,6 +112,11 @@ const sidebars = {
           id: "advanced/autonomous-trading",
           label: "Autonomous Trading",
         },
+        {
+            type: "doc",
+            id: "advanced/eliza-in-tee",
+            label: "Eliza in TEE",
+          },
       ],
     },
     {

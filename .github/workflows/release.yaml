@@ -1,12 +1,9 @@
 name: Release
 
 on:
+    release:
+        types: [created]
     workflow_dispatch:
-        inputs:
-            release_type:
-                description: "Type of release (prerelease, prepatch, patch, minor, preminor, major)"
-                required: true
-                default: "patch"
 
 jobs:
     release:
@@ -43,33 +40,22 @@ jobs:
             - name: Build packages
               run: pnpm run build
 
-            - name: Tag and Publish Packages
-              id: tag_publish
+            - name: Publish Packages
+              id: publish
               run: |
-                  npx lerna version ${{ github.event.inputs.release_type }} --conventional-commits --yes --no-private --force-publish
-                  npx lerna publish from-git --yes --dist-tag ${{ github.event.inputs.release_type == 'preminor' && 'next' || 'latest' }}
+                  # Get the latest release tag
+                  LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
 
-            - name: Get Version Tag
-              id: get_tag
-              run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+                  # Force clean the working directory and reset any changes
+                  echo "Cleaning working directory and resetting any changes"
+                  git clean -fd
+                  git reset --hard HEAD
 
-            - name: Generate Release Body
-              id: release_body
-              run: |
-                  if [ -f CHANGELOG.md ]; then
-                    echo "body=$(cat CHANGELOG.md)" >> $GITHUB_OUTPUT
-                  else
-                    echo "body=No changelog provided for this release." >> $GITHUB_OUTPUT
-                  fi
+                  # Force checkout the latest tag
+                  echo "Checking out latest tag: $LATEST_TAG"
+                  git checkout -b temp-publish-branch $LATEST_TAG
 
-            - name: Create GitHub Release
-              uses: actions/create-release@v1
+                  echo "Publishing version: $LATEST_TAG"
+                  npx lerna publish from-package --yes --dist-tag latest
               env:
-                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-                  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
-              with:
-                  tag_name: ${{ steps.get_tag.outputs.TAG }}
-                  release_name: Release
-                  body_path: CHANGELOG.md
-                  draft: false
-                  prerelease: false
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

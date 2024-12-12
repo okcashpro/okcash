@@ -25,7 +25,7 @@ COPY characters ./characters
 
 # Install dependencies and build the project
 RUN pnpm install \
-    && pnpm build \
+    && pnpm build-docker \
     && pnpm prune --prod
 
 # Create a new stage for the final image
@@ -52,4 +52,4 @@ COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/characters ./characters
 
 # Set the command to run the application
-CMD ["pnpm", "start"]
+CMD ["pnpm", "start", "--non-interactive"]

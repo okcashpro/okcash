@@ -498,67 +498,73 @@ export class AgentRuntime implements IAgentRuntime {
         state?: State,
         callback?: HandlerCallback
     ): Promise<void> {
-        if (!responses[0].content?.action) {
-            elizaLogger.warn("No action found in the response content.");
-            return;
-        }
+        for (const response of responses) {
+            if (!response.content?.action) {
+                elizaLogger.warn("No action found in the response content.");
+                continue;
+            }
 
-        const normalizedAction = responses[0].content.action
-            .toLowerCase()
-            .replace("_", "");
+            const normalizedAction = response.content.action
+                .toLowerCase()
+                .replace("_", "");
 
-        elizaLogger.success(`Normalized action: ${normalizedAction}`);
+            elizaLogger.success(`Normalized action: ${normalizedAction}`);
 
-        let action = this.actions.find(
-            (a: { name: string }) =>
-                a.name
-                    .toLowerCase()
-                    .replace("_", "")
-                    .includes(normalizedAction) ||
-                normalizedAction.includes(a.name.toLowerCase().replace("_", ""))
-        );
+            let action = this.actions.find(
+                (a: { name: string }) =>
+                    a.name
+                        .toLowerCase()
+                        .replace("_", "")
+                        .includes(normalizedAction) ||
+                    normalizedAction.includes(
+                        a.name.toLowerCase().replace("_", "")
+                    )
+            );
 
-        if (!action) {
-            elizaLogger.info("Attempting to find action in similes.");
-            for (const _action of this.actions) {
-                const simileAction = _action.similes.find(
-                    (simile) =>
-                        simile
-                            .toLowerCase()
-                            .replace("_", "")
-                            .includes(normalizedAction) ||
-                        normalizedAction.includes(
-                            simile.toLowerCase().replace("_", "")
-                        )
-                );
-                if (simileAction) {
-                    action = _action;
-                    elizaLogger.success(
-                        `Action found in similes: ${action.name}`
+            if (!action) {
+                elizaLogger.info("Attempting to find action in similes.");
+                for (const _action of this.actions) {
+                    const simileAction = _action.similes.find(
+                        (simile) =>
+                            simile
+                                .toLowerCase()
+                                .replace("_", "")
+                                .includes(normalizedAction) ||
+                            normalizedAction.includes(
+                                simile.toLowerCase().replace("_", "")
+                            )
                     );
-                    break;
+                    if (simileAction) {
+                        action = _action;
+                        elizaLogger.success(
+                            `Action found in similes: ${action.name}`
+                        );
+                        break;
+                    }
                 }
             }
-        }
 
-        if (!action) {
-            elizaLogger.error(
-                "No action found for",
-                responses[0].content.action
-            );
-            return;
-        }
+            if (!action) {
+                elizaLogger.error(
+                    "No action found for",
+                    response.content.action
+                );
+                continue;
+            }
 
-        if (!action.handler) {
-            elizaLogger.error(`Action ${action.name} has no handler.`);
-            return;
-        }
+            if (!action.handler) {
+                elizaLogger.error(`Action ${action.name} has no handler.`);
+                continue;
+            }
 
-        try {
-            elizaLogger.info(`Executing handler for action: ${action.name}`);
-            await action.handler(this, message, state, {}, callback);
-        } catch (error) {
-            elizaLogger.error(error);
+            try {
+                elizaLogger.info(
+                    `Executing handler for action: ${action.name}`
+                );
+                await action.handler(this, message, state, {}, callback);
+            } catch (error) {
+                elizaLogger.error(error);
+            }
         }
     }
 
@@ -566,10 +572,16 @@ export class AgentRuntime implements IAgentRuntime {
      * Evaluate the message and state using the registered evaluators.
      * @param message The message to evaluate.
      * @param state The state of the agent.
-     * @param didRespond Whether the agent responded to the message.
+     * @param didRespond Whether the agent responded to the message.~
+     * @param callback The handler callback
      * @returns The results of the evaluation.
      */
-    async evaluate(message: Memory, state?: State, didRespond?: boolean) {
+    async evaluate(
+        message: Memory,
+        state?: State,
+        didRespond?: boolean,
+        callback?: HandlerCallback
+    ) {
         const evaluatorPromises = this.evaluators.map(
             async (evaluator: Evaluator) => {
                 elizaLogger.log("Evaluating", evaluator.name);
@@ -595,17 +607,12 @@ export class AgentRuntime implements IAgentRuntime {
             return [];
         }
 
-        const evaluators = formatEvaluators(evaluatorsData as Evaluator[]);
-        const evaluatorNames = formatEvaluatorNames(
-            evaluatorsData as Evaluator[]
-        );
-
         const context = composeContext({
             state: {
                 ...state,
-                evaluators,
-                evaluatorNames,
-            } as State,
+                evaluators: formatEvaluators(evaluatorsData),
+                evaluatorNames: formatEvaluatorNames(evaluatorsData),
+            },
             template:
                 this.character.templates?.evaluationTemplate ||
                 evaluationTemplate,
@@ -617,21 +624,18 @@ export class AgentRuntime implements IAgentRuntime {
             modelClass: ModelClass.SMALL,
         });
 
-        const parsedResult = parseJsonArrayFromText(
+        const evaluators = parseJsonArrayFromText(
             result
         ) as unknown as string[];
 
-        this.evaluators
-            .filter((evaluator: Evaluator) =>
-                parsedResult?.includes(evaluator.name)
-            )
-            .forEach((evaluator: Evaluator) => {
-                if (!evaluator?.handler) return;
+        for (const evaluator of this.evaluators) {
+            if (!evaluators.includes(evaluator.name)) continue;
 
-                evaluator.handler(this, message);
-            });
+            if (evaluator.handler)
+                await evaluator.handler(this, message, state, {}, callback);
+        }
 
-        return parsedResult;
+        return evaluators;
     }
 
     /**

@@ -1,6 +1,6 @@
 {
     "name": "@ai16z/plugin-image-generation",
-    "version": "0.1.4-alpha.3",
+    "version": "0.1.5-alpha.5",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
@@ -8,9 +8,9 @@
         "@ai16z/eliza": "workspace:*",
         "tsup": "8.3.5"
     },
-    "devDependencies": {},
     "scripts": {
         "build": "tsup --format esm --dts",
+        "dev": "tsup --format esm --dts --watch",
         "lint": "eslint . --fix"
     },
     "peerDependencies": {
