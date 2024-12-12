@@ -1,3 +1,6 @@
 packages:
     - "docs"
-    - "core"
+    - "packages/*"
+    - "client"
+    - "web-agent"
+    - "agent"

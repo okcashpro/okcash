@@ -1,137 +1,147 @@
----
-id: "index"
-title: "eliza"
-sidebar_label: "Readme"
-sidebar_position: 0
-custom_edit_url: null
----
+# @ai16z/eliza v0.1.5-alpha.3
 
-# Eliza
+## Enumerations
 
-<img src="./docs/eliza_banner.jpg" alt="Eliza Banner" width="100%"></img>
+- [GoalStatus](enumerations/GoalStatus.md)
+- [ModelClass](enumerations/ModelClass.md)
+- [ModelProviderName](enumerations/ModelProviderName.md)
+- [Clients](enumerations/Clients.md)
+- [ServiceType](enumerations/ServiceType.md)
+- [LoggingLevel](enumerations/LoggingLevel.md)
 
-_As seen powering [@DegenSpartanAI](https://x.com/degenspartanai) and [@MarcAIndreessen](https://x.com/pmairca)_
+## Classes
 
-- Multi-agent simulation framework
-- Add as many unique characters as you want with [characterfile](https://github.com/lalalune/characterfile/)
-- Full-featured Discord and Twitter connectors, with Discord voice channel support
-- Full conversational and document RAG memory
-- Can read links and PDFs, transcribe audio and videos, summarize conversations, and more
-- Highly extensible - create your own actions and clients to extend Eliza's capabilities
-- Supports open source and local models (default configured with Nous Hermes Llama 3.1B)
-- Supports OpenAI for cloud inference on a light-weight device
-- "Ask Claude" mode for calling Claude on more complex queries
-- 100% Typescript
+- [MemoryCacheAdapter](classes/MemoryCacheAdapter.md)
+- [FsCacheAdapter](classes/FsCacheAdapter.md)
+- [DbCacheAdapter](classes/DbCacheAdapter.md)
+- [CacheManager](classes/CacheManager.md)
+- [DatabaseAdapter](classes/DatabaseAdapter.md)
+- [MemoryManager](classes/MemoryManager.md)
+- [AgentRuntime](classes/AgentRuntime.md)
+- [Service](classes/Service.md)
 
-# Getting Started
+## Interfaces
 
-## Install Node.js
+- [ICacheAdapter](interfaces/ICacheAdapter.md)
+- [GenerationOptions](interfaces/GenerationOptions.md)
+- [Content](interfaces/Content.md)
+- [ActionExample](interfaces/ActionExample.md)
+- [ConversationExample](interfaces/ConversationExample.md)
+- [Actor](interfaces/Actor.md)
+- [Objective](interfaces/Objective.md)
+- [Goal](interfaces/Goal.md)
+- [State](interfaces/State.md)
+- [Memory](interfaces/Memory.md)
+- [MessageExample](interfaces/MessageExample.md)
+- [Action](interfaces/Action.md)
+- [EvaluationExample](interfaces/EvaluationExample.md)
+- [Evaluator](interfaces/Evaluator.md)
+- [Provider](interfaces/Provider.md)
+- [Relationship](interfaces/Relationship.md)
+- [Account](interfaces/Account.md)
+- [Participant](interfaces/Participant.md)
+- [Room](interfaces/Room.md)
+- [IDatabaseAdapter](interfaces/IDatabaseAdapter.md)
+- [IDatabaseCacheAdapter](interfaces/IDatabaseCacheAdapter.md)
+- [IMemoryManager](interfaces/IMemoryManager.md)
+- [ICacheManager](interfaces/ICacheManager.md)
+- [IAgentRuntime](interfaces/IAgentRuntime.md)
+- [IImageDescriptionService](interfaces/IImageDescriptionService.md)
+- [ITranscriptionService](interfaces/ITranscriptionService.md)
+- [IVideoService](interfaces/IVideoService.md)
+- [ITextGenerationService](interfaces/ITextGenerationService.md)
+- [IBrowserService](interfaces/IBrowserService.md)
+- [ISpeechService](interfaces/ISpeechService.md)
+- [IPdfService](interfaces/IPdfService.md)
 
-https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+## Type Aliases
 
-## Edit the .env file
+- [EnvConfig](type-aliases/EnvConfig.md)
+- [CharacterConfig](type-aliases/CharacterConfig.md)
+- [UUID](type-aliases/UUID.md)
+- [Model](type-aliases/Model.md)
+- [Models](type-aliases/Models.md)
+- [Handler](type-aliases/Handler.md)
+- [HandlerCallback](type-aliases/HandlerCallback.md)
+- [Validator](type-aliases/Validator.md)
+- [Media](type-aliases/Media.md)
+- [Client](type-aliases/Client.md)
+- [Plugin](type-aliases/Plugin.md)
+- [Character](type-aliases/Character.md)
+- [CacheOptions](type-aliases/CacheOptions.md)
+- [SearchResult](type-aliases/SearchResult.md)
+- [SearchResponse](type-aliases/SearchResponse.md)
+- [KnowledgeItem](type-aliases/KnowledgeItem.md)
 
-- Copy .env.example to .env and fill in the appropriate values
-- Edit the TWITTER environment variables to add your bot's username and password
+## Variables
 
-## Edit the character file
+- [defaultCharacter](variables/defaultCharacter.md)
+- [envSchema](variables/envSchema.md)
+- [CharacterSchema](variables/CharacterSchema.md)
+- [evaluationTemplate](variables/evaluationTemplate.md)
+- [knowledge](variables/knowledge.md)
+- [elizaLogger](variables/elizaLogger.md)
+- [models](variables/models.md)
+- [messageCompletionFooter](variables/messageCompletionFooter.md)
+- [shouldRespondFooter](variables/shouldRespondFooter.md)
+- [booleanFooter](variables/booleanFooter.md)
+- [stringArrayFooter](variables/stringArrayFooter.md)
+- [settings](variables/settings.md)
 
-- Check out the file `src/core/defaultCharacter.ts` - you can modify this
-- You can also load characters with the `node --loader ts-node/esm src/index.ts --characters="path/to/your/character.json"` and run multiple bots at the same time.
+## Functions
 
-### Linux Installation
-
-You might need these
-
-```
-npm install --include=optional sharp
-```
-
-### Run with Llama
-
-You can run Llama 70B or 405B models by setting the `XAI_MODEL` environment variable to `meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` or `meta-llama/Meta-Llama-3.1-405B-Instruct`
-
-### Run with Grok
-
-You can run Grok models by setting the `XAI_MODEL` environment variable to `grok-beta`
-
-### Run with OpenAI
-
-You can run OpenAI models by setting the `XAI_MODEL` environment variable to `gpt-4o-mini` or `gpt-4o`
-
-# Requires Node 20+
-
-If you are getting strange issues when starting up, make sure you're using Node 20+. Some APIs are not compatible with previous versions. You can check your node version with `node -v`. If you need to install a new version of node, we recommend using [nvm](https://github.com/nvm-sh/nvm).
-
-## Additional Requirements
-
-You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
-
-```
-npm install --include=optional sharp
-```
-
-# Environment Setup
-
-You will need to add environment variables to your .env file to connect to various platforms:
-
-```
-# Required environment variables
-# Start Discord
-DISCORD_APPLICATION_ID=
-DISCORD_API_TOKEN= # Bot token
-
-# Start Twitter
-TWITTER_USERNAME= # Account username
-TWITTER_PASSWORD= # Account password
-TWITTER_EMAIL= # Account email
-TWITTER_COOKIES= # Account cookies
-```
-
-# Local Setup
-
-## CUDA Setup
-
-If you have an NVIDIA GPU, you can install CUDA to speed up local inference dramatically.
-
-```
-npm install
-npx --no node-llama-cpp source download --gpu cuda
-```
-
-Make sure that you've installed the CUDA Toolkit, including cuDNN and cuBLAS.
-
-## Running locally
-
-Add XAI_MODEL and set it to one of the above options from [Run with
-Llama](#run-with-llama) - you can leave X_SERVER_URL and XAI_API_KEY blank, it
-downloads the model from huggingface and queries it locally
-
-# Cloud Setup (with OpenAI)
-
-In addition to the environment variables above, you will need to add the following:
-
-```
-# OpenAI handles the bulk of the work with chat, TTS, image recognition, etc.
-OPENAI_API_KEY=sk-* # OpenAI API key, starting with sk-
-
-# The agent can also ask Claude for help if you have an API key
-ANTHROPIC_API_KEY=
-
-# For Elevenlabs voice generation on Discord voice
-ELEVENLABS_XI_API_KEY= # API key from elevenlabs
-
-# ELEVENLABS SETTINGS
-ELEVENLABS_MODEL_ID=eleven_multilingual_v2
-ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
-ELEVENLABS_VOICE_STABILITY=0.5
-ELEVENLABS_VOICE_SIMILARITY_BOOST=0.9
-ELEVENLABS_VOICE_STYLE=0.66
-ELEVENLABS_VOICE_USE_SPEAKER_BOOST=false
-ELEVENLABS_OPTIMIZE_STREAMING_LATENCY=4
-ELEVENLABS_OUTPUT_FORMAT=pcm_16000
-```
-
-# Discord Bot
-
-For help with setting up your Discord Bot, check out here: https://discordjs.guide/preparations/setting-up-a-bot-application.html
+- [composeActionExamples](functions/composeActionExamples.md)
+- [formatActionNames](functions/formatActionNames.md)
+- [formatActions](functions/formatActions.md)
+- [composeContext](functions/composeContext.md)
+- [addHeader](functions/addHeader.md)
+- [getEmbeddingConfig](functions/getEmbeddingConfig.md)
+- [getEmbeddingType](functions/getEmbeddingType.md)
+- [getEmbeddingZeroVector](functions/getEmbeddingZeroVector.md)
+- [embed](functions/embed.md)
+- [validateEnv](functions/validateEnv.md)
+- [validateCharacterConfig](functions/validateCharacterConfig.md)
+- [formatEvaluatorNames](functions/formatEvaluatorNames.md)
+- [formatEvaluators](functions/formatEvaluators.md)
+- [formatEvaluatorExamples](functions/formatEvaluatorExamples.md)
+- [formatEvaluatorExampleDescriptions](functions/formatEvaluatorExampleDescriptions.md)
+- [generateText](functions/generateText.md)
+- [trimTokens](functions/trimTokens.md)
+- [generateShouldRespond](functions/generateShouldRespond.md)
+- [splitChunks](functions/splitChunks.md)
+- [generateTrueOrFalse](functions/generateTrueOrFalse.md)
+- [generateTextArray](functions/generateTextArray.md)
+- [generateObject](functions/generateObject.md)
+- [generateObjectArray](functions/generateObjectArray.md)
+- [generateMessageResponse](functions/generateMessageResponse.md)
+- [generateImage](functions/generateImage.md)
+- [generateCaption](functions/generateCaption.md)
+- [generateWebSearch](functions/generateWebSearch.md)
+- [generateObjectV2](functions/generateObjectV2.md)
+- [handleProvider](functions/handleProvider.md)
+- [getGoals](functions/getGoals.md)
+- [formatGoalsAsString](functions/formatGoalsAsString.md)
+- [updateGoal](functions/updateGoal.md)
+- [createGoal](functions/createGoal.md)
+- [getActorDetails](functions/getActorDetails.md)
+- [formatActors](functions/formatActors.md)
+- [formatMessages](functions/formatMessages.md)
+- [formatTimestamp](functions/formatTimestamp.md)
+- [getModel](functions/getModel.md)
+- [getEndpoint](functions/getEndpoint.md)
+- [parseShouldRespondFromText](functions/parseShouldRespondFromText.md)
+- [parseBooleanFromText](functions/parseBooleanFromText.md)
+- [parseJsonArrayFromText](functions/parseJsonArrayFromText.md)
+- [parseJSONObjectFromText](functions/parseJSONObjectFromText.md)
+- [formatPosts](functions/formatPosts.md)
+- [getProviders](functions/getProviders.md)
+- [createRelationship](functions/createRelationship.md)
+- [getRelationship](functions/getRelationship.md)
+- [getRelationships](functions/getRelationships.md)
+- [formatRelationships](functions/formatRelationships.md)
+- [findNearestEnvFile](functions/findNearestEnvFile.md)
+- [configureSettings](functions/configureSettings.md)
+- [loadEnvConfig](functions/loadEnvConfig.md)
+- [getEnvVariable](functions/getEnvVariable.md)
+- [hasEnvVariable](functions/hasEnvVariable.md)
+- [stringToUuid](functions/stringToUuid.md)

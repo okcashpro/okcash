@@ -1,45 +1,77 @@
----
-id: "Goal"
-title: "Interface: Goal"
-sidebar_label: "Goal"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Goal
 
-Represents a goal, which is a higher-level aim composed of one or more objectives. Goals are tracked to measure progress or achievements within the conversation or system.
+# Interface: Goal
+
+Represents a high-level goal composed of objectives
 
 ## Properties
 
-### id
+### id?
 
-• `Optional` **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+> `optional` **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
----
+Optional unique identifier
+
+#### Defined in
+
+[packages/core/src/types.ts:110](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L110)
+
+***
+
+### roomId
+
+> **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Room ID where goal exists
+
+#### Defined in
+
+[packages/core/src/types.ts:113](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L113)
+
+***
+
+### userId
+
+> **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+User ID of goal owner
+
+#### Defined in
+
+[packages/core/src/types.ts:116](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L116)
+
+***
 
 ### name
 
-• **name**: `string`
+> **name**: `string`
 
----
+Name/title of the goal
 
-### objectives
+#### Defined in
 
-• **objectives**: [`Objective`](Objective.md)[]
+[packages/core/src/types.ts:119](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L119)
 
----
-
-### room_id
-
-• **room_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
-
----
+***
 
 ### status
 
-• **status**: [`GoalStatus`](../enums/GoalStatus.md)
+> **status**: [`GoalStatus`](../enumerations/GoalStatus.md)
 
----
+Current status
 
-### user_id
+#### Defined in
 
-• **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+[packages/core/src/types.ts:122](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L122)
+
+***
+
+### objectives
+
+> **objectives**: [`Objective`](Objective.md)[]
+
+Component objectives
+
+#### Defined in
+
+[packages/core/src/types.ts:125](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L125)

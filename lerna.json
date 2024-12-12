@@ -1,0 +1,5 @@
+{
+    "version": "0.1.5-alpha.5",
+    "packages": ["packages/*", "docs", "agent", "client"],
+    "npmClient": "pnpm"
+}

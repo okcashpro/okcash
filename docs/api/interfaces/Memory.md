@@ -1,45 +1,113 @@
----
-id: "Memory"
-title: "Interface: Memory"
-sidebar_label: "Memory"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Memory
 
-Represents a memory record, which could be a message or any other piece of information remembered by the system, including its content, associated user IDs, and optionally, its embedding vector for similarity comparisons.
+# Interface: Memory
+
+Represents a stored memory/message
 
 ## Properties
 
+### id?
+
+> `optional` **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Optional unique identifier
+
+#### Defined in
+
+[packages/core/src/types.ts:325](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L325)
+
+***
+
+### userId
+
+> **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Associated user ID
+
+#### Defined in
+
+[packages/core/src/types.ts:328](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L328)
+
+***
+
+### agentId
+
+> **agentId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Associated agent ID
+
+#### Defined in
+
+[packages/core/src/types.ts:331](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L331)
+
+***
+
+### createdAt?
+
+> `optional` **createdAt**: `number`
+
+Optional creation timestamp
+
+#### Defined in
+
+[packages/core/src/types.ts:334](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L334)
+
+***
+
 ### content
 
-• **content**: [`Content`](Content.md)
+> **content**: [`Content`](Content.md)
 
----
+Memory content
 
-### created_at
+#### Defined in
 
-• `Optional` **created_at**: `string`
+[packages/core/src/types.ts:337](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L337)
 
----
+***
 
-### embedding
+### embedding?
 
-• `Optional` **embedding**: `number`[]
+> `optional` **embedding**: `number`[]
 
----
+Optional embedding vector
 
-### id
+#### Defined in
 
-• `Optional` **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+[packages/core/src/types.ts:340](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L340)
 
----
+***
 
-### room_id
+### roomId
 
-• **room_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+> **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
----
+Associated room ID
 
-### user_id
+#### Defined in
 
-• **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+[packages/core/src/types.ts:343](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L343)
+
+***
+
+### unique?
+
+> `optional` **unique**: `boolean`
+
+Whether memory is unique
+
+#### Defined in
+
+[packages/core/src/types.ts:346](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L346)
+
+***
+
+### similarity?
+
+> `optional` **similarity**: `number`
+
+Embedding similarity score
+
+#### Defined in
+
+[packages/core/src/types.ts:349](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L349)

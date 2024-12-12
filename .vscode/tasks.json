@@ -5,8 +5,10 @@
     "tasks": [
         {
             "type": "typescript",
-            "tsconfig": "tsconfig.json",
-            "problemMatcher": ["$tsc"],
+            "tsconfig": "packages/core/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
             "label": "tsbuild",
             "group": "build"
         }

@@ -1,22 +1,23 @@
----
-id: "getRelationship"
-title: "Function: getRelationship"
-sidebar_label: "getRelationship"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / getRelationship
 
-▸ **getRelationship**(`«destructured»`): `Promise`\<`null` \| [`Relationship`](../interfaces/Relationship.md)\>
+# Function: getRelationship()
 
-#### Parameters
+> **getRelationship**(`__namedParameters`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)\>
 
-| Name             | Type                                                       |
-| :--------------- | :--------------------------------------------------------- |
-| `«destructured»` | `Object`                                                   |
-| › `runtime`      | [`AgentRuntime`](../classes/AgentRuntime.md)               |
-| › `userA`        | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
-| › `userB`        | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
+## Parameters
 
-#### Returns
+• **\_\_namedParameters**
 
-`Promise`\<`null` \| [`Relationship`](../interfaces/Relationship.md)\>
+• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
+• **\_\_namedParameters.userA**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **\_\_namedParameters.userB**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+## Returns
+
+`Promise`\<[`Relationship`](../interfaces/Relationship.md)\>
+
+## Defined in
+
+[packages/core/src/relationships.ts:18](https://github.com/monilpat/eliza/blob/main/packages/core/src/relationships.ts#L18)

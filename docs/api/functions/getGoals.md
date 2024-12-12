@@ -1,24 +1,27 @@
----
-id: "getGoals"
-title: "Function: getGoals"
-sidebar_label: "getGoals"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / getGoals
 
-▸ **getGoals**(`«destructured»`): `Promise`\<[`Goal`](../interfaces/Goal.md)[]\>
+# Function: getGoals()
 
-#### Parameters
+> **getGoals**(`__namedParameters`): `Promise`\<[`Goal`](../interfaces/Goal.md)[]\>
 
-| Name                | Type                                                       | Default value |
-| :------------------ | :--------------------------------------------------------- | :------------ |
-| `«destructured»`    | `Object`                                                   | `undefined`   |
-| › `count?`          | `number`                                                   | `5`           |
-| › `onlyInProgress?` | `boolean`                                                  | `true`        |
-| › `room_id`         | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | `undefined`   |
-| › `runtime`         | [`AgentRuntime`](../classes/AgentRuntime.md)               | `undefined`   |
-| › `user_id?`        | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` | `undefined`   |
+## Parameters
 
-#### Returns
+• **\_\_namedParameters**
+
+• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
+• **\_\_namedParameters.roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **\_\_namedParameters.userId?**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+• **\_\_namedParameters.onlyInProgress?**: `boolean` = `true`
+
+• **\_\_namedParameters.count?**: `number` = `5`
+
+## Returns
 
 `Promise`\<[`Goal`](../interfaces/Goal.md)[]\>
+
+## Defined in
+
+[packages/core/src/goals.ts:8](https://github.com/monilpat/eliza/blob/main/packages/core/src/goals.ts#L8)

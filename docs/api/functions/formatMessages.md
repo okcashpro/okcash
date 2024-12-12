@@ -1,25 +1,25 @@
----
-id: "formatMessages"
-title: "Function: formatMessages"
-sidebar_label: "formatMessages"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / formatMessages
 
-▸ **formatMessages**(`«destructured»`): `string`
+# Function: formatMessages()
+
+> **formatMessages**(`__namedParameters`): `string`
 
 Format messages into a string
 
-#### Parameters
+## Parameters
 
-| Name             | Type                                  |
-| :--------------- | :------------------------------------ |
-| `«destructured»` | `Object`                              |
-| › `actors`       | [`Actor`](../interfaces/Actor.md)[]   |
-| › `messages`     | [`Memory`](../interfaces/Memory.md)[] |
+• **\_\_namedParameters**
 
-#### Returns
+• **\_\_namedParameters.messages**: [`Memory`](../interfaces/Memory.md)[]
+
+• **\_\_namedParameters.actors**: [`Actor`](../interfaces/Actor.md)[]
+
+## Returns
 
 `string`
 
 string
+
+## Defined in
+
+[packages/core/src/messages.ts:60](https://github.com/monilpat/eliza/blob/main/packages/core/src/messages.ts#L60)

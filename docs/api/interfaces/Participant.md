@@ -1,21 +1,29 @@
----
-id: "Participant"
-title: "Interface: Participant"
-sidebar_label: "Participant"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Participant
 
-Represents a participant in a room, including their ID and account details.
+# Interface: Participant
+
+Room participant with account details
 
 ## Properties
 
-### account
-
-• **account**: [`Account`](Account.md)
-
----
-
 ### id
 
-• **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+> **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Unique identifier
+
+#### Defined in
+
+[packages/core/src/types.ts:520](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L520)
+
+***
+
+### account
+
+> **account**: [`Account`](Account.md)
+
+Associated account
+
+#### Defined in
+
+[packages/core/src/types.ts:523](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L523)

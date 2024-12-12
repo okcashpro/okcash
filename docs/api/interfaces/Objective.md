@@ -1,27 +1,41 @@
----
-id: "Objective"
-title: "Interface: Objective"
-sidebar_label: "Objective"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Objective
 
-Represents an objective within a goal, detailing what needs to be achieved and whether it has been completed.
+# Interface: Objective
+
+Represents a single objective within a goal
 
 ## Properties
 
-### completed
+### id?
 
-• **completed**: `boolean`
+> `optional` **id**: `string`
 
----
+Optional unique identifier
+
+#### Defined in
+
+[packages/core/src/types.ts:87](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L87)
+
+***
 
 ### description
 
-• **description**: `string`
+> **description**: `string`
 
----
+Description of what needs to be achieved
 
-### id
+#### Defined in
 
-• `Optional` **id**: `string`
+[packages/core/src/types.ts:90](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L90)
+
+***
+
+### completed
+
+> **completed**: `boolean`
+
+Whether objective is completed
+
+#### Defined in
+
+[packages/core/src/types.ts:93](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L93)

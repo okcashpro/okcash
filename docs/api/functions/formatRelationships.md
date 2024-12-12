@@ -1,21 +1,21 @@
----
-id: "formatRelationships"
-title: "Function: formatRelationships"
-sidebar_label: "formatRelationships"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / formatRelationships
 
-▸ **formatRelationships**(`«destructured»`): `Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`[]\>
+# Function: formatRelationships()
 
-#### Parameters
+> **formatRelationships**(`__namedParameters`): `Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
 
-| Name             | Type                                                       |
-| :--------------- | :--------------------------------------------------------- |
-| `«destructured»` | `Object`                                                   |
-| › `runtime`      | [`AgentRuntime`](../classes/AgentRuntime.md)               |
-| › `user_id`      | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
+## Parameters
 
-#### Returns
+• **\_\_namedParameters**
 
-`Promise`\<\`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`[]\>
+• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
+• **\_\_namedParameters.userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+## Returns
+
+`Promise`\<\`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`[]\>
+
+## Defined in
+
+[packages/core/src/relationships.ts:43](https://github.com/monilpat/eliza/blob/main/packages/core/src/relationships.ts#L43)

@@ -1,23 +1,23 @@
----
-id: "formatActionNames"
-title: "Function: formatActionNames"
-sidebar_label: "formatActionNames"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / formatActionNames
 
-▸ **formatActionNames**(`actions`): `string`
+# Function: formatActionNames()
+
+> **formatActionNames**(`actions`): `string`
 
 Formats the names of the provided actions into a comma-separated string.
 
-#### Parameters
+## Parameters
 
-| Name      | Type                                  | Description                                               |
-| :-------- | :------------------------------------ | :-------------------------------------------------------- |
-| `actions` | [`Action`](../interfaces/Action.md)[] | An array of `Action` objects from which to extract names. |
+• **actions**: [`Action`](../interfaces/Action.md)[]
 
-#### Returns
+An array of `Action` objects from which to extract names.
+
+## Returns
 
 `string`
 
 A comma-separated string of action names.
+
+## Defined in
+
+[packages/core/src/actions.ts:61](https://github.com/monilpat/eliza/blob/main/packages/core/src/actions.ts#L61)

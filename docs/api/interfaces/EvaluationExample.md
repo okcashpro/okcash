@@ -1,27 +1,41 @@
----
-id: "EvaluationExample"
-title: "Interface: EvaluationExample"
-sidebar_label: "EvaluationExample"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / EvaluationExample
 
-Represents an example for evaluation, including the context, an array of message examples, and the expected outcome.
+# Interface: EvaluationExample
+
+Example for evaluating agent behavior
 
 ## Properties
 
 ### context
 
-• **context**: `string`
+> **context**: `string`
 
----
+Evaluation context
+
+#### Defined in
+
+[packages/core/src/types.ts:419](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L419)
+
+***
 
 ### messages
 
-• **messages**: [`ActionExample`](ActionExample.md)[]
+> **messages**: [`ActionExample`](ActionExample.md)[]
 
----
+Example messages
+
+#### Defined in
+
+[packages/core/src/types.ts:422](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L422)
+
+***
 
 ### outcome
 
-• **outcome**: `string`
+> **outcome**: `string`
+
+Expected outcome
+
+#### Defined in
+
+[packages/core/src/types.ts:425](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L425)

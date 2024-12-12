@@ -1,21 +1,29 @@
----
-id: "ActionExample"
-title: "Interface: ActionExample"
-sidebar_label: "ActionExample"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / ActionExample
 
-Represents an example of content, typically used for demonstrating or testing purposes. Includes user, content, optional action, and optional source.
+# Interface: ActionExample
+
+Example content with associated user for demonstration purposes
 
 ## Properties
 
-### content
-
-• **content**: [`Content`](Content.md)
-
----
-
 ### user
 
-• **user**: `string`
+> **user**: `string`
+
+User associated with the example
+
+#### Defined in
+
+[packages/core/src/types.ts:39](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L39)
+
+***
+
+### content
+
+> **content**: [`Content`](Content.md)
+
+Content of the example
+
+#### Defined in
+
+[packages/core/src/types.ts:42](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L42)

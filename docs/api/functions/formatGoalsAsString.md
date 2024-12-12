@@ -1,20 +1,19 @@
----
-id: "formatGoalsAsString"
-title: "Function: formatGoalsAsString"
-sidebar_label: "formatGoalsAsString"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / formatGoalsAsString
 
-▸ **formatGoalsAsString**(`«destructured»`): `string`
+# Function: formatGoalsAsString()
 
-#### Parameters
+> **formatGoalsAsString**(`__namedParameters`): `string`
 
-| Name             | Type                              |
-| :--------------- | :-------------------------------- |
-| `«destructured»` | `Object`                          |
-| › `goals`        | [`Goal`](../interfaces/Goal.md)[] |
+## Parameters
 
-#### Returns
+• **\_\_namedParameters**
+
+• **\_\_namedParameters.goals**: [`Goal`](../interfaces/Goal.md)[]
+
+## Returns
 
 `string`
+
+## Defined in
+
+[packages/core/src/goals.ts:30](https://github.com/monilpat/eliza/blob/main/packages/core/src/goals.ts#L30)

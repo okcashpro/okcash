@@ -47,7 +47,7 @@ If a docs change is needed: I have updated the documentation accordingly.
 ## Detailed testing steps
 
 <!--
-None, automtated tests are fine.
+None, automated tests are fine.
 -->
 
 <!--
@@ -76,4 +76,10 @@ None, automtated tests are fine.
 <!--  If there is something more than the automated steps, please specifiy deploy instructions. -->
 <!--
 ## Deployment instructions
+-->
+
+<!-- If you are on Discord, please join https://discord.gg/ai16z and state your Discord username here for contribute role and join us in #development-feed -->
+<!--
+## Discord username
+
 -->

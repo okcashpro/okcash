@@ -1,0 +1,42 @@
+services:
+    tee:
+        command: ["pnpm", "start"]
+        build:
+            context: .
+            dockerfile: Dockerfile
+        stdin_open: true
+        tty: true
+        volumes:
+            - /var/run/tappd.sock:/var/run/tappd.sock
+            - tee:/app/packages/client-twitter/src/tweetcache
+            - tee:/app/db.sqlite
+        environment:
+            - OPENAI_API_KEY=
+            - REDPILL_API_KEY=
+            - ELEVENLABS_XI_API_KEY=
+            - ELEVENLABS_MODEL_ID=eleven_multilingual_v2
+            - ELEVENLABS_VOICE_ID=21m00Tcm4TlvDq8ikWAM
+            - ELEVENLABS_VOICE_STABILITY=0.5
+            - ELEVENLABS_VOICE_SIMILARITY_BOOST=0.9
+            - ELEVENLABS_VOICE_STYLE=0.66
+            - ELEVENLABS_VOICE_USE_SPEAKER_BOOST=false
+            - ELEVENLABS_OPTIMIZE_STREAMING_LATENCY=4
+            - ELEVENLABS_OUTPUT_FORMAT=pcm_16000
+            - TWITTER_DRY_RUN=false
+            - TWITTER_USERNAME=
+            - TWITTER_PASSWORD=
+            - TWITTER_EMAIL=
+            - X_SERVER_URL=https://api.red-pill.ai/v1
+            - BIRDEYE_API_KEY=
+            - SOL_ADDRESS=So11111111111111111111111111111111111111112
+            - SLIPPAGE=1
+            - RPC_URL=https://api.mainnet-beta.solana.com
+            - HELIUS_API_KEY=
+            - SERVER_PORT=3000
+            - WALLET_SECRET_SALT=secret_salt
+        ports:
+            - "3000:80"
+        restart: always
+
+volumes:
+    tee:

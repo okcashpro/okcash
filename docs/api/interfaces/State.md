@@ -1,139 +1,321 @@
----
-id: "State"
-title: "Interface: State"
-sidebar_label: "State"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / State
 
-Represents the state of the conversation or context in which the agent is operating, including information about users, messages, goals, and other relevant data.
+# Interface: State
+
+Represents the current state/context of a conversation
 
 ## Indexable
 
-▪ [key: `string`]: `unknown`
+ \[`key`: `string`\]: `unknown`
 
 ## Properties
 
-### actionExamples
+### userId?
 
-• `Optional` **actionExamples**: `string`
+> `optional` **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
----
+ID of user who sent current message
 
-### actionNames
+#### Defined in
 
-• `Optional` **actionNames**: `string`
+[packages/core/src/types.ts:240](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L240)
 
----
+***
 
-### actions
+### agentId?
 
-• `Optional` **actions**: `string`
+> `optional` **agentId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
----
+ID of agent in conversation
 
-### actionsData
+#### Defined in
 
-• `Optional` **actionsData**: [`Action`](Action.md)[]
+[packages/core/src/types.ts:243](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L243)
 
----
+***
+
+### bio
+
+> **bio**: `string`
+
+Agent's biography
+
+#### Defined in
+
+[packages/core/src/types.ts:246](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L246)
+
+***
+
+### lore
+
+> **lore**: `string`
+
+Agent's background lore
+
+#### Defined in
+
+[packages/core/src/types.ts:249](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L249)
+
+***
+
+### messageDirections
+
+> **messageDirections**: `string`
+
+Message handling directions
+
+#### Defined in
+
+[packages/core/src/types.ts:252](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L252)
+
+***
+
+### postDirections
+
+> **postDirections**: `string`
+
+Post handling directions
+
+#### Defined in
+
+[packages/core/src/types.ts:255](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L255)
+
+***
+
+### roomId
+
+> **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Current room/conversation ID
+
+#### Defined in
+
+[packages/core/src/types.ts:258](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L258)
+
+***
+
+### agentName?
+
+> `optional` **agentName**: `string`
+
+Optional agent name
+
+#### Defined in
+
+[packages/core/src/types.ts:261](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L261)
+
+***
+
+### senderName?
+
+> `optional` **senderName**: `string`
+
+Optional message sender name
+
+#### Defined in
+
+[packages/core/src/types.ts:264](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L264)
+
+***
 
 ### actors
 
-• **actors**: `string`
+> **actors**: `string`
 
----
+String representation of conversation actors
 
-### actorsData
+#### Defined in
 
-• `Optional` **actorsData**: [`Actor`](Actor.md)[]
+[packages/core/src/types.ts:267](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L267)
 
----
+***
 
-### agentId
+### actorsData?
 
-• `Optional` **agentId**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+> `optional` **actorsData**: [`Actor`](Actor.md)[]
 
----
+Optional array of actor objects
 
-### agentName
+#### Defined in
 
-• `Optional` **agentName**: `string`
+[packages/core/src/types.ts:270](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L270)
 
----
+***
 
-### goals
+### goals?
 
-• `Optional` **goals**: `string`
+> `optional` **goals**: `string`
 
----
+Optional string representation of goals
 
-### goalsData
+#### Defined in
 
-• `Optional` **goalsData**: [`Goal`](Goal.md)[]
+[packages/core/src/types.ts:273](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L273)
 
----
+***
 
-### providers
+### goalsData?
 
-• `Optional` **providers**: `string`
+> `optional` **goalsData**: [`Goal`](Goal.md)[]
 
----
+Optional array of goal objects
 
-### recentFacts
+#### Defined in
 
-• `Optional` **recentFacts**: `string`
+[packages/core/src/types.ts:276](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L276)
 
----
-
-### recentFactsData
-
-• `Optional` **recentFactsData**: [`Memory`](Memory.md)[]
-
----
+***
 
 ### recentMessages
 
-• **recentMessages**: `string`
+> **recentMessages**: `string`
 
----
+Recent message history as string
+
+#### Defined in
+
+[packages/core/src/types.ts:279](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L279)
+
+***
 
 ### recentMessagesData
 
-• **recentMessagesData**: [`Memory`](Memory.md)[]
+> **recentMessagesData**: [`Memory`](Memory.md)[]
 
----
+Recent message objects
 
-### relevantFacts
+#### Defined in
 
-• `Optional` **relevantFacts**: `string`
+[packages/core/src/types.ts:282](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L282)
 
----
+***
 
-### relevantFactsData
+### actionNames?
 
-• `Optional` **relevantFactsData**: [`Memory`](Memory.md)[]
+> `optional` **actionNames**: `string`
 
----
+Optional valid action names
 
-### responseData
+#### Defined in
 
-• `Optional` **responseData**: [`Content`](Content.md)
+[packages/core/src/types.ts:285](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L285)
 
----
+***
 
-### room_id
+### actions?
 
-• **room_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+> `optional` **actions**: `string`
 
----
+Optional action descriptions
 
-### senderName
+#### Defined in
 
-• `Optional` **senderName**: `string`
+[packages/core/src/types.ts:288](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L288)
 
----
+***
 
-### user_id
+### actionsData?
 
-• `Optional` **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+> `optional` **actionsData**: [`Action`](Action.md)[]
+
+Optional action objects
+
+#### Defined in
+
+[packages/core/src/types.ts:291](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L291)
+
+***
+
+### actionExamples?
+
+> `optional` **actionExamples**: `string`
+
+Optional action examples
+
+#### Defined in
+
+[packages/core/src/types.ts:294](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L294)
+
+***
+
+### providers?
+
+> `optional` **providers**: `string`
+
+Optional provider descriptions
+
+#### Defined in
+
+[packages/core/src/types.ts:297](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L297)
+
+***
+
+### responseData?
+
+> `optional` **responseData**: [`Content`](Content.md)
+
+Optional response content
+
+#### Defined in
+
+[packages/core/src/types.ts:300](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L300)
+
+***
+
+### recentInteractionsData?
+
+> `optional` **recentInteractionsData**: [`Memory`](Memory.md)[]
+
+Optional recent interaction objects
+
+#### Defined in
+
+[packages/core/src/types.ts:303](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L303)
+
+***
+
+### recentInteractions?
+
+> `optional` **recentInteractions**: `string`
+
+Optional recent interactions string
+
+#### Defined in
+
+[packages/core/src/types.ts:306](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L306)
+
+***
+
+### formattedConversation?
+
+> `optional` **formattedConversation**: `string`
+
+Optional formatted conversation
+
+#### Defined in
+
+[packages/core/src/types.ts:309](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L309)
+
+***
+
+### knowledge?
+
+> `optional` **knowledge**: `string`
+
+Optional formatted knowledge
+
+#### Defined in
+
+[packages/core/src/types.ts:312](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L312)
+
+***
+
+### knowledgeData?
+
+> `optional` **knowledgeData**: [`KnowledgeItem`](../type-aliases/KnowledgeItem.md)[]
+
+Optional knowledge data
+
+#### Defined in
+
+[packages/core/src/types.ts:314](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L314)

@@ -1,23 +1,23 @@
----
-id: "formatEvaluatorExampleDescriptions"
-title: "Function: formatEvaluatorExampleDescriptions"
-sidebar_label: "formatEvaluatorExampleDescriptions"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / formatEvaluatorExampleDescriptions
 
-▸ **formatEvaluatorExampleDescriptions**(`evaluators`): `string`
+# Function: formatEvaluatorExampleDescriptions()
+
+> **formatEvaluatorExampleDescriptions**(`evaluators`): `string`
 
 Generates a string summarizing the descriptions of each evaluator example.
 
-#### Parameters
+## Parameters
 
-| Name         | Type                                        | Description                                              |
-| :----------- | :------------------------------------------ | :------------------------------------------------------- |
-| `evaluators` | [`Evaluator`](../interfaces/Evaluator.md)[] | An array of evaluator objects, each containing examples. |
+• **evaluators**: [`Evaluator`](../interfaces/Evaluator.md)[]
 
-#### Returns
+An array of evaluator objects, each containing examples.
+
+## Returns
 
 `string`
 
 A string that summarizes the descriptions for each evaluator example, formatted with the evaluator name, example number, and description.
+
+## Defined in
+
+[packages/core/src/evaluators.ts:110](https://github.com/monilpat/eliza/blob/main/packages/core/src/evaluators.ts#L110)

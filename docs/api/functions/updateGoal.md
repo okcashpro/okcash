@@ -1,21 +1,21 @@
----
-id: "updateGoal"
-title: "Function: updateGoal"
-sidebar_label: "updateGoal"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / updateGoal
 
-▸ **updateGoal**(`«destructured»`): `Promise`\<`void`\>
+# Function: updateGoal()
 
-#### Parameters
+> **updateGoal**(`__namedParameters`): `Promise`\<`void`\>
 
-| Name             | Type                                         |
-| :--------------- | :------------------------------------------- |
-| `«destructured»` | `Object`                                     |
-| › `goal`         | [`Goal`](../interfaces/Goal.md)              |
-| › `runtime`      | [`AgentRuntime`](../classes/AgentRuntime.md) |
+## Parameters
 
-#### Returns
+• **\_\_namedParameters**
+
+• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
+• **\_\_namedParameters.goal**: [`Goal`](../interfaces/Goal.md)
+
+## Returns
 
 `Promise`\<`void`\>
+
+## Defined in
+
+[packages/core/src/goals.ts:45](https://github.com/monilpat/eliza/blob/main/packages/core/src/goals.ts#L45)

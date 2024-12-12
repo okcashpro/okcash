@@ -1,23 +1,23 @@
----
-id: "formatActions"
-title: "Function: formatActions"
-sidebar_label: "formatActions"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / formatActions
 
-▸ **formatActions**(`actions`): `string`
+# Function: formatActions()
+
+> **formatActions**(`actions`): `string`
 
 Formats the provided actions into a detailed string listing each action's name and description, separated by commas and newlines.
 
-#### Parameters
+## Parameters
 
-| Name      | Type                                  | Description                             |
-| :-------- | :------------------------------------ | :-------------------------------------- |
-| `actions` | [`Action`](../interfaces/Action.md)[] | An array of `Action` objects to format. |
+• **actions**: [`Action`](../interfaces/Action.md)[]
 
-#### Returns
+An array of `Action` objects to format.
+
+## Returns
 
 `string`
 
 A detailed string of actions, including names and descriptions.
+
+## Defined in
+
+[packages/core/src/actions.ts:73](https://github.com/monilpat/eliza/blob/main/packages/core/src/actions.ts#L73)

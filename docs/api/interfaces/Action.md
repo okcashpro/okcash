@@ -1,45 +1,77 @@
----
-id: "Action"
-title: "Interface: Action"
-sidebar_label: "Action"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Action
 
-Represents an action that the agent can perform, including conditions for its use, a description, examples, a handler function, and a validation function.
+# Interface: Action
+
+Represents an action the agent can perform
 
 ## Properties
 
-### condition
+### similes
 
-• **condition**: `string`
+> **similes**: `string`[]
 
----
+Similar action descriptions
+
+#### Defined in
+
+[packages/core/src/types.ts:396](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L396)
+
+***
 
 ### description
 
-• **description**: `string`
+> **description**: `string`
 
----
+Detailed description
+
+#### Defined in
+
+[packages/core/src/types.ts:399](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L399)
+
+***
 
 ### examples
 
-• **examples**: [`ActionExample`](ActionExample.md)[][]
+> **examples**: [`ActionExample`](ActionExample.md)[][]
 
----
+Example usages
+
+#### Defined in
+
+[packages/core/src/types.ts:402](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L402)
+
+***
 
 ### handler
 
-• **handler**: [`Handler`](../types/Handler.md)
+> **handler**: [`Handler`](../type-aliases/Handler.md)
 
----
+Handler function
+
+#### Defined in
+
+[packages/core/src/types.ts:405](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L405)
+
+***
 
 ### name
 
-• **name**: `string`
+> **name**: `string`
 
----
+Action name
+
+#### Defined in
+
+[packages/core/src/types.ts:408](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L408)
+
+***
 
 ### validate
 
-• **validate**: [`Validator`](../types/Validator.md)
+> **validate**: [`Validator`](../type-aliases/Validator.md)
+
+Validation function
+
+#### Defined in
+
+[packages/core/src/types.ts:411](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L411)

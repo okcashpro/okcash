@@ -1,51 +1,89 @@
----
-id: "Relationship"
-title: "Interface: Relationship"
-sidebar_label: "Relationship"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Relationship
 
-Represents a relationship between two users, including their IDs, the status of the relationship, and the room ID in which the relationship is established.
+# Interface: Relationship
+
+Represents a relationship between users
 
 ## Properties
 
-### created_at
-
-• `Optional` **created_at**: `string`
-
----
-
 ### id
 
-• **id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+> **id**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
 
----
+Unique identifier
 
-### room_id
+#### Defined in
 
-• **room_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+[packages/core/src/types.ts:471](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L471)
 
----
+***
+
+### userA
+
+> **userA**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+First user ID
+
+#### Defined in
+
+[packages/core/src/types.ts:474](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L474)
+
+***
+
+### userB
+
+> **userB**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Second user ID
+
+#### Defined in
+
+[packages/core/src/types.ts:477](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L477)
+
+***
+
+### userId
+
+> **userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Primary user ID
+
+#### Defined in
+
+[packages/core/src/types.ts:480](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L480)
+
+***
+
+### roomId
+
+> **roomId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+Associated room ID
+
+#### Defined in
+
+[packages/core/src/types.ts:483](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L483)
+
+***
 
 ### status
 
-• **status**: `string`
+> **status**: `string`
 
----
+Relationship status
 
-### user_a
+#### Defined in
 
-• **user_a**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+[packages/core/src/types.ts:486](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L486)
 
----
+***
 
-### user_b
+### createdAt?
 
-• **user_b**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+> `optional` **createdAt**: `string`
 
----
+Optional creation timestamp
 
-### user_id
+#### Defined in
 
-• **user_id**: \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\`
+[packages/core/src/types.ts:489](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L489)

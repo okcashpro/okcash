@@ -1,21 +1,21 @@
----
-id: "getRelationships"
-title: "Function: getRelationships"
-sidebar_label: "getRelationships"
-sidebar_position: 0
-custom_edit_url: null
----
+[@ai16z/eliza v0.1.5-alpha.3](../index.md) / getRelationships
 
-▸ **getRelationships**(`«destructured»`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
+# Function: getRelationships()
 
-#### Parameters
+> **getRelationships**(`__namedParameters`): `Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
 
-| Name             | Type                                                       |
-| :--------------- | :--------------------------------------------------------- |
-| `«destructured»` | `Object`                                                   |
-| › `runtime`      | [`AgentRuntime`](../classes/AgentRuntime.md)               |
-| › `user_id`      | \`$\{string}-$\{string}-$\{string}-$\{string}-$\{string}\` |
+## Parameters
 
-#### Returns
+• **\_\_namedParameters**
+
+• **\_\_namedParameters.runtime**: [`IAgentRuntime`](../interfaces/IAgentRuntime.md)
+
+• **\_\_namedParameters.userId**: \`$\{string\}-$\{string\}-$\{string\}-$\{string\}-$\{string\}\`
+
+## Returns
 
 `Promise`\<[`Relationship`](../interfaces/Relationship.md)[]\>
+
+## Defined in
+
+[packages/core/src/relationships.ts:33](https://github.com/monilpat/eliza/blob/main/packages/core/src/relationships.ts#L33)
