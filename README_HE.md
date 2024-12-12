@@ -57,7 +57,7 @@
 -   📈 טיפול בתהליכים עסקיים
 </div>
 <div align="right">
--   🎮 במשחקי וידאו (NPC)
+-   🎮 במשחקי וידאו (NPCs)
 </div>
 <div align="right">
 -   🧠 מסחר
