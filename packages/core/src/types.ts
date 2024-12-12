@@ -710,6 +710,7 @@ export type Character = {
             shouldIgnoreBotMessages?: boolean;
             shouldIgnoreDirectMessages?: boolean;
             shouldRespondOnlyToMentions?: boolean;
+            messageSimilarityThreshold?: number;
             isPartOfTeam?: boolean;
             teamAgentIds?: string[];
             teamLeaderId?: string;
@@ -719,6 +720,7 @@ export type Character = {
             shouldIgnoreBotMessages?: boolean;
             shouldIgnoreDirectMessages?: boolean;
             shouldRespondOnlyToMentions?: boolean;
+            messageSimilarityThreshold?: number;
             isPartOfTeam?: boolean;
             teamAgentIds?: string[];
             teamLeaderId?: string;
