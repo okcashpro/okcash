@@ -335,6 +335,7 @@ export async function initializeClients(
     }
 
     if (clientTypes.includes("twitter")) {
+        TwitterClientInterface.enableSearch = getSecret(character, "TWITTER_SEARCH_ENABLE");
         const twitterClients = await TwitterClientInterface.start(runtime);
         clients.push(twitterClients);
     }
