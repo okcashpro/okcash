@@ -44,10 +44,10 @@ jobs:
               run: pnpm build
 
             - name: Configure an environment
+              env:
+                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
-                  rm -f .env
-                  echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
-                  cat .env
+                  env
 
             - name: Run integration tests
               run: pnpm run integrationTests
