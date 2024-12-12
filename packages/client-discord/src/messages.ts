@@ -79,7 +79,7 @@ export class MessageManager {
             return;
         }
 
-        // Check for mentions-only mode
+        // Check for mentions-only mode setting
         if (this.runtime.character.clientConfig?.discord?.shouldRespondOnlyToMentions) {
             if(!this._isMessageForMe(message)) {
                 return;
