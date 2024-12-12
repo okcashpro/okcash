@@ -444,12 +444,6 @@ export class TwitterInteractionClient {
                     );
                 }
 
-                   // Ensure the message and state are properly stringified before evaluation
-            const sanitizedMessage = JSON.parse(JSON.stringify(message));
-            const sanitizedState = JSON.parse(JSON.stringify(state));
-            
-            await this.runtime.evaluate(sanitizedMessage, sanitizedState);
-
 
                 await this.runtime.processActions(
                     message,
