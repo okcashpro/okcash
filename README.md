@@ -90,7 +90,7 @@ sh scripts/start.sh
 
 ### Edit the character file
 
-1. Open `agent/src/character.ts` to modify the default character. Uncomment and edit.
+1. Open `packages/core/src/defaultCharacter.ts` to modify the default character. Uncomment and edit.
 
 2. To load custom characters:
     - Use `pnpm start --characters="path/to/your/character.json"`
