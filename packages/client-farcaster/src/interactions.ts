@@ -6,6 +6,8 @@ import {
     ModelClass,
     stringToUuid,
     elizaLogger,
+    HandlerCallback,
+    Content,
     type IAgentRuntime,
 } from "@ai16z/eliza";
 import type { FarcasterClient } from "./client";
@@ -219,56 +221,65 @@ export class FarcasterInteractionManager {
                 messageHandlerTemplate,
         });
 
-        const response = await generateMessageResponse({
+        const responseContent = await generateMessageResponse({
             runtime: this.runtime,
             context,
             modelClass: ModelClass.LARGE,
         });
 
-        response.inReplyTo = memoryId;
+        responseContent.inReplyTo = memoryId;
 
-        if (!response.text) return;
+        if (!responseContent.text) return;
 
         if (this.runtime.getSetting("FARCASTER_DRY_RUN") === "true") {
             elizaLogger.info(
-                `Dry run: would have responded to cast ${cast.hash} with ${response.text}`
+                `Dry run: would have responded to cast ${cast.hash} with ${responseContent.text}`
             );
             return;
         }
 
-        try {
-            elizaLogger.info(`Replying to cast ${cast.hash}.`);
+        const callback: HandlerCallback = async (
+            content: Content,
+            files: any[]
+        ) => {
+            try {
+                if (memoryId && !content.inReplyTo) {
+                    content.inReplyTo = memoryId;
+                }
+                const results = await sendCast({
+                    runtime: this.runtime,
+                    client: this.client,
+                    signerUuid: this.signerUuid,
+                    profile: cast.profile,
+                    content: content,
+                    roomId: memory.roomId,
+                    inReplyTo: {
+                        fid: cast.authorFid,
+                        hash: cast.hash,
+                    },
+                });
+                // sendCast lost response action, so we need to add it back here
+                results[0].memory.content.action = content.action;
 
-            const results = await sendCast({
-                runtime: this.runtime,
-                client: this.client,
-                signerUuid: this.signerUuid,
-                profile: cast.profile,
-                content: response,
-                roomId: memory.roomId,
-                inReplyTo: {
-                    fid: cast.authorFid,
-                    hash: cast.hash,
-                },
-            });
-            // sendCast lost response action, so we need to add it back here
-            results[0].memory.content.action = response.action;
-
-            const newState = await this.runtime.updateRecentMessageState(state);
-
-            for (const { memory } of results) {
-                await this.runtime.messageManager.createMemory(memory);
+                for (const { memory } of results) {
+                    await this.runtime.messageManager.createMemory(memory);
+                }
+                return results.map((result) => result.memory);
+            } catch (error) {
+                console.error("Error sending response cast:", error);
+                return [];
             }
+        };
 
-            await this.runtime.evaluate(memory, newState);
+        const responseMessages = await callback(responseContent);
 
-            await this.runtime.processActions(
-                memory,
-                results.map((result) => result.memory),
-                newState
-            );
-        } catch (error) {
-            elizaLogger.error(`Error sending response cast: ${error}`);
-        }
+        const newState = await this.runtime.updateRecentMessageState(state);
+
+        await this.runtime.processActions(
+            memory,
+            responseMessages,
+            newState,
+            callback
+        );
     }
 }
