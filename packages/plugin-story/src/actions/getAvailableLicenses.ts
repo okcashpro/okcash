@@ -150,14 +150,7 @@ export const getAvailableLicensesAction = {
     examples: [
         [
             {
-                user: "assistant",
-                content: {
-                    text: "Getting available licenses for an IP Asset 0x2265F2b8e47F98b3Bdf7a1937EAc27282954A4Db",
-                    action: "GET_AVAILABLE_LICENSES",
-                },
-            },
-            {
-                user: "user",
+                user: "{{user1}}",
                 content: {
                     text: "Get available licenses for an IP Asset 0x2265F2b8e47F98b3Bdf7a1937EAc27282954A4Db",
                     action: "GET_AVAILABLE_LICENSES",

@@ -134,10 +134,23 @@ export const attachTermsAction = {
     examples: [
         [
             {
-                user: "user",
+                user: "{{user1}}",
+                content: {
+                    text: "I would like to attach license terms to my IP.",
+                    action: "ATTACH_TERMS",
+                },
+            },
+            {
+                user: "{{user2}}",
+                content: {
+                    text: "Sure! What is the ipId? You should also tell me if you want to add a minting fee, or if you want to enable commercial use of your IP. If so, you can add a revenue share as well.",
+                    action: "ATTACH_TERMS",
+                },
+            },
+            {
+                user: "{{user1}}",
                 content: {
                     text: "Attach commercial, 10% rev share license terms to IP Asset 0x2265F2b8e47F98b3Bdf7a1937EAc27282954A4Db",
-                    action: "ATTACH_TERMS",
                 },
             },
         ],

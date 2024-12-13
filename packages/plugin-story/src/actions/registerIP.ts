@@ -124,10 +124,22 @@ export const registerIPAction = {
     examples: [
         [
             {
-                user: "user",
+                user: "{{user1}}",
+                content: {
+                    text: "I would like to register my IP.",
+                },
+            },
+            {
+                user: "{{user2}}",
+                content: {
+                    text: "Sure! Please provide the title and description of your IP.",
+                    action: "REGISTER_IP",
+                },
+            },
+            {
+                user: "{{user1}}",
                 content: {
                     text: "Register my IP titled 'My IP' with the description 'This is my IP'",
-                    action: "REGISTER_IP",
                 },
             },
         ],

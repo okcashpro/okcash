@@ -97,10 +97,22 @@ export const licenseIPAction = {
     examples: [
         [
             {
-                user: "user",
+                user: "{{user1}}",
+                content: {
+                    text: "I would like to license an IP.",
+                },
+            },
+            {
+                user: "{{user2}}",
+                content: {
+                    text: "Sure! Please provide the ipId of the IP you want to license and the license terms id you want to attach.",
+                    action: "LICENSE_IP",
+                },
+            },
+            {
+                user: "{{user1}}",
                 content: {
                     text: "License an IP Asset 0x2265F2b8e47F98b3Bdf7a1937EAc27282954A4Db with license terms 1",
-                    action: "LICENSE_IP",
                 },
             },
         ],

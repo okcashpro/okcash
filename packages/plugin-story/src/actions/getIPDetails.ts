@@ -113,14 +113,7 @@ export const getIPDetailsAction = {
     examples: [
         [
             {
-                user: "assistant",
-                content: {
-                    text: "Getting details for an IP Asset 0x2265F2b8e47F98b3Bdf7a1937EAc27282954A4Db",
-                    action: "GET_IP_DETAILS",
-                },
-            },
-            {
-                user: "user",
+                user: "{{user1}}",
                 content: {
                     text: "Get details for an IP Asset 0x2265F2b8e47F98b3Bdf7a1937EAc27282954A4Db",
                     action: "GET_IP_DETAILS",

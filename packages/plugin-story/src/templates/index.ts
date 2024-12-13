@@ -30,6 +30,7 @@ Extract the following information about the requested IP licensing:
 - Field "amount": The amount of licenses to mint
 
 Respond with a JSON markdown block containing only the extracted values. A user must explicitly provide a licensorIpId and licenseTermsId.
+If they don't provide the amount, set it as null.
 
 \`\`\`json
 {
@@ -49,11 +50,11 @@ export const getAvailableLicensesTemplate = `Given the recent messages and walle
 Extract the following information about the requested IP licensing:
 - Field "ipid": The IP Asset that you want to mint a license from
 
-Respond with a JSON markdown block containing only the extracted values:
+Respond with a JSON markdown block containing only the extracted values. A user must provide an ipId.
 
 \`\`\`json
 {
-    "ipid": string | null
+    "ipid": string
 }
 \`\`\`
 `;
@@ -65,11 +66,11 @@ export const getIPDetailsTemplate = `Given the recent messages below:
 Extract the following information about the requested IP details:
 - Field "ipId": The IP Asset that you want to get details for
 
-Respond with a JSON markdown block containing only the extracted values:
+Respond with a JSON markdown block containing only the extracted values. A user must provide an ipId.
 
 \`\`\`json
 {
-    "ipId": string | null
+    "ipId": string
 }
 \`\`\`
 `;
@@ -86,7 +87,8 @@ Extract the following information about attaching license terms to an IP Asset:
 from commercial use of the IP Asset. This must be between 0 and 100. If a user specifies
 a commercialRevShare, then commercialUse must be set to true.
 
-Respond with a JSON markdown block containing only the extracted values. A user must provide an ipId.
+Respond with a JSON markdown block containing only the extracted values. A user must provide an ipId. If they don't provide
+the others fields, set them as null.
 
 \`\`\`json
 {
