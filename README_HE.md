@@ -86,13 +86,13 @@
 <div align="right">
 
 
-````
+```
 git clone https://github.com/ai16z/eliza-starter.git
 
 cp .env.example .env
 
 pnpm i && pnpm start
-````
+```
 
 </div>
 
@@ -121,11 +121,15 @@ git checkout $(git describe --tags --abbrev=0)
 
 ### עריכת קובץ .env
 
+<div align="right">
+
 העתק את .env.example ל-.env ומלא את הערכים המתאימים.
 
 ```
 cp .env.example .env
 ```
+
+</div>
 
 הערה: .env הוא אופציונלי. אם אתם מתכננים להפעיל מספר סוכנים נפרדים, ניתן להעביר סודות דרך JSON הדמות.
 
@@ -133,24 +137,24 @@ cp .env.example .env
 
 פעולה זו תפעיל הכל כדי להגדיר את הפרויקט ולהתחיל את הבוט עם הדמות המובנית.
 
+<div align="right">
+
 ```bash
 sh scripts/start.sh
 ```
 
+</div>
+
 ### עריכת קובץ הדמות
 
-<!-- <div align="right"> -->
 1. פתח את `agent/src/character.ts` כדי לשנות את דמות ברירת המחדל. בטל הערה וערוך.
-<!-- </div> -->
-<!-- <div align="right"> -->
+
 2. לטעינת דמויות מותאמות אישית:
     - השתמש ב-`pnpm start --characters="path/to/your/character.json"`
     - ניתן לטעון מספר קבצי דמויות בו זמנית.
-<!-- </div> -->
-<!-- <div align="right"> -->
+
 3. התחבר עם X (טוויטר):
     - שנה `"clients": []` ל-`"clients": ["twitter"]` בקובץ הדמות כדי להתחבר ל-X.
-<!-- </div> -->
 
 ### התחלה ידנית של אלייזה
 <div align="right">
