@@ -714,11 +714,6 @@ export type Character = {
             shouldIgnoreBotMessages?: boolean;
             shouldIgnoreDirectMessages?: boolean;
             shouldRespondOnlyToMentions?: boolean;
-            messageSimilarityThreshold?: number;
-            isPartOfTeam?: boolean;
-            teamAgentIds?: string[];
-            teamLeaderId?: string;
-            teamMemberInterestKeywords?: string[];
         };
         telegram?: {
             shouldIgnoreBotMessages?: boolean;
@@ -726,11 +721,6 @@ export type Character = {
             shouldRespondOnlyToMentions?: boolean;
             shouldOnlyJoinInAllowedGroups?: boolean;
             allowedGroupIds?: string[];
-            messageSimilarityThreshold?: number;
-            isPartOfTeam?: boolean;
-            teamAgentIds?: string[];
-            teamLeaderId?: string;
-            teamMemberInterestKeywords?: string[];
         };
     };
 
