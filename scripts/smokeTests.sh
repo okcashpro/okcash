@@ -44,7 +44,7 @@ cd $PROJECT_DIR
 
 cp .env.example .env
 
-pnpm install -r
+pnpm install -r --frozen-lockfile
 
 pnpm build
 
