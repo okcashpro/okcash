@@ -139,8 +139,6 @@ export class TwitterPostClient {
             elizaLogger.log(`Next tweet scheduled in ${randomMinutes} minutes`);
         };
 
-
-
         const processActionsLoop = async () => {
             const actionInterval = parseInt(
                 this.runtime.getSetting("ACTION_INTERVAL")
@@ -188,6 +186,7 @@ export class TwitterPostClient {
         } else {
             elizaLogger.log("Action processing loop disabled by configuration");
         }
+        generateNewTweetLoop();
     }
 
     constructor(client: ClientBase, runtime: IAgentRuntime, config: IAgentConfig) {
