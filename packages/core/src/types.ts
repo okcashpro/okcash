@@ -601,13 +601,21 @@ export type Plugin = {
 /**
  * Available client platforms
  */
-export enum Clients {
+export enum ClientType {
     DISCORD = "discord",
     DIRECT = "direct",
     TWITTER = "twitter",
     TELEGRAM = "telegram",
-    FARCASTER = "farcaster",
+    FARCASTER = "farcaster"
 }
+
+export type Clients = {
+    type: ClientType;
+    credentials: {
+        [key: string]: string;
+    };
+};
+
 /**
  * Configuration for an agent character
  */
