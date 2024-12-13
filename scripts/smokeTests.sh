@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Strict mode, exit on error, undefined variables, and pipe failures
+set -euo pipefail
+
 # Print some information about the environment to aid in case of troubleshooting
 
 echo "node version:"
@@ -27,20 +30,9 @@ if (( CURRENT_NODE_VERSION < REQUIRED_NODE_VERSION )); then
 fi
 
 # Autodetect project directory relative to this script's path
-PROJECT_DIR="$0"
-while [ -h "$PROJECT_DIR" ]; do
-    ls=$(ls -ld "$PROJECT_DIR")
-    link=$(expr "$ls" : '.*-> \(.*\)$')
-    if expr "$link" : '/.*' > /dev/null; then
-        PROJECT_DIR="$link"
-    else
-        PROJECT_DIR="$(dirname "$PROJECT_DIR")/$link"
-    fi
-done
-PROJECT_DIR="$(dirname "$PROJECT_DIR")/.."
-PROJECT_DIR="$(cd "$PROJECT_DIR"; pwd)"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-cd $PROJECT_DIR
+cd "$PROJECT_DIR"
 
 cp .env.example .env
 
@@ -48,39 +40,53 @@ pnpm install -r
 
 pnpm build
 
+# Create temp file and ensure cleanup
 OUTFILE="$(mktemp)"
-echo $OUTFILE
+trap 'rm -f "$OUTFILE"' EXIT
+echo "Using temporary output file: $OUTFILE"
+
+# Add timeout configuration
+TIMEOUT=30
+INTERVAL=0.5
+TIMER=0
+
 (
-  # Wait for the ready message
+  # Wait for the ready message with timeout
   while true; do
+    if [[ $TIMER -ge $TIMEOUT ]]; then
+      echo "Error: Timeout waiting for application to start after $TIMEOUT seconds"
+      kill $$
+      exit 1
+    fi
+
     if grep -q "Chat started" "$OUTFILE"; then
       echo "exit"; sleep 2
       break
     fi
-    sleep 0.5
+
+    sleep $INTERVAL
+    TIMER=$(echo "$TIMER + $INTERVAL" | bc)
   done
 ) | pnpm start --character=characters/trump.character.json > "$OUTFILE" &
 
 # Wait for process to finish
 wait $!
 RESULT=$?
+
 echo "----- OUTPUT START -----"
 cat "$OUTFILE"
 echo "----- OUTPUT END -----"
 
 # Check the exit code of the last command
 if [[ $RESULT -ne 0 ]]; then
-    echo "Error: 'start' command exited with an error."
+    echo "Error: 'start' command exited with an error (code: $RESULT)"
     exit 1
 fi
 
-# Check if output.txt contains "Terminating and cleaning up resources..."
+# Check if output contains expected termination message
 if grep -q "Terminating and cleaning up resources..." "$OUTFILE"; then
     echo "Script completed successfully."
 else
-    echo "Error: The output does not contain the expected string."
+    echo "Error: The output does not contain the expected termination message."
     exit 1
 fi
-
-# Clean up
-rm "$OUTFILE"
