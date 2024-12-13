@@ -576,9 +576,7 @@ export class VoiceManager extends EventEmitter {
             const wavBuffer = await this.convertOpusToWav(inputBuffer);
             console.log("Starting transcription...");
 
-            let transcriptionText: string;
-
-            transcriptionText = await this.runtime
+            const transcriptionText = await this.runtime
                 .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
                 .transcribe(wavBuffer);
 
