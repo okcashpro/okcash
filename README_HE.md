@@ -82,22 +82,22 @@
 
 ### שימוש ב-Starter (מומלץ)
 
+
 <div align="right">
 
-```
+
+````
 git clone https://github.com/ai16z/eliza-starter.git
 
 cp .env.example .env
 
 pnpm i && pnpm start
-```
+````
+
 </div>
 
-<div align="right">
 
 לאחר מכן קרא את [התיעוד](https://ai16z.github.io/eliza/) כדי ללמוד כיצד להתאים את אלייזה.
-
-</div>
 
 ### התחלה ידנית של אלייזה (מומלץ רק למי שיודע מה הוא עושה)
 <div align="right">
