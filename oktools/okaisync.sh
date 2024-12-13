@@ -7,7 +7,7 @@ git remote add okai https://github.com/okcashpro/okai.git 2>/dev/null || echo "R
 
 git fetch okai main
 
-git subtree pull --prefix=okai okai main -m syncokai
+git subtree pull --prefix=okai okai main 
 
 git push origin master
 
