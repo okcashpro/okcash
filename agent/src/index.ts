@@ -10,7 +10,6 @@ import {
     AgentRuntime,
     CacheManager,
     Character,
-    ClientType,
     Clients,
     DbCacheAdapter,
     FsCacheAdapter,
@@ -336,29 +335,28 @@ export async function initializeClients(
         character.clients?.map((str) => str.toLowerCase()) || [];
     elizaLogger.log('initializeClients', clientTypes, 'for', character.name)
 
-    if (clientTypes.includes(ClientType.DIRECT)) {
+    if (clientTypes.includes(Clients.DIRECT)) {
         const autoClient = await AutoClientInterface.start(runtime);
         if (autoClient) clients.auto = autoClient;
     }
 
-    if (clientTypes.includes("discord")) {
+    if (clientTypes.includes(Clients.DISCORD)) {
         const discordClient = await DiscordClientInterface.start(runtime);
         if (discordClient) clients.discord = discordClient;
     }
 
-    if (clientTypes.includes(ClientType.TELEGRAM)) {
+    if (clientTypes.includes(Clients.TELEGRAM)) {
         const telegramClient = await TelegramClientInterface.start(runtime);
         if (telegramClient) clients.telegram = telegramClient;
     }
 
-    if (clientTypes.includes(ClientType.TWITTER)) {
-        const config = character.clients?.find((client) => client.type === ClientType.TWITTER)?.config;
+    if (clientTypes.includes(Clients.TWITTER)) {
         TwitterClientInterface.enableSearch = !isFalsish(getSecret(character, "TWITTER_SEARCH_ENABLE"));
         const twitterClient = await TwitterClientInterface.start(runtime);
         if (twitterClient) clients.twitter = twitterClient;
     }
 
-    if (clientTypes.includes("farcaster")) {
+    if (clientTypes.includes(Clients.FARCASTER)) {
         // why is this one different :(
         const farcasterClient = new FarcasterAgentClient(runtime);
         if (farcasterClient) {

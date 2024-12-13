@@ -1,4 +1,4 @@
-import { IAgentConfig, IAgentRuntime } from "@ai16z/eliza";
+import { IAgentRuntime } from "@ai16z/eliza";
 import { z } from "zod";
 
 export const DEFAULT_MAX_TWEET_LENGTH = 280;
@@ -20,34 +20,27 @@ export const twitterEnvSchema = z.object({
 export type TwitterConfig = z.infer<typeof twitterEnvSchema>;
 
 export async function validateTwitterConfig(
-    runtime: IAgentRuntime,
-    config: IAgentConfig
+    runtime: IAgentRuntime
 ): Promise<TwitterConfig> {
     try {
         const twitterConfig = {
             TWITTER_DRY_RUN:
-                config?.TWITTER_DRY_RUN ||
                 runtime.getSetting("TWITTER_DRY_RUN") ||
                 process.env.TWITTER_DRY_RUN ||
                 "false",
             TWITTER_USERNAME:
-                config?.TWITTER_USERNAME ||
                 runtime.getSetting("TWITTER_USERNAME") ||
                 process.env.TWITTER_USERNAME,
             TWITTER_PASSWORD:
-                config?.TWITTER_PASSWORD ||
                 runtime.getSetting("TWITTER_PASSWORD") ||
                 process.env.TWITTER_PASSWORD,
             TWITTER_EMAIL:
-                config?.TWITTER_EMAIL ||
                 runtime.getSetting("TWITTER_EMAIL") ||
                 process.env.TWITTER_EMAIL,
             TWITTER_COOKIES:
-                config?.TWITTER_COOKIES ||
                 runtime.getSetting("TWITTER_COOKIES") ||
                 process.env.TWITTER_COOKIES,
             MAX_TWEET_LENGTH:
-                config?.MAX_TWEET_LENGTH ||
                 runtime.getSetting("MAX_TWEET_LENGTH") ||
                 process.env.MAX_TWEET_LENGTH ||
                 DEFAULT_MAX_TWEET_LENGTH.toString(),

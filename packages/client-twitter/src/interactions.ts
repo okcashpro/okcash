@@ -14,7 +14,6 @@ import {
     stringToUuid,
     elizaLogger,
     getEmbeddingZeroVector,
-    IAgentConfig,
 } from "@ai16z/eliza";
 import { ClientBase } from "./base";
 import { buildConversationThread, sendTweet, wait } from "./utils.ts";
@@ -90,11 +89,9 @@ Thread of Tweets You Are Replying To:
 export class TwitterInteractionClient {
     client: ClientBase;
     runtime: IAgentRuntime;
-    config: IAgentConfig;
-    constructor(client: ClientBase, runtime: IAgentRuntime, config: IAgentConfig) {
+    constructor(client: ClientBase, runtime: IAgentRuntime) {
         this.client = client;
         this.runtime = runtime;
-        this.config = config;
     }
 
     async start() {
@@ -103,7 +100,7 @@ export class TwitterInteractionClient {
             setTimeout(
                 handleTwitterInteractionsLoop,
                 Number(
-                    this.config?.TWITTER_POLL_INTERVAL || this.runtime.getSetting("TWITTER_POLL_INTERVAL") || 120
+                    this.runtime.getSetting("TWITTER_POLL_INTERVAL") || 120
                 ) * 1000 // Default to 2 minutes
             );
         };
@@ -113,7 +110,7 @@ export class TwitterInteractionClient {
     async handleTwitterInteractions() {
         elizaLogger.log("Checking Twitter interactions");
   // Read from environment variable, fallback to default list if not set
-  const targetUsersStr = this.config?.TWITTER_TARGET_USERS || this.runtime.getSetting("TWITTER_TARGET_USERS");
+  const targetUsersStr = this.runtime.getSetting("TWITTER_TARGET_USERS");
 
   const twitterUsername = this.client.profile.username;
   try {
@@ -321,7 +318,7 @@ export class TwitterInteractionClient {
 
         let state = await this.runtime.composeState(message, {
             twitterClient: this.client.twitterClient,
-            twitterUserName: this.config?.TWITTER_USERNAME || this.runtime.getSetting("TWITTER_USERNAME"),
+            twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
             currentPost,
             formattedConversation,
         });
@@ -358,7 +355,7 @@ export class TwitterInteractionClient {
         }
 
         // 1. Get the raw target users string from settings
-        const targetUsersStr = this.config?.TWITTER_TARGET_USERS || this.runtime.getSetting("TWITTER_TARGET_USERS");
+        const targetUsersStr = this.runtime.getSetting("TWITTER_TARGET_USERS");
 
         // 2. Process the string to get valid usernames
         const validTargetUsersStr = targetUsersStr && targetUsersStr.trim()
@@ -420,7 +417,7 @@ export class TwitterInteractionClient {
                         this.client,
                         response,
                         message.roomId,
-                        this.config?.TWITTER_USERNAME || this.runtime.getSetting("TWITTER_USERNAME"),
+                        this.runtime.getSetting("TWITTER_USERNAME"),
                         tweet.id
                     );
                     return memories;

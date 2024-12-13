@@ -134,9 +134,8 @@ The Twitter client enables posting, searching, and interacting with Twitter user
 
 ```typescript
 import { TwitterClientInterface } from "@eliza/client-twitter";
-const config = character.clients?.find((client) => client.type === ClientType.TWITTER)?.config;
 // Initialize client
-const client = await TwitterClientInterface.start(runtime, config);
+const client = await TwitterClientInterface.start(runtime);
 
 // Configuration in .env
 TWITTER_USERNAME = your_username;

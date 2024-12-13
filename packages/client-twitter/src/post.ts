@@ -7,7 +7,6 @@ import {
     ModelClass,
     stringToUuid,
     parseBooleanFromText,
-    IAgentConfig,
 } from "@ai16z/eliza";
 import { elizaLogger } from "@ai16z/eliza";
 import { ClientBase } from "./base.ts";
@@ -97,7 +96,6 @@ function truncateToCompleteSentence(
 export class TwitterPostClient {
     client: ClientBase;
     runtime: IAgentRuntime;
-    config: IAgentConfig;
     twitterUsername: string;
     private isProcessing: boolean = false;
     private lastProcessTime: number = 0;
@@ -190,11 +188,10 @@ export class TwitterPostClient {
         generateNewTweetLoop();
     }
 
-    constructor(client: ClientBase, runtime: IAgentRuntime, config: IAgentConfig) {
+    constructor(client: ClientBase, runtime: IAgentRuntime) {
         this.client = client;
         this.runtime = runtime;
-        this.config = config;
-        this.twitterUsername = config?.TWITTER_USERNAME || runtime.getSetting("TWITTER_USERNAME");
+        this.twitterUsername = runtime.getSetting("TWITTER_USERNAME");
     }
 
     private async generateNewTweet() {
@@ -281,7 +278,7 @@ export class TwitterPostClient {
             // Final cleaning
             cleanedContent = removeQuotes(content);
 
-            if ((this.config?.TWITTER_DRY_RUN || this.runtime.getSetting("TWITTER_DRY_RUN")) === "true") {
+            if ((this.runtime.getSetting("TWITTER_DRY_RUN")) === "true") {
                 elizaLogger.info(
                     `Dry run: would have posted tweet: ${cleanedContent}`
                 );

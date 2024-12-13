@@ -136,19 +136,18 @@ export async function initializeClients(
   runtime: IAgentRuntime,
 ) {
   const clients = [];
-  const clientTypes = character.clients?.map((str) => str.type.toLowerCase()) || [];
+  const clientTypes = character.clients?.map((str) => str.toLowerCase()) || [];
 
-  if (clientTypes.includes(ClientType.DISCORD)) {
+  if (clientTypes.includes(Clients.DISCORD)) {
     clients.push(await DiscordClientInterface.start(runtime));
   }
-  if (clientTypes.includes(ClientType.TELEGRAM)) {
+  if (clientTypes.includes(Clients.TELEGRAM)) {
     clients.push(await TelegramClientInterface.start(runtime));
   }
-  if (clientTypes.includes(ClientType.TWITTER)) {
-    const config = character.clients?.find((client) => client.type === ClientType.TWITTER)?.config;
-    clients.push(await TwitterClientInterface.start(runtime, config));
+  if (clientTypes.includes(Clients.TWITTER)) {
+    clients.push(await TwitterClientInterface.start(runtime));
   }
-  if (clientTypes.includes(ClientType.DIRECT)) {
+  if (clientTypes.includes(Clients.DIRECT)) {
     clients.push(await AutoClientInterface.start(runtime));
   }
 

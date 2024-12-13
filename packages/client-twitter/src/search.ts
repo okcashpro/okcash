@@ -1,5 +1,5 @@
 import { SearchMode } from "agent-twitter-client";
-import { composeContext, IAgentConfig } from "@ai16z/eliza";
+import { composeContext } from "@ai16z/eliza";
 import { generateMessageResponse, generateText } from "@ai16z/eliza";
 import { messageCompletionFooter } from "@ai16z/eliza";
 import {
@@ -45,15 +45,13 @@ Your response should not contain any questions. Brief, concise statements only. 
 export class TwitterSearchClient {
     client: ClientBase;
     runtime: IAgentRuntime;
-    config: IAgentConfig;
     twitterUsername: string;
     private respondedTweets: Set<string> = new Set();
 
-    constructor(client: ClientBase, runtime: IAgentRuntime, config: IAgentConfig) {
+    constructor(client: ClientBase, runtime: IAgentRuntime) {
         this.client = client;
         this.runtime = runtime;
-        this.config = config;
-        this.twitterUsername = config?.TWITTER_USERNAME || runtime.getSetting("TWITTER_USERNAME");
+        this.twitterUsername = runtime.getSetting("TWITTER_USERNAME");
     }
 
     async start() {

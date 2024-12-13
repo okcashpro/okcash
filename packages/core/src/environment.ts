@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ModelProviderName, ClientType } from "./types";
+import { ModelProviderName, Clients } from "./types";
 
 // TODO: TO COMPLETE
 export const envSchema = z.object({
@@ -62,11 +62,6 @@ const PluginSchema = z.object({
     clients: z.array(z.any()).optional(),
 });
 
-const clientSchema = z.object({
-    type: z.nativeEnum(ClientType),
-    config: z.record(z.string()),
-});
-
 // Main Character schema
 export const CharacterSchema = z.object({
     id: z.string().uuid().optional(),
@@ -82,7 +77,7 @@ export const CharacterSchema = z.object({
     topics: z.array(z.string()),
     adjectives: z.array(z.string()),
     knowledge: z.array(z.string()).optional(),
-    clients: z.array(z.array(clientSchema)),
+    clients: z.array(z.nativeEnum(Clients)),
     plugins: z.union([
       z.array(z.string()),
       z.array(PluginSchema),
