@@ -566,7 +566,7 @@ export type Media = {
  */
 export type Client = {
     /** Start client connection */
-    start: (runtime: IAgentRuntime) => Promise<unknown>;
+    start: (runtime: IAgentRuntime, config?: IAgentConfig) => Promise<unknown>;
 
     /** Stop client connection */
     stop: (runtime: IAgentRuntime) => Promise<unknown>;
@@ -609,11 +609,13 @@ export enum ClientType {
     FARCASTER = "farcaster"
 }
 
+export interface IAgentConfig {
+    [key: string]: string;
+}
+
 export type Clients = {
     type: ClientType;
-    credentials: {
-        [key: string]: string;
-    };
+    config: IAgentConfig;
 };
 
 /**

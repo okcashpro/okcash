@@ -8,6 +8,7 @@ import {
     getEmbeddingZeroVector,
     elizaLogger,
     stringToUuid,
+    IAgentConfig,
 } from "@ai16z/eliza";
 import {
     QueryTweetsResponse,
@@ -85,6 +86,7 @@ export class ClientBase extends EventEmitter {
     static _twitterClients: { [accountIdentifier: string]: Scraper } = {};
     twitterClient: Scraper;
     runtime: IAgentRuntime;
+    config: IAgentConfig;
     directions: string;
     lastCheckedTweetId: bigint | null = null;
     imageDescriptionService: IImageDescriptionService;
@@ -134,10 +136,11 @@ export class ClientBase extends EventEmitter {
         );
     }
 
-    constructor(runtime: IAgentRuntime) {
+    constructor(runtime: IAgentRuntime, config: IAgentConfig) {
         super();
         this.runtime = runtime;
-        const username = this.runtime.getSetting("TWITTER_USERNAME");
+        this.config = config;
+        const username = this.config.TWITTER_USERNAME || this.runtime.getSetting("TWITTER_USERNAME");
         if (ClientBase._twitterClients[username]) {
             this.twitterClient = ClientBase._twitterClients[username];
         } else {
@@ -154,16 +157,19 @@ export class ClientBase extends EventEmitter {
 
     async init() {
         //test
-        const username = this.runtime.getSetting("TWITTER_USERNAME");
+        const username = this.config.TWITTER_USERNAME || this.runtime.getSetting("TWITTER_USERNAME");
+        const password = this.config.TWITTER_PASSWORD || this.runtime.getSetting("TWITTER_PASSWORD");
+        const email = this.config.TWITTER_EMAIL || this.runtime.getSetting("TWITTER_EMAIL");
+        const twitter2faSecret = this.config.TWITTER_2FA_SECRET || this.runtime.getSetting("TWITTER_2FA_SECRET") || undefined;
+        const cookies = this.config.TWITTER_COOKIES || this.runtime.getSetting("TWITTER_COOKIES");
+
 
         if (!username) {
             throw new Error("Twitter username not configured");
         }
         // Check for Twitter cookies
-        if (this.runtime.getSetting("TWITTER_COOKIES")) {
-            const cookiesArray = JSON.parse(
-                this.runtime.getSetting("TWITTER_COOKIES")
-            );
+        if (cookies) {
+            const cookiesArray = JSON.parse(cookies);
 
             await this.setCookiesFromArray(cookiesArray);
         } else {
@@ -177,9 +183,9 @@ export class ClientBase extends EventEmitter {
         while (true) {
             await this.twitterClient.login(
                 username,
-                this.runtime.getSetting("TWITTER_PASSWORD"),
-                this.runtime.getSetting("TWITTER_EMAIL"),
-                this.runtime.getSetting("TWITTER_2FA_SECRET") || undefined
+                password,
+                email,
+                twitter2faSecret
             );
 
             if (await this.twitterClient.isLoggedIn()) {
@@ -469,10 +475,11 @@ export class ClientBase extends EventEmitter {
         }
 
         const timeline = await this.fetchHomeTimeline(cachedTimeline ? 10 : 50);
+        const username = this.config.TWITTER_USERNAME || this.runtime.getSetting("TWITTER_USERNAME");
 
         // Get the most recent 20 mentions and interactions
         const mentionsAndInteractions = await this.fetchSearchTweets(
-            `@${this.runtime.getSetting("TWITTER_USERNAME")}`,
+            `@${username}`,
             20,
             SearchMode.Latest
         );

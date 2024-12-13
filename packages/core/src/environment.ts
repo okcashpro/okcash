@@ -64,7 +64,7 @@ const PluginSchema = z.object({
 
 const clientSchema = z.object({
     type: z.nativeEnum(ClientType),
-    credentials: z.record(z.string()),
+    config: z.record(z.string()),
 });
 
 // Main Character schema
