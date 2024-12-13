@@ -107,7 +107,7 @@ export const registerIPAction = {
         try {
             const response = await action.registerIP(content, runtime);
             callback?.({
-                text: `Successfully registered IP ID: ${response.ipId}\nTransaction Hash: ${response.txHash}`,
+                text: `Successfully registered IP ID: ${response.ipId}. Transaction Hash: ${response.txHash}. View it on the explorer: https://explorer.story.foundation/ipa/${response.ipId}`,
             });
             return true;
         } catch (e) {

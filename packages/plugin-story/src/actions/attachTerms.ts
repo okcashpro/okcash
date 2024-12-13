@@ -111,7 +111,7 @@ export const attachTermsAction = {
             // if license terms were attached
             if (response.attachTermsResponse.success) {
                 callback?.({
-                    text: `Successfully attached license terms: ${response.registerPilTermsResponse.licenseTermsId}\nTransaction Hash: ${response.attachTermsResponse.txHash}`,
+                    text: `Successfully attached license terms: ${response.registerPilTermsResponse.licenseTermsId}. Transaction Hash: ${response.attachTermsResponse.txHash}. View it on the block explorer: https://odyssey.storyscan.xyz/tx/${response.attachTermsResponse.txHash}`,
                 });
                 return true;
             }

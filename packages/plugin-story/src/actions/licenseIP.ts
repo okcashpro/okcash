@@ -80,7 +80,7 @@ export const licenseIPAction = {
         try {
             const response = await action.licenseIP(content);
             callback?.({
-                text: `Successfully minted license tokens: ${response.licenseTokenIds.join(", ")}\nTransaction Hash: ${response.txHash}`,
+                text: `Successfully minted license tokens: ${response.licenseTokenIds.join(", ")}. Transaction Hash: ${response.txHash}. View it on the block explorer: https://odyssey.storyscan.xyz/tx/${response.txHash}`,
             });
             return true;
         } catch (e) {
