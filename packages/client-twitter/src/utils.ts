@@ -5,6 +5,8 @@ import { stringToUuid } from "@ai16z/eliza";
 import { ClientBase } from "./base";
 import { elizaLogger } from "@ai16z/eliza";
 import { DEFAULT_MAX_TWEET_LENGTH } from "./environment";
+import fs from "fs";
+import path from "path";
 
 export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     const waitTime =
@@ -162,6 +164,28 @@ export async function buildConversationThread(
     return thread;
 }
 
+export function getMediaType(filePath: string) {
+    const extension = filePath.split('.').pop().toLowerCase();
+    switch (extension) {
+        case 'png':
+        case 'jpg':
+        case 'jpeg':
+            return 'image';
+        case 'mp4':
+            return 'video';
+        default:
+            throw new Error(`Unsupported media type: ${extension}`);
+    }
+}
+type Attachment = {
+    id: string;
+    url: string; // Path to the file
+    title?: string;
+    source?: string;
+    description?: string;
+    text?: string;
+};
+
 export async function sendTweet(
     client: ClientBase,
     content: Content,
@@ -178,11 +202,31 @@ export async function sendTweet(
     let previousTweetId = inReplyTo;
 
     for (const chunk of tweetChunks) {
+        let mediaData: { data: Buffer; mediaType: string }[] | undefined;
+
+        if (content.attachments && content.attachments.length > 0) {
+            mediaData = await Promise.all(
+                content.attachments.map(async (attachment:Attachment) => {
+                    if (fs.existsSync(attachment.url)) {
+                        const mediaBuffer = await fs.promises.readFile(
+                            path.resolve(attachment.url)
+                        );
+                        const mediaType = getMediaType(attachment.url);
+                        return { data: mediaBuffer, mediaType };
+                    } else {
+                        throw new Error(
+                            `File not found: ${attachment.url}. Make sure the path is correct.`
+                        );
+                    }
+                })
+            );
+        }
         const result = await client.requestQueue.add(
             async () =>
                 await client.twitterClient.sendTweet(
                     chunk.trim(),
-                    previousTweetId
+                    previousTweetId,
+                    mediaData
                 )
         );
         const body = await result.json();
