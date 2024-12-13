@@ -47,7 +47,6 @@ import {
     discordVoiceHandlerTemplate,
 } from "./templates.ts";
 import { getWavHeader } from "./utils.ts";
-import { createClient, DeepgramClient } from "@deepgram/sdk";
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
@@ -139,7 +138,6 @@ export class AudioMonitor {
 }
 
 export class VoiceManager extends EventEmitter {
-    private deepgram?: DeepgramClient;
     private processingVoice: boolean = false;
     private transcriptionTimeout: NodeJS.Timeout | null = null;
     private userStates: Map<
@@ -165,9 +163,6 @@ export class VoiceManager extends EventEmitter {
         super();
         this.client = client.client;
         this.runtime = client.runtime;
-
-        const deepgramKey = this.runtime.getSetting("DEEPGRAM_API_KEY");
-        this.deepgram = deepgramKey ? createClient(deepgramKey) : null;
     }
 
     async handleVoiceStateUpdate(oldState: VoiceState, newState: VoiceState) {
@@ -583,26 +578,9 @@ export class VoiceManager extends EventEmitter {
 
             let transcriptionText: string;
 
-            if (this.deepgram) {
-                const response =
-                    await this.deepgram.listen.prerecorded.transcribeFile(
-                        wavBuffer,
-                        {
-                            model: "nova-2",
-                            language: "en-US",
-                            smart_format: true,
-                        }
-                    );
-                transcriptionText =
-                    response.result.results.channels[0].alternatives[0]
-                        .transcript;
-            } else {
-                transcriptionText = await this.runtime
-                    .getService<ITranscriptionService>(
-                        ServiceType.TRANSCRIPTION
-                    )
-                    .transcribe(wavBuffer);
-            }
+            transcriptionText = await this.runtime
+                .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
+                .transcribe(wavBuffer);
 
             function isValidTranscription(text: string): boolean {
                 if (!text || text.includes("[BLANK_AUDIO]")) return false;
