@@ -173,6 +173,7 @@ export class TwitterPostClient {
         if (postImmediately) {
             await this.generateNewTweet();
         }
+        generateNewTweetLoop();
 
         // Add check for ENABLE_ACTION_PROCESSING before starting the loop
         const enableActionProcessing = parseBooleanFromText(
@@ -254,6 +255,7 @@ export class TwitterPostClient {
                     cleanedContent = parsedResponse;
                 }
             } catch (error) {
+                error.linted = true; // make linter happy since catch needs a variable
                 // If not JSON, clean the raw content
                 cleanedContent = newTweetContent
                     .replace(/^\s*{?\s*"text":\s*"|"\s*}?\s*$/g, '') // Remove JSON-like wrapper
@@ -378,7 +380,7 @@ export class TwitterPostClient {
         console.log("generate tweet content response:\n" + response);
 
         // First clean up any markdown and newlines
-        let cleanedResponse = response
+        const cleanedResponse = response
             .replace(/```json\s*/g, '')  // Remove ```json
             .replace(/```\s*/g, '')      // Remove any remaining ```
             .replaceAll(/\\n/g, "\n")
@@ -397,6 +399,8 @@ export class TwitterPostClient {
                 }
             }
         } catch (error) {
+            error.linted = true; // make linter happy since catch needs a variable
+
             // If JSON parsing fails, treat as plain text
             elizaLogger.debug('Response is not JSON, treating as plain text');
         }
