@@ -646,8 +646,11 @@ export type Character = {
         twitterMessageHandlerTemplate?: string;
         twitterShouldRespondTemplate?: string;
         farcasterPostTemplate?: string;
+        lensPostTemplate?: string;
         farcasterMessageHandlerTemplate?: string;
+        lensMessageHandlerTemplate?: string;
         farcasterShouldRespondTemplate?: string;
+        lensShouldRespondTemplate?: string;
         telegramMessageHandlerTemplate?: string;
         telegramShouldRespondTemplate?: string;
         discordVoiceHandlerTemplate?: string;
@@ -1124,12 +1127,16 @@ export interface IPdfService extends Service {
 }
 
 export interface IAwsS3Service extends Service {
-    uploadFile(imagePath: string, useSignedUrl: boolean, expiresIn: number ): Promise<{
+    uploadFile(
+        imagePath: string,
+        useSignedUrl: boolean,
+        expiresIn: number
+    ): Promise<{
         success: boolean;
         url?: string;
         error?: string;
     }>;
-    generateSignedUrl(fileName: string, expiresIn: number): Promise<string>
+    generateSignedUrl(fileName: string, expiresIn: number): Promise<string>;
 }
 
 export type SearchResult = {
