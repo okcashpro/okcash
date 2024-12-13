@@ -573,6 +573,11 @@ const startAgents = async () => {
     } catch (error) {
         elizaLogger.error("Error starting agents:", error);
     }
+    // upload some agent functionality into directClient
+    directClient.startAgent = async character => {
+      // wrap it so we don't have to inject directClient later
+      return startAgent(character, directClient)
+    };
 
     function chat() {
         const agentId = characters[0].name ?? "Agent";
