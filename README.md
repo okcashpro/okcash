@@ -25,7 +25,6 @@
 -   ☁️ Supports many models (local Llama, OpenAI, Anthropic, Groq, etc.)
 -   📦 Just works!
 
-
 ## 🎯 Use Cases
 
 -   🤖 Chatbots
