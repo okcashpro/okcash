@@ -5,6 +5,7 @@ import { stringToUuid } from "@ai16z/eliza";
 import { ClientBase } from "./base";
 import { elizaLogger } from "@ai16z/eliza";
 import { DEFAULT_MAX_TWEET_LENGTH } from "./environment";
+import { Media } from "@ai16z/eliza";
 import fs from "fs";
 import path from "path";
 
@@ -164,27 +165,15 @@ export async function buildConversationThread(
     return thread;
 }
 
-export function getMediaType(filePath: string) {
-    const extension = filePath.split('.').pop().toLowerCase();
-    switch (extension) {
-        case 'png':
-        case 'jpg':
-        case 'jpeg':
-            return 'image';
-        case 'mp4':
-            return 'video';
-        default:
-            throw new Error(`Unsupported media type: ${extension}`);
+export function getMediaType(attachment: Media) {
+    if (attachment.contentType?.startsWith("video")) {
+        return "video";
+    } else if (attachment.contentType?.startsWith("image")) {
+        return "image";
+    } else {
+        throw new Error(`Unsupported media type`);
     }
 }
-type Attachment = {
-    id: string;
-    url: string; // Path to the file
-    title?: string;
-    source?: string;
-    description?: string;
-    text?: string;
-};
 
 export async function sendTweet(
     client: ClientBase,
@@ -206,22 +195,26 @@ export async function sendTweet(
 
         if (content.attachments && content.attachments.length > 0) {
             mediaData = await Promise.all(
-                content.attachments.map(async (attachment:Attachment) => {
+                content.attachments.map(async (attachment: Media) => {
                     if (/^(http|https):\/\//.test(attachment.url)) {
                         // Handle HTTP URLs
                         const response = await fetch(attachment.url);
                         if (!response.ok) {
-                            throw new Error(`Failed to fetch file: ${attachment.url}`);
+                            throw new Error(
+                                `Failed to fetch file: ${attachment.url}`
+                            );
                         }
-                        const mediaBuffer = Buffer.from(await response.arrayBuffer());
-                        const mediaType = getMediaType(attachment.url);
+                        const mediaBuffer = Buffer.from(
+                            await response.arrayBuffer()
+                        );
+                        const mediaType = getMediaType(attachment);
                         return { data: mediaBuffer, mediaType };
                     } else if (fs.existsSync(attachment.url)) {
                         // Handle local file paths
                         const mediaBuffer = await fs.promises.readFile(
                             path.resolve(attachment.url)
                         );
-                        const mediaType = getMediaType(attachment.url);
+                        const mediaType = getMediaType(attachment);
                         return { data: mediaBuffer, mediaType };
                     } else {
                         throw new Error(

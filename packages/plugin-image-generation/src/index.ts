@@ -205,6 +205,7 @@ const imageGeneration: Action = {
                                 source: "imageGeneration",
                                 description: "...", //caption.title,
                                 text: "...", //caption.description,
+                                contentType: "image",
                             },
                         ],
                     },
