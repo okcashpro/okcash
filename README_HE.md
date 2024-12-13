@@ -94,7 +94,9 @@ pnpm i && pnpm start
 </div>
 
 <div align="right">
+
 לאחר מכן קרא את [התיעוד](https://ai16z.github.io/eliza/) כדי ללמוד כיצד להתאים את אלייזה.
+
 </div>
 
 ### התחלה ידנית של אלייזה (מומלץ רק למי שיודע מה הוא עושה)
@@ -111,7 +113,11 @@ git checkout $(git describe --tags --abbrev=0)
 
 ### התחלת אלייזה עם Gitpod
 
+<div align="right">
+
 [![פתח ב-Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ai16z/eliza/tree/main)
+
+</div>
 
 ### עריכת קובץ .env
 
