@@ -53,7 +53,7 @@ export class TwitterSearchClient {
         this.client = client;
         this.runtime = runtime;
         this.config = config;
-        this.twitterUsername = config.TWITTER_USERNAME || runtime.getSetting("TWITTER_USERNAME");
+        this.twitterUsername = config?.TWITTER_USERNAME || runtime.getSetting("TWITTER_USERNAME");
     }
 
     async start() {

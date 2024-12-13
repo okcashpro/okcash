@@ -193,7 +193,7 @@ export class TwitterPostClient {
         this.client = client;
         this.runtime = runtime;
         this.config = config;
-        this.twitterUsername = config.TWITTER_USERNAME || runtime.getSetting("TWITTER_USERNAME");
+        this.twitterUsername = config?.TWITTER_USERNAME || runtime.getSetting("TWITTER_USERNAME");
     }
 
     private async generateNewTweet() {
@@ -279,7 +279,7 @@ export class TwitterPostClient {
             // Final cleaning
             cleanedContent = removeQuotes(content);
 
-            if ((this.config.TWITTER_DRY_RUN || this.runtime.getSetting("TWITTER_DRY_RUN")) === "true") {
+            if ((this.config?.TWITTER_DRY_RUN || this.runtime.getSetting("TWITTER_DRY_RUN")) === "true") {
                 elizaLogger.info(
                     `Dry run: would have posted tweet: ${cleanedContent}`
                 );

@@ -617,7 +617,7 @@ export interface IAgentConfig {
 
 export type Clients = {
     type: ClientType;
-    config: IAgentConfig;
+    config?: IAgentConfig;
 };
 
 /**
