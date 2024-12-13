@@ -1,4 +1,4 @@
-<div align="rtl">
+<div align="rtl" dir="rtl">
 
 # אלייזה 🤖
 
@@ -14,36 +14,24 @@
 
 <div align="center">
 
-[中文说明](./README_CN.md) | [日本語の説明](./README_JA.md) | [한국어 설명](./README_KOR.md) | [Français](./README_FR.md) | [Português](./README_PTBR.md) | [Türkçe](./README_TR.md) | [Русский](./README_RU.md) | [Español](./README_ES.md) | [Italiano](./README_IT.md) | [ไทย](./README_TH.md) | [Deutsch](./README_DE.md) | [עִברִית](./README_HE.md)
+[中文说明](https://github.com/ai16z/Elisa/blob/main/README_CN.md) | [日本語の説明](https://github.com/ai16z/Elisa/blob/main/README_JA.md) | [한국어 설명](https://github.com/ai16z/Elisa/blob/main/README_KOR.md) | [Français](https://github.com/ai16z/Elisa/blob/main/README_FR.md) | [Português](https://github.com/ai16z/Elisa/blob/main/README_PTBR.md) | [Türkçe](TR.md) | [Русский](https://github.com/ai16z/Elisa/blob/main/README_RU.md) | [Español](https://github.com/ai16z/Elisa/blob/main/README_ES.md) | [Italiano](https://github.com/ai16z/Elisa/blob/main/README_IT.md) | [ไทย](https://github.com/ai16z/Elisa/blob/main/README_TH.md) | [Deutsch](https://github.com/ai16z/Elisa/blob/main/README_DE.md) | [עִברִית](https://github.com/ai16z/Elisa/blob/main/README_HE.md)
 
 </div>
+
+<div dir="rtl" align="right">
 
 ## ✨ תכונות
 
-<div align="right">
 -   🛠️ מחברים מלאים לדיסקורד, טוויטר וטלגרם
-</div>
-<div align="right">
 -   🔗 תמיכה בכל מודל (Llama, Grok, OpenAI, Anthropic, וכו')
-</div>
-<div align="right">
 -   👥 תמיכה בריבוי סוכנים וחדרים
-</div>
-<div align="right">
 -   📚 קל לשלב ולהשתמש במסמכים שלך
-</div>
-<div align="right">
 -   💾 זיכרון ומאגר מסמכים הניתנים לשליפה
-</div>
-<div align="right">
 -   🚀 ניתן להרחבה רבה - יצירת פעולות ולקוחות משלך
-</div>
-<div align="right">
 -   ☁️ תומך בהרבה מודלים (local Llama, OpenAI, Anthropic, Groq ,
 וכו')
-</div>
-<div align="right">
 -   📦 פשוט עובד!
+
 </div>
 
 ## 🎯 מקרי שימוש
@@ -82,9 +70,7 @@
 
 ### שימוש ב-Starter (מומלץ)
 
-
-<div align="right">
-
+<div align="right" dir="ltr">
 
 ```
 git clone https://github.com/ai16z/eliza-starter.git
