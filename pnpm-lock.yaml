@@ -96,9 +96,6 @@ importers:
       zx:
         specifier: ^8.2.4
         version: 8.2.4
-      zx:
-        specifier: ^8.2.4
-        version: 8.2.4
 
   agent:
     dependencies:
@@ -37029,11 +37026,6 @@ snapshots:
   zwitch@1.0.5: {}
 
   zwitch@2.0.4: {}
-
-  zx@8.2.4:
-    optionalDependencies:
-      '@types/fs-extra': 11.0.4
-      '@types/node': 20.17.9
 
   zx@8.2.4:
     optionalDependencies:
