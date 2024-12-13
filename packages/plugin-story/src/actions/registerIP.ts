@@ -8,22 +8,23 @@ import {
     type Memory,
     type State,
 } from "@ai16z/eliza";
-import { storyWalletProvider, WalletProvider } from "../providers/wallet";
+import { WalletProvider } from "../providers/wallet";
 import { registerIPTemplate } from "../templates";
 import { RegisterIPParams } from "../types";
 import { RegisterIpResponse } from "@story-protocol/core-sdk";
 import { createHash } from "crypto";
-import { PinataProvider } from "../providers/pinata";
+import pinataSDK from "@pinata/sdk";
+import { uploadJSONToIPFS } from "../functions/uploadJSONToIPFS";
 
 export { registerIPTemplate };
 
 export class RegisterIPAction {
-    constructor(
-        private walletProvider: WalletProvider,
-        private pinataProvider: PinataProvider
-    ) {}
+    constructor(private walletProvider: WalletProvider) {}
 
-    async registerIP(params: RegisterIPParams): Promise<RegisterIpResponse> {
+    async registerIP(
+        params: RegisterIPParams,
+        runtime: IAgentRuntime
+    ): Promise<RegisterIpResponse> {
         const storyClient = this.walletProvider.getStoryClient();
 
         // configure ip metadata
@@ -39,14 +40,16 @@ export class RegisterIPAction {
             description: params.description,
         };
 
+        const pinataJWT = runtime.getSetting("PINATA_JWT");
+        if (!pinataJWT) throw new Error("PINATA_JWT not configured");
+        const pinata = new pinataSDK({ pinataJWTKey: pinataJWT });
+
         // upload metadata to ipfs
-        const ipIpfsHash =
-            await this.pinataProvider.uploadJSONToIPFS(ipMetadata);
+        const ipIpfsHash = await uploadJSONToIPFS(pinata, ipMetadata);
         const ipHash = createHash("sha256")
             .update(JSON.stringify(ipMetadata))
             .digest("hex");
-        const nftIpfsHash =
-            await this.pinataProvider.uploadJSONToIPFS(nftMetadata);
+        const nftIpfsHash = await uploadJSONToIPFS(pinata, nftMetadata);
         const nftHash = createHash("sha256")
             .update(JSON.stringify(nftMetadata))
             .digest("hex");
@@ -100,10 +103,9 @@ export const registerIPAction = {
         });
 
         const walletProvider = new WalletProvider(runtime);
-        const pinataProvider = new PinataProvider(runtime);
-        const action = new RegisterIPAction(walletProvider, pinataProvider);
+        const action = new RegisterIPAction(walletProvider);
         try {
-            const response = await action.registerIP(content);
+            const response = await action.registerIP(content, runtime);
             callback?.({
                 text: `Successfully registered IP ID: ${response.ipId}\nTransaction Hash: ${response.txHash}`,
             });

@@ -8,7 +8,7 @@ import {
     type Memory,
     type State,
 } from "@ai16z/eliza";
-import { storyWalletProvider, WalletProvider } from "../providers/wallet";
+import { WalletProvider } from "../providers/wallet";
 import { attachTermsTemplate } from "../templates";
 import {
     AttachLicenseTermsResponse,
