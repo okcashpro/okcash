@@ -46,14 +46,13 @@ import {
     discordShouldRespondTemplate,
     discordVoiceHandlerTemplate,
 } from "./templates.ts";
-import debounce from "lodash/debounce.js";
 import { getWavHeader } from "./utils.ts";
+import { createClient, DeepgramClient } from "@deepgram/sdk";
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
 const DECODE_SAMPLE_RATE = 16000;
 
-// Buffers all audio
 export class AudioMonitor {
     private readable: Readable;
     private buffers: Buffer[] = [];
@@ -64,6 +63,7 @@ export class AudioMonitor {
     constructor(
         readable: Readable,
         maxSize: number,
+        onStart: () => void,
         callback: (buffer: Buffer) => void
     ) {
         this.readable = readable;
@@ -98,6 +98,7 @@ export class AudioMonitor {
         });
         this.readable.on("speakingStarted", () => {
             if (this.ended) return;
+            onStart();
             elizaLogger.log("Speaking started");
             this.reset();
         });
@@ -138,6 +139,9 @@ export class AudioMonitor {
 }
 
 export class VoiceManager extends EventEmitter {
+    private deepgram?: DeepgramClient;
+    private processingVoice: boolean = false;
+    private transcriptionTimeout: NodeJS.Timeout | null = null;
     private userStates: Map<
         string,
         {
@@ -161,6 +165,9 @@ export class VoiceManager extends EventEmitter {
         super();
         this.client = client.client;
         this.runtime = client.runtime;
+
+        const deepgramKey = this.runtime.getSetting("DEEPGRAM_API_KEY");
+        this.deepgram = deepgramKey ? createClient(deepgramKey) : null;
     }
 
     async handleVoiceStateUpdate(oldState: VoiceState, newState: VoiceState) {
@@ -373,6 +380,7 @@ export class VoiceManager extends EventEmitter {
                 if (avgVolume > SPEAKING_THRESHOLD) {
                     volumeBuffer.length = 0;
                     this.cleanupAudioPlayer(this.activeAudioPlayer);
+                    this.processingVoice = false;
                 }
             }
         });
@@ -453,6 +461,52 @@ export class VoiceManager extends EventEmitter {
         // this.scanGuild(guild);
     }
 
+    async debouncedProcessTranscription(
+        userId: UUID,
+        name: string,
+        userName: string,
+        channel: BaseGuildVoiceChannel
+    ) {
+        const DEBOUNCE_TRANSCRIPTION_THRESHOLD = 1500; // wait for 1.5 seconds of silence
+
+        if (this.activeAudioPlayer?.state?.status === "idle") {
+            elizaLogger.log("Cleaning up idle audio player.");
+            this.cleanupAudioPlayer(this.activeAudioPlayer);
+        }
+
+        if (this.activeAudioPlayer || this.processingVoice) {
+            const state = this.userStates.get(userId);
+            state.buffers.length = 0;
+            state.totalLength = 0;
+            return;
+        }
+
+        if (this.transcriptionTimeout) {
+            clearTimeout(this.transcriptionTimeout);
+        }
+
+        this.transcriptionTimeout = setTimeout(async () => {
+            this.processingVoice = true;
+            try {
+                await this.processTranscription(
+                    userId,
+                    channel.id,
+                    channel,
+                    name,
+                    userName
+                );
+
+                // Clean all users' previous buffers
+                this.userStates.forEach((state, id) => {
+                    state.buffers.length = 0;
+                    state.totalLength = 0;
+                });
+            } finally {
+                this.processingVoice = false;
+            }
+        }, DEBOUNCE_TRANSCRIPTION_THRESHOLD);
+    }
+
     async handleUserStream(
         userId: UUID,
         name: string,
@@ -461,7 +515,6 @@ export class VoiceManager extends EventEmitter {
         audioStream: Readable
     ) {
         console.log(`Starting audio monitor for user: ${userId}`);
-        const channelId = channel.id;
         if (!this.userStates.has(userId)) {
             this.userStates.set(userId, {
                 buffers: [],
@@ -473,25 +526,17 @@ export class VoiceManager extends EventEmitter {
 
         const state = this.userStates.get(userId);
 
-        const DEBOUNCE_TRANSCRIPTION_THRESHOLD = 2500; // wait for 1.5 seconds of silence
-
-        const debouncedProcessTranscription = debounce(async () => {
-            await this.processTranscription(
-                userId,
-                channelId,
-                channel,
-                name,
-                userName
-            );
-        }, DEBOUNCE_TRANSCRIPTION_THRESHOLD);
-
         const processBuffer = async (buffer: Buffer) => {
             try {
                 state!.buffers.push(buffer);
                 state!.totalLength += buffer.length;
                 state!.lastActive = Date.now();
-
-                debouncedProcessTranscription();
+                this.debouncedProcessTranscription(
+                    userId,
+                    name,
+                    userName,
+                    channel
+                );
             } catch (error) {
                 console.error(
                     `Error processing buffer for user ${userId}:`,
@@ -500,13 +545,22 @@ export class VoiceManager extends EventEmitter {
             }
         };
 
-        new AudioMonitor(audioStream, 10000000, async (buffer) => {
-            if (!buffer) {
-                console.error("Received empty buffer");
-                return;
+        new AudioMonitor(
+            audioStream,
+            10000000,
+            () => {
+                if (this.transcriptionTimeout) {
+                    clearTimeout(this.transcriptionTimeout);
+                }
+            },
+            async (buffer) => {
+                if (!buffer) {
+                    console.error("Received empty buffer");
+                    return;
+                }
+                await processBuffer(buffer);
             }
-            await processBuffer(buffer);
-        });
+        );
     }
 
     private async processTranscription(
@@ -520,17 +574,35 @@ export class VoiceManager extends EventEmitter {
         if (!state || state.buffers.length === 0) return;
         try {
             const inputBuffer = Buffer.concat(state.buffers, state.totalLength);
+
             state.buffers.length = 0; // Clear the buffers
             state.totalLength = 0;
-
             // Convert Opus to WAV
             const wavBuffer = await this.convertOpusToWav(inputBuffer);
-
             console.log("Starting transcription...");
 
-            const transcriptionText = await this.runtime
-                .getService<ITranscriptionService>(ServiceType.TRANSCRIPTION)
-                .transcribe(wavBuffer);
+            let transcriptionText: string;
+
+            if (this.deepgram) {
+                const response =
+                    await this.deepgram.listen.prerecorded.transcribeFile(
+                        wavBuffer,
+                        {
+                            model: "nova-2",
+                            language: "en-US",
+                            smart_format: true,
+                        }
+                    );
+                transcriptionText =
+                    response.result.results.channels[0].alternatives[0]
+                        .transcript;
+            } else {
+                transcriptionText = await this.runtime
+                    .getService<ITranscriptionService>(
+                        ServiceType.TRANSCRIPTION
+                    )
+                    .transcribe(wavBuffer);
+            }
 
             function isValidTranscription(text: string): boolean {
                 if (!text || text.includes("[BLANK_AUDIO]")) return false;
