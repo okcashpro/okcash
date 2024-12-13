@@ -318,42 +318,53 @@ function initializeDatabase(dataDir: string) {
     }
 }
 
+// also adds plugins from character file into the runtime
 export async function initializeClients(
     character: Character,
     runtime: IAgentRuntime
 ) {
-    const clients = [];
-    const clientTypes =
+    // each client can only register once
+    // and if we want two we can explicitly support it
+    const clients:Record<string, any> = {};
+    const clientTypes:string[] =
         character.clients?.map((str) => str.toLowerCase()) || [];
+    elizaLogger.log('initializeClients', clientTypes, 'for', character.name)
 
     if (clientTypes.includes("auto")) {
         const autoClient = await AutoClientInterface.start(runtime);
-        if (autoClient) clients.push(autoClient);
+        if (autoClient) clients.auto = autoClient;
     }
 
     if (clientTypes.includes("discord")) {
-        clients.push(await DiscordClientInterface.start(runtime));
+        const discordClient = await DiscordClientInterface.start(runtime);
+        if (discordClient) clients.discord = discordClient;
     }
 
     if (clientTypes.includes("telegram")) {
         const telegramClient = await TelegramClientInterface.start(runtime);
-        if (telegramClient) clients.push(telegramClient);
+        if (telegramClient) clients.telegram = telegramClient;
     }
 
     if (clientTypes.includes("twitter")) {
         TwitterClientInterface.enableSearch = !isFalsish(getSecret(character, "TWITTER_SEARCH_ENABLE"));
-        const twitterClients = await TwitterClientInterface.start(runtime);
-        clients.push(twitterClients);
+        const twitterClient = await TwitterClientInterface.start(runtime);
+        if (twitterClient) clients.twitter = twitterClient;
     }
 
     if (clientTypes.includes("farcaster")) {
-        const farcasterClients = new FarcasterAgentClient(runtime);
-        farcasterClients.start();
-        clients.push(farcasterClients);
+        // why is this one different :(
+        const farcasterClient = new FarcasterAgentClient(runtime);
+        if (farcasterClient) {
+          farcasterClient.start();
+          clients.farcaster = farcasterClient;
+        }
     }
+
+    elizaLogger.log('client keys', Object.keys(clients));
 
     if (character.plugins?.length > 0) {
         for (const plugin of character.plugins) {
+            // if plugin has clients, add those..
             if (plugin.clients) {
                 for (const client of plugin.clients) {
                     clients.push(await client.start(runtime));
@@ -382,7 +393,7 @@ function isFalsish(input: any): boolean {
 }
 
 function getSecret(character: Character, secret: string) {
-    return character.settings.secrets?.[secret] || process.env[secret];
+    return character.settings?.secrets?.[secret] || process.env[secret];
 }
 
 let nodePlugin: any | undefined;
@@ -392,7 +403,7 @@ export async function createAgent(
     db: IDatabaseAdapter,
     cache: ICacheManager,
     token: string
-) {
+):AgentRuntime {
     elizaLogger.success(
         elizaLogger.successesTitle,
         "Creating runtime for character",
@@ -425,6 +436,7 @@ export async function createAgent(
         modelProvider: character.modelProvider,
         evaluators: [],
         character,
+        // character.plugins are handled when clients are added
         plugins: [
             bootstrapPlugin,
             getSecret(character, "CONFLUX_CORE_PRIVATE_KEY")
@@ -495,7 +507,7 @@ function initializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
     return cache;
 }
 
-async function startAgent(character: Character, directClient) {
+async function startAgent(character: Character, directClient):AgentRuntime {
     let db: IDatabaseAdapter & IDatabaseCacheAdapter;
     try {
         character.id ??= stringToUuid(character.name);
@@ -514,15 +526,21 @@ async function startAgent(character: Character, directClient) {
         await db.init();
 
         const cache = initializeDbCache(character, db);
-        const runtime = await createAgent(character, db, cache, token);
+        const runtime:AgentRuntime = await createAgent(character, db, cache, token);
 
+        // start services/plugins/process knowledge
         await runtime.initialize();
 
-        const clients = await initializeClients(character, runtime);
+        // start assigned clients
+        runtime.clients = await initializeClients(character, runtime);
 
+        // add to container
         directClient.registerAgent(runtime);
 
-        return clients;
+        // report to console
+        elizaLogger.debug(`Started ${character.name} as ${runtime.agentId}`)
+
+        return runtime;
     } catch (error) {
         elizaLogger.error(
             `Error starting agent for character ${character.name}:`,
@@ -566,8 +584,8 @@ const startAgents = async () => {
         });
     }
 
-    elizaLogger.log("Chat started. Type 'exit' to quit.");
     if (!args["non-interactive"]) {
+        elizaLogger.log("Chat started. Type 'exit' to quit.");
         chat();
     }
 };
