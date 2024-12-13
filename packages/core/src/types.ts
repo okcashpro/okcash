@@ -207,6 +207,7 @@ export type Models = {
     [ModelProviderName.VOLENGINE]: Model;
     [ModelProviderName.NANOGPT]: Model;
     [ModelProviderName.HYPERBOLIC]: Model;
+    [ModelProviderName.VENICE]: Model;
 };
 
 /**
@@ -234,6 +235,7 @@ export enum ModelProviderName {
     VOLENGINE = "volengine",
     NANOGPT = "nanogpt",
     HYPERBOLIC = "hyperbolic",
+    VENICE = "venice",
 }
 
 /**
@@ -603,7 +605,9 @@ export type Plugin = {
  */
 export enum Clients {
     DISCORD = "discord",
-    DIRECT = "direct",
+// you can't specify this in characters
+// all characters are registered with this
+//    DIRECT = "direct",
     TWITTER = "twitter",
     TELEGRAM = "telegram",
     FARCASTER = "farcaster",
@@ -713,6 +717,11 @@ export type Character = {
         discord?: {
             shouldIgnoreBotMessages?: boolean;
             shouldIgnoreDirectMessages?: boolean;
+            messageSimilarityThreshold?: number;
+            isPartOfTeam?: boolean;
+            teamAgentIds?: string[];
+            teamLeaderId?: string;
+            teamMemberInterestKeywords?: string[];
         };
         telegram?: {
             shouldIgnoreBotMessages?: boolean;
@@ -1003,6 +1012,9 @@ export interface IAgentRuntime {
     cacheManager: ICacheManager;
 
     services: Map<ServiceType, Service>;
+    // any could be EventEmitter
+    // but I think the real solution is forthcoming as a base client interface
+    clients: Record<string, any>;
 
     initialize(): Promise<void>;
 
