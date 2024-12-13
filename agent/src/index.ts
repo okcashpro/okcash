@@ -326,7 +326,7 @@ export async function initializeClients(
 ) {
     const clients = [];
     const clientTypes =
-        character.clients?.map((str) => str.type) || [];
+        character.clients?.map((str) => str.type.toLowerCase()) || [];
 
     if (clientTypes.includes(ClientType.DIRECT)) {
         const autoClient = await AutoClientInterface.start(runtime);
