@@ -422,7 +422,9 @@ export async function createAgent(
             (getSecret(character, "SOLANA_PUBLIC_KEY") ||
             (getSecret(character, "WALLET_PUBLIC_KEY") &&
                 !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))) &&
-            getSecret(character, "SOLANA_ADMIN_PUBLIC_KEY")
+            getSecret(character, "SOLANA_ADMIN_PUBLIC_KEY") &&
+            getSecret(character, "SOLANA_PRIVATE_KEY") &&
+            getSecret(character, "SOLANA_ADMIN_PRIVATE_KEY")
                 ? nftGenerationPlugin
                 : null,
             getSecret(character, "ZEROG_PRIVATE_KEY") ? zgPlugin : null,

@@ -79,46 +79,55 @@ export class WalletSolana {
         adminPublicKey: string;
         uri: string;
         fee: number;
-    }): Promise<any> {
-        const collectionMint = generateSigner(this.umi);
-        elizaLogger.log("collectionMint", collectionMint, percentAmount(5));
-        let transaction = new TransactionBuilder();
-        const info = {
-            name,
-            symbol,
-            uri,
-        };
-        console.log(`Metadata uploaded: ${uri}`);
-        transaction = transaction.add(
-            createNft(this.umi, {
-                ...info,
-                mint: collectionMint,
-                sellerFeeBasisPoints: percentAmount(fee),
-                isCollection: true,
-            })
-        );
+    }): Promise<{
+        success: boolean;
+        link: string;
+        address: string;
+        error?: string | null;
+    }> {
+        try {
+            const collectionMint = generateSigner(this.umi);
+            let transaction = new TransactionBuilder();
+            const info = {
+                name,
+                symbol,
+                uri,
+            };
+            transaction = transaction.add(
+                createNft(this.umi, {
+                    ...info,
+                    mint: collectionMint,
+                    sellerFeeBasisPoints: percentAmount(fee),
+                    isCollection: true,
+                })
+            );
 
-        transaction = transaction.add(
-            updateV1(this.umi, {
-                mint: collectionMint.publicKey,
-                newUpdateAuthority: publicKey(adminPublicKey), // updateAuthority's public key
-            })
-        );
+            transaction = transaction.add(
+                updateV1(this.umi, {
+                    mint: collectionMint.publicKey,
+                    newUpdateAuthority: publicKey(adminPublicKey), // updateAuthority's public key
+                })
+            );
 
-        await transaction.sendAndConfirm(this.umi, {
-            confirm: {},
-        });
+            await transaction.sendAndConfirm(this.umi, {
+                confirm: {},
+            });
 
-        // await sleep(5000);
-        // const createdCollectionNft = await fetchDigitalAsset(
-        //     this.umi,
-        //     collectionMint.publicKey
-        // );
-        const address = collectionMint.publicKey;
-        return {
-            link: getExplorerLink("address", address, this.cluster),
-            address,
-        };
+            const address = collectionMint.publicKey;
+            return {
+                success: true,
+                link: getExplorerLink("address", address, this.cluster),
+                address,
+                error: null,
+            };
+        } catch (e) {
+            return {
+                success: false,
+                link: "",
+                address: "",
+                error: e.message,
+            };
+        }
     }
 
     async mintNFT({
@@ -135,63 +144,69 @@ export class WalletSolana {
         symbol: string;
         uri: string;
         fee: number;
-    }): Promise<any> {
-        const umi = this.umi;
-        const mint = generateSigner(umi);
+    }): Promise<{
+        success: boolean;
+        link: string;
+        address: string;
+        error?: string | null;
+    }> {
+        try {
+            const umi = this.umi;
+            const mint = generateSigner(umi);
 
-        let transaction = new TransactionBuilder();
-        console.log("collectionAddress", collectionAddress);
-        const collectionAddressKey = publicKey(collectionAddress);
-        // Add SOL transfer instruction (0.1 SOL)
-        const receiverAddressKey = publicKey(adminPublicKey); // Replace with actual receiver address
-        transaction = transaction.add(
-            transferSol(umi, {
-                source: umi.identity,
-                destination: receiverAddressKey,
-                amount: sol(0.1),
-            })
-        );
-        const info = {
-            name,
-            uri,
-            symbol,
-        };
-        transaction = transaction.add(
-            createNft(umi, {
-                mint,
-                ...info,
-                sellerFeeBasisPoints: percentAmount(fee),
-                collection: {
-                    key: collectionAddressKey,
-                    verified: false,
-                },
-            })
-        );
+            let transaction = new TransactionBuilder();
+            elizaLogger.log("collection address", collectionAddress);
+            const collectionAddressKey = publicKey(collectionAddress);
+            // Add SOL transfer instruction (0.1 SOL)
+            const receiverAddressKey = publicKey(adminPublicKey); // Replace with actual receiver address
+            transaction = transaction.add(
+                transferSol(umi, {
+                    source: umi.identity,
+                    destination: receiverAddressKey,
+                    amount: sol(0.1),
+                })
+            );
+            const info = {
+                name,
+                uri,
+                symbol,
+            };
+            transaction = transaction.add(
+                createNft(umi, {
+                    mint,
+                    ...info,
+                    sellerFeeBasisPoints: percentAmount(fee),
+                    collection: {
+                        key: collectionAddressKey,
+                        verified: false,
+                    },
+                })
+            );
 
-        transaction = transaction.add(
-            updateV1(umi, {
-                mint: mint.publicKey,
-                newUpdateAuthority: publicKey(adminPublicKey), // updateAuthority's public key
-            })
-        );
+            transaction = transaction.add(
+                updateV1(umi, {
+                    mint: mint.publicKey,
+                    newUpdateAuthority: publicKey(adminPublicKey), // updateAuthority's public key
+                })
+            );
 
-        await transaction.sendAndConfirm(umi);
-        //
-        // await sleep();
-        // const createdNft = await fetchDigitalAsset(umi, mint.publicKey);
-        //
-        // console.log(
-        //     `🖼️ Created NFT! Address is ${getExplorerLink(
-        //         "address",
-        //         createdNft.mint.publicKey,
-        //         "devnet"
-        //     )}`
-        // );
-        const address = mint.publicKey;
-        return {
-            link: getExplorerLink("address", address, this.cluster),
-            address,
-        };
+            await transaction.sendAndConfirm(umi);
+
+            const address = mint.publicKey;
+            return {
+                success: true,
+                link: getExplorerLink("address", address, this.cluster),
+                address,
+                error: null,
+            };
+        } catch (e) {
+            return {
+                success: false,
+                link: "",
+                address: "",
+                error: e.message,
+            };
+        }
     }
 
     async verifyNft({
@@ -200,31 +215,43 @@ export class WalletSolana {
     }: {
         collectionAddress: string;
         nftAddress: string;
-    }) {
-        const umi = this.umi;
-        const collectionAddressKey = publicKey(collectionAddress);
-        const nftAddressKey = publicKey(nftAddress);
-        console.log("collectionAddress", collectionAddress);
-        console.log("nftAddress", nftAddress);
+    }): Promise<{
+        isVerified: boolean;
+        error: string | null;
+    }> {
+        try {
+            const umi = this.umi;
+            const collectionAddressKey = publicKey(collectionAddress);
+            const nftAddressKey = publicKey(nftAddress);
 
-        let transaction = new TransactionBuilder();
-        transaction = transaction.add(
-            verifyCollectionV1(umi, {
-                metadata: findMetadataPda(umi, { mint: nftAddressKey }),
-                collectionMint: collectionAddressKey,
-                authority: umi.identity,
-            })
-        );
+            let transaction = new TransactionBuilder();
+            transaction = transaction.add(
+                verifyCollectionV1(umi, {
+                    metadata: findMetadataPda(umi, { mint: nftAddressKey }),
+                    collectionMint: collectionAddressKey,
+                    authority: umi.identity,
+                })
+            );
 
-        await transaction.sendAndConfirm(umi);
+            await transaction.sendAndConfirm(umi);
 
-        console.log(
-            `✅ NFT ${nftAddress} verified as member of collection ${collectionAddress}! See Explorer at ${getExplorerLink(
-                "address",
-                nftAddress,
-                this.cluster
-            )}`
-        );
+            elizaLogger.log(
+                `✅ NFT ${nftAddress} verified as member of collection ${collectionAddress}! See Explorer at ${getExplorerLink(
+                    "address",
+                    nftAddress,
+                    this.cluster
+                )}`
+            );
+            return {
+                isVerified: true,
+                error: null,
+            };
+        } catch (e) {
+            return {
+                isVerified: false,
+                error: e.message,
+            };
+        }
     }
 }
 
