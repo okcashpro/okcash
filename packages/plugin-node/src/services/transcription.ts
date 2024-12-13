@@ -202,9 +202,6 @@ export class TranscriptionService
             const { audioBuffer, resolve } = this.queue.shift()!;
             let result: string | null = null;
             if (this.deepgram) {
-                console.log(
-                    "%%%%%%%&&&&%%%%%%%&&&&%%%%%%%&&&&%%%%%%%&&&&%%%%%%%&&&&%%%%%%%&&&&%%%%%%%&&&&%%%%%%%&&&&%%%%%%%&&&&%%%%%%%&&&&%%%%%%%&&&&"
-                );
                 result = await this.transcribeWithDeepgram(audioBuffer);
             } else if (this.openai) {
                 result = await this.transcribeWithOpenAI(audioBuffer);
