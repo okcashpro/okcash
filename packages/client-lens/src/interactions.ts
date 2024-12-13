@@ -59,6 +59,7 @@ export class LensInteractionManager {
     }
 
     private async handleInteractions() {
+        elizaLogger.info("Handle Lens interactions");
         // TODO: handle next() for pagination
         const { mentions } = await this.client.getMentions();
 

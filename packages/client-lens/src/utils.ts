@@ -70,7 +70,15 @@ export const getProfilePictureUri = (picture: any): string | undefined => {
     }
 };
 
-export function omit<T extends object>(obj: T, key: string): T {
-    delete obj[key];
-    return obj;
+export function omit<T extends object, K extends string>(
+    obj: T,
+    key: K
+): Omit<T, K> {
+    const result: any = {};
+    Object.keys(obj).forEach((currentKey) => {
+        if (currentKey !== key) {
+            result[currentKey] = obj[currentKey];
+        }
+    });
+    return result;
 }

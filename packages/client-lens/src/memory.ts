@@ -83,7 +83,8 @@ export async function buildConversationThread({
                 userId,
                 roomId,
                 currentPublication.by.id,
-                currentPublication.by.metadata?.displayName,
+                currentPublication.by.metadata?.displayName ||
+                    currentPublication.by.handle?.localName,
                 "lens"
             );
 

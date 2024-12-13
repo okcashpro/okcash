@@ -6,15 +6,16 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@ai16z/plugin-evm": "workspace:*",
         "@lens-protocol/client": "2.2.0",
         "@lens-protocol/metadata": "1.2.0",
         "axios": "^1.7.9",
-        "lodash": "^4.17.21",
         "viem": "^2.13.8"
     },
     "devDependencies": {
         "tsup": "^8.3.5"
+    },
+    "peerDependencies": {
+        "@ai16z/eliza": "workspace:*"
     },
     "scripts": {
         "build": "tsup --format esm --dts",

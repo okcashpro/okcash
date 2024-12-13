@@ -611,6 +611,7 @@ export enum Clients {
     TWITTER = "twitter",
     TELEGRAM = "telegram",
     FARCASTER = "farcaster",
+    LENS = "lens",
 }
 /**
  * Configuration for an agent character

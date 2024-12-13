@@ -2,56 +2,56 @@ import { IAgentRuntime, elizaLogger } from "@ai16z/eliza";
 import {
     AnyPublicationFragment,
     LensClient as LensClientCore,
+    production,
     LensTransactionStatusType,
     LimitType,
     NotificationType,
     ProfileFragment,
     PublicationType,
+    FeedEventItemType,
 } from "@lens-protocol/client";
-import { omit } from "lodash/object";
 import { Profile, BroadcastResult } from "./types";
-import { WalletClient } from "viem";
-import { getProfilePictureUri, handleBroadcastResult } from "./utils";
+import { PrivateKeyAccount } from "viem";
+import { getProfilePictureUri, handleBroadcastResult, omit } from "./utils";
 
 export class LensClient {
     runtime: IAgentRuntime;
-    core: LensClientCore;
-    walletClient: WalletClient;
+    account: PrivateKeyAccount;
     cache: Map<string, any>;
     lastInteractionTimestamp: Date;
     profileId: `0x${string}`;
 
     private authenticated: boolean;
     private authenticatedProfile: ProfileFragment | null;
+    private core: LensClientCore;
 
     constructor(opts: {
         runtime: IAgentRuntime;
-        core: LensClientCore;
-        walletClient: WalletClient;
         cache: Map<string, any>;
+        account: PrivateKeyAccount;
         profileId: `0x${string}`;
     }) {
         this.cache = opts.cache;
         this.runtime = opts.runtime;
-        this.walletClient = opts.walletClient;
-        this.core = opts.core;
+        this.account = opts.account;
+        this.core = new LensClientCore({
+            environment: production,
+        });
         this.lastInteractionTimestamp = new Date();
         this.profileId = opts.profileId;
         this.authenticated = false;
         this.authenticatedProfile = null;
     }
 
-    async authenticate(): Promise<boolean> {
+    async authenticate(): Promise<void> {
         try {
-            const [address] = await this.walletClient.getAddresses();
             const { id, text } =
                 await this.core.authentication.generateChallenge({
-                    signedBy: address,
+                    signedBy: this.account.address,
                     for: this.profileId,
                 });
 
-            const signature = await this.walletClient.signMessage({
-                account: address,
+            const signature = await this.account.signMessage({
                 message: text,
             });
 
@@ -61,13 +61,10 @@ export class LensClient {
             });
 
             this.authenticated = true;
-            return true;
         } catch (error) {
             elizaLogger.error("client-lens::client error: ", error);
             throw error;
         }
-
-        return false;
     }
 
     async createPublication(
@@ -75,23 +72,33 @@ export class LensClient {
         onchain: boolean = false,
         commentOn?: string
     ): Promise<AnyPublicationFragment | null | undefined> {
-        if (!this.authenticated) {
-            await this.authenticate();
-        }
-        let broadcastResult;
         try {
+            if (!this.authenticated) {
+                await this.authenticate();
+                elizaLogger.log("done authenticating");
+            }
+            let broadcastResult;
+
             if (commentOn) {
                 broadcastResult = onchain
                     ? await this.createCommentOnchain(contentURI, commentOn)
-                    : await this.createCommentOnchain(contentURI, commentOn);
+                    : await this.createCommentMomoka(contentURI, commentOn);
+            } else {
+                broadcastResult = onchain
+                    ? await this.createPostOnchain(contentURI)
+                    : await this.createPostMomoka(contentURI);
             }
 
-            broadcastResult = onchain
-                ? await this.createPostOnchain(contentURI)
-                : await this.createPostMomoka(contentURI);
+            elizaLogger.log("broadcastResult", broadcastResult);
+
+            if (broadcastResult.id) {
+                return await this.core.publication.fetch({
+                    forId: broadcastResult.id,
+                });
+            }
 
             const completion = await this.core.transaction.waitUntilComplete({
-                forTxId: broadcastResult.txId,
+                forTxHash: broadcastResult.txHash,
             });
 
             if (completion?.status === LensTransactionStatusType.Complete) {
@@ -154,14 +161,15 @@ export class LensClient {
 
     async getMentions(): Promise<{
         mentions: AnyPublicationFragment[];
-        next: () => {};
+        next?: () => {};
     }> {
         if (!this.authenticated) {
             await this.authenticate();
         }
+        // TODO: we should limit to new ones or at least latest n
         const result = await this.core.notifications.fetch({
             where: {
-                highSignalFilter: true,
+                highSignalFilter: false, // true,
                 notificationTypes: [
                     NotificationType.Mentioned,
                     NotificationType.Commented,
@@ -175,8 +183,10 @@ export class LensClient {
         items.map((notification) => {
             // @ts-ignore NotificationFragment
             const item = notification.publication || notification.comment;
-            mentions.push(item);
-            this.cache.set(`lens/publication/${item.id}`, item);
+            if (!item.isEncrypted) {
+                mentions.push(item);
+                this.cache.set(`lens/publication/${item.id}`, item);
+            }
         });
 
         return { mentions, next };
@@ -216,34 +226,46 @@ export class LensClient {
 
     async getTimeline(
         profileId: string,
-        limit: number = 50
+        limit: number = 10
     ): Promise<AnyPublicationFragment[]> {
-        if (!this.authenticated) {
-            await this.authenticate();
+        try {
+            if (!this.authenticated) {
+                await this.authenticate();
+            }
+            const timeline: AnyPublicationFragment[] = [];
+            let next: any | undefined = undefined;
+
+            do {
+                const result = next
+                    ? await next()
+                    : await this.core.feed.fetch({
+                          where: {
+                              for: profileId,
+                              feedEventItemTypes: [FeedEventItemType.Post],
+                          },
+                      });
+
+                const data = result.unwrap();
+
+                data.items.forEach((item) => {
+                    // private posts in orb clubs are encrypted
+                    if (timeline.length < limit && !item.root.isEncrypted) {
+                        this.cache.set(
+                            `lens/publication/${item.id}`,
+                            item.root
+                        );
+                        timeline.push(item.root as AnyPublicationFragment);
+                    }
+                });
+
+                next = data.pageInfo.next;
+            } while (next && timeline.length < limit);
+
+            return timeline;
+        } catch (error) {
+            console.log(error);
+            throw new Error("client-lens:: getTimeline");
         }
-        const timeline: AnyPublicationFragment[] = [];
-        let next: any | undefined = undefined;
-
-        do {
-            const result = next
-                ? await next()
-                : await this.core.feed.highlights({
-                      where: {
-                          for: profileId,
-                      },
-                  });
-
-            const data = result.unwrap();
-
-            data.items.forEach((item) => {
-                this.cache.set(`lens/publication/${item.id}`, item);
-                timeline.push(item);
-            });
-
-            next = data.next;
-        } while (next && timeline.length < limit);
-
-        return timeline;
     }
 
     private async createPostOnchain(
@@ -266,10 +288,8 @@ export class LensClient {
             });
         const { id, typedData } = typedDataResult.unwrap();
 
-        const [account] = await this.walletClient.getAddresses();
-        const signedTypedData = await this.walletClient.signTypedData({
-            account,
-            domain: omit(typedData.domain, "__typename"),
+        const signedTypedData = await this.account.signTypedData({
+            domain: omit(typedData.domain as any, "__typename"),
             types: omit(typedData.types, "__typename"),
             primaryType: "Post",
             message: omit(typedData.value, "__typename"),
@@ -285,6 +305,7 @@ export class LensClient {
     private async createPostMomoka(
         contentURI: string
     ): Promise<BroadcastResult | undefined> {
+        console.log("createPostMomoka");
         // gasless + signless if they enabled the lens profile manager
         if (this.authenticatedProfile?.signless) {
             const broadcastResult = await this.core.publication.postOnMomoka({
@@ -298,12 +319,11 @@ export class LensClient {
             await this.core.publication.createMomokaPostTypedData({
                 contentURI,
             });
+        console.log("typedDataResult", typedDataResult);
         const { id, typedData } = typedDataResult.unwrap();
 
-        const [account] = await this.walletClient.getAddresses();
-        const signedTypedData = await this.walletClient.signTypedData({
-            account,
-            domain: omit(typedData.domain, "__typename"),
+        const signedTypedData = await this.account.signTypedData({
+            domain: omit(typedData.domain as any, "__typename"),
             types: omit(typedData.types, "__typename"),
             primaryType: "Post",
             message: omit(typedData.value, "__typename"),
@@ -338,10 +358,8 @@ export class LensClient {
 
         const { id, typedData } = typedDataResult.unwrap();
 
-        const [account] = await this.walletClient.getAddresses();
-        const signedTypedData = await this.walletClient.signTypedData({
-            account,
-            domain: omit(typedData.domain, "__typename"),
+        const signedTypedData = await this.account.signTypedData({
+            domain: omit(typedData.domain as any, "__typename"),
             types: omit(typedData.types, "__typename"),
             primaryType: "Comment",
             message: omit(typedData.value, "__typename"),
@@ -378,10 +396,8 @@ export class LensClient {
 
         const { id, typedData } = typedDataResult.unwrap();
 
-        const [account] = await this.walletClient.getAddresses();
-        const signedTypedData = await this.walletClient.signTypedData({
-            account,
-            domain: omit(typedData.domain, "__typename"),
+        const signedTypedData = await this.account.signTypedData({
+            domain: omit(typedData.domain as any, "__typename"),
             types: omit(typedData.types, "__typename"),
             primaryType: "Comment",
             message: omit(typedData.value, "__typename"),

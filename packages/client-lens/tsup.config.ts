@@ -14,6 +14,9 @@ export default defineConfig({
         "@node-llama-cpp",
         "https",
         "http",
+        "util",
+        "form-data",
+        "axios",
         "agentkeepalive",
         // Add other modules you want to externalize
     ],

@@ -25,7 +25,7 @@ export class LensPostManager {
     ) {}
 
     public async start() {
-        const generateNewCastLoop = async () => {
+        const generateNewPubLoop = async () => {
             try {
                 await this.generateNewPublication();
             } catch (error) {
@@ -34,12 +34,12 @@ export class LensPostManager {
             }
 
             this.timeout = setTimeout(
-                generateNewCastLoop,
+                generateNewPubLoop,
                 (Math.floor(Math.random() * (4 - 1 + 1)) + 1) * 60 * 60 * 1000
             ); // Random interval between 1 and 4 hours
         };
 
-        generateNewCastLoop();
+        generateNewPubLoop();
     }
 
     public async stop() {
@@ -57,9 +57,9 @@ export class LensPostManager {
                 "lens"
             );
 
-            const timeline = await this.client.getTimeline(this.profileId, 10);
+            const timeline = await this.client.getTimeline(this.profileId);
 
-            this.cache.set("lens/timeline", timeline);
+            // this.cache.set("lens/timeline", timeline);
 
             const formattedHomeTimeline = formatTimeline(
                 this.runtime.character,
@@ -81,7 +81,6 @@ export class LensPostManager {
                 }
             );
 
-            // Generate new cast
             const context = composeContext({
                 state,
                 template:
@@ -89,13 +88,11 @@ export class LensPostManager {
                     postTemplate,
             });
 
-            const newContent = await generateText({
+            const content = await generateText({
                 runtime: this.runtime,
                 context,
                 modelClass: ModelClass.SMALL,
             });
-
-            const content = newContent.replaceAll(/\\n/g, "\n").trim();
 
             if (this.runtime.getSetting("LENS_DRY_RUN") === "true") {
                 elizaLogger.info(`Dry run: would have posted: ${content}`);
