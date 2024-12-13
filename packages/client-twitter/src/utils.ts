@@ -207,7 +207,17 @@ export async function sendTweet(
         if (content.attachments && content.attachments.length > 0) {
             mediaData = await Promise.all(
                 content.attachments.map(async (attachment:Attachment) => {
-                    if (fs.existsSync(attachment.url)) {
+                    if (/^(http|https):\/\//.test(attachment.url)) {
+                        // Handle HTTP URLs
+                        const response = await fetch(attachment.url);
+                        if (!response.ok) {
+                            throw new Error(`Failed to fetch file: ${attachment.url}`);
+                        }
+                        const mediaBuffer = Buffer.from(await response.arrayBuffer());
+                        const mediaType = getMediaType(attachment.url);
+                        return { data: mediaBuffer, mediaType };
+                    } else if (fs.existsSync(attachment.url)) {
+                        // Handle local file paths
                         const mediaBuffer = await fs.promises.readFile(
                             path.resolve(attachment.url)
                         );
