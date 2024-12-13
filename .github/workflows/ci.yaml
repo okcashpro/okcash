@@ -34,7 +34,7 @@ jobs:
                   echo "NODE_ENV=test" >> packages/core/.env.test
 
             - name: Run tests
-              run: cd packages/core && pnpm test
+              run: cd packages/core && pnpm test:coverage
 
             - name: Build packages
               run: pnpm run build
