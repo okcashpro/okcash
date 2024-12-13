@@ -108,8 +108,7 @@ export async function initializeClients(
     clients.push(await TelegramClientInterface.start(runtime));
   }
   if (clientTypes.includes(Clients.TWITTER)) {
-     const config = character.clients?.find((client) => client.type === ClientType.TWITTER)?.config;
-    clients.push(await TwitterClientInterface.start(runtime, config));
+    clients.push(await TwitterClientInterface.start(runtime));
   }
   if (clientTypes.includes(Clients.DIRECT)) {
     clients.push(await AutoClientInterface.start(runtime));

@@ -278,7 +278,7 @@ export class TwitterPostClient {
             // Final cleaning
             cleanedContent = removeQuotes(content);
 
-            if ((this.runtime.getSetting("TWITTER_DRY_RUN")) === "true") {
+            if (this.runtime.getSetting("TWITTER_DRY_RUN") === "true") {
                 elizaLogger.info(
                     `Dry run: would have posted tweet: ${cleanedContent}`
                 );

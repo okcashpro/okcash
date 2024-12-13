@@ -148,8 +148,7 @@ export class TwitterInteractionClient {
 
                 // Filter for unprocessed, non-reply, recent tweets
                 const validTweets = userTweets.filter(tweet => {
-                    const isUnprocessed = !this.client.lastCheckedTweetId ||
-                                        parseInt(tweet.id) > this.client.lastCheckedTweetId;
+                    const isUnprocessed = !this.client.lastCheckedTweetId || parseInt(tweet.id) > this.client.lastCheckedTweetId;
                     const isRecent = (Date.now() - (tweet.timestamp * 1000)) < 2 * 60 * 60 * 1000;
 
                     elizaLogger.log(`Tweet ${tweet.id} checks:`, {
