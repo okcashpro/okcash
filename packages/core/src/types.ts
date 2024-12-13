@@ -713,6 +713,11 @@ export type Character = {
         discord?: {
             shouldIgnoreBotMessages?: boolean;
             shouldIgnoreDirectMessages?: boolean;
+            messageSimilarityThreshold?: number;
+            isPartOfTeam?: boolean;
+            teamAgentIds?: string[];
+            teamLeaderId?: string;
+            teamMemberInterestKeywords?: string[];
         };
         telegram?: {
             shouldIgnoreBotMessages?: boolean;
