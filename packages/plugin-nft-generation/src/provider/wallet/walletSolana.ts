@@ -157,15 +157,7 @@ export class WalletSolana {
             let transaction = new TransactionBuilder();
             elizaLogger.log("collection address", collectionAddress);
             const collectionAddressKey = publicKey(collectionAddress);
-            // Add SOL transfer instruction (0.1 SOL)
-            const receiverAddressKey = publicKey(adminPublicKey); // Replace with actual receiver address
-            transaction = transaction.add(
-                transferSol(umi, {
-                    source: umi.identity,
-                    destination: receiverAddressKey,
-                    amount: sol(0.1),
-                })
-            );
+
             const info = {
                 name,
                 uri,
