@@ -16,6 +16,7 @@ import { storyOdyssey } from "viem/chains";
 
 export { licenseIPTemplate };
 
+// Types for request/response
 type GetAvailableLicensesParams = {
     ipid: Address;
 };
@@ -24,25 +25,25 @@ type GetAvailableLicensesResponse = {
     data: IPLicenseDetails[];
 };
 
+/**
+ * Class to handle fetching available licenses for an IP asset from Story Protocol
+ */
 export class GetAvailableLicensesAction {
-    constructor() {}
+    // Default query options for license terms
+    private readonly defaultQueryOptions = {
+        pagination: { limit: 10, offset: 0 },
+        orderBy: "blockNumber",
+        orderDirection: "desc",
+    };
 
     async getAvailableLicenses(
         params: GetAvailableLicensesParams
     ): Promise<GetAvailableLicensesResponse> {
-        const ipLicenseTermsQueryOptions = {
-            pagination: {
-                limit: 10,
-                offset: 0,
-            },
-            orderBy: "blockNumber",
-            orderDirection: "desc",
-        };
-
         elizaLogger.log(
             "Fetching from",
             `${API_URL}/${RESOURCE_TYPE.IP_LICENSE_DETAILS}`
         );
+
         const response = await fetch(
             `${API_URL}/${RESOURCE_TYPE.IP_LICENSE_DETAILS}`,
             {
@@ -54,8 +55,8 @@ export class GetAvailableLicensesAction {
                 },
                 cache: "no-cache",
                 body: JSON.stringify({
-                    ip_ids: [params.ipid], // Use the provided IPID instead of hardcoded value
-                    options: ipLicenseTermsQueryOptions, // Use the defined query options
+                    ip_ids: [params.ipid],
+                    options: this.defaultQueryOptions,
                 }),
             }
         );
@@ -64,18 +65,37 @@ export class GetAvailableLicensesAction {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const text = await response.text();
         try {
+            const text = await response.text();
             const licenseDetailsResponse = JSON.parse(text);
             elizaLogger.log("licenseDetailsResponse", licenseDetailsResponse);
             return licenseDetailsResponse;
         } catch (e) {
-            elizaLogger.error("Failed to parse response:", text);
+            elizaLogger.error("Failed to parse response");
             throw new Error(`Failed to parse JSON response: ${e.message}`);
         }
     }
 }
 
+/**
+ * Formats a license's terms into a human-readable string
+ */
+const formatLicenseTerms = (license: IPLicenseDetails): string => {
+    const terms = license.terms;
+    return `License ID: ${license.id}
+- Terms:
+  • Commercial Use: ${terms.commercialUse ? "Allowed" : "Not Allowed"}
+  • Commercial Attribution: ${terms.commercialAttribution ? "Required" : "Not Required"}
+  • Derivatives: ${terms.derivativesAllowed ? "Allowed" : "Not Allowed"}
+  • Derivatives Attribution: ${terms.derivativesAttribution ? "Required" : "Not Required"}
+  • Derivatives Approval: ${terms.derivativesApproval ? "Required" : "Not Required"}
+  • Revenue Share: ${terms.commercialRevenueShare ? terms.commercialRevenueShare + "%" : "Not Required"}
+`;
+};
+
+/**
+ * Main action configuration for getting available licenses
+ */
 export const getAvailableLicensesAction = {
     name: "GET_AVAILABLE_LICENSES",
     description: "Get available licenses for an IP Asset on Story",
@@ -88,42 +108,27 @@ export const getAvailableLicensesAction = {
     ): Promise<boolean> => {
         elizaLogger.log("Starting GET_AVAILABLE_LICENSES handler...");
 
-        // initialize or update state
-        if (!state) {
-            state = (await runtime.composeState(message)) as State;
-        } else {
-            state = await runtime.updateRecentMessageState(state);
-        }
+        // Initialize or update state
+        state = !state
+            ? ((await runtime.composeState(message)) as State)
+            : await runtime.updateRecentMessageState(state);
 
-        const getAvailableLicensesContext = composeContext({
-            state,
-            template: getAvailableLicensesTemplate,
-        });
-
+        // Generate parameters from context
         const content = await generateObjectDEPRECATED({
             runtime,
-            context: getAvailableLicensesContext,
+            context: composeContext({
+                state,
+                template: getAvailableLicensesTemplate,
+            }),
             modelClass: ModelClass.SMALL,
         });
 
+        // Fetch and format license data
         const action = new GetAvailableLicensesAction();
         try {
             const response = await action.getAvailableLicenses(content);
-
-            // TODO: need to format this better into human understandable terms
             const formattedResponse = response.data
-                .map((license) => {
-                    const terms = license.terms;
-                    return `License ID: ${license.id}
-- Terms:
-  • Commercial Use: ${terms.commercialUse ? "Allowed" : "Not Allowed"}
-  • Commercial Attribution: ${terms.commercialAttribution ? "Required" : "Not Required"}
-  • Derivatives: ${terms.derivativesAllowed ? "Allowed" : "Not Allowed"}
-  • Derivatives Attribution: ${terms.derivativesAttribution ? "Required" : "Not Required"}
-  • Derivatives Approval: ${terms.derivativesApproval ? "Required" : "Not Required"}
-  • Revenue Share: ${terms.commercialRevenueShare ? terms.commercialRevenueShare + "%" : "Not Required"}
-`;
-                })
+                .map(formatLicenseTerms)
                 .join("\n");
 
             callback?.({
@@ -141,9 +146,7 @@ export const getAvailableLicensesAction = {
         }
     },
     template: getAvailableLicensesTemplate,
-    validate: async (runtime: IAgentRuntime) => {
-        return true;
-    },
+    validate: async () => true,
     examples: [
         [
             {

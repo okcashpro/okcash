@@ -3,6 +3,7 @@ export * from "./actions/licenseIP";
 export * from "./actions/attachTerms";
 export * from "./providers/wallet";
 export * from "./actions/getAvailableLicenses";
+export * from "./actions/getIPDetails";
 export * from "./providers/pinata";
 export * from "./types";
 
@@ -12,6 +13,7 @@ import { storyPinataProvider } from "./providers/pinata";
 import { registerIPAction } from "./actions/registerIP";
 import { licenseIPAction } from "./actions/licenseIP";
 import { getAvailableLicensesAction } from "./actions/getAvailableLicenses";
+import { getIPDetailsAction } from "./actions/getIPDetails";
 import { attachTermsAction } from "./actions/attachTerms";
 
 export const storyPlugin: Plugin = {
@@ -20,7 +22,13 @@ export const storyPlugin: Plugin = {
     providers: [storyWalletProvider, storyPinataProvider],
     evaluators: [],
     services: [],
-    actions: [registerIPAction, licenseIPAction, attachTermsAction, getAvailableLicensesAction],
+    actions: [
+        registerIPAction,
+        licenseIPAction,
+        attachTermsAction,
+        getAvailableLicensesAction,
+        getIPDetailsAction,
+    ],
 };
 
 export default storyPlugin;
