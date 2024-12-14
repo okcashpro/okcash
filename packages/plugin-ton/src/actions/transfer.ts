@@ -4,14 +4,18 @@ import {
     Content,
     HandlerCallback,
     ModelClass,
-    generateObjectV2,
+    generateObject,
     type IAgentRuntime,
     type Memory,
     type State,
 } from "@ai16z/eliza";
 import { z } from "zod";
 
-import { initWalletProvider, WalletProvider, nativeWalletProvider } from "../providers/wallet";
+import {
+    initWalletProvider,
+    WalletProvider,
+    nativeWalletProvider,
+} from "../providers/wallet";
 import { internal } from "@ton/ton";
 
 export interface TransferContent extends Content {
@@ -63,19 +67,20 @@ export class TransferAction {
             const transfer = await contract.createTransfer({
                 seqno,
                 secretKey: this.walletProvider.keypair.secretKey,
-                messages: [internal({
-                    value: params.amount.toString(),
-                    to: params.recipient,
-                    body: 'eliza ton wallet plugin',
-                })]
+                messages: [
+                    internal({
+                        value: params.amount.toString(),
+                        to: params.recipient,
+                        body: "eliza ton wallet plugin",
+                    }),
+                ],
             });
 
             await contract.send(transfer);
 
             // await this.waitForTransaction(seqno, contract);
 
-            return transfer.hash().toString('hex');
-
+            return transfer.hash().toString("hex");
         } catch (error) {
             throw new Error(`Transfer failed: ${error.message}`);
         }
@@ -85,7 +90,7 @@ export class TransferAction {
 const buildTransferDetails = async (
     runtime: IAgentRuntime,
     message: Memory,
-    state: State,
+    state: State
 ): Promise<TransferContent> => {
     const walletInfo = await nativeWalletProvider.get(runtime, message, state);
     state.walletInfo = walletInfo;
@@ -110,7 +115,7 @@ const buildTransferDetails = async (
     });
 
     // Generate transfer content with the schema
-    const content = await generateObjectV2({
+    const content = await generateObject({
         runtime,
         context: transferContext,
         schema: transferSchema,
@@ -124,12 +129,7 @@ const buildTransferDetails = async (
 
 export default {
     name: "SEND_TOKEN",
-    similes: [
-        "SEND_TOKENS",
-        "TOKEN_TRANSFER",
-        "MOVE_TOKENS",
-        "SEND_TON"
-    ],
+    similes: ["SEND_TOKENS", "TOKEN_TRANSFER", "MOVE_TOKENS", "SEND_TON"],
     description: "Transfer tokens from the agent's wallet to another",
     handler: async (
         runtime: IAgentRuntime,
@@ -143,7 +143,7 @@ export default {
         const transferDetails = await buildTransferDetails(
             runtime,
             message,
-            state,
+            state
         );
 
         // Validate transfer content
@@ -159,7 +159,6 @@ export default {
         }
 
         try {
-
             const walletProvider = await initWalletProvider(runtime);
             const action = new TransferAction(walletProvider);
             const hash = await action.transfer(transferDetails);
