@@ -338,22 +338,23 @@ export async function initializeClients(
         character.clients?.map((str) => str.toLowerCase()) || [];
     elizaLogger.log("initializeClients", clientTypes, "for", character.name);
 
-    if (clientTypes.includes("auto")) {
+    if (clientTypes.includes(Clients.DIRECT)) {
         const autoClient = await AutoClientInterface.start(runtime);
         if (autoClient) clients.auto = autoClient;
     }
 
-    if (clientTypes.includes("discord")) {
+    if (clientTypes.includes(Clients.DISCORD)) {
         const discordClient = await DiscordClientInterface.start(runtime);
         if (discordClient) clients.discord = discordClient;
     }
 
-    if (clientTypes.includes("telegram")) {
+    if (clientTypes.includes(Clients.TELEGRAM)) {
         const telegramClient = await TelegramClientInterface.start(runtime);
         if (telegramClient) clients.telegram = telegramClient;
     }
 
-    if (clientTypes.includes("twitter")) {
+    if (clientTypes.includes(Clients.TWITTER)) {
+        TwitterClientInterface.enableSearch = !isFalsish(getSecret(character, "TWITTER_SEARCH_ENABLE"));
         const twitterClient = await TwitterClientInterface.start(runtime);
         // TODO: This might be incorrect, please test if you are concerned about this functionality
         // By default we have disabled this because it is annoying for users
@@ -363,7 +364,7 @@ export async function initializeClients(
         if (twitterClient) clients.twitter = twitterClient;
     }
 
-    if (clientTypes.includes("farcaster")) {
+    if (clientTypes.includes(Clients.FARCASTER)) {
         // why is this one different :(
         const farcasterClient = new FarcasterAgentClient(runtime);
         if (farcasterClient) {

@@ -608,15 +608,18 @@ export type Plugin = {
  */
 export enum Clients {
     DISCORD = "discord",
-    // you can't specify this in characters
-    // all characters are registered with this
-    //    DIRECT = "direct",
+    DIRECT = "direct",
     TWITTER = "twitter",
     TELEGRAM = "telegram",
     FARCASTER = "farcaster",
     AUTO = "auto",
     SLACK = "slack",
 }
+
+export interface IAgentConfig {
+    [key: string]: string;
+}
+
 /**
  * Configuration for an agent character
  */

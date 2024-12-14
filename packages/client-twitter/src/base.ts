@@ -155,15 +155,18 @@ export class ClientBase extends EventEmitter {
     async init() {
         //test
         const username = this.runtime.getSetting("TWITTER_USERNAME");
+        const password = this.runtime.getSetting("TWITTER_PASSWORD");
+        const email = this.runtime.getSetting("TWITTER_EMAIL");
+        const twitter2faSecret = this.runtime.getSetting("TWITTER_2FA_SECRET") || undefined;
+        const cookies = this.runtime.getSetting("TWITTER_COOKIES");
+
 
         if (!username) {
             throw new Error("Twitter username not configured");
         }
         // Check for Twitter cookies
-        if (this.runtime.getSetting("TWITTER_COOKIES")) {
-            const cookiesArray = JSON.parse(
-                this.runtime.getSetting("TWITTER_COOKIES")
-            );
+        if (cookies) {
+            const cookiesArray = JSON.parse(cookies);
 
             await this.setCookiesFromArray(cookiesArray);
         } else {
@@ -186,9 +189,9 @@ export class ClientBase extends EventEmitter {
             try {
                 await this.twitterClient.login(
                     username,
-                    this.runtime.getSetting("TWITTER_PASSWORD"),
-                    this.runtime.getSetting("TWITTER_EMAIL"),
-                    this.runtime.getSetting("TWITTER_2FA_SECRET") || undefined
+                    password,
+                    email,
+                    twitter2faSecret
                 );
             } catch (error) {
                 elizaLogger.error(`Login attempt failed: ${error.message}`);
@@ -480,10 +483,11 @@ export class ClientBase extends EventEmitter {
         }
 
         const timeline = await this.fetchHomeTimeline(cachedTimeline ? 10 : 50);
+        const username = this.runtime.getSetting("TWITTER_USERNAME");
 
         // Get the most recent 20 mentions and interactions
         const mentionsAndInteractions = await this.fetchSearchTweets(
-            `@${this.runtime.getSetting("TWITTER_USERNAME")}`,
+            `@${username}`,
             20,
             SearchMode.Latest
         );
