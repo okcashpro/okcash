@@ -16,7 +16,7 @@
         "dev": "tsup --format esm --dts --watch",
         "test": "vitest run",
         "test:watch": "vitest",
-        "lint": "eslint . --fix"
+        "lint": "eslint --fix  --cache ."
     },
     "devDependencies": {
         "@types/dompurify": "3.2.0"

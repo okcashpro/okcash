@@ -8,7 +8,7 @@
         "build": "tsup --format esm --dts",
         "dev": "tsup --format esm --dts --watch",
         "test": "jest",
-        "lint": "eslint . --fix"
+        "lint": "eslint --fix  --cache ."
     },
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
