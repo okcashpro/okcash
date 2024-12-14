@@ -8,7 +8,7 @@ import {
     ModelClass,
     State,
     composeContext,
-    generateObjectV2,
+    generateObject,
     type Action,
 } from "@ai16z/eliza";
 import { WalletProvider } from "../providers/wallet";
@@ -89,7 +89,7 @@ export default {
         });
 
         // Generate transfer content
-        const content = await generateObjectV2({
+        const content = await generateObject({
             runtime,
             context: transferContext,
             modelClass: ModelClass.SMALL,

@@ -8,7 +8,7 @@ import {
     State,
     type Action,
     composeContext,
-    generateObjectV2,
+    generateObject,
 } from "@ai16z/eliza";
 import { connect, keyStores, utils } from "near-api-js";
 import { KeyPairString } from "near-api-js/lib/utils";
@@ -126,7 +126,7 @@ export const executeTransfer: Action = {
         });
 
         // Generate transfer content
-        const content = await generateObjectV2({
+        const content = await generateObject({
             runtime,
             context: transferContext,
             modelClass: ModelClass.SMALL,

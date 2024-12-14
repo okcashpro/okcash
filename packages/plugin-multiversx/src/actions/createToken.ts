@@ -7,7 +7,7 @@ import {
     Memory,
     ModelClass,
     State,
-    generateObjectV2,
+    generateObject,
     composeContext,
     type Action,
 } from "@ai16z/eliza";
@@ -83,7 +83,7 @@ export default {
         });
 
         // Generate transfer content
-        const content = await generateObjectV2({
+        const content = await generateObject({
             runtime,
             context: transferContext,
             modelClass: ModelClass.SMALL,

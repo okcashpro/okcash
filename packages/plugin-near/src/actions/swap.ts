@@ -7,7 +7,7 @@ import {
     State,
     type Action,
     composeContext,
-    generateObjectV2,
+    generateObject,
 } from "@ai16z/eliza";
 import { connect, keyStores, utils } from "near-api-js";
 import {
@@ -214,7 +214,7 @@ export const executeSwap: Action = {
             template: swapTemplate,
         });
 
-        const response = await generateObjectV2({
+        const response = await generateObject({
             runtime,
             context: swapContext,
             modelClass: ModelClass.LARGE,

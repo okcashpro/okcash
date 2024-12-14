@@ -1,8 +1,4 @@
-import {
-    Connection,
-    PublicKey,
-    VersionedTransaction,
-} from "@solana/web3.js";
+import { Connection, PublicKey, VersionedTransaction } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import { v4 as uuidv4 } from "uuid";
 import { TrustScoreDatabase } from "@ai16z/plugin-trustdb";
@@ -15,7 +11,7 @@ import {
     State,
     type Action,
     composeContext,
-    generateObjectDEPRECATED,
+    generateObjectDeprecated,
     settings,
 } from "@ai16z/eliza";
 import { TokenProvider } from "../providers/token.ts";
@@ -206,7 +202,7 @@ export const executeSwap: Action = {
             template: swapTemplate,
         });
 
-        const response = await generateObjectDEPRECATED({
+        const response = await generateObjectDeprecated({
             runtime,
             context: swapContext,
             modelClass: ModelClass.LARGE,
