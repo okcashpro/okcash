@@ -44,7 +44,8 @@ import { solanaPlugin } from "@ai16z/plugin-solana";
 import { teePlugin, TEEMode } from "@ai16z/plugin-tee";
 import { aptosPlugin, TransferAptosToken } from "@ai16z/plugin-aptos";
 import { flowPlugin } from "@ai16z/plugin-flow";
-import { multiversxPlugin } from '@ai16z/plugin-multiversx';
+import { multiversxPlugin } from "@ai16z/plugin-multiversx";
+import { nearPlugin } from "@ai16z/plugin-near";
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
@@ -332,9 +333,9 @@ export async function initializeClients(
     // each client can only register once
     // and if we want two we can explicitly support it
     const clients: Record<string, any> = {};
-    const clientTypes:string[] =
+    const clientTypes: string[] =
         character.clients?.map((str) => str.toLowerCase()) || [];
-    elizaLogger.log('initializeClients', clientTypes, 'for', character.name)
+    elizaLogger.log("initializeClients", clientTypes, "for", character.name);
 
     if (clientTypes.includes("auto")) {
         const autoClient = await AutoClientInterface.start(runtime);
@@ -352,8 +353,12 @@ export async function initializeClients(
     }
 
     if (clientTypes.includes("twitter")) {
-        TwitterClientInterface.enableSearch = !isFalsish(getSecret(character, "TWITTER_SEARCH_ENABLE"));
         const twitterClient = await TwitterClientInterface.start(runtime);
+        // TODO: This might be incorrect, please test if you are concerned about this functionality
+        // By default we have disabled this because it is annoying for users
+        (twitterClient as any).enableSearch = !isFalsish(
+            getSecret(character, "TWITTER_SEARCH_ENABLE")
+        );
         if (twitterClient) clients.twitter = twitterClient;
     }
 
@@ -361,12 +366,12 @@ export async function initializeClients(
         // why is this one different :(
         const farcasterClient = new FarcasterAgentClient(runtime);
         if (farcasterClient) {
-          farcasterClient.start();
-          clients.farcaster = farcasterClient;
+            farcasterClient.start();
+            clients.farcaster = farcasterClient;
         }
     }
 
-    elizaLogger.log('client keys', Object.keys(clients));
+    elizaLogger.log("client keys", Object.keys(clients));
 
     if (character.plugins?.length > 0) {
         for (const plugin of character.plugins) {
@@ -389,10 +394,19 @@ function isFalsish(input: any): boolean {
     }
 
     // Convert input to a string if it's not null or undefined
-    const value = input == null ? '' : String(input);
+    const value = input == null ? "" : String(input);
 
     // List of common falsish string representations
-    const falsishValues = ['false', '0', 'no', 'n', 'off', 'null', 'undefined', ''];
+    const falsishValues = [
+        "false",
+        "0",
+        "no",
+        "n",
+        "off",
+        "null",
+        "undefined",
+        "",
+    ];
 
     // Check if the value (trimmed and lowercased) is in the falsish list
     return falsishValues.includes(value.trim().toLowerCase());
@@ -409,7 +423,7 @@ export async function createAgent(
     db: IDatabaseAdapter,
     cache: ICacheManager,
     token: string
-):AgentRuntime {
+): Promise<AgentRuntime> {
     elizaLogger.success(
         elizaLogger.successesTitle,
         "Creating runtime for character",
@@ -454,7 +468,12 @@ export async function createAgent(
                 !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
                 ? solanaPlugin
                 : null,
-            getSecret(character, "EVM_PRIVATE_KEY") ||
+            (getSecret(character, "NEAR_ADDRESS") ||
+                getSecret(character, "NEAR_WALLET_PUBLIC_KEY")) &&
+            getSecret(character, "NEAR_WALLET_SECRET_KEY")
+                ? nearPlugin
+                : null,
+            getSecret(character, "EVM_PUBLIC_KEY") ||
             (getSecret(character, "WALLET_PUBLIC_KEY") &&
                 getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
                 ? evmPlugin
@@ -492,7 +511,7 @@ export async function createAgent(
                 ? flowPlugin
                 : null,
             getSecret(character, "APTOS_PRIVATE_KEY") ? aptosPlugin : null,
-            getSecret(character, 'MVX_PRIVATE_KEY') ? multiversxPlugin : null
+            getSecret(character, "MVX_PRIVATE_KEY") ? multiversxPlugin : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
@@ -515,7 +534,10 @@ function initializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
     return cache;
 }
 
-async function startAgent(character: Character, directClient):AgentRuntime {
+async function startAgent(
+    character: Character,
+    directClient
+): Promise<AgentRuntime> {
     let db: IDatabaseAdapter & IDatabaseCacheAdapter;
     try {
         character.id ??= stringToUuid(character.name);
@@ -534,7 +556,12 @@ async function startAgent(character: Character, directClient):AgentRuntime {
         await db.init();
 
         const cache = initializeDbCache(character, db);
-        const runtime:AgentRuntime = await createAgent(character, db, cache, token);
+        const runtime: AgentRuntime = await createAgent(
+            character,
+            db,
+            cache,
+            token
+        );
 
         // start services/plugins/process knowledge
         await runtime.initialize();
@@ -546,7 +573,7 @@ async function startAgent(character: Character, directClient):AgentRuntime {
         directClient.registerAgent(runtime);
 
         // report to console
-        elizaLogger.debug(`Started ${character.name} as ${runtime.agentId}`)
+        elizaLogger.debug(`Started ${character.name} as ${runtime.agentId}`);
 
         return runtime;
     } catch (error) {
@@ -563,7 +590,7 @@ async function startAgent(character: Character, directClient):AgentRuntime {
 }
 
 const startAgents = async () => {
-    const directClient = await DirectClientInterface.start();
+    const directClient = await DirectClientInterface.start(null);
     const args = parseArguments();
 
     let charactersArg = args.characters || args.character;
@@ -581,11 +608,6 @@ const startAgents = async () => {
     } catch (error) {
         elizaLogger.error("Error starting agents:", error);
     }
-    // upload some agent functionality into directClient
-    directClient.startAgent = async character => {
-      // wrap it so we don't have to inject directClient later
-      return startAgent(character, directClient)
-    };
 
     function chat() {
         const agentId = characters[0].name ?? "Agent";
