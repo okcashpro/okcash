@@ -13,7 +13,7 @@ import {
 import { connect, keyStores, utils } from "near-api-js";
 import { KeyPairString } from "near-api-js/lib/utils";
 import { utils as nearUtils } from "near-api-js";
-import BigNumber from "bignumber.js";
+// import BigNumber from "bignumber.js";
 
 export interface TransferContent extends Content {
     recipient: string;
@@ -72,9 +72,7 @@ async function transferNEAR(
     }
 
     // Convert amount to yoctoNEAR (1 NEAR = 10^24 yoctoNEAR)
-    const yoctoAmount = new BigNumber(amount)
-        .multipliedBy(new BigNumber(10).pow(24))
-        .toFixed(0);
+    // const yoctoAmount = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(24)).toFixed(0);
 
     // Create keystore and connect to NEAR
     const keyStore = new keyStores.InMemoryKeyStore();
@@ -101,7 +99,7 @@ async function transferNEAR(
 export const executeTransfer: Action = {
     name: "SEND_NEAR",
     similes: ["TRANSFER_NEAR", "SEND_TOKENS", "TRANSFER_TOKENS", "PAY_NEAR"],
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (_runtime: IAgentRuntime, _message: Memory) => {
         return true; // Add your validation logic here
     },
     description: "Transfer NEAR tokens to another account",
