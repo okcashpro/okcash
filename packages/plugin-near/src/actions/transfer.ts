@@ -72,9 +72,7 @@ async function transferNEAR(
     }
 
     // Convert amount to yoctoNEAR (1 NEAR = 10^24 yoctoNEAR)
-    const yoctoAmount = new BigNumber(amount)
-        .multipliedBy(new BigNumber(10).pow(24))
-        .toFixed(0);
+    // const yoctoAmount = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(24)).toFixed(0);
 
     // Create keystore and connect to NEAR
     const keyStore = new keyStores.InMemoryKeyStore();
