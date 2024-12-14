@@ -12,13 +12,11 @@ import {
     ActionExample,
     Content,
     HandlerCallback,
-    Handler,
     IAgentRuntime,
     Media,
     Memory,
     ModelClass,
     State,
-    ServiceType,
     elizaLogger,
 } from "@ai16z/eliza";
 import { ISlackService, SLACK_SERVICE_TYPE } from "../types/slack-types";
