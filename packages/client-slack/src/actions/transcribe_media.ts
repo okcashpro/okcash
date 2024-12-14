@@ -1,4 +1,8 @@
-import { composeContext, generateText, parseJSONObjectFromText } from "@ai16z/eliza";
+import {
+    composeContext,
+    generateText,
+    parseJSONObjectFromText,
+} from "@ai16z/eliza";
 import {
     Action,
     ActionExample,
@@ -72,7 +76,7 @@ const transcribeMediaAction: Action = {
     validate: async (
         _runtime: IAgentRuntime,
         message: Memory,
-        state: State | undefined
+        _state: State | undefined
     ): Promise<boolean> => {
         if (message.content.source !== "slack") {
             return false;
@@ -106,7 +110,7 @@ const transcribeMediaAction: Action = {
         _options: any,
         callback: HandlerCallback
     ): Promise<Content> => {
-        const currentState = await runtime.composeState(message) as State;
+        const currentState = (await runtime.composeState(message)) as State;
 
         const callbackData: Content = {
             text: "",
@@ -133,12 +137,12 @@ const transcribeMediaAction: Action = {
                     msg.content.attachments.length > 0
             )
             .flatMap((msg) => msg.content.attachments)
-            .find(
-                (attachment) => {
-                    if (!attachment) return false;
-                    return attachment.id.toLowerCase() === attachmentId.toLowerCase();
-                }
-            );
+            .find((attachment) => {
+                if (!attachment) return false;
+                return (
+                    attachment.id.toLowerCase() === attachmentId.toLowerCase()
+                );
+            });
 
         if (!attachment) {
             console.error(`Couldn't find attachment with ID ${attachmentId}`);
@@ -146,7 +150,7 @@ const transcribeMediaAction: Action = {
             return callbackData;
         }
 
-        const mediaTranscript = attachment.text || '';
+        const mediaTranscript = attachment.text || "";
         callbackData.text = mediaTranscript.trim();
 
         if (
@@ -210,4 +214,4 @@ ${mediaTranscript.trim()}
     ] as ActionExample[][],
 };
 
-export default transcribeMediaAction; 
+export default transcribeMediaAction;
