@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / getActorDetails
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / getActorDetails
 
 # Function: getActorDetails()
 
@@ -20,4 +20,4 @@ Get details for a list of actors.
 
 ## Defined in
 
-[packages/core/src/messages.ts:12](https://github.com/monilpat/eliza/blob/main/packages/core/src/messages.ts#L12)
+[packages/core/src/messages.ts:12](https://github.com/ai16z/eliza/blob/main/packages/core/src/messages.ts#L12)

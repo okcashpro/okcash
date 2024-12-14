@@ -1,4 +1,4 @@
-# @ai16z/eliza v0.1.5-alpha.3
+# @ai16z/eliza v0.1.5-alpha.5
 
 ## Enumerations
 
@@ -53,6 +53,9 @@
 - [IBrowserService](interfaces/IBrowserService.md)
 - [ISpeechService](interfaces/ISpeechService.md)
 - [IPdfService](interfaces/IPdfService.md)
+- [IAwsS3Service](interfaces/IAwsS3Service.md)
+- [ActionResponse](interfaces/ActionResponse.md)
+- [ISlackService](interfaces/ISlackService.md)
 
 ## Type Aliases
 
@@ -86,6 +89,7 @@
 - [shouldRespondFooter](variables/shouldRespondFooter.md)
 - [booleanFooter](variables/booleanFooter.md)
 - [stringArrayFooter](variables/stringArrayFooter.md)
+- [postActionResponseFooter](variables/postActionResponseFooter.md)
 - [settings](variables/settings.md)
 
 ## Functions
@@ -111,14 +115,15 @@
 - [splitChunks](functions/splitChunks.md)
 - [generateTrueOrFalse](functions/generateTrueOrFalse.md)
 - [generateTextArray](functions/generateTextArray.md)
-- [generateObject](functions/generateObject.md)
+- [generateObjectDeprecated](functions/generateObjectDeprecated.md)
 - [generateObjectArray](functions/generateObjectArray.md)
 - [generateMessageResponse](functions/generateMessageResponse.md)
 - [generateImage](functions/generateImage.md)
 - [generateCaption](functions/generateCaption.md)
 - [generateWebSearch](functions/generateWebSearch.md)
-- [generateObjectV2](functions/generateObjectV2.md)
+- [generateObject](functions/generateObject.md)
 - [handleProvider](functions/handleProvider.md)
+- [generateTweetActions](functions/generateTweetActions.md)
 - [getGoals](functions/getGoals.md)
 - [formatGoalsAsString](functions/formatGoalsAsString.md)
 - [updateGoal](functions/updateGoal.md)
@@ -133,6 +138,7 @@
 - [parseBooleanFromText](functions/parseBooleanFromText.md)
 - [parseJsonArrayFromText](functions/parseJsonArrayFromText.md)
 - [parseJSONObjectFromText](functions/parseJSONObjectFromText.md)
+- [parseActionResponseFromText](functions/parseActionResponseFromText.md)
 - [formatPosts](functions/formatPosts.md)
 - [getProviders](functions/getProviders.md)
 - [createRelationship](functions/createRelationship.md)
