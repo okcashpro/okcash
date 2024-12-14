@@ -3,7 +3,7 @@ on:
     push:
         branches:
             - "*"
-    pull_request:
+    pull_request_target:
         branches:
             - "*"
 jobs:
@@ -38,7 +38,7 @@ jobs:
                   cache: "pnpm"
 
             - name: Install dependencies
-              run: pnpm install -r
+              run: pnpm install -r --frozen-lockfile
 
             - name: Build packages
               run: pnpm build

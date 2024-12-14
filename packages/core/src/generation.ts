@@ -533,6 +533,29 @@ export async function generateText({
                 break;
             }
 
+            case ModelProviderName.VENICE: {
+                elizaLogger.debug("Initializing Venice model.");
+                const venice = createOpenAI({
+                    apiKey: apiKey,
+                    baseURL: endpoint
+                });
+
+                const { text: veniceResponse } = await aiGenerateText({
+                    model: venice.languageModel(model),
+                    prompt: context,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                });
+
+                response = veniceResponse;
+                elizaLogger.debug("Received response from Venice model.");
+                break;
+            }
+
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
                 elizaLogger.error(errorMessage);
@@ -931,7 +954,8 @@ export const generateImage = async (
             : (runtime.getSetting("HEURIST_API_KEY") ??
               runtime.getSetting("TOGETHER_API_KEY") ??
               runtime.getSetting("FAL_API_KEY") ??
-              runtime.getSetting("OPENAI_API_KEY"));
+              runtime.getSetting("OPENAI_API_KEY") ??
+              runtime.getSetting("VENICE_API_KEY"));
 
     try {
         if (runtime.imageModelProvider === ModelProviderName.HEURIST) {
@@ -1077,6 +1101,40 @@ export const generateImage = async (
             });
 
             const base64s = await Promise.all(base64Promises);
+            return { success: true, data: base64s };
+        } else if (runtime.imageModelProvider === ModelProviderName.VENICE) {
+            const response = await fetch(
+                "https://api.venice.ai/api/v1/image/generate",
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${apiKey}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        model: data.modelId || "fluently-xl",
+                        prompt: data.prompt,
+                        negative_prompt: data.negativePrompt,
+                        width: data.width || 1024,
+                        height: data.height || 1024,
+                        steps: data.numIterations || 20,
+                    }),
+                }
+            );
+
+            const result = await response.json();
+
+            if (!result.images || !Array.isArray(result.images)) {
+                throw new Error("Invalid response format from Venice AI");
+            }
+
+            const base64s = result.images.map((base64String) => {
+                if (!base64String) {
+                    throw new Error("Empty base64 string in Venice AI response");
+                }
+                return `data:image/png;base64,${base64String}`;
+            });
+
             return { success: true, data: base64s };
         } else {
             let targetSize = `${data.width}x${data.height}`;
