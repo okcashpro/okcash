@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / hasEnvVariable
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / hasEnvVariable
 
 # Function: hasEnvVariable()
 
@@ -20,4 +20,4 @@ True if the environment variable exists
 
 ## Defined in
 
-[packages/core/src/settings.ts:118](https://github.com/monilpat/eliza/blob/main/packages/core/src/settings.ts#L118)
+[packages/core/src/settings.ts:118](https://github.com/ai16z/eliza/blob/main/packages/core/src/settings.ts#L118)

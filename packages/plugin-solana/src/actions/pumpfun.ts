@@ -14,7 +14,7 @@ import {
     Memory,
     ModelClass,
     State,
-    generateObjectDEPRECATED,
+    generateObjectDeprecated,
     composeContext,
     type Action,
 } from "@ai16z/eliza";
@@ -302,7 +302,7 @@ export default {
             template: pumpfunTemplate,
         });
 
-        const content = await generateObjectDEPRECATED({
+        const content = await generateObjectDeprecated({
             runtime,
             context: pumpContext,
             modelClass: ModelClass.LARGE,

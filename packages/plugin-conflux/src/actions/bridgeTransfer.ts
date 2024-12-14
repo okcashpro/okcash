@@ -6,7 +6,7 @@ import {
     HandlerCallback,
 } from "@ai16z/eliza";
 import {
-    generateObjectV2,
+    generateObject,
     composeContext,
     ModelClass,
     Content,
@@ -117,7 +117,7 @@ export const bridgeTransfer: Action = {
             template: confluxBridgeTransferTemplate,
         });
 
-        const content = await generateObjectV2({
+        const content = await generateObject({
             runtime,
             context,
             modelClass: ModelClass.LARGE,

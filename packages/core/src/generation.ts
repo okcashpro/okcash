@@ -21,7 +21,7 @@ import {
     parseJsonArrayFromText,
     parseJSONObjectFromText,
     parseShouldRespondFromText,
-    parseActionResponseFromText
+    parseActionResponseFromText,
 } from "./parsing.ts";
 import settings from "./settings.ts";
 import {
@@ -33,7 +33,7 @@ import {
     ModelProviderName,
     ServiceType,
     SearchResponse,
-    ActionResponse
+    ActionResponse,
 } from "./types.ts";
 import { fal } from "@fal-ai/client";
 
@@ -537,7 +537,7 @@ export async function generateText({
                 elizaLogger.debug("Initializing Venice model.");
                 const venice = createOpenAI({
                     apiKey: apiKey,
-                    baseURL: endpoint
+                    baseURL: endpoint,
                 });
 
                 const { text: veniceResponse } = await aiGenerateText({
@@ -797,7 +797,7 @@ export async function generateTextArray({
     }
 }
 
-export async function generateObjectDEPRECATED({
+export async function generateObjectDeprecated({
     runtime,
     context,
     modelClass,
@@ -807,7 +807,7 @@ export async function generateObjectDEPRECATED({
     modelClass: string;
 }): Promise<any> {
     if (!context) {
-        elizaLogger.error("generateObjectDEPRECATED context is empty");
+        elizaLogger.error("generateObjectDeprecated context is empty");
         return null;
     }
     let retryDelay = 1000;
@@ -1130,7 +1130,9 @@ export const generateImage = async (
 
             const base64s = result.images.map((base64String) => {
                 if (!base64String) {
-                    throw new Error("Empty base64 string in Venice AI response");
+                    throw new Error(
+                        "Empty base64 string in Venice AI response"
+                    );
                 }
                 return `data:image/png;base64,${base64String}`;
             });
@@ -1260,7 +1262,7 @@ interface ModelSettings {
  * @returns {Promise<any[]>} - A promise that resolves to an array of generated objects.
  * @throws {Error} - Throws an error if the provider is unsupported or if generation fails.
  */
-export const generateObjectV2 = async ({
+export const generateObject = async ({
     runtime,
     context,
     modelClass,
@@ -1271,7 +1273,7 @@ export const generateObjectV2 = async ({
     mode = "json",
 }: GenerationOptions): Promise<GenerateObjectResult<unknown>> => {
     if (!context) {
-        const errorMessage = "generateObjectV2 context is empty";
+        const errorMessage = "generateObject context is empty";
         console.error(errorMessage);
         throw new Error(errorMessage);
     }
@@ -1365,7 +1367,7 @@ export async function handleProvider(
         case ModelProviderName.GROQ:
             return await handleGroq(options);
         case ModelProviderName.LLAMALOCAL:
-            return await generateObjectDEPRECATED({
+            return await generateObjectDeprecated({
                 runtime,
                 context,
                 modelClass,
@@ -1626,7 +1628,10 @@ export async function generateTweetActions({
                 context,
                 modelClass,
             });
-            console.debug("Received response from generateText for tweet actions:", response);
+            console.debug(
+                "Received response from generateText for tweet actions:",
+                response
+            );
             const { actions } = parseActionResponseFromText(response.trim());
             if (actions) {
                 console.debug("Parsed tweet actions:", actions);

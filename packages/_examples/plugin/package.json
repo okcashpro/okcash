@@ -14,6 +14,6 @@
     "scripts": {
         "build": "tsup --format esm --dts",
         "dev": "tsup --format esm --dts --watch",
-        "lint": "eslint . --fix"
+        "lint": "eslint --fix  --cache ."
     }
 }
