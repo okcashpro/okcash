@@ -47,3 +47,5 @@ packages/plugin-coinbase/package-lock.json
 tsup.config.bundled_*.mjs
 
 .turbo
+
+coverage
