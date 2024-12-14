@@ -464,6 +464,7 @@ export async function createAgent(
                 : null,
             getSecret(character, "FAL_API_KEY") ||
             getSecret(character, "OPENAI_API_KEY") ||
+            getSecret(character, "VENICE_API_KEY") ||
             getSecret(character, "HEURIST_API_KEY")
                 ? imageGenerationPlugin
                 : null,
@@ -578,6 +579,11 @@ const startAgents = async () => {
     } catch (error) {
         elizaLogger.error("Error starting agents:", error);
     }
+    // upload some agent functionality into directClient
+    directClient.startAgent = async character => {
+      // wrap it so we don't have to inject directClient later
+      return startAgent(character, directClient)
+    };
 
     function chat() {
         const agentId = characters[0].name ?? "Agent";

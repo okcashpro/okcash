@@ -561,6 +561,9 @@ export type Media = {
 
     /** Text content */
     text: string;
+
+    /** Content type */
+    contentType?: string;
 };
 
 /**
@@ -609,6 +612,7 @@ export enum Clients {
     TWITTER = "twitter",
     TELEGRAM = "telegram",
     FARCASTER = "farcaster",
+    AUTO = "auto",
 }
 
 export interface IAgentConfig {
@@ -729,6 +733,11 @@ export type Character = {
         telegram?: {
             shouldIgnoreBotMessages?: boolean;
             shouldIgnoreDirectMessages?: boolean;
+            messageSimilarityThreshold?: number;
+            isPartOfTeam?: boolean;
+            teamAgentIds?: string[];
+            teamLeaderId?: string;
+            teamMemberInterestKeywords?: string[];
         };
     };
 
@@ -1141,12 +1150,16 @@ export interface IPdfService extends Service {
 }
 
 export interface IAwsS3Service extends Service {
-    uploadFile(imagePath: string, useSignedUrl: boolean, expiresIn: number ): Promise<{
+    uploadFile(
+        imagePath: string,
+        useSignedUrl: boolean,
+        expiresIn: number
+    ): Promise<{
         success: boolean;
         url?: string;
         error?: string;
     }>;
-    generateSignedUrl(fileName: string, expiresIn: number): Promise<string>
+    generateSignedUrl(fileName: string, expiresIn: number): Promise<string>;
 }
 
 export type SearchResult = {
