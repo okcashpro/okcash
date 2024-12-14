@@ -53,7 +53,10 @@ async function runExample() {
 
         // Create a test file
         const testFilePath = path.join(__dirname, "test.txt");
-        const fs = require("fs");
+        async function loadFs() {
+            return await import("fs");
+        }
+        const fs = await loadFs();
         fs.writeFileSync(
             testFilePath,
             "This is a test file content for attachment testing."
