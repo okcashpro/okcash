@@ -55,6 +55,8 @@ TIMER=0
   while true; do
     if (( TIMER >= TIMEOUT )); then
       echo "Error: Timeout waiting for application to start after $((TIMEOUT / 10)) seconds"
+      echo "Logs from $OUTFILE:"
+      cat "$OUTFILE"
       pkill -f "pnpm start"
       exit 1
     fi
