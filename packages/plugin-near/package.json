@@ -12,12 +12,6 @@
         "bignumber.js": "9.1.2",
         "node-cache": "5.1.2"
     },
-    "devDependencies": {
-        "eslint": "^9.15.0",
-        "eslint-config-prettier": "9.1.0",
-        "eslint-plugin-prettier": "5.2.1",
-        "eslint-plugin-vitest": "0.5.4"
-    },
     "scripts": {
         "build": "tsup --format esm,cjs --dts",
         "test": "vitest run",
