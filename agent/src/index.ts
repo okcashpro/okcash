@@ -47,6 +47,7 @@ import { multiversxPlugin } from "@ai16z/plugin-multiversx";
 import { nearPlugin } from "@ai16z/plugin-near";
 import { createNodePlugin } from "@ai16z/plugin-node";
 import { solanaPlugin } from "@ai16z/plugin-solana";
+<<<<<<< HEAD
 import { TEEMode, teePlugin } from "@ai16z/plugin-tee";
 import { tonPlugin } from "@ai16z/plugin-ton";
 import { zksyncEraPlugin } from "@ai16z/plugin-zksync-era";
@@ -55,11 +56,19 @@ import {
     createNFTApiRouter,
 } from "@ai16z/plugin-nft-generation";
 import { suiPlugin } from "@ai16z/plugin-sui";
+=======
+import { aptosPlugin, TransferAptosToken } from "@ai16z/plugin-aptos";
+import { flowPlugin } from "@ai16z/plugin-flow";
+import { storyPlugin } from "@ai16z/plugin-story";
+import { teePlugin } from "@ai16z/plugin-tee";
+>>>>>>> 7ebab21dd8304d3af3edf980905c4ef70e52fa2d
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import yargs from "yargs";
+
+import { mainCharacter } from "../maincharacter";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -202,7 +211,7 @@ export async function loadCharacters(
 
     if (loadedCharacters.length === 0) {
         elizaLogger.info("No characters found, using default character");
-        loadedCharacters.push(defaultCharacter);
+        loadedCharacters.push(mainCharacter);
     }
 
     return loadedCharacters;
@@ -526,9 +535,12 @@ export async function createAgent(
                       tokenContractPlugin,
                       advancedTradePlugin,
                   ]
+<<<<<<< HEAD
                 : []),
             ...(teeMode !== TEEMode.OFF && walletSecretSalt
                 ? [teePlugin, solanaPlugin]
+=======
+>>>>>>> 7ebab21dd8304d3af3edf980905c4ef70e52fa2d
                 : []),
             getSecret(character, "COINBASE_API_KEY") &&
             getSecret(character, "COINBASE_PRIVATE_KEY") &&
@@ -541,10 +553,14 @@ export async function createAgent(
                 ? flowPlugin
                 : null,
             getSecret(character, "APTOS_PRIVATE_KEY") ? aptosPlugin : null,
+<<<<<<< HEAD
             getSecret(character, "MVX_PRIVATE_KEY") ? multiversxPlugin : null,
             getSecret(character, "ZKSYNC_PRIVATE_KEY") ? zksyncEraPlugin : null,
             getSecret(character, "TON_PRIVATE_KEY") ? tonPlugin : null,
             getSecret(character, "SUI_PRIVATE_KEY") ? suiPlugin : null,
+=======
+            getSecret(character, "STORY_PRIVATE_KEY") ? storyPlugin : null,
+>>>>>>> 7ebab21dd8304d3af3edf980905c4ef70e52fa2d
         ].filter(Boolean),
         providers: [],
         actions: [],
@@ -629,7 +645,7 @@ const startAgents = async () => {
 
     let charactersArg = args.characters || args.character;
 
-    let characters = [defaultCharacter];
+    let characters = [mainCharacter];
 
     if (charactersArg) {
         characters = await loadCharacters(charactersArg);
