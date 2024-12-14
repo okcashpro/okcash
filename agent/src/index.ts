@@ -10,6 +10,7 @@ import {
     AgentRuntime,
     CacheManager,
     Character,
+    Clients,
     DbCacheAdapter,
     defaultCharacter,
     elizaLogger,
@@ -354,7 +355,9 @@ export async function initializeClients(
     }
 
     if (clientTypes.includes(Clients.TWITTER)) {
-        TwitterClientInterface.enableSearch = !isFalsish(getSecret(character, "TWITTER_SEARCH_ENABLE"));
+        TwitterClientInterface.enableSearch = !isFalsish(
+            getSecret(character, "TWITTER_SEARCH_ENABLE")
+        );
         const twitterClient = await TwitterClientInterface.start(runtime);
         // TODO: This might be incorrect, please test if you are concerned about this functionality
         // By default we have disabled this because it is annoying for users
