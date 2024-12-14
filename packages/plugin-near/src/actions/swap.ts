@@ -57,7 +57,8 @@ async function swapToken(
             runtime.getSetting("RPC_URL") || "https://rpc.testnet.near.org";
 
         // Get all pools for estimation
-        const { ratedPools, unRatedPools, simplePools } = await fetchAllPools();
+        // ratedPools, unRatedPools,
+        const { simplePools } = await fetchAllPools();
         const swapTodos = await estimateSwap({
             tokenIn,
             tokenOut,
