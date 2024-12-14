@@ -767,6 +767,10 @@ export type Character = {
         bio: string;
         nicknames?: string[];
     };
+    /** Optional NFT prompt */
+    nft?: {
+        prompt: string;
+    }
 };
 
 /**
@@ -1163,6 +1167,7 @@ export interface IPdfService extends Service {
 export interface IAwsS3Service extends Service {
     uploadFile(
         imagePath: string,
+        subDirectory: string,
         useSignedUrl: boolean,
         expiresIn: number
     ): Promise<{
