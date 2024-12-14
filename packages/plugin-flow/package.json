@@ -6,7 +6,6 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@ai16z/plugin-trustdb": "workspace:*",
         "@onflow/config": "1.5.1",
         "@onflow/fcl": "1.13.1",
         "@onflow/typedefs": "1.4.0",

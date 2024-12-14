@@ -817,9 +817,6 @@ importers:
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-trustdb':
-        specifier: workspace:*
-        version: link:../plugin-trustdb
       '@aptos-labs/ts-sdk':
         specifier: ^1.26.0
         version: 1.33.1
@@ -908,9 +905,6 @@ importers:
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-trustdb':
-        specifier: workspace:*
-        version: link:../plugin-trustdb
       '@lifi/data-types':
         specifier: 5.15.5
         version: 5.15.5
@@ -935,9 +929,6 @@ importers:
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-trustdb':
-        specifier: workspace:*
-        version: link:../plugin-trustdb
       '@onflow/config':
         specifier: 1.5.1
         version: 1.5.1
@@ -1118,9 +1109,6 @@ importers:
       '@ai16z/eliza':
         specifier: workspace:*
         version: link:../core
-      '@ai16z/plugin-trustdb':
-        specifier: workspace:*
-        version: link:../plugin-trustdb
       '@ref-finance/ref-sdk':
         specifier: ^1.4.6
         version: 1.4.6(encoding@0.1.13)(react@18.3.1)

@@ -6,7 +6,6 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@ai16z/plugin-trustdb": "workspace:*",
         "@aptos-labs/ts-sdk": "^1.26.0",
         "bignumber": "1.1.0",
         "bignumber.js": "9.1.2",

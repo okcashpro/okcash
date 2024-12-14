@@ -6,7 +6,6 @@
     "types": "dist/index.d.ts",
     "dependencies": {
         "@ai16z/eliza": "workspace:*",
-        "@ai16z/plugin-trustdb": "workspace:*",
         "@ref-finance/ref-sdk": "^1.4.6",
         "tsup": "8.3.5",
         "near-api-js": "5.0.1",
