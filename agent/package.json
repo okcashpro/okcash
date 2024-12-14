@@ -40,6 +40,7 @@
         "@ai16z/plugin-node": "workspace:*",
         "@ai16z/plugin-solana": "workspace:*",
         "@ai16z/plugin-starknet": "workspace:*",
+        "@ai16z/plugin-ton": "workspace:*",
         "@ai16z/plugin-tee": "workspace:*",
         "@ai16z/plugin-multiversx": "workspace:*",
         "@ai16z/plugin-near": "workspace:*",
