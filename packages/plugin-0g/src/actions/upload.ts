@@ -7,7 +7,7 @@ import {
     ModelClass,
     Content,
     ActionExample,
-    generateObjectV2,
+    generateObject,
 } from "@ai16z/eliza";
 import { Indexer, ZgFile, getFlowContract } from "@0glabs/0g-ts-sdk";
 import { ethers } from "ethers";
@@ -68,7 +68,7 @@ export const zgUpload: Action = {
         });
 
         // Generate upload content
-        const content = await generateObjectV2({
+        const content = await generateObject({
             runtime,
             context: uploadContext,
             modelClass: ModelClass.LARGE,

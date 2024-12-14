@@ -1,4 +1,4 @@
-import { Coinbase} from "@coinbase/coinbase-sdk";
+import { Coinbase } from "@coinbase/coinbase-sdk";
 import {
     Action,
     Plugin,
@@ -8,7 +8,7 @@ import {
     HandlerCallback,
     State,
     composeContext,
-    generateObjectV2,
+    generateObject,
     ModelClass,
     Provider,
 } from "@ai16z/eliza";
@@ -132,7 +132,7 @@ export const executeTradeAction: Action = {
                 template: tradeTemplate,
             });
 
-            const tradeDetails = await generateObjectV2({
+            const tradeDetails = await generateObject({
                 runtime,
                 context,
                 modelClass: ModelClass.LARGE,
@@ -165,7 +165,13 @@ export const executeTradeAction: Action = {
                 return;
             }
 
-            const { trade, transfer } = await executeTradeAndCharityTransfer(runtime, network, amount, sourceAsset, targetAsset);
+            const { trade, transfer } = await executeTradeAndCharityTransfer(
+                runtime,
+                network,
+                amount,
+                sourceAsset,
+                targetAsset
+            );
 
             let responseText = `Trade executed successfully:
 - Network: ${network}
@@ -181,10 +187,7 @@ export const executeTradeAction: Action = {
                 responseText += "\n(Note: Charity transfer was not completed)";
             }
 
-            callback(
-                { text: responseText },
-                []
-            );
+            callback({ text: responseText }, []);
         } catch (error) {
             elizaLogger.error("Error during trade execution:", error);
             callback(
@@ -282,13 +285,13 @@ export const executeTradeAction: Action = {
         ],
     ],
     similes: [
-        "EXECUTE_TRADE",         // Primary action name
-        "SWAP_TOKENS",          // For token swaps
-        "CONVERT_CURRENCY",     // For currency conversion
-        "EXCHANGE_ASSETS",      // For asset exchange
-        "MARKET_BUY",          // For buying assets
-        "MARKET_SELL",         // For selling assets
-        "TRADE_CRYPTO",        // Generic crypto trading
+        "EXECUTE_TRADE", // Primary action name
+        "SWAP_TOKENS", // For token swaps
+        "CONVERT_CURRENCY", // For currency conversion
+        "EXCHANGE_ASSETS", // For asset exchange
+        "MARKET_BUY", // For buying assets
+        "MARKET_SELL", // For selling assets
+        "TRADE_CRYPTO", // Generic crypto trading
     ],
 };
 
