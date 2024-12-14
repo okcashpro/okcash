@@ -87,10 +87,10 @@ export const models: Models = {
         },
         endpoint: "https://api.x.ai/v1",
         model: {
-            [ModelClass.SMALL]: "grok-beta",
-            [ModelClass.MEDIUM]: "grok-beta",
-            [ModelClass.LARGE]: "grok-beta",
-            [ModelClass.EMBEDDING]: "grok-beta", // not sure about this one
+            [ModelClass.SMALL]: settings.SMALL_GROK_MODEL || "grok-2-1212",
+            [ModelClass.MEDIUM]: settings.MEDIUM_GROK_MODEL || "grok-2-1212",
+            [ModelClass.LARGE]: settings.LARGE_GROK_MODEL || "grok-2-1212",
+            [ModelClass.EMBEDDING]: settings.EMBEDDING_GROK_MODEL || "grok-2-1212", // not sure about this one
         },
     },
     [ModelProviderName.GROQ]: {
