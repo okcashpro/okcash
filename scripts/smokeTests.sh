@@ -46,16 +46,18 @@ trap 'rm -f "$OUTFILE"' EXIT
 echo "Using temporary output file: $OUTFILE"
 
 # Add timeout configuration
-TIMEOUT=30
-INTERVAL=0.5
+TIMEOUT=1800  # 3 minutes represented as 1800 tenths of a second
+INTERVAL=5   # Represent 0.5 seconds as 5 tenths of a second
 TIMER=0
 
 (
   # Wait for the ready message with timeout
   while true; do
-    if [[ $TIMER -ge $TIMEOUT ]]; then
-      echo "Error: Timeout waiting for application to start after $TIMEOUT seconds"
-      kill $$
+    if (( TIMER >= TIMEOUT )); then
+      echo "Error: Timeout waiting for application to start after $((TIMEOUT / 10)) seconds"
+      echo "Logs from $OUTFILE:"
+      cat "$OUTFILE"
+      pkill -f "pnpm start"
       exit 1
     fi
 
@@ -64,8 +66,8 @@ TIMER=0
       break
     fi
 
-    sleep $INTERVAL
-    TIMER=$(echo "$TIMER + $INTERVAL" | bc)
+    sleep 0.5
+    TIMER=$((TIMER + INTERVAL))
   done
 ) | pnpm start --character=characters/trump.character.json > "$OUTFILE" &
 

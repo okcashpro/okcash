@@ -561,6 +561,9 @@ export type Media = {
 
     /** Text content */
     text: string;
+
+    /** Content type */
+    contentType?: string;
 };
 
 /**
@@ -605,13 +608,14 @@ export type Plugin = {
  */
 export enum Clients {
     DISCORD = "discord",
-// you can't specify this in characters
-// all characters are registered with this
-//    DIRECT = "direct",
+    // you can't specify this in characters
+    // all characters are registered with this
+    //    DIRECT = "direct",
     TWITTER = "twitter",
     TELEGRAM = "telegram",
     FARCASTER = "farcaster",
     AUTO = "auto",
+    SLACK = "slack",
 }
 /**
  * Configuration for an agent character
@@ -658,6 +662,8 @@ export type Character = {
         discordVoiceHandlerTemplate?: string;
         discordShouldRespondTemplate?: string;
         discordMessageHandlerTemplate?: string;
+        slackMessageHandlerTemplate?: string;
+        slackShouldRespondTemplate?: string;
     };
 
     /** Character biography */
@@ -731,6 +737,16 @@ export type Character = {
             shouldRespondOnlyToMentions?: boolean;
             shouldOnlyJoinInAllowedGroups?: boolean;
             allowedGroupIds?: string[];
+            messageSimilarityThreshold?: number;
+            isPartOfTeam?: boolean;
+            teamAgentIds?: string[];
+            teamLeaderId?: string;
+            teamMemberInterestKeywords?: string[];
+        };
+        slack?: {
+            shouldIgnoreBotMessages?: boolean;
+            shouldIgnoreDirectMessages?: boolean;
+
         };
     };
 
@@ -1143,12 +1159,16 @@ export interface IPdfService extends Service {
 }
 
 export interface IAwsS3Service extends Service {
-    uploadFile(imagePath: string, useSignedUrl: boolean, expiresIn: number ): Promise<{
+    uploadFile(
+        imagePath: string,
+        useSignedUrl: boolean,
+        expiresIn: number
+    ): Promise<{
         success: boolean;
         url?: string;
         error?: string;
     }>;
-    generateSignedUrl(fileName: string, expiresIn: number): Promise<string>
+    generateSignedUrl(fileName: string, expiresIn: number): Promise<string>;
 }
 
 export type SearchResult = {
@@ -1178,6 +1198,8 @@ export enum ServiceType {
     PDF = "pdf",
     INTIFACE = "intiface",
     AWS_S3 = "aws_s3",
+    BUTTPLUG = "buttplug",
+    SLACK = "slack",
 }
 
 export enum LoggingLevel {
@@ -1196,4 +1218,8 @@ export interface ActionResponse {
     retweet: boolean;
     quote?: boolean;
     reply?: boolean;
+}
+
+export interface ISlackService extends Service {
+    client: any;
 }

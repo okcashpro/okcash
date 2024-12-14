@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / stringToUuid
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / stringToUuid
 
 # Function: stringToUuid()
 
@@ -14,4 +14,4 @@
 
 ## Defined in
 
-[packages/core/src/uuid.ts:4](https://github.com/monilpat/eliza/blob/main/packages/core/src/uuid.ts#L4)
+[packages/core/src/uuid.ts:4](https://github.com/ai16z/eliza/blob/main/packages/core/src/uuid.ts#L4)

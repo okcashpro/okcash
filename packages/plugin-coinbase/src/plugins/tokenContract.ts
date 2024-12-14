@@ -8,7 +8,7 @@ import {
     HandlerCallback,
     State,
     composeContext,
-    generateObjectV2,
+    generateObject,
     ModelClass,
 } from "@ai16z/eliza";
 import { initializeWallet } from "../utils";
@@ -39,13 +39,13 @@ const contractsCsvFilePath = path.join(baseDir, "contracts.csv");
 
 // Add this helper at the top level
 const serializeBigInt = (value: any): any => {
-    if (typeof value === 'bigint') {
+    if (typeof value === "bigint") {
         return value.toString();
     }
     if (Array.isArray(value)) {
         return value.map(serializeBigInt);
     }
-    if (typeof value === 'object' && value !== null) {
+    if (typeof value === "object" && value !== null) {
         return Object.fromEntries(
             Object.entries(value).map(([k, v]) => [k, serializeBigInt(v)])
         );
@@ -112,7 +112,7 @@ export const deployTokenContractAction: Action = {
                 template: tokenContractTemplate,
             });
 
-            const contractDetails = await generateObjectV2({
+            const contractDetails = await generateObject({
                 runtime,
                 context,
                 modelClass: ModelClass.SMALL,
@@ -323,7 +323,7 @@ export const invokeContractAction: Action = {
                 template: contractInvocationTemplate,
             });
 
-            const invocationDetails = await generateObjectV2({
+            const invocationDetails = await generateObject({
                 runtime,
                 context,
                 modelClass: ModelClass.LARGE,
@@ -340,8 +340,14 @@ export const invokeContractAction: Action = {
                 return;
             }
 
-            const { contractAddress, method, args, amount, assetId, networkId } =
-                invocationDetails.object;
+            const {
+                contractAddress,
+                method,
+                args,
+                amount,
+                assetId,
+                networkId,
+            } = invocationDetails.object;
             const wallet = await initializeWallet(runtime, networkId);
 
             // Prepare invocation options
@@ -351,10 +357,10 @@ export const invokeContractAction: Action = {
                 abi: ABI,
                 args: {
                     ...args,
-                    amount: args.amount || amount // Ensure amount is passed in args
+                    amount: args.amount || amount, // Ensure amount is passed in args
                 },
                 networkId,
-                assetId
+                assetId,
             };
             elizaLogger.log("Invocation options:", invocationOptions);
             // Invoke the contract
@@ -445,15 +451,19 @@ Contract invocation has been logged to the CSV file.`,
 
 export const readContractAction: Action = {
     name: "READ_CONTRACT",
-    description: "Read data from a deployed smart contract using the Coinbase SDK",
+    description:
+        "Read data from a deployed smart contract using the Coinbase SDK",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
         elizaLogger.log("Validating runtime for READ_CONTRACT...");
-        return !!(
-            runtime.character.settings.secrets?.COINBASE_API_KEY ||
-            process.env.COINBASE_API_KEY
-        ) && !!(
-            runtime.character.settings.secrets?.COINBASE_PRIVATE_KEY ||
-            process.env.COINBASE_PRIVATE_KEY
+        return (
+            !!(
+                runtime.character.settings.secrets?.COINBASE_API_KEY ||
+                process.env.COINBASE_API_KEY
+            ) &&
+            !!(
+                runtime.character.settings.secrets?.COINBASE_PRIVATE_KEY ||
+                process.env.COINBASE_PRIVATE_KEY
+            )
         );
     },
     handler: async (
@@ -467,8 +477,12 @@ export const readContractAction: Action = {
 
         try {
             Coinbase.configure({
-                apiKeyName: runtime.getSetting("COINBASE_API_KEY") ?? process.env.COINBASE_API_KEY,
-                privateKey: runtime.getSetting("COINBASE_PRIVATE_KEY") ?? process.env.COINBASE_PRIVATE_KEY,
+                apiKeyName:
+                    runtime.getSetting("COINBASE_API_KEY") ??
+                    process.env.COINBASE_API_KEY,
+                privateKey:
+                    runtime.getSetting("COINBASE_PRIVATE_KEY") ??
+                    process.env.COINBASE_PRIVATE_KEY,
             });
 
             const context = composeContext({
@@ -476,7 +490,7 @@ export const readContractAction: Action = {
                 template: readContractTemplate,
             });
 
-            const readDetails = await generateObjectV2({
+            const readDetails = await generateObject({
                 runtime,
                 context,
                 modelClass: ModelClass.SMALL,
@@ -493,8 +507,15 @@ export const readContractAction: Action = {
                 return;
             }
 
-            const { contractAddress, method, args, networkId, abi } = readDetails.object;
-            elizaLogger.log("Reading contract:", { contractAddress, method, args, networkId, abi });
+            const { contractAddress, method, args, networkId, abi } =
+                readDetails.object;
+            elizaLogger.log("Reading contract:", {
+                contractAddress,
+                method,
+                args,
+                networkId,
+                abi,
+            });
 
             const result = await readContract({
                 networkId,
@@ -509,19 +530,24 @@ export const readContractAction: Action = {
 
             elizaLogger.info("Contract read result:", serializedResult);
 
-            callback({
-                text: `Contract read successful:
+            callback(
+                {
+                    text: `Contract read successful:
 - Contract Address: ${contractAddress}
 - Method: ${method}
 - Network: ${networkId}
-- Result: ${JSON.stringify(serializedResult, null, 2)}`
-            }, []);
-
+- Result: ${JSON.stringify(serializedResult, null, 2)}`,
+                },
+                []
+            );
         } catch (error) {
             elizaLogger.error("Error reading contract:", error);
-            callback({
-                text: `Failed to read contract: ${error instanceof Error ? error.message : "Unknown error"}`
-            }, []);
+            callback(
+                {
+                    text: `Failed to read contract: ${error instanceof Error ? error.message : "Unknown error"}`,
+                },
+                []
+            );
         }
     },
     examples: [
@@ -549,6 +575,11 @@ export const readContractAction: Action = {
 
 export const tokenContractPlugin: Plugin = {
     name: "tokenContract",
-    description: "Enables deployment, invocation, and reading of ERC20, ERC721, and ERC1155 token contracts using the Coinbase SDK",
-    actions: [deployTokenContractAction, invokeContractAction, readContractAction],
+    description:
+        "Enables deployment, invocation, and reading of ERC20, ERC721, and ERC1155 token contracts using the Coinbase SDK",
+    actions: [
+        deployTokenContractAction,
+        invokeContractAction,
+        readContractAction,
+    ],
 };

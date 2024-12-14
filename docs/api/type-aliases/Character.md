@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Character
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / Character
 
 # Type Alias: Character
 
@@ -128,6 +128,14 @@ Optional prompt templates
 
 > `optional` **discordMessageHandlerTemplate**: `string`
 
+### templates.slackMessageHandlerTemplate?
+
+> `optional` **slackMessageHandlerTemplate**: `string`
+
+### templates.slackShouldRespondTemplate?
+
+> `optional` **slackShouldRespondTemplate**: `string`
+
 ### bio
 
 > **bio**: `string` \| `string`[]
@@ -196,9 +204,9 @@ Optional configuration
 
  \[`key`: `string`\]: `string`
 
-### settings.buttplug?
+### settings.intiface?
 
-> `optional` **buttplug**: `boolean`
+> `optional` **intiface**: `boolean`
 
 ### settings.voice?
 
@@ -284,6 +292,26 @@ Optional client-specific config
 
 > `optional` **shouldIgnoreDirectMessages**: `boolean`
 
+### clientConfig.discord.messageSimilarityThreshold?
+
+> `optional` **messageSimilarityThreshold**: `number`
+
+### clientConfig.discord.isPartOfTeam?
+
+> `optional` **isPartOfTeam**: `boolean`
+
+### clientConfig.discord.teamAgentIds?
+
+> `optional` **teamAgentIds**: `string`[]
+
+### clientConfig.discord.teamLeaderId?
+
+> `optional` **teamLeaderId**: `string`
+
+### clientConfig.discord.teamMemberInterestKeywords?
+
+> `optional` **teamMemberInterestKeywords**: `string`[]
+
 ### clientConfig.telegram?
 
 > `optional` **telegram**: `object`
@@ -293,6 +321,38 @@ Optional client-specific config
 > `optional` **shouldIgnoreBotMessages**: `boolean`
 
 ### clientConfig.telegram.shouldIgnoreDirectMessages?
+
+> `optional` **shouldIgnoreDirectMessages**: `boolean`
+
+### clientConfig.telegram.messageSimilarityThreshold?
+
+> `optional` **messageSimilarityThreshold**: `number`
+
+### clientConfig.telegram.isPartOfTeam?
+
+> `optional` **isPartOfTeam**: `boolean`
+
+### clientConfig.telegram.teamAgentIds?
+
+> `optional` **teamAgentIds**: `string`[]
+
+### clientConfig.telegram.teamLeaderId?
+
+> `optional` **teamLeaderId**: `string`
+
+### clientConfig.telegram.teamMemberInterestKeywords?
+
+> `optional` **teamMemberInterestKeywords**: `string`[]
+
+### clientConfig.slack?
+
+> `optional` **slack**: `object`
+
+### clientConfig.slack.shouldIgnoreBotMessages?
+
+> `optional` **shouldIgnoreBotMessages**: `boolean`
+
+### clientConfig.slack.shouldIgnoreDirectMessages?
 
 > `optional` **shouldIgnoreDirectMessages**: `boolean`
 
@@ -342,4 +402,4 @@ Optional Twitter profile
 
 ## Defined in
 
-[packages/core/src/types.ts:609](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L609)
+[packages/core/src/types.ts:623](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L623)

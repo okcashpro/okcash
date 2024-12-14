@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / knowledge
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / knowledge
 
 # Variable: knowledge
 
@@ -52,4 +52,4 @@
 
 ## Defined in
 
-[packages/core/src/knowledge.ts:150](https://github.com/monilpat/eliza/blob/main/packages/core/src/knowledge.ts#L150)
+[packages/core/src/knowledge.ts:150](https://github.com/ai16z/eliza/blob/main/packages/core/src/knowledge.ts#L150)
