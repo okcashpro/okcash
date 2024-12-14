@@ -53,7 +53,7 @@ TIMER=0
 (
   # Wait for the ready message with timeout
   while true; do
-    if [[ $TIMER -ge $TIMEOUT ]]; then
+    if (( TIMER >= TIMEOUT * 10 )); then
       echo "Error: Timeout waiting for application to start after $TIMEOUT seconds"
       kill $$
       exit 1
