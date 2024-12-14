@@ -36,7 +36,9 @@ import {
     webhookPlugin,
     advancedTradePlugin,
 } from "@ai16z/plugin-coinbase";
+import { DirectClient } from "@ai16z/client-direct";
 import { confluxPlugin } from "@ai16z/plugin-conflux";
+import { zksyncEraPlugin } from "@ai16z/plugin-zksync-era";
 import { imageGenerationPlugin } from "@ai16z/plugin-image-generation";
 import { evmPlugin } from "@ai16z/plugin-evm";
 import { createNodePlugin } from "@ai16z/plugin-node";
@@ -64,7 +66,7 @@ export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
 
 const logFetch = async (url: string, options: any) => {
     elizaLogger.info(`Fetching ${url}`);
-    elizaLogger.info(options);
+    elizaLogger.info(JSON.stringify(options, null, 2));
     return fetch(url, options);
 };
 
@@ -512,6 +514,7 @@ export async function createAgent(
                 : null,
             getSecret(character, "APTOS_PRIVATE_KEY") ? aptosPlugin : null,
             getSecret(character, "MVX_PRIVATE_KEY") ? multiversxPlugin : null,
+            getSecret(character, "ZKSYNC_PRIVATE_KEY") ? zksyncEraPlugin : null,
         ].filter(Boolean),
         providers: [],
         actions: [],
@@ -581,7 +584,7 @@ async function startAgent(
             `Error starting agent for character ${character.name}:`,
             error
         );
-        console.error(error);
+        elizaLogger.error(error);
         if (db) {
             await db.close();
         }
@@ -590,7 +593,9 @@ async function startAgent(
 }
 
 const startAgents = async () => {
-    const directClient = await DirectClientInterface.start(null);
+    const directClient = new DirectClient();
+    const serverPort = parseInt(settings.SERVER_PORT || "3000");
+    directClient.start(serverPort);
     const args = parseArguments();
 
     let charactersArg = args.characters || args.character;
@@ -609,9 +614,44 @@ const startAgents = async () => {
         elizaLogger.error("Error starting agents:", error);
     }
 
+    async function handleUserInput(input, agentId) {
+        elizaLogger.log("handleUserInput", input, agentId);
+        if (input.toLowerCase() === "exit") {
+            gracefulExit();
+        }
+
+        try {
+            const serverPort = parseInt(settings.SERVER_PORT || "3000");
+
+            const response = await fetch(
+                `http://localhost:${serverPort}/${agentId}/message`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        text: input,
+                        userId: "user",
+                        userName: "User",
+                    }),
+                }
+            );
+
+            const data = await response.json();
+            elizaLogger.log("data: ", data);
+            data.forEach((message) =>
+                elizaLogger.log(`${"Agent"}: ${message.text}`)
+            );
+        } catch (error) {
+            elizaLogger.error("Error fetching response:", error);
+        }
+    }
+
     function chat() {
+        elizaLogger.log("chat");
         const agentId = characters[0].name ?? "Agent";
+        elizaLogger.log("agentId: ", agentId);
         rl.question("You: ", async (input) => {
+            elizaLogger.log("input: ", input);
             await handleUserInput(input, agentId);
             if (input.toLowerCase() !== "exit") {
                 chat(); // Loop back to ask another question
@@ -621,6 +661,8 @@ const startAgents = async () => {
 
     if (!args["non-interactive"]) {
         elizaLogger.log("Chat started. Type 'exit' to quit.");
+        // log an empty line
+        elizaLogger.log("");
         chat();
     }
 };
@@ -634,36 +676,6 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
 });
-
-async function handleUserInput(input, agentId) {
-    if (input.toLowerCase() === "exit") {
-        gracefulExit();
-    }
-
-    try {
-        const serverPort = parseInt(settings.SERVER_PORT || "3000");
-
-        const response = await fetch(
-            `http://localhost:${serverPort}/${agentId}/message`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    text: input,
-                    userId: "user",
-                    userName: "User",
-                }),
-            }
-        );
-
-        const data = await response.json();
-        data.forEach((message) =>
-            elizaLogger.log(`${"Agent"}: ${message.text}`)
-        );
-    } catch (error) {
-        console.error("Error fetching response:", error);
-    }
-}
 
 async function gracefulExit() {
     elizaLogger.log("Terminating and cleaning up resources...");
