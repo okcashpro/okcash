@@ -595,7 +595,6 @@ async function startAgent(
 const startAgents = async () => {
     const directClient = new DirectClient();
     const serverPort = parseInt(settings.SERVER_PORT || "3000");
-    directClient.start(serverPort);
     const args = parseArguments();
 
     let charactersArg = args.characters || args.character;
@@ -614,74 +613,13 @@ const startAgents = async () => {
         elizaLogger.error("Error starting agents:", error);
     }
 
-    async function handleUserInput(input, agentId) {
-        elizaLogger.log("handleUserInput", input, agentId);
-        if (input.toLowerCase() === "exit") {
-            gracefulExit();
-        }
+    directClient.start(serverPort);
 
-        try {
-            const serverPort = parseInt(settings.SERVER_PORT || "3000");
-
-            const response = await fetch(
-                `http://localhost:${serverPort}/${agentId}/message`,
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        text: input,
-                        userId: "user",
-                        userName: "User",
-                    }),
-                }
-            );
-
-            const data = await response.json();
-            elizaLogger.log("data: ", data);
-            data.forEach((message) =>
-                elizaLogger.log(`${"Agent"}: ${message.text}`)
-            );
-        } catch (error) {
-            elizaLogger.error("Error fetching response:", error);
-        }
-    }
-
-    function chat() {
-        elizaLogger.log("chat");
-        const agentId = characters[0].name ?? "Agent";
-        elizaLogger.log("agentId: ", agentId);
-        rl.question("You: ", async (input) => {
-            elizaLogger.log("input: ", input);
-            await handleUserInput(input, agentId);
-            if (input.toLowerCase() !== "exit") {
-                chat(); // Loop back to ask another question
-            }
-        });
-    }
-
-    if (!args["non-interactive"]) {
-        elizaLogger.log("Chat started. Type 'exit' to quit.");
-        // log an empty line
-        elizaLogger.log("");
-        chat();
-    }
+    elizaLogger.log("Visit the following URL to chat with your agents:");
+    elizaLogger.log(`http://localhost:5173`);
 };
 
 startAgents().catch((error) => {
     elizaLogger.error("Unhandled error in startAgents:", error);
     process.exit(1); // Exit the process after logging
 });
-
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
-
-async function gracefulExit() {
-    elizaLogger.log("Terminating and cleaning up resources...");
-    rl.close();
-    process.exit(0);
-}
-
-rl.on("SIGINT", gracefulExit);
-rl.on("SIGTERM", gracefulExit);
