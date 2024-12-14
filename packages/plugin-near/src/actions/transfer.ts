@@ -99,7 +99,7 @@ async function transferNEAR(
 export const executeTransfer: Action = {
     name: "SEND_NEAR",
     similes: ["TRANSFER_NEAR", "SEND_TOKENS", "TRANSFER_TOKENS", "PAY_NEAR"],
-    validate: async (runtime: IAgentRuntime, message: Memory) => {
+    validate: async (_runtime: IAgentRuntime, _message: Memory) => {
         return true; // Add your validation logic here
     },
     description: "Transfer NEAR tokens to another account",
