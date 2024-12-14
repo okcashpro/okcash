@@ -95,7 +95,7 @@ async function swapToken(
         const hasStorageIn = await checkStorageBalance(account, inputTokenId);
         const hasStorageOut = await checkStorageBalance(account, outputTokenId);
 
-        let transactions = await instantSwap({
+        const transactions = await instantSwap({
             tokenIn,
             tokenOut,
             amountIn: amount,
