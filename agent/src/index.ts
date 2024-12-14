@@ -3,6 +3,7 @@ import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite";
 import { AutoClientInterface } from "@ai16z/client-auto";
 import { DiscordClientInterface } from "@ai16z/client-discord";
 import { FarcasterAgentClient } from "@ai16z/client-farcaster";
+import { LensAgentClient } from "@ai16z/client-lens";
 import { SlackClientInterface } from "@ai16z/client-slack";
 import { TelegramClientInterface } from "@ai16z/client-telegram";
 import { TwitterClientInterface } from "@ai16z/client-twitter";
@@ -355,16 +356,14 @@ export async function initializeClients(
     }
 
     if (clientTypes.includes(Clients.TWITTER)) {
-        TwitterClientInterface.enableSearch = !isFalsish(
-            getSecret(character, "TWITTER_SEARCH_ENABLE")
-        );
         const twitterClient = await TwitterClientInterface.start(runtime);
-        // TODO: This might be incorrect, please test if you are concerned about this functionality
-        // By default we have disabled this because it is annoying for users
-        (twitterClient as any).enableSearch = !isFalsish(
-            getSecret(character, "TWITTER_SEARCH_ENABLE")
-        );
-        if (twitterClient) clients.twitter = twitterClient;
+
+        if (twitterClient) {
+            clients.twitter = twitterClient;
+            (twitterClient as any).enableSearch = !isFalsish(
+                getSecret(character, "TWITTER_SEARCH_ENABLE")
+            );
+        }
     }
 
     if (clientTypes.includes(Clients.FARCASTER)) {
@@ -374,6 +373,11 @@ export async function initializeClients(
             farcasterClient.start();
             clients.farcaster = farcasterClient;
         }
+    }
+    if (clientTypes.includes("lens")) {
+        const lensClient = new LensAgentClient(runtime);
+        lensClient.start();
+        clients.lens = lensClient;
     }
 
     elizaLogger.log("client keys", Object.keys(clients));

@@ -1,6 +1,6 @@
 {
     "name": "@ai16z/agent",
-    "version": "0.1.5-alpha.5",
+    "version": "0.1.5-alpha.6",
     "main": "src/index.ts",
     "type": "module",
     "scripts": {
@@ -23,6 +23,7 @@
         "@ai16z/client-direct": "workspace:*",
         "@ai16z/client-discord": "workspace:*",
         "@ai16z/client-farcaster": "workspace:*",
+        "@ai16z/client-lens": "workspace:*",
         "@ai16z/client-telegram": "workspace:*",
         "@ai16z/client-twitter": "workspace:*",
         "@ai16z/client-slack": "workspace:*",

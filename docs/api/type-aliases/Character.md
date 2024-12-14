@@ -108,6 +108,18 @@ Optional prompt templates
 
 > `optional` **farcasterShouldRespondTemplate**: `string`
 
+### templates.lensPostTemplate?
+
+> `optional` **lensPostTemplate**: `string`
+
+### templates.lensMessageHandlerTemplate?
+
+> `optional` **farcasterMessageHandlerTemplate**: `string`
+
+### templates.lensShouldRespondTemplate?
+
+> `optional` **lensShouldRespondTemplate**: `string`
+
 ### templates.telegramMessageHandlerTemplate?
 
 > `optional` **telegramMessageHandlerTemplate**: `string`
@@ -202,7 +214,7 @@ Optional configuration
 
 #### Index Signature
 
- \[`key`: `string`\]: `string`
+\[`key`: `string`\]: `string`
 
 ### settings.intiface?
 
@@ -264,7 +276,7 @@ New structured ElevenLabs config
 
 #### Index Signature
 
- \[`key`: `string`\]: `any`[]
+\[`key`: `string`\]: `any`[]
 
 ### settings.chains.evm?
 

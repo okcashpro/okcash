@@ -612,6 +612,7 @@ export enum Clients {
     TWITTER = "twitter",
     TELEGRAM = "telegram",
     FARCASTER = "farcaster",
+    LENS = "lens",
     AUTO = "auto",
     SLACK = "slack",
 }
@@ -658,8 +659,11 @@ export type Character = {
         twitterMessageHandlerTemplate?: string;
         twitterShouldRespondTemplate?: string;
         farcasterPostTemplate?: string;
+        lensPostTemplate?: string;
         farcasterMessageHandlerTemplate?: string;
+        lensMessageHandlerTemplate?: string;
         farcasterShouldRespondTemplate?: string;
+        lensShouldRespondTemplate?: string;
         telegramMessageHandlerTemplate?: string;
         telegramShouldRespondTemplate?: string;
         discordVoiceHandlerTemplate?: string;
