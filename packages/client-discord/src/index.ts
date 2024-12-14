@@ -1,7 +1,11 @@
-import { getEmbeddingZeroVector } from "@ai16z/eliza";
-import { Character, Client as ElizaClient, IAgentRuntime } from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza";
-import { elizaLogger } from "@ai16z/eliza";
+import {
+    getEmbeddingZeroVector,
+    stringToUuid,
+    elizaLogger,
+    Character,
+    Client as ElizaClient,
+    IAgentRuntime,
+} from "@ai16z/eliza";
 import {
     Client,
     Events,
@@ -109,6 +113,16 @@ export class DiscordClient extends EventEmitter {
             Events.InteractionCreate,
             this.handleInteractionCreate.bind(this)
         );
+    }
+
+    async stop() {
+        try {
+          // disconnect websocket
+          // this unbinds all the listeners
+          await this.client.destroy();
+        } catch(e) {
+          elizaLogger.error('client-discord instance stop err', e);
+        }
     }
 
     private async onClientReady(readyClient: { user: { tag: any; id: any } }) {
@@ -388,7 +402,13 @@ export function startDiscord(runtime: IAgentRuntime) {
 
 export const DiscordClientInterface: ElizaClient = {
     start: async (runtime: IAgentRuntime) => new DiscordClient(runtime),
-    stop: async (_runtime: IAgentRuntime) => {
-        console.warn("Discord client does not support stopping yet");
+    stop: async (runtime: IAgentRuntime) => {
+        try {
+          // stop it
+          elizaLogger.log('Stopping discord client', runtime.agentId)
+          await runtime.clients.discord.stop()
+        } catch(e) {
+          elizaLogger.error('client-discord interface stop error', e);
+        }
     },
 };

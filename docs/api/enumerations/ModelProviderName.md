@@ -148,7 +148,7 @@ Available model providers
 
 ### GALADRIEL
 
-> **GALADRIEL**: `"galadriel"`
+**GALADRIEL**: `"galadriel"`
 
 #### Defined in
 
