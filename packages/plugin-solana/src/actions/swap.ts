@@ -205,8 +205,7 @@ export const executeSwap: Action = {
         });
 
         console.log("Response:", response);
-        const type =
-            response.inputTokenSymbol?.toUpperCase() === "SOL" ? "buy" : "sell";
+        // const type = response.inputTokenSymbol?.toUpperCase() === "SOL" ? "buy" : "sell";
 
         // Add SOL handling logic
         if (response.inputTokenSymbol?.toUpperCase() === "SOL") {
@@ -287,7 +286,7 @@ export const executeSwap: Action = {
                 false
             );
 
-            const provider = new WalletProvider(connection, walletPublicKey);
+            // const provider = new WalletProvider(connection, walletPublicKey);
 
             console.log("Wallet Public Key:", walletPublicKey);
             console.log("inputTokenSymbol:", response.inputTokenCA);
