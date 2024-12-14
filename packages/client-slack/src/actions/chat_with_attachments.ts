@@ -1,4 +1,9 @@
-import { composeContext, generateText, trimTokens, parseJSONObjectFromText } from "@ai16z/eliza";
+import {
+    composeContext,
+    generateText,
+    trimTokens,
+    parseJSONObjectFromText,
+} from "@ai16z/eliza";
 import { models } from "@ai16z/eliza";
 import {
     Action,
@@ -22,7 +27,7 @@ Summarization objective: {{objective}}
 
 # Instructions: Summarize the attachments. Return the summary. Do not acknowledge this request, just summarize and continue the existing summary if there is one. Capture any important details based on the objective. Only respond with the new summary text.`;
 
-export const attachmentIdsTemplate = `# Messages we are summarizing 
+export const attachmentIdsTemplate = `# Messages we are summarizing
 {{recentMessages}}
 
 # Instructions: {{senderName}} is requesting a summary of specific attachments. Your goal is to determine their objective, along with the list of attachment IDs to summarize.
@@ -54,12 +59,12 @@ const getAttachmentIds = async (
             context,
             modelClass: ModelClass.SMALL,
         });
-        
+
         const parsedResponse = parseJSONObjectFromText(response) as {
             objective: string;
             attachmentIds: string[];
         } | null;
-        
+
         if (parsedResponse?.objective && parsedResponse?.attachmentIds) {
             return parsedResponse;
         }
@@ -91,7 +96,7 @@ const summarizeAction: Action = {
     validate: async (
         runtime: IAgentRuntime,
         message: Memory,
-        state: State | undefined
+        _state: State | undefined
     ): Promise<boolean> => {
         if (message.content.source !== "slack") {
             return false;
@@ -122,7 +127,7 @@ const summarizeAction: Action = {
             "listen",
             "watch",
         ];
-        
+
         return keywords.some((keyword) =>
             message.content.text.toLowerCase().includes(keyword.toLowerCase())
         );
@@ -134,7 +139,8 @@ const summarizeAction: Action = {
         options: any,
         callback: HandlerCallback
     ): Promise<Content> => {
-        const currentState = state ?? await runtime.composeState(message) as State;
+        const currentState =
+            state ?? ((await runtime.composeState(message)) as State);
 
         const callbackData: Content = {
             text: "",
@@ -143,7 +149,11 @@ const summarizeAction: Action = {
             attachments: [],
         };
 
-        const attachmentData = await getAttachmentIds(runtime, message, currentState);
+        const attachmentData = await getAttachmentIds(
+            runtime,
+            message,
+            currentState
+        );
         if (!attachmentData) {
             console.error("Couldn't get attachment IDs from message");
             await callback(callbackData);
@@ -161,23 +171,25 @@ const summarizeAction: Action = {
             .flatMap((msg) => msg.content.attachments)
             .filter((attachment) => {
                 if (!attachment) return false;
-                return attachmentIds
-                    .map((attch) => attch.toLowerCase().slice(0, 5))
-                    .includes(attachment.id.toLowerCase().slice(0, 5)) ||
+                return (
+                    attachmentIds
+                        .map((attch) => attch.toLowerCase().slice(0, 5))
+                        .includes(attachment.id.toLowerCase().slice(0, 5)) ||
                     attachmentIds.some((id) => {
                         const attachmentId = id.toLowerCase().slice(0, 5);
                         return attachment.id
                             .toLowerCase()
                             .includes(attachmentId);
-                    });
+                    })
+                );
             });
 
         const attachmentsWithText = attachments
             .map((attachment) => {
-                if (!attachment) return '';
+                if (!attachment) return "";
                 return `# ${attachment.title}\n${attachment.text}`;
             })
-            .filter(text => text !== '')
+            .filter((text) => text !== "")
             .join("\n\n");
 
         let currentSummary = "";
@@ -227,7 +239,7 @@ ${currentSummary.trim()}
         } else if (currentSummary.trim()) {
             const summaryFilename = `content/summary_${Date.now()}`;
             await runtime.cacheManager.set(summaryFilename, currentSummary);
-            
+
             callbackData.text = `I've attached the summary of the requested attachments as a text file.`;
             await callback(callbackData, [summaryFilename]);
         } else {
