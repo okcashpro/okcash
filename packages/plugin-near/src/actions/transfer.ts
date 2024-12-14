@@ -8,7 +8,7 @@ import {
     State,
     type Action,
     composeContext,
-    generateObject,
+    generateObjectV2,
 } from "@ai16z/eliza";
 import { connect, keyStores, utils } from "near-api-js";
 import { KeyPairString } from "near-api-js/lib/utils";
@@ -27,7 +27,8 @@ function isTransferContent(
 ): content is TransferContent {
     return (
         typeof content.recipient === "string" &&
-        (typeof content.amount === "string" || typeof content.amount === "number")
+        (typeof content.amount === "string" ||
+            typeof content.amount === "number")
     );
 }
 
@@ -58,10 +59,11 @@ Respond with a JSON markdown block containing only the extracted values.`;
 async function transferNEAR(
     runtime: IAgentRuntime,
     recipient: string,
-    amount: string,
+    amount: string
 ): Promise<string> {
     const networkId = runtime.getSetting("NEAR_NETWORK") || "testnet";
-    const nodeUrl = runtime.getSetting("RPC_URL") || "https://rpc.testnet.near.org";
+    const nodeUrl =
+        runtime.getSetting("RPC_URL") || "https://rpc.testnet.near.org";
     const accountId = runtime.getSetting("NEAR_ADDRESS");
     const secretKey = runtime.getSetting("NEAR_WALLET_SECRET_KEY");
 
@@ -124,7 +126,7 @@ export const executeTransfer: Action = {
         });
 
         // Generate transfer content
-        const content = await generateObject({
+        const content = await generateObjectV2({
             runtime,
             context: transferContext,
             modelClass: ModelClass.SMALL,
@@ -198,5 +200,3 @@ export const executeTransfer: Action = {
         ],
     ] as ActionExample[][],
 } as Action;
-
-

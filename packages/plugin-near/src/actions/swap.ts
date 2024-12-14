@@ -7,22 +7,32 @@ import {
     State,
     type Action,
     composeContext,
-    generateObject,
+    generateObjectV2,
 } from "@ai16z/eliza";
 import { connect, keyStores, utils } from "near-api-js";
-import { init_env, ftGetTokenMetadata, estimateSwap, instantSwap, fetchAllPools, FT_MINIMUM_STORAGE_BALANCE_LARGE, ONE_YOCTO_NEAR } from '@ref-finance/ref-sdk';
+import {
+    init_env,
+    ftGetTokenMetadata,
+    estimateSwap,
+    instantSwap,
+    fetchAllPools,
+    FT_MINIMUM_STORAGE_BALANCE_LARGE,
+    ONE_YOCTO_NEAR,
+} from "@ref-finance/ref-sdk";
 import { walletProvider } from "../providers/wallet";
 import { KeyPairString } from "near-api-js/lib/utils";
 
-
-async function checkStorageBalance(account: any, contractId: string): Promise<boolean> {
+async function checkStorageBalance(
+    account: any,
+    contractId: string
+): Promise<boolean> {
     try {
         const balance = await account.viewFunction({
             contractId,
-            methodName: 'storage_balance_of',
-            args: { account_id: account.accountId }
+            methodName: "storage_balance_of",
+            args: { account_id: account.accountId },
         });
-        return balance !== null && balance.total !== '0';
+        return balance !== null && balance.total !== "0";
     } catch (error) {
         console.log(`Error checking storage balance: ${error}`);
         return false;
@@ -34,17 +44,20 @@ async function swapToken(
     inputTokenId: string,
     outputTokenId: string,
     amount: string,
-    slippageTolerance: number = Number(runtime.getSetting("SLIPPAGE_TOLERANCE")) || 0.01
+    slippageTolerance: number = Number(
+        runtime.getSetting("SLIPPAGE_TOLERANCE")
+    ) || 0.01
 ): Promise<any> {
     try {
         // Get token metadata
         const tokenIn = await ftGetTokenMetadata(inputTokenId);
         const tokenOut = await ftGetTokenMetadata(outputTokenId);
         const networkId = runtime.getSetting("NEAR_NETWORK") || "testnet";
-        const nodeUrl = runtime.getSetting("RPC_URL") || "https://rpc.testnet.near.org";
+        const nodeUrl =
+            runtime.getSetting("RPC_URL") || "https://rpc.testnet.near.org";
 
         // Get all pools for estimation
-        const { ratedPools, unRatedPools, simplePools} = await fetchAllPools();
+        const { ratedPools, unRatedPools, simplePools } = await fetchAllPools();
         const swapTodos = await estimateSwap({
             tokenIn,
             tokenOut,
@@ -52,11 +65,11 @@ async function swapToken(
             simplePools,
             options: {
                 enableSmartRouting: true,
-            }
+            },
         });
 
         if (!swapTodos || swapTodos.length === 0) {
-            throw new Error('No valid swap route found');
+            throw new Error("No valid swap route found");
         }
 
         // Get account ID from runtime settings
@@ -88,31 +101,41 @@ async function swapToken(
             amountIn: amount,
             swapTodos,
             slippageTolerance,
-            AccountId: accountId
+            AccountId: accountId,
         });
 
         // If storage deposit is needed, add it to transactions
         if (!hasStorageIn) {
             transactions.unshift({
                 receiverId: inputTokenId,
-                functionCalls: [{
-                    methodName: 'storage_deposit',
-                    args: { account_id: accountId, registration_only: true },
-                    gas: '30000000000000',
-                    amount: FT_MINIMUM_STORAGE_BALANCE_LARGE
-                }]
+                functionCalls: [
+                    {
+                        methodName: "storage_deposit",
+                        args: {
+                            account_id: accountId,
+                            registration_only: true,
+                        },
+                        gas: "30000000000000",
+                        amount: FT_MINIMUM_STORAGE_BALANCE_LARGE,
+                    },
+                ],
             });
         }
 
         if (!hasStorageOut) {
             transactions.unshift({
                 receiverId: outputTokenId,
-                functionCalls: [{
-                    methodName: 'storage_deposit',
-                    args: { account_id: accountId, registration_only: true },
-                    gas: '30000000000000',
-                    amount: FT_MINIMUM_STORAGE_BALANCE_LARGE
-                }]
+                functionCalls: [
+                    {
+                        methodName: "storage_deposit",
+                        args: {
+                            account_id: accountId,
+                            registration_only: true,
+                        },
+                        gas: "30000000000000",
+                        amount: FT_MINIMUM_STORAGE_BALANCE_LARGE,
+                    },
+                ],
             });
         }
 
@@ -156,7 +179,12 @@ Respond with a JSON markdown block containing only the extracted values. Use nul
 
 export const executeSwap: Action = {
     name: "EXECUTE_SWAP_NEAR",
-    similes: ["SWAP_TOKENS_NEAR", "TOKEN_SWAP_NEAR", "TRADE_TOKENS_NEAR", "EXCHANGE_TOKENS_NEAR"],
+    similes: [
+        "SWAP_TOKENS_NEAR",
+        "TOKEN_SWAP_NEAR",
+        "TRADE_TOKENS_NEAR",
+        "EXCHANGE_TOKENS_NEAR",
+    ],
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         console.log("Message:", message);
         return true;
@@ -186,7 +214,7 @@ export const executeSwap: Action = {
             template: swapTemplate,
         });
 
-        const response = await generateObject({
+        const response = await generateObjectV2({
             runtime,
             context: swapContext,
             modelClass: ModelClass.LARGE,
@@ -194,7 +222,11 @@ export const executeSwap: Action = {
 
         console.log("Response:", response);
 
-        if (!response.inputTokenId || !response.outputTokenId || !response.amount) {
+        if (
+            !response.inputTokenId ||
+            !response.outputTokenId ||
+            !response.amount
+        ) {
             console.log("Missing required parameters, skipping swap");
             const responseMsg = {
                 text: "I need the input token ID, output token ID, and amount to perform the swap",
@@ -214,13 +246,17 @@ export const executeSwap: Action = {
 
             // Create keystore and connect to NEAR
             const keyStore = new keyStores.InMemoryKeyStore();
-            const keyPair = utils.KeyPair.fromString(secretKey as KeyPairString);
+            const keyPair = utils.KeyPair.fromString(
+                secretKey as KeyPairString
+            );
             await keyStore.setKey("testnet", accountId, keyPair);
 
             const nearConnection = await connect({
                 networkId: runtime.getSetting("NEAR_NETWORK") || "testnet",
                 keyStore,
-                nodeUrl: runtime.getSetting("RPC_URL") || "https://rpc.testnet.near.org",
+                nodeUrl:
+                    runtime.getSetting("RPC_URL") ||
+                    "https://rpc.testnet.near.org",
             });
 
             // Execute swap
@@ -243,14 +279,18 @@ export const executeSwap: Action = {
                         methodName: functionCall.methodName,
                         args: functionCall.args,
                         gas: functionCall.gas,
-                        attachedDeposit: BigInt(functionCall.amount === ONE_YOCTO_NEAR ? '1' : functionCall.amount),
+                        attachedDeposit: BigInt(
+                            functionCall.amount === ONE_YOCTO_NEAR
+                                ? "1"
+                                : functionCall.amount
+                        ),
                     });
                     results.push(result);
                 }
             }
 
             console.log("Swap completed successfully!");
-            const txHashes = results.map(r => r.transaction.hash).join(", ");
+            const txHashes = results.map((r) => r.transaction.hash).join(", ");
 
             const responseMsg = {
                 text: `Swap completed successfully! Transaction hashes: ${txHashes}`,
