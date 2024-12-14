@@ -5,7 +5,9 @@ import { createCollection } from "./handlers/createCollection.ts";
 import { createNFT, createNFTMetadata } from "./handlers/createNFT.ts";
 import { verifyNFT } from "./handlers/verifyNFT.ts";
 
-export function createNFTApiRouter(agents: Map<string, AgentRuntime>) {
+export function createNFTApiRouter(
+    agents: Map<string, AgentRuntime>
+): express.Router {
     const router = express.Router();
 
     router.post(
@@ -22,7 +24,7 @@ export function createNFTApiRouter(agents: Map<string, AgentRuntime>) {
                 const collectionAddressRes = await createCollection({
                     runtime,
                     collectionName: runtime.character.name,
-                    fee
+                    fee,
                 });
 
                 res.json({
@@ -38,7 +40,6 @@ export function createNFTApiRouter(agents: Map<string, AgentRuntime>) {
             }
         }
     );
-
 
     router.post(
         "/api/nft-generation/create-nft-metadata",
@@ -120,7 +121,6 @@ export function createNFTApiRouter(agents: Map<string, AgentRuntime>) {
         }
     );
 
-
     router.post(
         "/api/nft-generation/verify-nft",
         async (req: express.Request, res: express.Response) => {
@@ -134,13 +134,13 @@ export function createNFTApiRouter(agents: Map<string, AgentRuntime>) {
                 res.status(404).send("Agent not found");
                 return;
             }
-            const verifyToken = runtime.getSetting('SOLANA_VERIFY_TOKEN')
+            const verifyToken = runtime.getSetting("SOLANA_VERIFY_TOKEN");
             if (token !== verifyToken) {
                 res.status(401).send(" Access denied for translation");
                 return;
             }
             try {
-               const {success} = await verifyNFT({
+                const { success } = await verifyNFT({
                     runtime,
                     collectionAddress,
                     NFTAddress,
@@ -148,7 +148,7 @@ export function createNFTApiRouter(agents: Map<string, AgentRuntime>) {
 
                 res.json({
                     success: true,
-                    data: success ? 'verified' : 'unverified',
+                    data: success ? "verified" : "unverified",
                 });
             } catch (e: any) {
                 console.log(e);
@@ -159,7 +159,6 @@ export function createNFTApiRouter(agents: Map<string, AgentRuntime>) {
             }
         }
     );
-
 
     return router;
 }
