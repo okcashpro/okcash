@@ -9,8 +9,8 @@
         "start:debug": "cross-env NODE_ENV=development VERBOSE=true DEBUG=eliza:* pnpm --filter \"@ai16z/agent\" start --isRoot",
         "dev": "bash ./scripts/dev.sh",
         "lint": "bash ./scripts/lint.sh",
-        "prettier-check": "npx prettier --check .",
-        "prettier": "npx prettier --write .",
+        "prettier-check": "npx prettier --check --cache .",
+        "prettier": "npx prettier --write --cache .",
         "release": "pnpm build && pnpm prettier && npx lerna publish --no-private --force-publish",
         "clean": "bash ./scripts/clean.sh",
         "docker:build": "bash ./scripts/docker.sh build",
@@ -18,7 +18,9 @@
         "docker:bash": "bash ./scripts/docker.sh bash",
         "docker:start": "bash ./scripts/docker.sh start",
         "docker": "pnpm docker:build && pnpm docker:run && pnpm docker:bash",
-        "test": "bash ./scripts/test.sh"
+        "test": "bash ./scripts/test.sh",
+        "smokeTests": "bash ./scripts/smokeTests.sh",
+        "integrationTests": "bash ./scripts/integrationTests.sh"
     },
     "devDependencies": {
         "@commitlint/cli": "18.6.1",
@@ -38,7 +40,8 @@
         "typedoc": "0.26.11",
         "typescript": "5.6.3",
         "vite": "5.4.11",
-        "vitest": "2.1.5"
+        "vitest": "2.1.5",
+        "zx": "^8.2.4"
     },
     "pnpm": {
         "overrides": {
@@ -51,9 +54,10 @@
     "dependencies": {
         "@0glabs/0g-ts-sdk": "0.2.1",
         "@coinbase/coinbase-sdk": "0.10.0",
+        "@deepgram/sdk": "^3.9.0",
+        "@vitest/eslint-plugin": "1.0.1",
         "amqplib": "0.10.5",
         "csv-parse": "5.6.0",
-        "@vitest/eslint-plugin": "1.0.1",
         "ollama-ai-provider": "0.16.1",
         "optional": "0.1.4",
         "pnpm": "9.14.4",

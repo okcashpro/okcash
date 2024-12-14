@@ -207,6 +207,7 @@ export type Models = {
     [ModelProviderName.VOLENGINE]: Model;
     [ModelProviderName.NANOGPT]: Model;
     [ModelProviderName.HYPERBOLIC]: Model;
+    [ModelProviderName.VENICE]: Model;
 };
 
 /**
@@ -234,6 +235,7 @@ export enum ModelProviderName {
     VOLENGINE = "volengine",
     NANOGPT = "nanogpt",
     HYPERBOLIC = "hyperbolic",
+    VENICE = "venice",
 }
 
 /**
@@ -559,6 +561,9 @@ export type Media = {
 
     /** Text content */
     text: string;
+
+    /** Content type */
+    contentType?: string;
 };
 
 /**
@@ -566,10 +571,10 @@ export type Media = {
  */
 export type Client = {
     /** Start client connection */
-    start: (runtime?: IAgentRuntime) => Promise<unknown>;
+    start: (runtime: IAgentRuntime) => Promise<unknown>;
 
     /** Stop client connection */
-    stop: (runtime?: IAgentRuntime) => Promise<unknown>;
+    stop: (runtime: IAgentRuntime) => Promise<unknown>;
 };
 
 /**
@@ -603,10 +608,14 @@ export type Plugin = {
  */
 export enum Clients {
     DISCORD = "discord",
-    DIRECT = "direct",
+    // you can't specify this in characters
+    // all characters are registered with this
+    //    DIRECT = "direct",
     TWITTER = "twitter",
     TELEGRAM = "telegram",
     FARCASTER = "farcaster",
+    AUTO = "auto",
+    SLACK = "slack",
 }
 /**
  * Configuration for an agent character
@@ -653,6 +662,8 @@ export type Character = {
         discordVoiceHandlerTemplate?: string;
         discordShouldRespondTemplate?: string;
         discordMessageHandlerTemplate?: string;
+        slackMessageHandlerTemplate?: string;
+        slackShouldRespondTemplate?: string;
     };
 
     /** Character biography */
@@ -713,8 +724,22 @@ export type Character = {
         discord?: {
             shouldIgnoreBotMessages?: boolean;
             shouldIgnoreDirectMessages?: boolean;
+            messageSimilarityThreshold?: number;
+            isPartOfTeam?: boolean;
+            teamAgentIds?: string[];
+            teamLeaderId?: string;
+            teamMemberInterestKeywords?: string[];
         };
         telegram?: {
+            shouldIgnoreBotMessages?: boolean;
+            shouldIgnoreDirectMessages?: boolean;
+            messageSimilarityThreshold?: number;
+            isPartOfTeam?: boolean;
+            teamAgentIds?: string[];
+            teamLeaderId?: string;
+            teamMemberInterestKeywords?: string[];
+        };
+        slack?: {
             shouldIgnoreBotMessages?: boolean;
             shouldIgnoreDirectMessages?: boolean;
         };
@@ -996,6 +1021,8 @@ export interface IAgentRuntime {
     evaluators: Evaluator[];
     plugins: Plugin[];
 
+    fetch?: typeof fetch | null;
+
     messageManager: IMemoryManager;
     descriptionManager: IMemoryManager;
     documentsManager: IMemoryManager;
@@ -1005,6 +1032,9 @@ export interface IAgentRuntime {
     cacheManager: ICacheManager;
 
     services: Map<ServiceType, Service>;
+    // any could be EventEmitter
+    // but I think the real solution is forthcoming as a base client interface
+    clients: Record<string, any>;
 
     initialize(): Promise<void>;
 
@@ -1128,12 +1158,17 @@ export interface IPdfService extends Service {
 }
 
 export interface IAwsS3Service extends Service {
-    uploadFile(imagePath: string, subDirectory: string, useSignedUrl: boolean, expiresIn: number ): Promise<{
+    uploadFile(
+        imagePath: string,
+        subDirectory: string,
+        useSignedUrl: boolean,
+        expiresIn: number
+    ): Promise<{
         success: boolean;
         url?: string;
         error?: string;
     }>;
-    generateSignedUrl(fileName: string, expiresIn: number): Promise<string>
+    generateSignedUrl(fileName: string, expiresIn: number): Promise<string>;
 }
 
 export type SearchResult = {
@@ -1163,6 +1198,8 @@ export enum ServiceType {
     PDF = "pdf",
     INTIFACE = "intiface",
     AWS_S3 = "aws_s3",
+    BUTTPLUG = "buttplug",
+    SLACK = "slack",
 }
 
 export enum LoggingLevel {
@@ -1175,3 +1212,14 @@ export type KnowledgeItem = {
     id: UUID;
     content: Content;
 };
+
+export interface ActionResponse {
+    like: boolean;
+    retweet: boolean;
+    quote?: boolean;
+    reply?: boolean;
+}
+
+export interface ISlackService extends Service {
+    client: any;
+}

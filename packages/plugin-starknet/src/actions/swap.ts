@@ -3,7 +3,7 @@ import {
     ActionExample,
     composeContext,
     elizaLogger,
-    generateObjectDEPRECATED,
+    generateObjectDeprecated,
     HandlerCallback,
     IAgentRuntime,
     Memory,
@@ -105,7 +105,7 @@ export const executeSwap: Action = {
             template: swapTemplate,
         });
 
-        const response = await generateObjectDEPRECATED({
+        const response = await generateObjectDeprecated({
             runtime,
             context: swapContext,
             modelClass: ModelClass.MEDIUM,

@@ -5,7 +5,10 @@
             "dependsOn": ["build"]
         },
         "@ai16z/agent#check-types": {
-            "dependsOn": ["@ai16z/plugin-solana#build"]
+            "dependsOn": [
+                "@ai16z/plugin-solana#build",
+                "@ai16z/plugin-direct#build"
+            ]
         },
         "build": {
             "outputs": ["dist/**"],
