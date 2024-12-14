@@ -21,6 +21,7 @@ import {
     parseJsonArrayFromText,
     parseJSONObjectFromText,
     parseShouldRespondFromText,
+    parseActionResponseFromText
 } from "./parsing.ts";
 import settings from "./settings.ts";
 import {
@@ -32,6 +33,7 @@ import {
     ModelProviderName,
     ServiceType,
     SearchResponse,
+    ActionResponse
 } from "./types.ts";
 import { fal } from "@fal-ai/client";
 
@@ -78,47 +80,68 @@ export async function generateText({
 
     // allow character.json settings => secrets to override models
     // FIXME: add MODEL_MEDIUM support
-    switch(provider) {
+    switch (provider) {
         // if runtime.getSetting("LLAMACLOUD_MODEL_LARGE") is true and modelProvider is LLAMACLOUD, then use the large model
-        case ModelProviderName.LLAMACLOUD: {
-            switch(modelClass) {
-                case ModelClass.LARGE: {
-                    model = runtime.getSetting("LLAMACLOUD_MODEL_LARGE") || model;
+        case ModelProviderName.LLAMACLOUD:
+            {
+                switch (modelClass) {
+                    case ModelClass.LARGE:
+                        {
+                            model =
+                                runtime.getSetting("LLAMACLOUD_MODEL_LARGE") ||
+                                model;
+                        }
+                        break;
+                    case ModelClass.SMALL:
+                        {
+                            model =
+                                runtime.getSetting("LLAMACLOUD_MODEL_SMALL") ||
+                                model;
+                        }
+                        break;
                 }
-                break;
-                case ModelClass.SMALL: {
-                    model = runtime.getSetting("LLAMACLOUD_MODEL_SMALL") || model;
-                }
-                break;
             }
-        }
-        break;
-        case ModelProviderName.TOGETHER: {
-            switch(modelClass) {
-                case ModelClass.LARGE: {
-                    model = runtime.getSetting("TOGETHER_MODEL_LARGE") || model;
+            break;
+        case ModelProviderName.TOGETHER:
+            {
+                switch (modelClass) {
+                    case ModelClass.LARGE:
+                        {
+                            model =
+                                runtime.getSetting("TOGETHER_MODEL_LARGE") ||
+                                model;
+                        }
+                        break;
+                    case ModelClass.SMALL:
+                        {
+                            model =
+                                runtime.getSetting("TOGETHER_MODEL_SMALL") ||
+                                model;
+                        }
+                        break;
                 }
-                break;
-                case ModelClass.SMALL: {
-                    model = runtime.getSetting("TOGETHER_MODEL_SMALL") || model;
-                }
-                break;
             }
-        }
-        break;
-        case ModelProviderName.OPENROUTER: {
-            switch(modelClass) {
-                case ModelClass.LARGE: {
-                    model = runtime.getSetting("LARGE_OPENROUTER_MODEL") || model;
+            break;
+        case ModelProviderName.OPENROUTER:
+            {
+                switch (modelClass) {
+                    case ModelClass.LARGE:
+                        {
+                            model =
+                                runtime.getSetting("LARGE_OPENROUTER_MODEL") ||
+                                model;
+                        }
+                        break;
+                    case ModelClass.SMALL:
+                        {
+                            model =
+                                runtime.getSetting("SMALL_OPENROUTER_MODEL") ||
+                                model;
+                        }
+                        break;
                 }
-                break;
-                case ModelClass.SMALL: {
-                    model = runtime.getSetting("SMALL_OPENROUTER_MODEL") || model;
-                }
-                break;
             }
-        }
-        break;
+            break;
     }
 
     elizaLogger.info("Selected model:", model);
@@ -155,7 +178,11 @@ export async function generateText({
             case ModelProviderName.HYPERBOLIC:
             case ModelProviderName.TOGETHER: {
                 elizaLogger.debug("Initializing OpenAI model.");
-                const openai = createOpenAI({ apiKey, baseURL: endpoint });
+                const openai = createOpenAI({
+                    apiKey,
+                    baseURL: endpoint,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
@@ -176,7 +203,9 @@ export async function generateText({
             }
 
             case ModelProviderName.GOOGLE: {
-                const google = createGoogleGenerativeAI();
+                const google = createGoogleGenerativeAI({
+                    fetch: runtime.fetch,
+                });
 
                 const { text: googleResponse } = await aiGenerateText({
                     model: google(model),
@@ -199,7 +228,10 @@ export async function generateText({
             case ModelProviderName.ANTHROPIC: {
                 elizaLogger.debug("Initializing Anthropic model.");
 
-                const anthropic = createAnthropic({ apiKey });
+                const anthropic = createAnthropic({
+                    apiKey,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: anthropicResponse } = await aiGenerateText({
                     model: anthropic.languageModel(model),
@@ -222,7 +254,10 @@ export async function generateText({
             case ModelProviderName.CLAUDE_VERTEX: {
                 elizaLogger.debug("Initializing Claude Vertex model.");
 
-                const anthropic = createAnthropic({ apiKey });
+                const anthropic = createAnthropic({
+                    apiKey,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: anthropicResponse } = await aiGenerateText({
                     model: anthropic.languageModel(model),
@@ -246,7 +281,11 @@ export async function generateText({
 
             case ModelProviderName.GROK: {
                 elizaLogger.debug("Initializing Grok model.");
-                const grok = createOpenAI({ apiKey, baseURL: endpoint });
+                const grok = createOpenAI({
+                    apiKey,
+                    baseURL: endpoint,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: grokResponse } = await aiGenerateText({
                     model: grok.languageModel(model, {
@@ -269,7 +308,7 @@ export async function generateText({
             }
 
             case ModelProviderName.GROQ: {
-                const groq = createGroq({ apiKey });
+                const groq = createGroq({ apiKey, fetch: runtime.fetch });
 
                 const { text: groqResponse } = await aiGenerateText({
                     model: groq.languageModel(model),
@@ -316,7 +355,11 @@ export async function generateText({
             case ModelProviderName.REDPILL: {
                 elizaLogger.debug("Initializing RedPill model.");
                 const serverUrl = models[provider].endpoint;
-                const openai = createOpenAI({ apiKey, baseURL: serverUrl });
+                const openai = createOpenAI({
+                    apiKey,
+                    baseURL: serverUrl,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: redpillResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
@@ -339,7 +382,11 @@ export async function generateText({
             case ModelProviderName.OPENROUTER: {
                 elizaLogger.debug("Initializing OpenRouter model.");
                 const serverUrl = models[provider].endpoint;
-                const openrouter = createOpenAI({ apiKey, baseURL: serverUrl });
+                const openrouter = createOpenAI({
+                    apiKey,
+                    baseURL: serverUrl,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: openrouterResponse } = await aiGenerateText({
                     model: openrouter.languageModel(model),
@@ -365,6 +412,7 @@ export async function generateText({
 
                     const ollamaProvider = createOllama({
                         baseURL: models[provider].endpoint + "/api",
+                        fetch: runtime.fetch,
                     });
                     const ollama = ollamaProvider(model);
 
@@ -389,6 +437,7 @@ export async function generateText({
                 const heurist = createOpenAI({
                     apiKey: apiKey,
                     baseURL: endpoint,
+                    fetch: runtime.fetch,
                 });
 
                 const { text: heuristResponse } = await aiGenerateText({
@@ -434,7 +483,11 @@ export async function generateText({
 
                 elizaLogger.debug("Using GAIANET model with baseURL:", baseURL);
 
-                const openai = createOpenAI({ apiKey, baseURL: endpoint });
+                const openai = createOpenAI({
+                    apiKey,
+                    baseURL: endpoint,
+                    fetch: runtime.fetch,
+                });
 
                 const { text: openaiResponse } = await aiGenerateText({
                     model: openai.languageModel(model),
@@ -459,6 +512,7 @@ export async function generateText({
                 const galadriel = createOpenAI({
                     apiKey: apiKey,
                     baseURL: endpoint,
+                    fetch: runtime.fetch,
                 });
 
                 const { text: galadrielResponse } = await aiGenerateText({
@@ -476,6 +530,29 @@ export async function generateText({
 
                 response = galadrielResponse;
                 elizaLogger.debug("Received response from Galadriel model.");
+                break;
+            }
+
+            case ModelProviderName.VENICE: {
+                elizaLogger.debug("Initializing Venice model.");
+                const venice = createOpenAI({
+                    apiKey: apiKey,
+                    baseURL: endpoint
+                });
+
+                const { text: veniceResponse } = await aiGenerateText({
+                    model: venice.languageModel(model),
+                    prompt: context,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                });
+
+                response = veniceResponse;
+                elizaLogger.debug("Received response from Venice model.");
                 break;
             }
 
@@ -877,7 +954,8 @@ export const generateImage = async (
             : (runtime.getSetting("HEURIST_API_KEY") ??
               runtime.getSetting("TOGETHER_API_KEY") ??
               runtime.getSetting("FAL_API_KEY") ??
-              runtime.getSetting("OPENAI_API_KEY"));
+              runtime.getSetting("OPENAI_API_KEY") ??
+              runtime.getSetting("VENICE_API_KEY"));
 
     try {
         if (runtime.imageModelProvider === ModelProviderName.HEURIST) {
@@ -1023,6 +1101,40 @@ export const generateImage = async (
             });
 
             const base64s = await Promise.all(base64Promises);
+            return { success: true, data: base64s };
+        } else if (runtime.imageModelProvider === ModelProviderName.VENICE) {
+            const response = await fetch(
+                "https://api.venice.ai/api/v1/image/generate",
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${apiKey}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        model: data.modelId || "fluently-xl",
+                        prompt: data.prompt,
+                        negative_prompt: data.negativePrompt,
+                        width: data.width || 1024,
+                        height: data.height || 1024,
+                        steps: data.numIterations || 20,
+                    }),
+                }
+            );
+
+            const result = await response.json();
+
+            if (!result.images || !Array.isArray(result.images)) {
+                throw new Error("Invalid response format from Venice AI");
+            }
+
+            const base64s = result.images.map((base64String) => {
+                if (!base64String) {
+                    throw new Error("Empty base64 string in Venice AI response");
+                }
+                return `data:image/png;base64,${base64String}`;
+            });
+
             return { success: true, data: base64s };
         } else {
             let targetSize = `${data.width}x${data.height}`;
@@ -1495,4 +1607,46 @@ interface TogetherAIImageResponse {
         content_type?: string;
         image_type?: string;
     }>;
+}
+
+export async function generateTweetActions({
+    runtime,
+    context,
+    modelClass,
+}: {
+    runtime: IAgentRuntime;
+    context: string;
+    modelClass: string;
+}): Promise<ActionResponse | null> {
+    let retryDelay = 1000;
+    while (true) {
+        try {
+            const response = await generateText({
+                runtime,
+                context,
+                modelClass,
+            });
+            console.debug("Received response from generateText for tweet actions:", response);
+            const { actions } = parseActionResponseFromText(response.trim());
+            if (actions) {
+                console.debug("Parsed tweet actions:", actions);
+                return actions;
+            } else {
+                elizaLogger.debug("generateTweetActions no valid response");
+            }
+        } catch (error) {
+            elizaLogger.error("Error in generateTweetActions:", error);
+            if (
+                error instanceof TypeError &&
+                error.message.includes("queueTextCompletion")
+            ) {
+                elizaLogger.error(
+                    "TypeError: Cannot read properties of null (reading 'queueTextCompletion')"
+                );
+            }
+        }
+        elizaLogger.log(`Retrying in ${retryDelay}ms...`);
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        retryDelay *= 2;
+    }
 }
