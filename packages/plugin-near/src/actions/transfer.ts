@@ -13,7 +13,7 @@ import {
 import { connect, keyStores, utils } from "near-api-js";
 import { KeyPairString } from "near-api-js/lib/utils";
 import { utils as nearUtils } from "near-api-js";
-import BigNumber from "bignumber.js";
+// import BigNumber from "bignumber.js";
 
 export interface TransferContent extends Content {
     recipient: string;
