@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / DbCacheAdapter
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / DbCacheAdapter
 
 # Class: DbCacheAdapter
 
@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/core/src/cache.ts:70](https://github.com/monilpat/eliza/blob/main/packages/core/src/cache.ts#L70)
+[packages/core/src/cache.ts:70](https://github.com/ai16z/eliza/blob/main/packages/core/src/cache.ts#L70)
 
 ## Methods
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[packages/core/src/cache.ts:75](https://github.com/monilpat/eliza/blob/main/packages/core/src/cache.ts#L75)
+[packages/core/src/cache.ts:75](https://github.com/ai16z/eliza/blob/main/packages/core/src/cache.ts#L75)
 
 ***
 
@@ -70,7 +70,7 @@
 
 #### Defined in
 
-[packages/core/src/cache.ts:79](https://github.com/monilpat/eliza/blob/main/packages/core/src/cache.ts#L79)
+[packages/core/src/cache.ts:79](https://github.com/ai16z/eliza/blob/main/packages/core/src/cache.ts#L79)
 
 ***
 
@@ -92,4 +92,4 @@
 
 #### Defined in
 
-[packages/core/src/cache.ts:83](https://github.com/monilpat/eliza/blob/main/packages/core/src/cache.ts#L83)
+[packages/core/src/cache.ts:83](https://github.com/ai16z/eliza/blob/main/packages/core/src/cache.ts#L83)

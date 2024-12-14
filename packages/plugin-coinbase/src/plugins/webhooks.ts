@@ -8,7 +8,7 @@ import {
     HandlerCallback,
     State,
     composeContext,
-    generateObjectV2,
+    generateObject,
     ModelClass,
     Provider,
 } from "@ai16z/eliza";
@@ -93,7 +93,7 @@ export const createWebhookAction: Action = {
                 template: webhookTemplate,
             });
 
-            const webhookDetails = await generateObjectV2({
+            const webhookDetails = await generateObject({
                 runtime,
                 context,
                 modelClass: ModelClass.LARGE,
@@ -110,8 +110,11 @@ export const createWebhookAction: Action = {
                 return;
             }
 
-            const { networkId, eventType, eventFilters, eventTypeFilter } = webhookDetails.object as WebhookContent;
-            const notificationUri = runtime.getSetting("COINBASE_NOTIFICATION_URI") ?? process.env.COINBASE_NOTIFICATION_URI;
+            const { networkId, eventType, eventFilters, eventTypeFilter } =
+                webhookDetails.object as WebhookContent;
+            const notificationUri =
+                runtime.getSetting("COINBASE_NOTIFICATION_URI") ??
+                process.env.COINBASE_NOTIFICATION_URI;
 
             if (!notificationUri) {
                 callback(
@@ -122,9 +125,23 @@ export const createWebhookAction: Action = {
                 );
                 return;
             }
-            elizaLogger.log("Creating webhook with details:", {networkId, notificationUri, eventType, eventTypeFilter, eventFilters});
-            const webhook = await Webhook.create({networkId, notificationUri, eventType, eventFilters});
-            elizaLogger.log("Webhook created successfully:", webhook.toString());
+            elizaLogger.log("Creating webhook with details:", {
+                networkId,
+                notificationUri,
+                eventType,
+                eventTypeFilter,
+                eventFilters,
+            });
+            const webhook = await Webhook.create({
+                networkId,
+                notificationUri,
+                eventType,
+                eventFilters,
+            });
+            elizaLogger.log(
+                "Webhook created successfully:",
+                webhook.toString()
+            );
             callback(
                 {
                     text: `Webhook created successfully: ${webhook.toString()}`,
@@ -160,7 +177,7 @@ export const createWebhookAction: Action = {
                 },
             },
         ],
-    ]
+    ],
 };
 
 export const webhookPlugin: Plugin = {

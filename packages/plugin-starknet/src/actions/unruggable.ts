@@ -3,7 +3,7 @@ import {
     ActionExample,
     composeContext,
     elizaLogger,
-    generateObjectDEPRECATED,
+    generateObjectDeprecated,
     HandlerCallback,
     IAgentRuntime,
     Memory,
@@ -102,7 +102,7 @@ export const deployToken: Action = {
             template: deployTemplate,
         });
 
-        const response = await generateObjectDEPRECATED({
+        const response = await generateObjectDeprecated({
             runtime,
             context: deployContext,
             modelClass: ModelClass.MEDIUM,

@@ -23,7 +23,7 @@ import {
 } from "@ai16z/eliza";
 import { composeContext } from "@ai16z/eliza";
 import { getWalletKey } from "../keypairUtils";
-import { generateObjectDEPRECATED } from "@ai16z/eliza";
+import { generateObjectDeprecated } from "@ai16z/eliza";
 
 export interface TransferContent extends Content {
     tokenAddress: string;
@@ -118,7 +118,7 @@ export default {
         });
 
         // Generate transfer content
-        const content = await generateObjectDEPRECATED({
+        const content = await generateObjectDeprecated({
             runtime,
             context: transferContext,
             modelClass: ModelClass.LARGE,
