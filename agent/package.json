@@ -25,6 +25,7 @@
         "@ai16z/client-farcaster": "workspace:*",
         "@ai16z/client-telegram": "workspace:*",
         "@ai16z/client-twitter": "workspace:*",
+        "@ai16z/client-slack": "workspace:*",
         "@ai16z/eliza": "workspace:*",
         "@ai16z/plugin-0g": "workspace:*",
         "@ai16z/plugin-aptos": "workspace:*",

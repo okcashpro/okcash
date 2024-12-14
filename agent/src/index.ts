@@ -1,58 +1,56 @@
 import { PostgresDatabaseAdapter } from "@ai16z/adapter-postgres";
 import { SqliteDatabaseAdapter } from "@ai16z/adapter-sqlite";
 import { AutoClientInterface } from "@ai16z/client-auto";
-import { DirectClientInterface } from "@ai16z/client-direct";
 import { DiscordClientInterface } from "@ai16z/client-discord";
+import { FarcasterAgentClient } from "@ai16z/client-farcaster";
+import { SlackClientInterface } from "@ai16z/client-slack";
 import { TelegramClientInterface } from "@ai16z/client-telegram";
 import { TwitterClientInterface } from "@ai16z/client-twitter";
-import { FarcasterAgentClient } from "@ai16z/client-farcaster";
 import {
     AgentRuntime,
     CacheManager,
     Character,
-    Clients,
     DbCacheAdapter,
+    defaultCharacter,
+    elizaLogger,
     FsCacheAdapter,
     IAgentRuntime,
     ICacheManager,
     IDatabaseAdapter,
     IDatabaseCacheAdapter,
     ModelProviderName,
-    defaultCharacter,
-    elizaLogger,
     settings,
     stringToUuid,
     validateCharacterConfig,
 } from "@ai16z/eliza";
 import { zgPlugin } from "@ai16z/plugin-0g";
-import createGoatPlugin from "@ai16z/plugin-goat";
 import { bootstrapPlugin } from "@ai16z/plugin-bootstrap";
+import createGoatPlugin from "@ai16z/plugin-goat";
 // import { intifacePlugin } from "@ai16z/plugin-intiface";
+import { DirectClient } from "@ai16z/client-direct";
+import { aptosPlugin } from "@ai16z/plugin-aptos";
 import {
+    advancedTradePlugin,
     coinbaseCommercePlugin,
     coinbaseMassPaymentsPlugin,
-    tradePlugin,
     tokenContractPlugin,
+    tradePlugin,
     webhookPlugin,
-    advancedTradePlugin,
 } from "@ai16z/plugin-coinbase";
-import { DirectClient } from "@ai16z/client-direct";
 import { confluxPlugin } from "@ai16z/plugin-conflux";
-import { zksyncEraPlugin } from "@ai16z/plugin-zksync-era";
-import { imageGenerationPlugin } from "@ai16z/plugin-image-generation";
 import { evmPlugin } from "@ai16z/plugin-evm";
-import { createNodePlugin } from "@ai16z/plugin-node";
-import { solanaPlugin } from "@ai16z/plugin-solana";
-import { teePlugin, TEEMode } from "@ai16z/plugin-tee";
-import { aptosPlugin, TransferAptosToken } from "@ai16z/plugin-aptos";
-import { tonPlugin } from "@ai16z/plugin-ton";
 import { flowPlugin } from "@ai16z/plugin-flow";
+import { imageGenerationPlugin } from "@ai16z/plugin-image-generation";
 import { multiversxPlugin } from "@ai16z/plugin-multiversx";
 import { nearPlugin } from "@ai16z/plugin-near";
+import { createNodePlugin } from "@ai16z/plugin-node";
+import { solanaPlugin } from "@ai16z/plugin-solana";
+import { TEEMode, teePlugin } from "@ai16z/plugin-tee";
+import { tonPlugin } from "@ai16z/plugin-ton";
+import { zksyncEraPlugin } from "@ai16z/plugin-zksync-era";
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
-import readline from "readline";
 import { fileURLToPath } from "url";
 import yargs from "yargs";
 
@@ -375,6 +373,12 @@ export async function initializeClients(
     }
 
     elizaLogger.log("client keys", Object.keys(clients));
+
+    // TODO: Add Slack client to the list
+    if (clientTypes.includes("slack")) {
+        const slackClient = await SlackClientInterface.start(runtime);
+        if (slackClient) clients.push(slackClient);
+    }
 
     if (character.plugins?.length > 0) {
         for (const plugin of character.plugins) {

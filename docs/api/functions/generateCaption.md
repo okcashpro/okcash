@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / generateCaption
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / generateCaption
 
 # Function: generateCaption()
 
@@ -26,4 +26,4 @@
 
 ## Defined in
 
-[packages/core/src/generation.ts:998](https://github.com/monilpat/eliza/blob/main/packages/core/src/generation.ts#L998)
+[packages/core/src/generation.ts:1175](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1175)

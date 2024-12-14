@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / ModelClass
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / ModelClass
 
 # Enumeration: ModelClass
 
@@ -12,7 +12,7 @@ Model size/type classification
 
 #### Defined in
 
-[packages/core/src/types.ts:132](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L132)
+[packages/core/src/types.ts:132](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L132)
 
 ***
 
@@ -22,7 +22,7 @@ Model size/type classification
 
 #### Defined in
 
-[packages/core/src/types.ts:133](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L133)
+[packages/core/src/types.ts:133](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L133)
 
 ***
 
@@ -32,7 +32,7 @@ Model size/type classification
 
 #### Defined in
 
-[packages/core/src/types.ts:134](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L134)
+[packages/core/src/types.ts:134](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L134)
 
 ***
 
@@ -42,7 +42,7 @@ Model size/type classification
 
 #### Defined in
 
-[packages/core/src/types.ts:135](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L135)
+[packages/core/src/types.ts:135](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L135)
 
 ***
 
@@ -52,4 +52,4 @@ Model size/type classification
 
 #### Defined in
 
-[packages/core/src/types.ts:136](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L136)
+[packages/core/src/types.ts:136](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L136)
