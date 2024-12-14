@@ -137,7 +137,7 @@ This plugin enables Eliza to interact with the Coinbase Commerce API to create a
 
 ---
 
-##$$# Coinbase Wallet Management
+##### Coinbase Wallet Management
 
 The plugin automatically handles wallet creation or uses an existing wallet if the required details are provided during the first run.
 
