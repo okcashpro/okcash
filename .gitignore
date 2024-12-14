@@ -49,3 +49,4 @@ tsup.config.bundled_*.mjs
 .turbo
 
 coverage
+.eslintcache

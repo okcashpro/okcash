@@ -19,7 +19,7 @@
         "dev": "tsup --format esm --dts --watch",
         "test": "vitest run",
         "test:watch": "vitest",
-        "lint": "eslint . --fix"
+        "lint": "eslint --fix  --cache ."
     },
     "peerDependencies": {
         "whatwg-url": "7.1.0"
