@@ -1,7 +1,7 @@
 import {
     composeContext,
     elizaLogger,
-    generateObjectDEPRECATED,
+    generateObjectDeprecated,
     HandlerCallback,
     ModelClass,
     type IAgentRuntime,
@@ -114,7 +114,7 @@ export const getAvailableLicensesAction = {
             : await runtime.updateRecentMessageState(state);
 
         // Generate parameters from context
-        const content = await generateObjectDEPRECATED({
+        const content = await generateObjectDeprecated({
             runtime,
             context: composeContext({
                 state,

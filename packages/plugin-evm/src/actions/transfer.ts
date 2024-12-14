@@ -106,7 +106,6 @@ export const transferAction = {
         options: any,
         callback?: HandlerCallback
     ) => {
-<<<<<<< HEAD
         try {
             const walletProvider = initWalletProvider(runtime);
             const action = new TransferAction(walletProvider);
@@ -141,12 +140,6 @@ export const transferAction = {
             }
             return false;
         }
-=======
-        console.log("Transfer action options:", options);
-        const walletProvider = new WalletProvider(runtime);
-        const action = new TransferAction(walletProvider);
-        return action.transfer(runtime, options);
->>>>>>> 7ebab21dd8304d3af3edf980905c4ef70e52fa2d
     },
     template: transferTemplate,
     validate: async (runtime: IAgentRuntime) => {

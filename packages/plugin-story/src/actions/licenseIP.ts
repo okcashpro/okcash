@@ -1,7 +1,7 @@
 import {
     composeContext,
     elizaLogger,
-    generateObjectDEPRECATED,
+    generateObjectDeprecated,
     HandlerCallback,
     ModelClass,
     type IAgentRuntime,
@@ -69,7 +69,7 @@ export const licenseIPAction = {
             template: licenseIPTemplate,
         });
 
-        const content = await generateObjectDEPRECATED({
+        const content = await generateObjectDeprecated({
             runtime,
             context: licenseIPContext,
             modelClass: ModelClass.SMALL,

@@ -1,20 +1,20 @@
 import {
     composeContext,
     elizaLogger,
-    generateObjectDEPRECATED,
+    generateObjectDeprecated,
     HandlerCallback,
     ModelClass,
     type IAgentRuntime,
     type Memory,
     type State,
 } from "@ai16z/eliza";
+import pinataSDK from "@pinata/sdk";
+import { RegisterIpResponse } from "@story-protocol/core-sdk";
+import { createHash } from "crypto";
+import { uploadJSONToIPFS } from "../functions/uploadJSONToIPFS";
 import { WalletProvider } from "../providers/wallet";
 import { registerIPTemplate } from "../templates";
 import { RegisterIPParams } from "../types";
-import { RegisterIpResponse } from "@story-protocol/core-sdk";
-import { createHash } from "crypto";
-import pinataSDK from "@pinata/sdk";
-import { uploadJSONToIPFS } from "../functions/uploadJSONToIPFS";
 
 export { registerIPTemplate };
 
@@ -96,7 +96,7 @@ export const registerIPAction = {
             template: registerIPTemplate,
         });
 
-        const content = await generateObjectDEPRECATED({
+        const content = await generateObjectDeprecated({
             runtime,
             context: registerIPContext,
             modelClass: ModelClass.SMALL,
