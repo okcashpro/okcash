@@ -16,17 +16,23 @@ Available client platforms
 
 ***
 
+### DIRECT
+
+> **DIRECT**: `"direct"`
+
+#### Defined in
+
+[packages/core/src/types.ts:611](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L611)
+
+***
+
 ### TWITTER
 
 > **TWITTER**: `"twitter"`
 
-you can't specify this in characters
-all characters are registered with this
-   DIRECT = "direct",
-
 #### Defined in
 
-[packages/core/src/types.ts:614](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L614)
+[packages/core/src/types.ts:612](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L612)
 
 ***
 
@@ -36,7 +42,7 @@ all characters are registered with this
 
 #### Defined in
 
-[packages/core/src/types.ts:615](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L615)
+[packages/core/src/types.ts:613](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L613)
 
 ***
 
@@ -46,7 +52,17 @@ all characters are registered with this
 
 #### Defined in
 
-[packages/core/src/types.ts:616](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L616)
+[packages/core/src/types.ts:614](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L614)
+
+***
+
+### LENS
+
+> **LENS**: `"lens"`
+
+#### Defined in
+
+[packages/core/src/types.ts:615](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L615)
 
 ***
 
@@ -56,7 +72,7 @@ all characters are registered with this
 
 #### Defined in
 
-[packages/core/src/types.ts:617](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L617)
+[packages/core/src/types.ts:616](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L616)
 
 ***
 
@@ -66,4 +82,4 @@ all characters are registered with this
 
 #### Defined in
 
-[packages/core/src/types.ts:618](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L618)
+[packages/core/src/types.ts:617](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L617)

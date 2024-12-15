@@ -247,7 +247,7 @@ The model to use for generateImage.
 
 ### fetch()
 
-> **fetch**: (`input`, `init`?) => `Promise`\<`Response`\>(`input`, `init`?) => `Promise`\<`Response`\>
+> **fetch**: (`input`, `init`?) => `Promise`\<`Response`\>
 
 Fetch function to use
 Some environments may not have access to the global fetch function and need a custom fetch override.
@@ -257,16 +257,6 @@ Some environments may not have access to the global fetch function and need a cu
 #### Parameters
 
 • **input**: `RequestInfo` \| `URL`
-
-• **init?**: `RequestInit`
-
-#### Returns
-
-`Promise`\<`Response`\>
-
-#### Parameters
-
-• **input**: `string` \| `Request` \| `URL`
 
 • **init?**: `RequestInit`
 
