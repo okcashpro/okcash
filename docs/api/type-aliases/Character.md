@@ -100,21 +100,21 @@ Optional prompt templates
 
 > `optional` **farcasterPostTemplate**: `string`
 
-### templates.lensPostTemplate?
-
-> `optional` **lensPostTemplate**: `string`
-
 ### templates.farcasterMessageHandlerTemplate?
 
 > `optional` **farcasterMessageHandlerTemplate**: `string`
 
-### templates.lensMessageHandlerTemplate?
-
-> `optional` **lensMessageHandlerTemplate**: `string`
-
 ### templates.farcasterShouldRespondTemplate?
 
 > `optional` **farcasterShouldRespondTemplate**: `string`
+
+### templates.lensPostTemplate?
+
+> `optional` **lensPostTemplate**: `string`
+
+### templates.lensMessageHandlerTemplate?
+
+> `optional` **farcasterMessageHandlerTemplate**: `string`
 
 ### templates.lensShouldRespondTemplate?
 
@@ -214,7 +214,7 @@ Optional configuration
 
 #### Index Signature
 
- \[`key`: `string`\]: `string`
+\[`key`: `string`\]: `string`
 
 ### settings.intiface?
 
@@ -276,7 +276,7 @@ New structured ElevenLabs config
 
 #### Index Signature
 
- \[`key`: `string`\]: `any`[]
+\[`key`: `string`\]: `any`[]
 
 ### settings.chains.evm?
 
@@ -412,16 +412,6 @@ Optional Twitter profile
 
 > `optional` **nicknames**: `string`[]
 
-### nft?
-
-> `optional` **nft**: `object`
-
-Optional NFT prompt
-
-### nft.prompt
-
-> **prompt**: `string`
-
 ## Defined in
 
-[packages/core/src/types.ts:627](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L627)
+[packages/core/src/types.ts:623](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L623)

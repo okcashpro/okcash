@@ -32,4 +32,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:1189](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1189)
+[packages/core/src/types.ts:1177](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1177)
