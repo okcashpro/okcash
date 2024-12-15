@@ -1,10 +1,20 @@
-[@ai16z/eliza v0.1.5-alpha.5](../index.md) / ISpeechService
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / ISlackService
 
-# Interface: ISpeechService
+# Interface: ISlackService
 
 ## Extends
 
 - [`Service`](../classes/Service.md)
+
+## Properties
+
+### client
+
+> **client**: `any`
+
+#### Defined in
+
+[packages/core/src/types.ts:1219](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1219)
 
 ## Accessors
 
@@ -49,37 +59,3 @@ Add abstract initialize method that must be implemented by derived classes
 #### Defined in
 
 [packages/core/src/types.ts:1003](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1003)
-
-***
-
-### getInstance()
-
-> **getInstance**(): [`ISpeechService`](ISpeechService.md)
-
-#### Returns
-
-[`ISpeechService`](ISpeechService.md)
-
-#### Defined in
-
-[packages/core/src/types.ts:1147](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1147)
-
-***
-
-### generate()
-
-> **generate**(`runtime`, `text`): `Promise`\<`Readable`\>
-
-#### Parameters
-
-• **runtime**: [`IAgentRuntime`](IAgentRuntime.md)
-
-• **text**: `string`
-
-#### Returns
-
-`Promise`\<`Readable`\>
-
-#### Defined in
-
-[packages/core/src/types.ts:1148](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1148)

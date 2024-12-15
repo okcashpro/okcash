@@ -108,7 +108,7 @@ Integrates Solana blockchain functionality:
 - `walletProvider` - Wallet management
 - `trustScoreProvider` - Transaction trust metrics
 
-### Charity Contributions
+##### Charity Contributions
 
 All Coinbase trades and transfers automatically donate 1% of the transaction amount to charity. Currently, the charity addresses are hardcoded based on the network used for the transaction, with the current charity being supported as X.
 
@@ -137,7 +137,7 @@ This plugin enables Eliza to interact with the Coinbase Commerce API to create a
 
 ---
 
-### Coinbase Wallet Management
+##### Coinbase Wallet Management
 
 The plugin automatically handles wallet creation or uses an existing wallet if the required details are provided during the first run.
 
@@ -302,7 +302,7 @@ When successful, a response similar to the following will be returned:
 
 ---
 
-#### 8. Coinbase Token Contract Plugin (`@eliza/plugin-coinbase`)
+#### 7. Coinbase Token Contract Plugin (`@eliza/plugin-coinbase`)
 
 This plugin enables the deployment and interaction with various token contracts (ERC20, ERC721, ERC1155) using the Coinbase SDK. It provides functionality for both deploying new token contracts and interacting with existing ones.
 
@@ -445,7 +445,7 @@ const response = await runtime.triggerAction("INVOKE_CONTRACT", {
 
 ---
 
-#### 7. TEE Plugin (`@ai16z/plugin-tee`)
+#### 8. TEE Plugin (`@ai16z/plugin-tee`)
 
 Integrates [Dstack SDK](https://github.com/Dstack-TEE/dstack) to enable TEE (Trusted Execution Environment) functionality and deploy secure & privacy-enhanced Eliza Agents:
 

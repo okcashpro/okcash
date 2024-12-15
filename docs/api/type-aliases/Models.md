@@ -92,6 +92,10 @@ Model configurations by provider
 
 > **hyperbolic**: [`Model`](Model.md)
 
+### venice
+
+> **venice**: [`Model`](Model.md)
+
 ## Defined in
 
 [packages/core/src/types.ts:188](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L188)

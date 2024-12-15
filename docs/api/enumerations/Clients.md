@@ -12,17 +12,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:605](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L605)
-
-***
-
-### DIRECT
-
-> **DIRECT**: `"direct"`
-
-#### Defined in
-
-[packages/core/src/types.ts:606](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L606)
+[packages/core/src/types.ts:610](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L610)
 
 ***
 
@@ -30,9 +20,13 @@ Available client platforms
 
 > **TWITTER**: `"twitter"`
 
+you can't specify this in characters
+all characters are registered with this
+   DIRECT = "direct",
+
 #### Defined in
 
-[packages/core/src/types.ts:607](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L607)
+[packages/core/src/types.ts:614](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L614)
 
 ***
 
@@ -42,7 +36,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:608](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L608)
+[packages/core/src/types.ts:615](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L615)
 
 ***
 
@@ -52,4 +46,24 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:609](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L609)
+[packages/core/src/types.ts:616](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L616)
+
+***
+
+### AUTO
+
+> **AUTO**: `"auto"`
+
+#### Defined in
+
+[packages/core/src/types.ts:617](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L617)
+
+***
+
+### SLACK
+
+> **SLACK**: `"slack"`
+
+#### Defined in
+
+[packages/core/src/types.ts:618](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L618)
