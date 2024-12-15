@@ -21,7 +21,7 @@ fi
 
 # Install dependencies
 echo -e "\033[1mInstalling dependencies...\033[0m"
-if ! pnpm i; then
+if ! pnpm i --frozen-lockfile; then
     echo -e "\033[1;31mFailed to install dependencies\033[0m"
     exit 1
 fi
