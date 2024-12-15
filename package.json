@@ -1,9 +1,9 @@
 {
     "name": "eliza",
     "scripts": {
-        "install": "pnpm i -r --frozen-lockfile",
-        "i": "pnpm i -r --frozen-lockfile",
-        "update": "pnpm i -r",
+        "install": "pnpm i --frozen-lockfile",
+        "i": "pnpm i --frozen-lockfile",
+        "update": "pnpm i",
         "preinstall": "npx only-allow pnpm",
         "build": "turbo run build --filter=!eliza-docs",
         "build-docker": "turbo run build",
