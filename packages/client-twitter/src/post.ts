@@ -96,6 +96,7 @@ function truncateToCompleteSentence(
 export class TwitterPostClient {
     client: ClientBase;
     runtime: IAgentRuntime;
+    twitterUsername: string;
     private isProcessing: boolean = false;
     private lastProcessTime: number = 0;
     private stopProcessingActions: boolean = false;
@@ -111,7 +112,7 @@ export class TwitterPostClient {
                 timestamp: number;
             }>(
                 "twitter/" +
-                    this.runtime.getSetting("TWITTER_USERNAME") +
+                    this.twitterUsername +
                     "/lastPost"
             );
 
@@ -135,8 +136,6 @@ export class TwitterPostClient {
 
             elizaLogger.log(`Next tweet scheduled in ${randomMinutes} minutes`);
         };
-
-
 
         const processActionsLoop = async () => {
             const actionInterval = parseInt(
@@ -172,6 +171,7 @@ export class TwitterPostClient {
         if (postImmediately) {
             await this.generateNewTweet();
         }
+        generateNewTweetLoop();
 
         // Add check for ENABLE_ACTION_PROCESSING before starting the loop
         const enableActionProcessing = parseBooleanFromText(
@@ -185,11 +185,13 @@ export class TwitterPostClient {
         } else {
             elizaLogger.log("Action processing loop disabled by configuration");
         }
+        generateNewTweetLoop();
     }
 
     constructor(client: ClientBase, runtime: IAgentRuntime) {
         this.client = client;
         this.runtime = runtime;
+        this.twitterUsername = runtime.getSetting("TWITTER_USERNAME");
     }
 
     private async generateNewTweet() {
@@ -250,11 +252,13 @@ export class TwitterPostClient {
                     cleanedContent = parsedResponse;
                 }
             } catch (error) {
+                error.linted = true; // make linter happy since catch needs a variable
                 // If not JSON, clean the raw content
                 cleanedContent = newTweetContent
                     .replace(/^\s*{?\s*"text":\s*"|"\s*}?\s*$/g, '') // Remove JSON-like wrapper
                     .replace(/^['"](.*)['"]$/g, '$1')  // Remove quotes
                     .replace(/\\"/g, '"')  // Unescape quotes
+                    .replace(/\\n/g, '\n') // Unescape newlines
                     .trim();
             }
 
@@ -309,7 +313,7 @@ export class TwitterPostClient {
                     userId: this.client.profile.id,
                     inReplyToStatusId:
                         tweetResult.legacy.in_reply_to_status_id_str,
-                    permanentUrl: `https://twitter.com/${this.runtime.getSetting("TWITTER_USERNAME")}/status/${tweetResult.rest_id}`,
+                    permanentUrl: `https://twitter.com/${this.twitterUsername}/status/${tweetResult.rest_id}`,
                     hashtags: [],
                     mentions: [],
                     photos: [],
@@ -374,7 +378,7 @@ export class TwitterPostClient {
         console.log("generate tweet content response:\n" + response);
 
         // First clean up any markdown and newlines
-        let cleanedResponse = response
+        const cleanedResponse = response
             .replace(/```json\s*/g, '')  // Remove ```json
             .replace(/```\s*/g, '')      // Remove any remaining ```
             .replaceAll(/\\n/g, "\n")
@@ -393,6 +397,8 @@ export class TwitterPostClient {
                 }
             }
         } catch (error) {
+            error.linted = true; // make linter happy since catch needs a variable
+
             // If JSON parsing fails, treat as plain text
             elizaLogger.debug('Response is not JSON, treating as plain text');
         }
@@ -429,7 +435,7 @@ export class TwitterPostClient {
 
             await this.runtime.ensureUserExists(
                 this.runtime.agentId,
-                this.runtime.getSetting("TWITTER_USERNAME"),
+                this.twitterUsername,
                 this.runtime.character.name,
                 "twitter"
             );
@@ -460,7 +466,7 @@ export class TwitterPostClient {
                             content: { text: "", action: "" },
                         },
                         {
-                            twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
+                            twitterUserName: this.twitterUsername,
                             currentTweet: `ID: ${tweet.id}\nFrom: ${tweet.name} (@${tweet.username})\nText: ${tweet.text}`,
                         }
                     );
@@ -546,7 +552,7 @@ export class TwitterPostClient {
                                     content: { text: tweet.text, action: "QUOTE" }
                                 },
                                 {
-                                    twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
+                                    twitterUserName: this.twitterUsername,
                                     currentPost: `From @${tweet.username}: ${tweet.text}`,
                                     formattedConversation,
                                     imageContext: imageDescriptions.length > 0
@@ -695,7 +701,7 @@ export class TwitterPostClient {
                     content: { text: tweet.text, action: "" }
                 },
                 {
-                    twitterUserName: this.runtime.getSetting("TWITTER_USERNAME"),
+                    twitterUserName: this.twitterUsername,
                     currentPost: `From @${tweet.username}: ${tweet.text}`,
                     formattedConversation,
                     imageContext: imageDescriptions.length > 0

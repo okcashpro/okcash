@@ -1,7 +1,7 @@
 import {
     composeContext,
     elizaLogger,
-    generateObjectV2,
+    generateObject,
     ModelClass,
     Provider,
 } from "@ai16z/eliza";
@@ -123,7 +123,8 @@ export const createCoinbaseChargeAction: Action = {
         "GET_CHARGE_STATUS",
         "LIST_CHARGES",
     ],
-    description: "Create and manage payment charges using Coinbase Commerce. Supports fixed and dynamic pricing, multiple currencies (USD, EUR, USDC), and provides charge status tracking and management features.",
+    description:
+        "Create and manage payment charges using Coinbase Commerce. Supports fixed and dynamic pricing, multiple currencies (USD, EUR, USDC), and provides charge status tracking and management features.",
     validate: async (runtime: IAgentRuntime, _message: Memory) => {
         const coinbaseCommerceKeyOk = !!runtime.getSetting(
             "COINBASE_COMMERCE_KEY"
@@ -151,7 +152,7 @@ export const createCoinbaseChargeAction: Action = {
             template: chargeTemplate,
         });
 
-        const chargeDetails = await generateObjectV2({
+        const chargeDetails = await generateObject({
             runtime,
             context,
             modelClass: ModelClass.LARGE,
@@ -407,7 +408,7 @@ export const getChargeDetailsAction: Action = {
             state,
             template: getChargeTemplate,
         });
-        const chargeDetails = await generateObjectV2({
+        const chargeDetails = await generateObject({
             runtime,
             context,
             modelClass: ModelClass.LARGE,
@@ -506,7 +507,7 @@ export const chargeProvider: Provider = {
             elizaLogger.log("Current Balances:", balances);
             elizaLogger.log("Last Transactions:", transactions);
         }
-        const formattedCharges = charges.map(charge => ({
+        const formattedCharges = charges.map((charge) => ({
             id: charge.id,
             name: charge.name,
             description: charge.description,

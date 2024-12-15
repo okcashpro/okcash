@@ -87,10 +87,10 @@ export const models: Models = {
         },
         endpoint: "https://api.x.ai/v1",
         model: {
-            [ModelClass.SMALL]: "grok-beta",
-            [ModelClass.MEDIUM]: "grok-beta",
-            [ModelClass.LARGE]: "grok-beta",
-            [ModelClass.EMBEDDING]: "grok-beta", // not sure about this one
+            [ModelClass.SMALL]: settings.SMALL_GROK_MODEL || "grok-2-1212",
+            [ModelClass.MEDIUM]: settings.MEDIUM_GROK_MODEL || "grok-2-1212",
+            [ModelClass.LARGE]: settings.LARGE_GROK_MODEL || "grok-2-1212",
+            [ModelClass.EMBEDDING]: settings.EMBEDDING_GROK_MODEL || "grok-2-1212", // not sure about this one
         },
     },
     [ModelProviderName.GROQ]: {
@@ -449,6 +449,21 @@ export const models: Models = {
                 settings.HYPERBOLIC_MODEL ||
                 "meta-llama/Meta-Llama-3.1-405-Instruct",
             [ModelClass.IMAGE]: settings.IMAGE_HYPERBOLIC_MODEL || "FLUX.1-dev",
+        },
+    },
+    [ModelProviderName.VENICE]: {
+        endpoint: "https://api.venice.ai/api/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            temperature: 0.6,
+        },
+        model: {
+            [ModelClass.SMALL]: settings.SMALL_VENICE_MODEL || "llama-3.3-70b",
+            [ModelClass.MEDIUM]: settings.MEDIUM_VENICE_MODEL || "llama-3.3-70b",
+            [ModelClass.LARGE]: settings.LARGE_VENICE_MODEL || "llama-3.1-405b",
+            [ModelClass.IMAGE]: settings.IMAGE_VENICE_MODEL || "fluently-xl",
         },
     },
 };

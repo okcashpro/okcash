@@ -44,6 +44,12 @@ Media description
 
 Text content
 
+### contentType?
+
+> `optional` **contentType**: `string`
+
+Content type
+
 ## Defined in
 
-[packages/core/src/types.ts:544](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L544)
+[packages/core/src/types.ts:546](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L546)
