@@ -301,8 +301,6 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
    pnpm i
    ```
 
-
-
 ## Next Steps
 
 Once you have your agent running, explore:
