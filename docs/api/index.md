@@ -41,7 +41,6 @@
 - [Account](interfaces/Account.md)
 - [Participant](interfaces/Participant.md)
 - [Room](interfaces/Room.md)
-- [IAgentConfig](interfaces/IAgentConfig.md)
 - [IDatabaseAdapter](interfaces/IDatabaseAdapter.md)
 - [IDatabaseCacheAdapter](interfaces/IDatabaseCacheAdapter.md)
 - [IMemoryManager](interfaces/IMemoryManager.md)
