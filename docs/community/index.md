@@ -1,29 +1,39 @@
 ---
-sidebar_position: 0
+title: Daily Summary
 slug: /
-title: Introduction
+sidebar_position: 0
 ---
 
-# Welcome to the ai16z Community
+## Why?
 
-ai16z is an innovative project that combines the power of artificial intelligence with the principles of decentralized autonomous organizations (DAOs) to revolutionize venture capital and foster an open-source community around AI agents.
+Chatrooms move too fast for people to keep up with.
 
-## Our Mission
+![](/img/overload2.jpg)
 
-Our mission is to leverage the collective intelligence of our community and cutting-edge AI technologies to make informed investment decisions, support groundbreaking projects, and drive the evolution of AI agents.
+Solution: Rebundle via automated summarization using LLMs to extract:
 
-## The Eliza Framework
+- Keep people updated, we move fast
+- Less humans in the loop, use AI
+  - Remove bias, misaligned incentives
+  - Add more transparency -> more trust
+  - Progressive Automation of the DAO
+- Extract contributions happening Discord
+  - Gamify open source development
+- For special projects
 
-At the core of ai16z lies the Eliza framework, an open-source toolkit that empowers developers to create and deploy AI agents capable of interacting on various platforms, such as Twitter and Discord. By providing a robust and flexible framework, we aim to accelerate the development and adoption of AI agents across different domains.
 
-## Community-Driven Governance
+## How it Works
 
-ai16z operates as a DAO, enabling token holders to actively participate in the decision-making process and shape the future of the project. Through our unique governance model and the "Virtual Marketplace of Trust," community members can pitch ideas, provide insights, and influence investment strategies based on their expertise and track record.
 
-## Explore and Contribute
 
-We invite you to explore the various sections of our documentation to learn more about ai16z, the Eliza framework, and how you can get involved:
+![](/img/discord_llm_pipeline2.jpg)
 
-- [AI Agents](/community/ai-agents/)
-- [Events and Updates](/community/streams)
-- [FAQ and Support](/community/faq-and-support)
+## Features
+- AI-powered chat analysis using Ollama (phi3 model)
+- Multiple output formats (Markdown, CSV, JSON)
+- Detailed analysis including:
+  - Daily summaries
+  - FAQ extraction
+  - Help interactions
+  - Action items
+
