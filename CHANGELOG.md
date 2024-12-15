@@ -1,5 +1,216 @@
 # Changelog
 
+## [v0.1.6-alpha.1](https://github.com/ai16z/eliza/tree/v0.1.6-alpha.1) (2024-12-13)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.5...v0.1.6-alpha.1)
+
+**Implemented enhancements:**
+
+- Add Venice.ai Model Provider [\#1016](https://github.com/ai16z/eliza/issues/1016)
+- Need to add media file upload for posting tweets with image from imageGenerationPlugin. Currently only discord has this implemented [\#969](https://github.com/ai16z/eliza/issues/969)
+- Script to create core memories for the agent [\#967](https://github.com/ai16z/eliza/issues/967)
+- feat: add hot-reloading for agent dependencies [\#930](https://github.com/ai16z/eliza/issues/930)
+- Improve `dev.sh` Script to Enhance Plugin Development Workflow [\#888](https://github.com/ai16z/eliza/issues/888)
+
+**Fixed bugs:**
+
+- How to set the model class for Anthropic? [\#988](https://github.com/ai16z/eliza/issues/988)
+- Twitter Search Client Broken [\#943](https://github.com/ai16z/eliza/issues/943)
+- Stuck querying when @'ing it in Discord [\#921](https://github.com/ai16z/eliza/issues/921)
+- Error pnpm start - Promise.withResolvers\(\): pdfjs-dist [\#902](https://github.com/ai16z/eliza/issues/902)
+- Running tests on start and dev? [\#893](https://github.com/ai16z/eliza/issues/893)
+- build:  eliza docs build creates 130 files that want to be modified/added to git [\#849](https://github.com/ai16z/eliza/issues/849)
+- EVM Plugin can't run any action [\#735](https://github.com/ai16z/eliza/issues/735)
+- Bug: plugin-solana crash report [\#467](https://github.com/ai16z/eliza/issues/467)
+
+**Closed issues:**
+
+- Issue: Unable to Post Tweets Using Eliza Integration with Twitter via Cookies or OAuth2 [\#901](https://github.com/ai16z/eliza/issues/901)
+
+**Merged pull requests:**
+
+- chore: release develop into main [\#1045](https://github.com/ai16z/eliza/pull/1045) ([odilitime](https://github.com/odilitime))
+- fix: re-enable generateNewTweetLoop / lint fixes [\#1043](https://github.com/ai16z/eliza/pull/1043) ([odilitime](https://github.com/odilitime))
+- docs: characterfile.md docs outdated with latest eliza version [\#1042](https://github.com/ai16z/eliza/pull/1042) ([tqdpham96](https://github.com/tqdpham96))
+- feat: Add AI Agent Dev School Tutorial Link [\#1038](https://github.com/ai16z/eliza/pull/1038) ([lalalune](https://github.com/lalalune))
+- fix: use pull\_request\_target for integration tests [\#1035](https://github.com/ai16z/eliza/pull/1035) ([jnaulty](https://github.com/jnaulty))
+- feat: Add Discord Team features [\#1032](https://github.com/ai16z/eliza/pull/1032) ([azep-ninja](https://github.com/azep-ninja))
+- feat: client-discord stop implementation / agent improvements [\#1029](https://github.com/ai16z/eliza/pull/1029) ([odilitime](https://github.com/odilitime))
+- chore: Push Develop into Main [\#1028](https://github.com/ai16z/eliza/pull/1028) ([odilitime](https://github.com/odilitime))
+- feat: improve voice processing and add deepgram transcription option [\#1026](https://github.com/ai16z/eliza/pull/1026) ([tcm390](https://github.com/tcm390))
+- docs: Update README.md [\#1025](https://github.com/ai16z/eliza/pull/1025) ([sergical](https://github.com/sergical))
+- docs: Update README.md [\#1024](https://github.com/ai16z/eliza/pull/1024) ([sergical](https://github.com/sergical))
+- chore: Twitter fetchHomeTimeline rework [\#1021](https://github.com/ai16z/eliza/pull/1021) ([odilitime](https://github.com/odilitime))
+- chore: Update CI configuration to enable test coverage and add covera… [\#1019](https://github.com/ai16z/eliza/pull/1019) ([snobbee](https://github.com/snobbee))
+- docs: "AI Agent Dev School Part 4" livestream notes [\#1015](https://github.com/ai16z/eliza/pull/1015) ([YoungPhlo](https://github.com/YoungPhlo))
+- docs: Add templates documentation to the project [\#1013](https://github.com/ai16z/eliza/pull/1013) ([Lukapetro](https://github.com/Lukapetro))
+- feat: Add custom fetch logic for agent [\#1010](https://github.com/ai16z/eliza/pull/1010) ([v1xingyue](https://github.com/v1xingyue))
+- feat: Plugin evm multichain [\#1009](https://github.com/ai16z/eliza/pull/1009) ([nicky-ru](https://github.com/nicky-ru))
+- feat: add venice.ai api model provider [\#1008](https://github.com/ai16z/eliza/pull/1008) ([proteanx](https://github.com/proteanx))
+- feat: improve Twitter client with action processing [\#1007](https://github.com/ai16z/eliza/pull/1007) ([dorianjanezic](https://github.com/dorianjanezic))
+- chore: Bring Develop up to date with HEAD [\#1006](https://github.com/ai16z/eliza/pull/1006) ([odilitime](https://github.com/odilitime))
+- feat: create example folder with example plugin [\#1004](https://github.com/ai16z/eliza/pull/1004) ([monilpat](https://github.com/monilpat))
+- chore: Twitter search switch [\#1003](https://github.com/ai16z/eliza/pull/1003) ([odilitime](https://github.com/odilitime))
+- fix: add callback to action in farcaster client [\#1002](https://github.com/ai16z/eliza/pull/1002) ([sin-bufan](https://github.com/sin-bufan))
+- fix: typo initialize [\#1000](https://github.com/ai16z/eliza/pull/1000) ([cryptofish7](https://github.com/cryptofish7))
+- feat: allow users to configure models for openai and anthropic [\#999](https://github.com/ai16z/eliza/pull/999) ([oxSaturn](https://github.com/oxSaturn))
+- add echochambers [\#997](https://github.com/ai16z/eliza/pull/997) ([savageops](https://github.com/savageops))
+- test: adding parsing tests. changed files parsing.test.ts [\#996](https://github.com/ai16z/eliza/pull/996) ([ai16z-demirix](https://github.com/ai16z-demirix))
+- feat: create README\_DE.md [\#995](https://github.com/ai16z/eliza/pull/995) ([GottliebFreudenreich](https://github.com/GottliebFreudenreich))
+- fix: Fix Twitter Search Logic and Add Galadriel Image Model [\#994](https://github.com/ai16z/eliza/pull/994) ([dontAskVI](https://github.com/dontAskVI))
+- test: Initial release of smoke/integration tests + testing framework [\#993](https://github.com/ai16z/eliza/pull/993) ([jzvikart](https://github.com/jzvikart))
+- fix: a typo in characterfile.md [\#986](https://github.com/ai16z/eliza/pull/986) ([oxSaturn](https://github.com/oxSaturn))
+- fix: Goat Plugin + AWS S3 Service error when env vars absent [\#985](https://github.com/ai16z/eliza/pull/985) ([jnaulty](https://github.com/jnaulty))
+- docs: add WSL Setup Guide to documentation  [\#983](https://github.com/ai16z/eliza/pull/983) ([ileana-pr](https://github.com/ileana-pr))
+- fix: docker trying to filter out missing docs package [\#978](https://github.com/ai16z/eliza/pull/978) ([odilitime](https://github.com/odilitime))
+- chore: fix broken lockfile [\#977](https://github.com/ai16z/eliza/pull/977) ([shakkernerd](https://github.com/shakkernerd))
+- chore: add how to startup chat ui [\#976](https://github.com/ai16z/eliza/pull/976) ([yodamaster726](https://github.com/yodamaster726))
+- feat: Add hyperbolic env vars to override model class [\#974](https://github.com/ai16z/eliza/pull/974) ([meppsilon](https://github.com/meppsilon))
+- LinkedIn Client [\#973](https://github.com/ai16z/eliza/pull/973) ([bkellgren](https://github.com/bkellgren))
+- Fix farcaster client process action issue [\#963](https://github.com/ai16z/eliza/pull/963) ([sin-bufan](https://github.com/sin-bufan))
+- fix\(agent\): correct EVM plugin activation condition [\#962](https://github.com/ai16z/eliza/pull/962) ([0xAsten](https://github.com/0xAsten))
+- fix: use MAX\_TWEET\_LENGTH from setting [\#960](https://github.com/ai16z/eliza/pull/960) ([oxSaturn](https://github.com/oxSaturn))
+- fix: Revert "docs: add WSL installation guide" [\#959](https://github.com/ai16z/eliza/pull/959) ([monilpat](https://github.com/monilpat))
+- feat: add dev script to plugin-aptos [\#956](https://github.com/ai16z/eliza/pull/956) ([asianviking](https://github.com/asianviking))
+- chore: rename intiface plugin [\#955](https://github.com/ai16z/eliza/pull/955) ([odilitime](https://github.com/odilitime))
+- fix: revert llamacloud endpoint change [\#954](https://github.com/ai16z/eliza/pull/954) ([odilitime](https://github.com/odilitime))
+- feat: allow character.json settings models for open router [\#953](https://github.com/ai16z/eliza/pull/953) ([odilitime](https://github.com/odilitime))
+- chore: 947 add other evm chains to wallet [\#949](https://github.com/ai16z/eliza/pull/949) ([n00b21337](https://github.com/n00b21337))
+- fix: telegram response memory userId to agentId [\#948](https://github.com/ai16z/eliza/pull/948) ([bmgalego](https://github.com/bmgalego))
+- docs: add WSL installation guide [\#946](https://github.com/ai16z/eliza/pull/946) ([ileana-pr](https://github.com/ileana-pr))
+- feat: Supports upload files to AWS S3. [\#941](https://github.com/ai16z/eliza/pull/941) ([xwxtwd](https://github.com/xwxtwd))
+- feat: process all responses actions [\#940](https://github.com/ai16z/eliza/pull/940) ([bmgalego](https://github.com/bmgalego))
+- feat: add callback handler to runtime evaluate method [\#938](https://github.com/ai16z/eliza/pull/938) ([bmgalego](https://github.com/bmgalego))
+- fix: update package name in faq [\#937](https://github.com/ai16z/eliza/pull/937) ([oxSaturn](https://github.com/oxSaturn))
+- fix: update quickstart and .env.example [\#932](https://github.com/ai16z/eliza/pull/932) ([oxSaturn](https://github.com/oxSaturn))
+- feat: add dynamic watch paths for agent development [\#931](https://github.com/ai16z/eliza/pull/931) ([samuveth](https://github.com/samuveth))
+- feat: flow update generate object [\#929](https://github.com/ai16z/eliza/pull/929) ([btspoony](https://github.com/btspoony))
+- feat: Config eternalai model from env [\#927](https://github.com/ai16z/eliza/pull/927) ([genesis-0000](https://github.com/genesis-0000))
+- feat: Add NanoGPT provider [\#926](https://github.com/ai16z/eliza/pull/926) ([dylan1951](https://github.com/dylan1951))
+- fix: use of Heurist model env vars [\#924](https://github.com/ai16z/eliza/pull/924) ([boxhock](https://github.com/boxhock))
+- feat: add readContract / invokeContract functionality to Coinbase plugin [\#923](https://github.com/ai16z/eliza/pull/923) ([monilpat](https://github.com/monilpat))
+- chore: deprecate text based way of generating JSON [\#920](https://github.com/ai16z/eliza/pull/920) ([monilpat](https://github.com/monilpat))
+- feat: create README\_TH.md  [\#918](https://github.com/ai16z/eliza/pull/918) ([asianviking](https://github.com/asianviking))
+- feat: update gaianet config [\#915](https://github.com/ai16z/eliza/pull/915) ([L-jasmine](https://github.com/L-jasmine))
+- fix: Farcater client cleanup and fixed response logic [\#914](https://github.com/ai16z/eliza/pull/914) ([sayangel](https://github.com/sayangel))
+- Twitter client enhancements [\#913](https://github.com/ai16z/eliza/pull/913) ([tharak123455](https://github.com/tharak123455))
+- feat: MAX\_TWEET\_LENGTH env implementation [\#912](https://github.com/ai16z/eliza/pull/912) ([onur-saf](https://github.com/onur-saf))
+- feat: allow users to configure models for groq [\#910](https://github.com/ai16z/eliza/pull/910) ([oxSaturn](https://github.com/oxSaturn))
+- fix: evaluation json parsing [\#907](https://github.com/ai16z/eliza/pull/907) ([cygaar](https://github.com/cygaar))
+- fix: twitter actions not triggering [\#903](https://github.com/ai16z/eliza/pull/903) ([cygaar](https://github.com/cygaar))
+- chore: Consistent language for Community & Contact link label [\#899](https://github.com/ai16z/eliza/pull/899) ([golryang](https://github.com/golryang))
+- chore: pass env variables when setting up GOAT and update GOAT readme [\#898](https://github.com/ai16z/eliza/pull/898) ([0xaguspunk](https://github.com/0xaguspunk))
+- docs: Add What Did You Get Done This Week \#4 summaries and timestamps [\#895](https://github.com/ai16z/eliza/pull/895) ([YoungPhlo](https://github.com/YoungPhlo))
+- chore: improved dev command [\#892](https://github.com/ai16z/eliza/pull/892) ([shakkernerd](https://github.com/shakkernerd))
+- chore: added more help message to the important notice text. [\#891](https://github.com/ai16z/eliza/pull/891) ([shakkernerd](https://github.com/shakkernerd))
+- chore: update models for groq [\#890](https://github.com/ai16z/eliza/pull/890) ([oxSaturn](https://github.com/oxSaturn))
+- Feat : github image cicd [\#889](https://github.com/ai16z/eliza/pull/889) ([v1xingyue](https://github.com/v1xingyue))
+- chore: enhance dev script, performance improvement and add help message [\#887](https://github.com/ai16z/eliza/pull/887) ([shakkernerd](https://github.com/shakkernerd))
+- chore: disable building docs on build command [\#884](https://github.com/ai16z/eliza/pull/884) ([shakkernerd](https://github.com/shakkernerd))
+- fix: re-enable coverage report upload to Codecov in CI workflow [\#880](https://github.com/ai16z/eliza/pull/880) ([snobbee](https://github.com/snobbee))
+- feat: Add Flow Blockchain plugin  [\#874](https://github.com/ai16z/eliza/pull/874) ([btspoony](https://github.com/btspoony))
+- feat: Add TEE Mode to Solana Plugin [\#835](https://github.com/ai16z/eliza/pull/835) ([HashWarlock](https://github.com/HashWarlock))
+- feat: add hyperbolic api to eliza [\#828](https://github.com/ai16z/eliza/pull/828) ([meppsilon](https://github.com/meppsilon))
+- loading indicator [\#827](https://github.com/ai16z/eliza/pull/827) ([tcm390](https://github.com/tcm390))
+- use github access token [\#825](https://github.com/ai16z/eliza/pull/825) ([tcm390](https://github.com/tcm390))
+- fix: refactor contributor page [\#809](https://github.com/ai16z/eliza/pull/809) ([tcm390](https://github.com/tcm390))
+- feat: implement advanced coinbase trading [\#725](https://github.com/ai16z/eliza/pull/725) ([monilpat](https://github.com/monilpat))
+
+## [v0.1.5-alpha.5](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.5) (2024-12-07)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.4...v0.1.5-alpha.5)
+
+**Merged pull requests:**
+
+- feat: working farcaster client with neynar [\#570](https://github.com/ai16z/eliza/pull/570) ([sayangel](https://github.com/sayangel))
+
+## [v0.1.5-alpha.4](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.4) (2024-12-06)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.3...v0.1.5-alpha.4)
+
+**Fixed bugs:**
+
+- `pnpm  start` crashes if there is too much data in knowledge [\#866](https://github.com/ai16z/eliza/issues/866)
+- Twitter login some function not work.  [\#857](https://github.com/ai16z/eliza/issues/857)
+
+**Merged pull requests:**
+
+- docs: Add AI Agent Dev School Parts 2 and 3 summaries and timestamps [\#877](https://github.com/ai16z/eliza/pull/877) ([YoungPhlo](https://github.com/YoungPhlo))
+- Add google model env vars [\#875](https://github.com/ai16z/eliza/pull/875) ([peersky](https://github.com/peersky))
+- Update quickstart.md [\#872](https://github.com/ai16z/eliza/pull/872) ([oxSaturn](https://github.com/oxSaturn))
+- Remove duplicated coinbase CDP options in .env.example [\#863](https://github.com/ai16z/eliza/pull/863) ([juntao](https://github.com/juntao))
+- test: adding environment and knowledge tests [\#862](https://github.com/ai16z/eliza/pull/862) ([ai16z-demirix](https://github.com/ai16z-demirix))
+- Updated quickstart.md to contemplate common issue [\#861](https://github.com/ai16z/eliza/pull/861) ([fede2442](https://github.com/fede2442))
+- fix: Use LARGE models for responses [\#853](https://github.com/ai16z/eliza/pull/853) ([lalalune](https://github.com/lalalune))
+- Update Node version in local-development.md [\#850](https://github.com/ai16z/eliza/pull/850) ([oxSaturn](https://github.com/oxSaturn))
+- fix: plugins docs [\#848](https://github.com/ai16z/eliza/pull/848) ([cygaar](https://github.com/cygaar))
+- fix: run release workflow after a github release is created [\#846](https://github.com/ai16z/eliza/pull/846) ([cygaar](https://github.com/cygaar))
+- fix: Include scripts/postinstall.js in the final NPM package [\#843](https://github.com/ai16z/eliza/pull/843) ([martincik](https://github.com/martincik))
+- feat: add Aptos plugin [\#818](https://github.com/ai16z/eliza/pull/818) ([0xaptosj](https://github.com/0xaptosj))
+- feat: add coinbase  ERC20, ERC721, and ERC1155 tokenContract deployment / invokement plugin [\#803](https://github.com/ai16z/eliza/pull/803) ([monilpat](https://github.com/monilpat))
+- feat: coinbase webhook + add more examples + testing [\#801](https://github.com/ai16z/eliza/pull/801) ([monilpat](https://github.com/monilpat))
+
+## [v0.1.5-alpha.3](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.3) (2024-12-04)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.2...v0.1.5-alpha.3)
+
+**Merged pull requests:**
+
+- chore: bump version to 0.1.5-alpha.3 [\#838](https://github.com/ai16z/eliza/pull/838) ([cygaar](https://github.com/cygaar))
+- chore: Revert/viem version and bump @goat-sdk/plugin-erc20 [\#836](https://github.com/ai16z/eliza/pull/836) ([shakkernerd](https://github.com/shakkernerd))
+- chore: revert viem package version [\#834](https://github.com/ai16z/eliza/pull/834) ([shakkernerd](https://github.com/shakkernerd))
+
+## [v0.1.5-alpha.2](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.2) (2024-12-04)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5-alpha.0...v0.1.5-alpha.2)
+
+**Implemented enhancements:**
+
+- feat: Add circuit breaker pattern for database operations [\#712](https://github.com/ai16z/eliza/issues/712)
+
+**Fixed bugs:**
+
+- 404 Localhost port 3000 [\#804](https://github.com/ai16z/eliza/issues/804)
+- actions examples selection does not select things properly [\#798](https://github.com/ai16z/eliza/issues/798)
+- recentPosts always empty [\#679](https://github.com/ai16z/eliza/issues/679)
+
+**Merged pull requests:**
+
+- chore: bump version to 0.1.5-alpha.1 [\#833](https://github.com/ai16z/eliza/pull/833) ([cygaar](https://github.com/cygaar))
+- fix: pin all node dependencies + update @solana/web3.js to safe version [\#832](https://github.com/ai16z/eliza/pull/832) ([cygaar](https://github.com/cygaar))
+- fix: docker-setup.md [\#826](https://github.com/ai16z/eliza/pull/826) ([Freytes](https://github.com/Freytes))
+- fix: twitter cache expires [\#824](https://github.com/ai16z/eliza/pull/824) ([palsp](https://github.com/palsp))
+- feat: \(core\) Add circuit breaker pattern for database operations -… [\#812](https://github.com/ai16z/eliza/pull/812) ([augchan42](https://github.com/augchan42))
+- fix: lerna publish command [\#811](https://github.com/ai16z/eliza/pull/811) ([cygaar](https://github.com/cygaar))
+
+## [v0.1.5-alpha.0](https://github.com/ai16z/eliza/tree/v0.1.5-alpha.0) (2024-12-03)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.5...v0.1.5-alpha.0)
+
+**Fixed bugs:**
+
+- Plugin system in character.plugins is not working [\#795](https://github.com/ai16z/eliza/issues/795)
+
+**Closed issues:**
+
+- State should use a cosine similarity of messages in the DB  [\#471](https://github.com/ai16z/eliza/issues/471)
+
+**Merged pull requests:**
+
+- fix: update package version to v0.1.5-alpha.0 [\#808](https://github.com/ai16z/eliza/pull/808) ([cygaar](https://github.com/cygaar))
+- fix: release workflow part 3 [\#807](https://github.com/ai16z/eliza/pull/807) ([cygaar](https://github.com/cygaar))
+- fix: part 2 of updating the npm publish workflow [\#806](https://github.com/ai16z/eliza/pull/806) ([cygaar](https://github.com/cygaar))
+- fix: update npm publication workflow [\#805](https://github.com/ai16z/eliza/pull/805) ([cygaar](https://github.com/cygaar))
+- fix: swap type error, create user trust on first message in telegram [\#800](https://github.com/ai16z/eliza/pull/800) ([MarcoMandar](https://github.com/MarcoMandar))
+- refactor: Improve actions samples random selection [\#799](https://github.com/ai16z/eliza/pull/799) ([dievardump](https://github.com/dievardump))
+- fix: Docker default non-interactive mode for Cloud instances [\#796](https://github.com/ai16z/eliza/pull/796) ([rarepepi](https://github.com/rarepepi))
+- fix: dev command [\#793](https://github.com/ai16z/eliza/pull/793) ([shakkernerd](https://github.com/shakkernerd))
+- chore: update README\_KOR.md to match latest README.md [\#789](https://github.com/ai16z/eliza/pull/789) ([mike0295](https://github.com/mike0295))
+- fix: enviroment -\> environment [\#787](https://github.com/ai16z/eliza/pull/787) ([tomguluson92](https://github.com/tomguluson92))
+- Update generation.ts to fix TOGETHER/LLAMACLOUD image generation [\#786](https://github.com/ai16z/eliza/pull/786) ([ProphetX10](https://github.com/ProphetX10))
+- fixs: uuid compatible for number [\#785](https://github.com/ai16z/eliza/pull/785) ([tomguluson92](https://github.com/tomguluson92))
+- fix: When the plugins field in the .character.json file is configured with plugin name. [\#784](https://github.com/ai16z/eliza/pull/784) ([xwxtwd](https://github.com/xwxtwd))
+
 ## [v0.1.5](https://github.com/ai16z/eliza/tree/v0.1.5) (2024-12-02)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.4-alpha.3...v0.1.5)
@@ -24,7 +235,7 @@
 - New knowledge not being ingested into agent memory after first run [\#614](https://github.com/ai16z/eliza/issues/614)
 - Tests failing - token.test.ts failing because it is commented out. Cache and goals tests are failing because jest is now switched with vitest [\#519](https://github.com/ai16z/eliza/issues/519)
 - Non node.js environments have issues building \(workers for instance\) [\#506](https://github.com/ai16z/eliza/issues/506)
-- Error when call `generateObjectV2` [\#469](https://github.com/ai16z/eliza/issues/469)
+- Error when call `generateObject` [\#469](https://github.com/ai16z/eliza/issues/469)
 - Current token.test.ts and videoGeneration.test.ts are throwing errors [\#464](https://github.com/ai16z/eliza/issues/464)
 - unable to run defaultcharacter with ModelProviderName.LLAMACLOUD local [\#271](https://github.com/ai16z/eliza/issues/271)
 - Incorrect steps in readme for starting eliza [\#270](https://github.com/ai16z/eliza/issues/270)

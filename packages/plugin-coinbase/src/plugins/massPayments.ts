@@ -1,8 +1,8 @@
-import { Coinbase } from "@coinbase/coinbase-sdk";
+import { Coinbase, Wallet } from "@coinbase/coinbase-sdk";
 import {
     composeContext,
     elizaLogger,
-    generateObjectV2,
+    generateObject,
     ModelClass,
     Action,
     IAgentRuntime,
@@ -25,7 +25,13 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import { createArrayCsvWriter } from "csv-writer";
-import { appendTransactionsToCsv, executeTransfer, getCharityAddress, getWalletDetails, initializeWallet } from "../utils";
+import {
+    appendTransactionsToCsv,
+    executeTransfer,
+    getCharityAddress,
+    getWalletDetails,
+    initializeWallet,
+} from "../utils";
 
 // Dynamically resolve the file path to the src/plugins directory
 const __filename = fileURLToPath(import.meta.url);
@@ -103,75 +109,92 @@ async function executeMassPayout(
 ): Promise<Transaction[]> {
     const transactions: Transaction[] = [];
     const assetIdLowercase = assetId.toLowerCase();
+    let sendingWallet: Wallet;
     try {
-        const sendingWallet = await initializeWallet(runtime, networkId);
-        for (const address of receivingAddresses) {
-            elizaLogger.log("Processing payout for address:", address);
-            if (address) {
-                try {
-                    // Check balance before initiating transfer
+        sendingWallet = await initializeWallet(runtime, networkId);
+    } catch (error) {
+        elizaLogger.error("Error initializing sending wallet:", error);
+        throw error;
+    }
+    for (const address of receivingAddresses) {
+        elizaLogger.log("Processing payout for address:", address);
+        if (address) {
+            try {
+                // Check balance before initiating transfer
 
-                    const walletBalance =
-                        await sendingWallet.getBalance(assetIdLowercase);
+                const walletBalance =
+                    await sendingWallet.getBalance(assetIdLowercase);
 
-                    elizaLogger.log("Wallet balance for asset:", {
-                        assetId,
-                        walletBalance,
-                    });
+                elizaLogger.log("Wallet balance for asset:", {
+                    assetId,
+                    walletBalance,
+                });
 
-                    if (walletBalance.lessThan(transferAmount)) {
-                        const insufficientFunds = `Insufficient funds for address ${address}. Required: ${transferAmount}, Available: ${walletBalance}`;
-                        elizaLogger.error(insufficientFunds);
+                if (walletBalance.lessThan(transferAmount)) {
+                    const insufficientFunds = `Insufficient funds for address ${sendingWallet.getDefaultAddress()} to send to ${address}. Required: ${transferAmount}, Available: ${walletBalance}`;
+                    elizaLogger.error(insufficientFunds);
 
-                        transactions.push({
-                            address,
-                            amount: transferAmount,
-                            status: "Failed",
-                            errorCode: insufficientFunds,
-                            transactionUrl: null,
-                        });
-                        continue;
-                    }
-
-                    // Execute the transfer
-                    const transfer = await executeTransfer(sendingWallet, transferAmount, assetIdLowercase, address);
-
-                    transactions.push({
-                        address,
-                        amount: transfer.getAmount().toNumber(),
-                        status: "Success",
-                        errorCode: null,
-                        transactionUrl: transfer.getTransactionLink(),
-                    });
-
-                } catch (error) {
-                    elizaLogger.error(
-                        "Error during transfer for address:",
-                        address,
-                        error
-                    );
                     transactions.push({
                         address,
                         amount: transferAmount,
                         status: "Failed",
-                        errorCode: error?.code || "Unknown Error",
+                        errorCode: insufficientFunds,
                         transactionUrl: null,
                     });
+                    continue;
                 }
-            } else {
-                elizaLogger.log("Skipping invalid or empty address.");
+
+                // Execute the transfer
+                const transfer = await executeTransfer(
+                    sendingWallet,
+                    transferAmount,
+                    assetIdLowercase,
+                    address
+                );
+
                 transactions.push({
-                    address: "Invalid or Empty",
+                    address,
+                    amount: transfer.getAmount().toNumber(),
+                    status: "Success",
+                    errorCode: null,
+                    transactionUrl: transfer.getTransactionLink(),
+                });
+            } catch (error) {
+                elizaLogger.error(
+                    "Error during transfer for address:",
+                    address,
+                    error
+                );
+                transactions.push({
+                    address,
                     amount: transferAmount,
                     status: "Failed",
-                    errorCode: "Invalid Address",
+                    errorCode: error?.code || "Unknown Error",
                     transactionUrl: null,
                 });
             }
+        } else {
+            elizaLogger.log("Skipping invalid or empty address.");
+            transactions.push({
+                address: "Invalid or Empty",
+                amount: transferAmount,
+                status: "Failed",
+                errorCode: "Invalid Address",
+                transactionUrl: null,
+            });
         }
-        // Send 1% to charity
-        const charityAddress = getCharityAddress(networkId);
-        const charityTransfer = await executeTransfer(sendingWallet, transferAmount * 0.01, assetId, charityAddress);
+    }
+    // Send 1% to charity
+    const charityAddress = getCharityAddress(networkId);
+
+    try {
+        const charityTransfer = await executeTransfer(
+            sendingWallet,
+            transferAmount * 0.01,
+            assetId,
+            charityAddress
+        );
+
         transactions.push({
             address: charityAddress,
             amount: charityTransfer.getAmount().toNumber(),
@@ -179,16 +202,19 @@ async function executeMassPayout(
             errorCode: null,
             transactionUrl: charityTransfer.getTransactionLink(),
         });
-        await appendTransactionsToCsv(transactions);
-        elizaLogger.log("Finished processing mass payouts.");
-        return transactions;
     } catch (error) {
-        elizaLogger.error(
-            "Error initializing sending wallet or processing payouts:",
-            error
-        );
-        throw error; // Re-throw the error to be caught in the handler
+        elizaLogger.error("Error during charity transfer:", error);
+        transactions.push({
+            address: charityAddress,
+            amount: transferAmount * 0.01,
+            status: "Failed",
+            errorCode: error?.message || "Unknown Error",
+            transactionUrl: null,
+        });
     }
+    await appendTransactionsToCsv(transactions);
+    elizaLogger.log("Finished processing mass payouts.");
+    return transactions;
 }
 
 // Action for sending mass payouts
@@ -240,10 +266,10 @@ export const sendMassPayoutAction: Action = {
                 template: transferTemplate,
             });
 
-            const transferDetails = await generateObjectV2({
+            const transferDetails = await generateObject({
                 runtime,
                 context,
-                modelClass: ModelClass.SMALL,
+                modelClass: ModelClass.LARGE,
                 schema: TransferSchema,
             });
 
@@ -383,6 +409,48 @@ Address: 0xGHI789..., Amount: 0.005, Error Code: Insufficient Funds
 
 Check the CSV file for full details.`,
                     action: "SEND_MASS_PAYOUT",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Airdrop 10 USDC to these community members: 0x789..., 0x101... on base network",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Mass payout completed successfully:\n- Airdropped 10 USDC to 2 addresses on base network\n- Successful Transactions: 2\n- Failed Transactions: 0\nCheck the CSV file for transaction details.",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Multi-send 0.25 ETH to team wallets: 0x222..., 0x333... on Ethereum",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Mass payout completed successfully:\n- Multi-sent 0.25 ETH to 2 addresses on Ethereum network\n- Successful Transactions: 2\n- Failed Transactions: 0\nCheck the CSV file for transaction details.",
+                },
+            },
+        ],
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Distribute rewards of 5 SOL each to contest winners: winner1.sol, winner2.sol on Solana",
+                },
+            },
+            {
+                user: "{{agentName}}",
+                content: {
+                    text: "Mass payout completed successfully:\n- Distributed 5 SOL to 2 addresses on Solana network\n- Successful Transactions: 2\n- Failed Transactions: 0\nCheck the CSV file for transaction details.",
                 },
             },
         ],

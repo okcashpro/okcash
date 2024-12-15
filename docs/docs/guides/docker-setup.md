@@ -102,6 +102,21 @@ This guide provides instructions for installing and running the Eliza chatbot us
 - For permission issues, ensure proper file ownership and permissions
 - For script formatting issues, run `dos2unix` on problematic files
 
+- Remove All Docker Images
+   - Run the following command to delete all images:
+ ```bash
+docker rmi -f $(docker images -aq)
+  ```
+- Remove All Build Cache
+   - To clear the build cache entirely, use:
+   ```bash  
+   docker builder prune -a -f
+   ```
+- Verify Cleanup
+  - Check Docker disk usage again to ensure everything is removed:
+ ```bash
+ docker system df
+ ```
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

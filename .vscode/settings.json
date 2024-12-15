@@ -12,6 +12,8 @@
     "typescript.format.enable": false,
     "files.trimTrailingWhitespace": true,
     "editor.trimAutoWhitespace": true,
+    "cadence.test.maxConcurrency": 5,
+    "cadence.customConfigPath": "packages/plugin-flow/flow.json",
     "[properties]": {
         "editor.defaultFormatter": "foxundermoon.shell-format"
     },

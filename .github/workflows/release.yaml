@@ -1,12 +1,9 @@
 name: Release
 
 on:
+    release:
+        types: [created]
     workflow_dispatch:
-        inputs:
-            release_type:
-                description: "Type of release (prerelease, prepatch, patch, minor, preminor, major)"
-                required: true
-                default: "patch"
 
 jobs:
     release:
@@ -48,36 +45,17 @@ jobs:
               run: |
                   # Get the latest release tag
                   LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+
+                  # Force clean the working directory and reset any changes
+                  echo "Cleaning working directory and resetting any changes"
+                  git clean -fd
+                  git reset --hard HEAD
+
+                  # Force checkout the latest tag
+                  echo "Checking out latest tag: $LATEST_TAG"
+                  git checkout -b temp-publish-branch $LATEST_TAG
+
                   echo "Publishing version: $LATEST_TAG"
-
-                  # Checkout the latest tag
-                  git checkout $LATEST_TAG
-
-                  npx lerna publish from-git --yes --dist-tag latest
+                  npx lerna publish from-package --yes --dist-tag latest
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-            - name: Get Version Tag
-              id: get_tag
-              run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
-
-            - name: Generate Release Body
-              id: release_body
-              run: |
-                  if [ -f CHANGELOG.md ]; then
-                    echo "body=$(cat CHANGELOG.md)" >> $GITHUB_OUTPUT
-                  else
-                    echo "body=No changelog provided for this release." >> $GITHUB_OUTPUT
-                  fi
-
-            - name: Create GitHub Release
-              uses: actions/create-release@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-                  PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
-              with:
-                  tag_name: ${{ steps.get_tag.outputs.TAG }}
-                  release_name: Release
-                  body_path: CHANGELOG.md
-                  draft: false
-                  prerelease: false

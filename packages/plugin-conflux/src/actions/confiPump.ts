@@ -5,7 +5,7 @@ import {
     State,
     HandlerCallback,
 } from "@ai16z/eliza";
-import { generateObjectV2, composeContext, ModelClass } from "@ai16z/eliza";
+import { generateObject, composeContext, ModelClass } from "@ai16z/eliza";
 import {
     createPublicClient,
     createWalletClient,
@@ -184,7 +184,7 @@ export const confiPump: Action = {
             template: confluxTransferTemplate,
         });
 
-        const content = await generateObjectV2({
+        const content = await generateObject({
             runtime,
             context,
             modelClass: ModelClass.LARGE,

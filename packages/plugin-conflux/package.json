@@ -1,12 +1,12 @@
 {
     "name": "@ai16z/plugin-conflux",
-    "version": "0.1.4-alpha.3",
+    "version": "0.1.5-alpha.5",
     "main": "dist/index.js",
     "type": "module",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "cive": "0.7.1",
-        "@ai16z/eliza": "workspace:*"
+        "@ai16z/eliza": "workspace:*",
+        "cive": "0.7.1"
     },
     "scripts": {
         "build": "tsup --format esm --dts",

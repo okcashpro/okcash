@@ -5,44 +5,97 @@ echo "Passing arguments: $*"
 # Base packages directory
 PACKAGES_DIR="./packages"
 
+# Display help message to users
+cat << "EOF"
+
+***********************************************************************
+*                                                                     *
+* IMPORTANT NOTICE:                                                  *
+*                                                                     *
+* To add your plugin to the development workflow:                    *
+*                                                                     *
+*  1. Navigate to the 'scripts' directory in your project.           *
+*                                                                     *
+*        cd scripts                                                  *
+*                                                                     *
+*  2. Edit the 'dev.sh' script file.                                 *
+*                                                                     *
+*        nano dev.sh                                                 *
+*                                                                     *
+*  3. Add the following changes:                                     *
+*                                                                     *
+*     a. Ensure your plugin's package.json contains a 'dev' command  *
+*        under the "scripts" section. Example:                       *
+*                                                                     *
+*        "scripts": {                                                *
+*            "dev": "your-dev-command-here"                          *
+*        }                                                           *
+*                                                                     *
+*     b. Add your plugin's folder name to the WORKING_FOLDERS list   *
+*        (relative to ./packages).                                   *
+*                                                                     *
+*        Example: WORKING_FOLDERS=("client-direct" "your-plugin-folder") *
+*                                                                     *
+*  4. Update the 'agent/package.json' file:                          *
+*                                                                     *
+*     Add your plugin to the "dependencies" section like so:         *
+*                                                                     *
+*        "@ai16z/your-plugin-name": "workspace:*"                    *
+*                                                                     *
+*  5. Edit the 'index.ts' file in 'agent/src':                       *
+*                                                                     *
+*     a. Import your plugin:                                         *
+*                                                                     *
+*        import yourPlugin from '@ai16z/your-plugin-name';           *
+*                                                                     *
+*     b. Add your plugin to the `plugins` array:                     *
+*                                                                     *
+*        const plugins = [                                           *
+*          existingPlugin,                                           *
+*          yourPlugin,                                               *
+*        ];                                                          *
+*                                                                     *
+* This will ensure that your plugin's development server runs        *
+* alongside others when you execute this script.                     *
+***********************************************************************
+
+EOF
+
+# 2 seconds delay
+for i in {1..5}; do
+  echo -n "."
+  sleep 0.4
+done
+
 # Check if the packages directory exists
 if [ ! -d "$PACKAGES_DIR" ]; then
   echo "Error: Directory $PACKAGES_DIR does not exist."
   exit 1
 fi
 
-# Function to check if an item is in an array
-is_in_array() {
-  local item="$1"
-  shift
-  for element; do
-    if [[ "$element" == "$item" ]]; then
-      return 0
-    fi
-  done
-  return 1
-}
+# List of working folders to watch (relative to $PACKAGES_DIR)
+WORKING_FOLDERS=("client-direct") # Core is handled separately
 
 # Initialize an array to hold package-specific commands
 COMMANDS=()
 
 # Ensure "core" package runs first
-if [ -d "$PACKAGES_DIR/core" ]; then
-  COMMANDS+=("pnpm --dir $PACKAGES_DIR/core dev -- $*")
+CORE_PACKAGE="$PACKAGES_DIR/core"
+if [ -d "$CORE_PACKAGE" ]; then
+  COMMANDS+=("pnpm --dir $CORE_PACKAGE dev -- $*")
 else
   echo "Warning: 'core' package not found in $PACKAGES_DIR."
 fi
 
-# List of folders to exclude
-EXCLUDED_FOLDERS=("create-eliza-app" "debug_audio" "content_cache")
+# Process remaining working folders
+for FOLDER in "${WORKING_FOLDERS[@]}"; do
+  PACKAGE="$PACKAGES_DIR/$FOLDER"
 
-# Iterate over all other subdirectories in the packages folder
-for PACKAGE in "$PACKAGES_DIR"/*; do
-  PACKAGE_NAME=$(basename "$PACKAGE")
-
-  # Skip excluded folders and "core"
-  if [ -d "$PACKAGE" ] && ! is_in_array "$PACKAGE_NAME" "${EXCLUDED_FOLDERS[@]}" && [ "$PACKAGE_NAME" != "core" ]; then
+  # Check if the folder exists and add the command
+  if [ -d "$PACKAGE" ]; then
     COMMANDS+=("pnpm --dir $PACKAGE dev -- $*")
+  else
+    echo "Warning: '$FOLDER' folder not found in $PACKAGES_DIR."
   fi
 done
 
@@ -54,13 +107,19 @@ else
 fi
 
 if [ -d "./agent" ]; then
-  COMMANDS+=("node -e \"setTimeout(() => process.exit(0), 5000)\" && pnpm --dir agent dev -- $*")
+  # Build the watch paths dynamically from WORKING_FOLDERS
+  WATCH_PATHS=()
+  for FOLDER in "${WORKING_FOLDERS[@]}"; do
+    WATCH_PATHS+=("--watch './packages/$FOLDER/dist'")
+  done
+
+  COMMANDS+=("nodemon ${WATCH_PATHS[@]} -e js,json,map --delay 2 --exec 'pnpm --dir agent dev -- $*'")
 else
   echo "Warning: 'agent' directory not found."
 fi
 
 # Run build command first
-if ! pnpm dev:build; then
+if ! pnpm build; then
   echo "Build failed. Exiting."
   exit 1
 fi

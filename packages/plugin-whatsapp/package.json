@@ -1,6 +1,6 @@
 {
     "name": "@ai16z/plugin-whatsapp",
-    "version": "0.1.4-alpha.3",
+    "version": "0.1.5-alpha.5",
     "description": "WhatsApp Cloud API plugin",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -8,19 +8,19 @@
         "build": "tsup --format esm --dts",
         "dev": "tsup --format esm --dts --watch",
         "test": "jest",
-        "lint": "eslint . --fix"
+        "lint": "eslint --fix  --cache ."
     },
     "dependencies": {
-        "axios": "1.7.8",
-        "@ai16z/eliza": "workspace:*"
+        "@ai16z/eliza": "workspace:*",
+        "axios": "1.7.8"
     },
     "devDependencies": {
-        "@types/node": "20.17.9",
         "@types/jest": "29.5.14",
+        "@types/node": "20.17.9",
         "@typescript-eslint/eslint-plugin": "8.16.0",
         "@typescript-eslint/parser": "8.16.0",
-        "typescript": "5.6.3",
         "jest": "29.7.0",
-        "ts-jest": "29.2.5"
+        "ts-jest": "29.2.5",
+        "typescript": "5.6.3"
     }
 }

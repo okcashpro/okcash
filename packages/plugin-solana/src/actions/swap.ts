@@ -1,27 +1,18 @@
-import bs58 from "bs58";
-import {
-    Connection,
-    Keypair,
-    PublicKey,
-    VersionedTransaction,
-} from "@solana/web3.js";
-import BigNumber from "bignumber.js";
-import { v4 as uuidv4 } from "uuid";
-import { TrustScoreDatabase } from "@ai16z/plugin-trustdb";
 import {
     ActionExample,
+    composeContext,
+    generateObjectDeprecated,
     HandlerCallback,
     IAgentRuntime,
     Memory,
     ModelClass,
+    settings,
     State,
     type Action,
-    composeContext,
-    generateObject,
-    settings,
 } from "@ai16z/eliza";
-import { TokenProvider } from "../providers/token.ts";
-import { TrustScoreManager } from "../providers/trustScoreProvider.ts";
+import { Connection, PublicKey, VersionedTransaction } from "@solana/web3.js";
+import BigNumber from "bignumber.js";
+import { getWalletKey } from "../keypairUtils.ts";
 import { walletProvider, WalletProvider } from "../providers/wallet.ts";
 import { getTokenDecimals } from "./swapUtils.ts";
 
@@ -110,7 +101,7 @@ Example response:
 \`\`\`json
 {
     "inputTokenSymbol": "SOL",
-    "outputTokenSymbol": "USDC", 
+    "outputTokenSymbol": "USDC",
     "inputTokenCA": "So11111111111111111111111111111111111111112",
     "outputTokenCA": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
     "amount": 1.5
@@ -125,7 +116,7 @@ Given the recent messages and wallet information below:
 
 Extract the following information about the requested token swap:
 - Input token symbol (the token being sold)
-- Output token symbol (the token being bought) 
+- Output token symbol (the token being bought)
 - Input token contract address if provided
 - Output token contract address if provided
 - Amount to swap
@@ -134,7 +125,7 @@ Respond with a JSON markdown block containing only the extracted values. Use nul
 \`\`\`json
 {
     "inputTokenSymbol": string | null,
-    "outputTokenSymbol": string | null, 
+    "outputTokenSymbol": string | null,
     "inputTokenCA": string | null,
     "outputTokenCA": string | null,
     "amount": number | string | null
@@ -145,12 +136,10 @@ Respond with a JSON markdown block containing only the extracted values. Use nul
 
 // get all the tokens in the wallet using the wallet provider
 async function getTokensInWallet(runtime: IAgentRuntime) {
+    const { publicKey } = await getWalletKey(runtime, false);
     const walletProvider = new WalletProvider(
         new Connection("https://api.mainnet-beta.solana.com"),
-        new PublicKey(
-            runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                runtime.getSetting("WALLET_PUBLIC_KEY")
-        )
+        publicKey
     );
 
     const walletInfo = await walletProvider.fetchPortfolioValue(runtime);
@@ -209,15 +198,14 @@ export const executeSwap: Action = {
             template: swapTemplate,
         });
 
-        const response = await generateObject({
+        const response = await generateObjectDeprecated({
             runtime,
             context: swapContext,
             modelClass: ModelClass.LARGE,
         });
 
         console.log("Response:", response);
-        const type =
-            response.inputTokenSymbol?.toUpperCase() === "SOL" ? "buy" : "sell";
+        // const type = response.inputTokenSymbol?.toUpperCase() === "SOL" ? "buy" : "sell";
 
         // Add SOL handling logic
         if (response.inputTokenSymbol?.toUpperCase() === "SOL") {
@@ -293,12 +281,12 @@ export const executeSwap: Action = {
             const connection = new Connection(
                 "https://api.mainnet-beta.solana.com"
             );
-            const walletPublicKey = new PublicKey(
-                runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                    runtime.getSetting("WALLET_PUBLIC_KEY")
+            const { publicKey: walletPublicKey } = await getWalletKey(
+                runtime,
+                false
             );
 
-            const provider = new WalletProvider(connection, walletPublicKey);
+            // const provider = new WalletProvider(connection, walletPublicKey);
 
             console.log("Wallet Public Key:", walletPublicKey);
             console.log("inputTokenSymbol:", response.inputTokenCA);
@@ -322,44 +310,11 @@ export const executeSwap: Action = {
                 VersionedTransaction.deserialize(transactionBuf);
 
             console.log("Preparing to sign transaction...");
-            const privateKeyString =
-                runtime.getSetting("SOLANA_PRIVATE_KEY") ??
-                runtime.getSetting("WALLET_PRIVATE_KEY");
-
-            // Handle different private key formats
-            let secretKey: Uint8Array;
-            try {
-                // First try to decode as base58
-                secretKey = bs58.decode(privateKeyString);
-                // eslint-disable-next-line
-            } catch (e) {
-                try {
-                    // If that fails, try base64
-                    secretKey = Uint8Array.from(
-                        Buffer.from(privateKeyString, "base64")
-                    );
-                    // eslint-disable-next-line
-                } catch (e2) {
-                    throw new Error("Invalid private key format");
-                }
-            }
-
-            // Verify the key length
-            if (secretKey.length !== 64) {
-                console.error("Invalid key length:", secretKey.length);
-                throw new Error(
-                    `Invalid private key length: ${secretKey.length}. Expected 64 bytes.`
-                );
-            }
 
             console.log("Creating keypair...");
-            const keypair = Keypair.fromSecretKey(secretKey);
-
+            const { keypair } = await getWalletKey(runtime, true);
             // Verify the public key matches what we expect
-            const expectedPublicKey =
-                runtime.getSetting("SOLANA_PUBLIC_KEY") ??
-                runtime.getSetting("WALLET_PUBLIC_KEY");
-            if (keypair.publicKey.toBase58() !== expectedPublicKey) {
+            if (keypair.publicKey.toBase58() !== walletPublicKey.toBase58()) {
                 throw new Error(
                     "Generated public key doesn't match expected public key"
                 );
@@ -399,81 +354,6 @@ export const executeSwap: Action = {
             if (confirmation.value.err) {
                 throw new Error(
                     `Transaction failed: ${confirmation.value.err}`
-                );
-            }
-
-            if (type === "buy") {
-                const tokenProvider = new TokenProvider(
-                    response.outputTokenCA,
-                    provider,
-                    runtime.cacheManager
-                );
-                const module = await import("better-sqlite3");
-                const Database = module.default;
-                const trustScoreDb = new TrustScoreDatabase(
-                    new Database(":memory:")
-                );
-                // add or get recommender
-                const uuid = uuidv4();
-                const recommender = await trustScoreDb.getOrCreateRecommender({
-                    id: uuid,
-                    address: walletPublicKey.toString(),
-                    solanaPubkey: walletPublicKey.toString(),
-                });
-
-                const trustScoreDatabase = new TrustScoreManager(
-                    runtime,
-                    tokenProvider,
-                    trustScoreDb
-                );
-                // save the trade
-                const tradeData = {
-                    buy_amount: response.amount,
-                    is_simulation: false,
-                };
-                await trustScoreDatabase.createTradePerformance(
-                    runtime,
-                    response.outputTokenCA,
-                    recommender.id,
-                    tradeData
-                );
-            } else if (type === "sell") {
-                const tokenProvider = new TokenProvider(
-                    response.inputTokenCA,
-                    provider,
-                    runtime.cacheManager
-                );
-                const module = await import("better-sqlite3");
-                const Database = module.default;
-                const trustScoreDb = new TrustScoreDatabase(
-                    new Database(":memory:")
-                );
-                // add or get recommender
-                const uuid = uuidv4();
-                const recommender = await trustScoreDb.getOrCreateRecommender({
-                    id: uuid,
-                    address: walletPublicKey.toString(),
-                    solanaPubkey: walletPublicKey.toString(),
-                });
-
-                const trustScoreDatabase = new TrustScoreManager(
-                    runtime,
-                    tokenProvider,
-                    trustScoreDb
-                );
-                // save the trade
-                const sellDetails = {
-                    sell_amount: response.amount,
-                    sell_recommender_id: recommender.id,
-                };
-                const sellTimeStamp = new Date().getTime().toString();
-                await trustScoreDatabase.updateSellDetails(
-                    runtime,
-                    response.inputTokenCA,
-                    recommender.id,
-                    sellTimeStamp,
-                    sellDetails,
-                    false
                 );
             }
 

@@ -1,6 +1,6 @@
 {
     "name": "create-eliza-app",
-    "version": "0.1.4-alpha.3",
+    "version": "0.1.5-alpha.5",
     "description": "",
     "sideEffects": false,
     "files": [
@@ -12,7 +12,7 @@
     },
     "scripts": {
         "build": "unbuild",
-        "lint": "eslint . --fix",
+        "lint": "eslint --fix  --cache .",
         "start": "node ./dist/index.cjs",
         "automd": "automd"
     },

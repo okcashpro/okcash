@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.4-alpha.3](../index.md) / SearchResult
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / SearchResult
 
 # Type Alias: SearchResult
 
@@ -28,4 +28,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:1118](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1118)
+[packages/core/src/types.ts:1181](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1181)

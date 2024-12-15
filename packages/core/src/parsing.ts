@@ -1,3 +1,4 @@
+import { ActionResponse } from "./types.ts";
 const jsonBlockPattern = /```json\n([\s\S]*?)\n```/;
 
 export const messageCompletionFooter = `\nResponse format should be formatted in a JSON block like this:
@@ -60,34 +61,40 @@ Your response must include the JSON block.`;
 export function parseJsonArrayFromText(text: string) {
     let jsonData = null;
 
+    // First try to parse with the original JSON format
     const jsonBlockMatch = text.match(jsonBlockPattern);
 
     if (jsonBlockMatch) {
         try {
-            jsonData = JSON.parse(jsonBlockMatch[1]);
+            // Replace single quotes with double quotes before parsing
+            const normalizedJson = jsonBlockMatch[1].replace(/'/g, '"');
+            jsonData = JSON.parse(normalizedJson);
         } catch (e) {
             console.error("Error parsing JSON:", e);
-            return null;
         }
-    } else {
-        const arrayPattern = /\[\s*{[\s\S]*?}\s*\]/;
+    }
+
+    // If that fails, try to find an array pattern
+    if (!jsonData) {
+        const arrayPattern = /\[\s*['"][^'"]*['"]\s*\]/;
         const arrayMatch = text.match(arrayPattern);
 
         if (arrayMatch) {
             try {
-                jsonData = JSON.parse(arrayMatch[0]);
+                // Replace single quotes with double quotes before parsing
+                const normalizedJson = arrayMatch[0].replace(/'/g, '"');
+                jsonData = JSON.parse(normalizedJson);
             } catch (e) {
                 console.error("Error parsing JSON:", e);
-                return null;
             }
         }
     }
 
     if (Array.isArray(jsonData)) {
         return jsonData;
-    } else {
-        return null;
     }
+
+    return null;
 }
 
 /**
@@ -140,3 +147,38 @@ export function parseJSONObjectFromText(
         return null;
     }
 }
+
+export const postActionResponseFooter = `Choose any combination of [LIKE], [RETWEET], [QUOTE], and [REPLY] that are appropriate. Each action must be on its own line. Your response must only include the chosen actions.`;
+
+export const parseActionResponseFromText = (text: string): { actions: ActionResponse } => {
+    const actions: ActionResponse = {
+        like: false,
+        retweet: false,
+        quote: false,
+        reply: false
+    };
+
+    // Regex patterns
+    const likePattern = /\[LIKE\]/i;
+    const retweetPattern = /\[RETWEET\]/i;
+    const quotePattern = /\[QUOTE\]/i;
+    const replyPattern = /\[REPLY\]/i;
+
+    // Check with regex
+    actions.like = likePattern.test(text);
+    actions.retweet = retweetPattern.test(text);
+    actions.quote = quotePattern.test(text);
+    actions.reply = replyPattern.test(text);
+
+    // Also do line by line parsing as backup
+    const lines = text.split('\n');
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed === '[LIKE]') actions.like = true;
+        if (trimmed === '[RETWEET]') actions.retweet = true;
+        if (trimmed === '[QUOTE]') actions.quote = true;
+        if (trimmed === '[REPLY]') actions.reply = true;
+    }
+
+    return { actions };
+};
