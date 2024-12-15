@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:998](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L998)
+[packages/core/src/types.ts:1009](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1009)
 
 ## Methods
 
@@ -48,17 +48,19 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1003](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1003)
+[packages/core/src/types.ts:1014](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1014)
 
 ***
 
 ### uploadFile()
 
-> **uploadFile**(`imagePath`, `useSignedUrl`, `expiresIn`): `Promise`\<`object`\>
+> **uploadFile**(`imagePath`, `subDirectory`, `useSignedUrl`, `expiresIn`): `Promise`\<`object`\>
 
 #### Parameters
 
 • **imagePath**: `string`
+
+• **subDirectory**: `string`
 
 • **useSignedUrl**: `boolean`
 
@@ -82,7 +84,7 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1157](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1157)
+[packages/core/src/types.ts:1168](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1168)
 
 ***
 
@@ -102,4 +104,4 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1166](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1166)
+[packages/core/src/types.ts:1178](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1178)
