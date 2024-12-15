@@ -45,6 +45,18 @@ Before getting started with Eliza, ensure you have:
    pnpm install
    ```
 
+   # Quickstart Guide Update
+
+**Important Note on pnpm Lockfile Management**
+
+By default, the `pnpm` lockfile will not be updated during installations based off of .npmrc frozen-lockfile=true. To update the lockfile, you need to run the command:
+
+```bash
+pnpm i --no-frozen-lockfile
+```
+
+Please only use this command when you are bumping the version of a package or adding a new package to your package.json. This practice helps maintain consistency in your project's dependencies and prevents unintended changes to the lockfile.
+
    Build the local libraries
 
    ```bash
@@ -288,6 +300,8 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
    ```bash
    pnpm i
    ```
+
+
 
 ## Next Steps
 
