@@ -4,7 +4,7 @@
     "modelProvider": "anthropic",
     "settings": {
         "voice": {
-            "model": "en_GB-male-high"
+            "model": "en_GB-danny-low"
         }
     },
     "plugins": [],

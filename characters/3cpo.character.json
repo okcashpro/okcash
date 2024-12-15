@@ -4,7 +4,7 @@
     "modelProvider": "anthropic",
     "settings": {
         "voice": {
-            "model": "en_GB-male-formal"
+            "model": "en_GB-alan-medium"
         }
     },
     "plugins": [],
