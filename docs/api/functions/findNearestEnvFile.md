@@ -2,20 +2,20 @@
 
 # Function: findNearestEnvFile()
 
-> **findNearestEnvFile**(`startDir`?): `string`
+> **findNearestEnvFile**(`startDir`?): `any`
 
 Recursively searches for a .env file starting from the current directory
 and moving up through parent directories (Node.js only)
 
 ## Parameters
 
-• **startDir?**: `string` = `...`
+• **startDir?**: `any` = `...`
 
 Starting directory for the search
 
 ## Returns
 
-`string`
+`any`
 
 Path to the nearest .env file or null if not found
 
