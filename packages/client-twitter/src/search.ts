@@ -207,9 +207,7 @@ export class TwitterSearchClient {
             // Fetch replies and retweets
             const replies = selectedTweet.thread;
             const replyContext = replies
-                .filter(
-                    (reply) => reply.username !== this.twitterUsername
-                )
+                .filter((reply) => reply.username !== this.twitterUsername)
                 .map((reply) => `@${reply.username}: ${reply.text}`)
                 .join("\n");
 
@@ -258,7 +256,7 @@ export class TwitterSearchClient {
             const responseContent = await generateMessageResponse({
                 runtime: this.runtime,
                 context,
-                modelClass: ModelClass.SMALL,
+                modelClass: ModelClass.LARGE,
             });
 
             responseContent.inReplyTo = message.id;

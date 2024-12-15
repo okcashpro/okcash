@@ -1,7 +1,7 @@
-import { 
-    stringToUuid, 
-    getEmbeddingZeroVector, 
-    composeContext, 
+import {
+    stringToUuid,
+    getEmbeddingZeroVector,
+    composeContext,
     generateMessageResponse,
     generateShouldRespond,
     ModelClass,
@@ -9,11 +9,14 @@ import {
     Content,
     State,
     elizaLogger,
-    HandlerCallback
-} from '@ai16z/eliza';
-import { slackMessageHandlerTemplate, slackShouldRespondTemplate } from './templates';
-import { WebClient } from '@slack/web-api';
-import { IAgentRuntime } from '@ai16z/eliza';
+    HandlerCallback,
+} from "@ai16z/eliza";
+import {
+    slackMessageHandlerTemplate,
+    slackShouldRespondTemplate,
+} from "./templates";
+import { WebClient } from "@slack/web-api";
+import { IAgentRuntime } from "@ai16z/eliza";
 
 export class MessageManager {
     private client: WebClient;
@@ -33,7 +36,7 @@ export class MessageManager {
         // Clear old processed messages and events every hour
         setInterval(() => {
             const oneHourAgo = Date.now() - 3600000;
-            
+
             // Clear old processed messages
             for (const [key, timestamp] of this.processedMessages.entries()) {
                 if (timestamp < oneHourAgo) {
@@ -49,17 +52,17 @@ export class MessageManager {
     private generateEventKey(event: any): string {
         // Create a unique key that includes all relevant event data
         // Normalize event type to handle message and app_mention as the same type
-        const eventType = (event.type === 'app_mention') ? 'message' : event.type;
-        
-        const components = [
-            event.ts,                    // Timestamp
-            event.channel,               // Channel ID
-            eventType,                   // Normalized event type
-            event.user,                  // User ID
-            event.thread_ts              // Thread timestamp (if any)
-        ].filter(Boolean);              // Remove any undefined/null values
+        const eventType = event.type === "app_mention" ? "message" : event.type;
 
-        const key = components.join('-');
+        const components = [
+            event.ts, // Timestamp
+            event.channel, // Channel ID
+            eventType, // Normalized event type
+            event.user, // User ID
+            event.thread_ts, // Thread timestamp (if any)
+        ].filter(Boolean); // Remove any undefined/null values
+
+        const key = components.join("-");
         console.log("\n=== EVENT DETAILS ===");
         console.log("Event Type:", event.type);
         console.log("Event TS:", event.ts);
@@ -73,7 +76,9 @@ export class MessageManager {
     private cleanMessage(text: string): string {
         elizaLogger.debug("🧹 [CLEAN] Cleaning message text:", text);
         // Remove bot mention
-        const cleaned = text.replace(new RegExp(`<@${this.botUserId}>`, 'g'), '').trim();
+        const cleaned = text
+            .replace(new RegExp(`<@${this.botUserId}>`, "g"), "")
+            .trim();
         elizaLogger.debug("✨ [CLEAN] Cleaned result:", cleaned);
         return cleaned;
     }
@@ -81,21 +86,27 @@ export class MessageManager {
     private async _shouldRespond(message: any, state: State): Promise<boolean> {
         console.log("\n=== SHOULD_RESPOND PHASE ===");
         console.log("🔍 Step 1: Evaluating if should respond to message");
-        
+
         // Always respond to direct mentions
-        if (message.type === 'app_mention' || message.text?.includes(`<@${this.botUserId}>`)) {
+        if (
+            message.type === "app_mention" ||
+            message.text?.includes(`<@${this.botUserId}>`)
+        ) {
             console.log("✅ Direct mention detected - will respond");
             return true;
         }
 
         // Always respond in direct messages
-        if (message.channel_type === 'im') {
+        if (message.channel_type === "im") {
             console.log("✅ Direct message detected - will respond");
             return true;
         }
 
         // Check if we're in a thread and we've participated
-        if (message.thread_ts && state.recentMessages?.includes(this.runtime.agentId)) {
+        if (
+            message.thread_ts &&
+            state.recentMessages?.includes(this.runtime.agentId)
+        ) {
             console.log("✅ Active thread participant - will respond");
             return true;
         }
@@ -104,9 +115,10 @@ export class MessageManager {
         console.log("🤔 Step 2: Using LLM to decide response");
         const shouldRespondContext = composeContext({
             state,
-            template: this.runtime.character.templates?.slackShouldRespondTemplate || 
-                     this.runtime.character.templates?.shouldRespondTemplate || 
-                     slackShouldRespondTemplate,
+            template:
+                this.runtime.character.templates?.slackShouldRespondTemplate ||
+                this.runtime.character.templates?.shouldRespondTemplate ||
+                slackShouldRespondTemplate,
         });
 
         console.log("🔄 Step 3: Calling generateShouldRespond");
@@ -117,7 +129,7 @@ export class MessageManager {
         });
 
         console.log(`✅ Step 4: LLM decision received: ${response}`);
-        return response === 'RESPOND';
+        return response === "RESPOND";
     }
 
     private async _generateResponse(
@@ -133,7 +145,7 @@ export class MessageManager {
         const response = await generateMessageResponse({
             runtime: this.runtime,
             context,
-            modelClass: ModelClass.SMALL,
+            modelClass: ModelClass.LARGE,
         });
         console.log("✅ Step 3: LLM response received");
 
@@ -141,18 +153,20 @@ export class MessageManager {
             console.error("❌ No response from generateMessageResponse");
             return {
                 text: "I apologize, but I'm having trouble generating a response right now.",
-                source: 'slack'
+                source: "slack",
             };
         }
 
         // If response includes a CONTINUE action but there's no direct mention or thread,
         // remove the action to prevent automatic continuation
         if (
-            response.action === 'CONTINUE' && 
+            response.action === "CONTINUE" &&
             !memory.content.text?.includes(`<@${this.botUserId}>`) &&
             !state.recentMessages?.includes(memory.id)
         ) {
-            console.log("⚠️ Step 4: Removing CONTINUE action - not a direct interaction");
+            console.log(
+                "⚠️ Step 4: Removing CONTINUE action - not a direct interaction"
+            );
             delete response.action;
         }
 
@@ -194,7 +208,9 @@ export class MessageManager {
         try {
             // Check if message is currently being processed
             if (this.messageProcessingLock.has(messageKey)) {
-                console.log("⚠️ Message is currently being processed - skipping");
+                console.log(
+                    "⚠️ Message is currently being processed - skipping"
+                );
                 return;
             }
 
@@ -211,7 +227,7 @@ export class MessageManager {
 
                 // Clean the message text
                 console.log("🧹 Step 3: Cleaning message text");
-                const cleanedText = this.cleanMessage(event.text || '');
+                const cleanedText = this.cleanMessage(event.text || "");
                 if (!cleanedText) {
                     console.log("⚠️ Empty message after cleaning - skipping");
                     return;
@@ -219,16 +235,26 @@ export class MessageManager {
 
                 // Generate unique IDs
                 console.log("🔑 Step 4: Generating conversation IDs");
-                const roomId = stringToUuid(`${event.channel}-${this.runtime.agentId}`);
-                const userId = stringToUuid(`${event.user}-${this.runtime.agentId}`);
-                const messageId = stringToUuid(`${event.ts}-${this.runtime.agentId}`);
+                const roomId = stringToUuid(
+                    `${event.channel}-${this.runtime.agentId}`
+                );
+                const userId = stringToUuid(
+                    `${event.user}-${this.runtime.agentId}`
+                );
+                const messageId = stringToUuid(
+                    `${event.ts}-${this.runtime.agentId}`
+                );
 
                 // Create initial memory
                 console.log("💾 Step 5: Creating initial memory");
                 const content: Content = {
                     text: cleanedText,
-                    source: 'slack',
-                    inReplyTo: event.thread_ts ? stringToUuid(`${event.thread_ts}-${this.runtime.agentId}`) : undefined
+                    source: "slack",
+                    inReplyTo: event.thread_ts
+                        ? stringToUuid(
+                              `${event.thread_ts}-${this.runtime.agentId}`
+                          )
+                        : undefined,
                 };
 
                 const memory: Memory = {
@@ -255,7 +281,7 @@ export class MessageManager {
                         slackClient: this.client,
                         slackEvent: event,
                         agentName: this.runtime.character.name,
-                        senderName: event.user_name || event.user
+                        senderName: event.user_name || event.user,
                     }
                 );
 
@@ -268,46 +294,77 @@ export class MessageManager {
                 const shouldRespond = await this._shouldRespond(event, state);
 
                 if (shouldRespond) {
-                    console.log("✅ Step 10: Should respond - generating response");
+                    console.log(
+                        "✅ Step 10: Should respond - generating response"
+                    );
                     const context = composeContext({
                         state,
-                        template: this.runtime.character.templates?.slackMessageHandlerTemplate || slackMessageHandlerTemplate,
+                        template:
+                            this.runtime.character.templates
+                                ?.slackMessageHandlerTemplate ||
+                            slackMessageHandlerTemplate,
                     });
 
-                    const responseContent = await this._generateResponse(memory, state, context);
+                    const responseContent = await this._generateResponse(
+                        memory,
+                        state,
+                        context
+                    );
 
                     if (responseContent?.text) {
                         console.log("📤 Step 11: Preparing to send response");
 
-                        const callback: HandlerCallback = async (content: Content) => {
+                        const callback: HandlerCallback = async (
+                            content: Content
+                        ) => {
                             try {
-                                console.log(" Step 12: Executing response callback");
-                                const result = await this.client.chat.postMessage({
-                                    channel: event.channel,
-                                    text: content.text || responseContent.text,
-                                    thread_ts: event.thread_ts
-                                });
+                                console.log(
+                                    " Step 12: Executing response callback"
+                                );
+                                const result =
+                                    await this.client.chat.postMessage({
+                                        channel: event.channel,
+                                        text:
+                                            content.text ||
+                                            responseContent.text,
+                                        thread_ts: event.thread_ts,
+                                    });
 
-                                console.log("💾 Step 13: Creating response memory");
+                                console.log(
+                                    "💾 Step 13: Creating response memory"
+                                );
                                 const responseMemory: Memory = {
-                                    id: stringToUuid(`${result.ts}-${this.runtime.agentId}`),
+                                    id: stringToUuid(
+                                        `${result.ts}-${this.runtime.agentId}`
+                                    ),
                                     userId: this.runtime.agentId,
                                     agentId: this.runtime.agentId,
                                     roomId,
                                     content: {
                                         ...content,
-                                        text: content.text || responseContent.text,
-                                        inReplyTo: messageId
+                                        text:
+                                            content.text ||
+                                            responseContent.text,
+                                        inReplyTo: messageId,
                                     },
                                     createdAt: Date.now(),
                                     embedding: getEmbeddingZeroVector(),
                                 };
 
-                                console.log("✓ Step 14: Marking message as processed");
-                                this.processedMessages.set(messageKey, currentTime);
+                                console.log(
+                                    "✓ Step 14: Marking message as processed"
+                                );
+                                this.processedMessages.set(
+                                    messageKey,
+                                    currentTime
+                                );
 
-                                console.log("💾 Step 15: Saving response memory");
-                                await this.runtime.messageManager.createMemory(responseMemory);
+                                console.log(
+                                    "💾 Step 15: Saving response memory"
+                                );
+                                await this.runtime.messageManager.createMemory(
+                                    responseMemory
+                                );
 
                                 return [responseMemory];
                             } catch (error) {
@@ -317,10 +374,14 @@ export class MessageManager {
                         };
 
                         console.log("📤 Step 16: Sending initial response");
-                        const responseMessages = await callback(responseContent);
+                        const responseMessages =
+                            await callback(responseContent);
 
-                        console.log("🔄 Step 17: Updating state after response");
-                        state = await this.runtime.updateRecentMessageState(state);
+                        console.log(
+                            "🔄 Step 17: Updating state after response"
+                        );
+                        state =
+                            await this.runtime.updateRecentMessageState(state);
 
                         if (responseContent.action) {
                             console.log("⚡ Step 18: Processing actions");
@@ -337,7 +398,9 @@ export class MessageManager {
                     this.processedMessages.set(messageKey, currentTime);
                 }
             } finally {
-                console.log("🔓 Final Step: Removing message from processing lock");
+                console.log(
+                    "🔓 Final Step: Removing message from processing lock"
+                );
                 this.messageProcessingLock.delete(messageKey);
             }
         } catch (error) {
@@ -345,4 +408,4 @@ export class MessageManager {
             this.messageProcessingLock.delete(messageKey);
         }
     }
-} 
+}
