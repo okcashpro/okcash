@@ -465,6 +465,26 @@ export const models: Models = {
             [ModelClass.LARGE]: settings.LARGE_VENICE_MODEL || "llama-3.1-405b",
         },
     },
+    [ModelProviderName.AKASH_CHAT_API]: {
+        endpoint: "https://chatapi.akash.network/api/v1",
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            temperature: 0.6,
+        },
+        model: {
+            [ModelClass.SMALL]:
+                settings.SMALL_AKASH_CHAT_API_MODEL ||
+                "Meta-Llama-3-2-3B-Instruct",
+            [ModelClass.MEDIUM]:
+                settings.MEDIUM_AKASH_CHAT_API_MODEL ||
+                "Meta-Llama-3-3-70B-Instruct",
+            [ModelClass.LARGE]:
+                settings.LARGE_AKASH_CHAT_API_MODEL ||
+                "Meta-Llama-3-1-405B-Instruct-FP8",
+        },
+    },
 };
 
 export function getModel(provider: ModelProviderName, type: ModelClass) {
