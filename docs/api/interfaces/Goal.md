@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Goal
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / Goal
 
 # Interface: Goal
 
@@ -14,7 +14,7 @@ Optional unique identifier
 
 #### Defined in
 
-[packages/core/src/types.ts:110](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L110)
+[packages/core/src/types.ts:110](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L110)
 
 ***
 
@@ -26,7 +26,7 @@ Room ID where goal exists
 
 #### Defined in
 
-[packages/core/src/types.ts:113](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L113)
+[packages/core/src/types.ts:113](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L113)
 
 ***
 
@@ -38,7 +38,7 @@ User ID of goal owner
 
 #### Defined in
 
-[packages/core/src/types.ts:116](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L116)
+[packages/core/src/types.ts:116](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L116)
 
 ***
 
@@ -50,7 +50,7 @@ Name/title of the goal
 
 #### Defined in
 
-[packages/core/src/types.ts:119](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L119)
+[packages/core/src/types.ts:119](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L119)
 
 ***
 
@@ -62,7 +62,7 @@ Current status
 
 #### Defined in
 
-[packages/core/src/types.ts:122](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L122)
+[packages/core/src/types.ts:122](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L122)
 
 ***
 
@@ -74,4 +74,4 @@ Component objectives
 
 #### Defined in
 
-[packages/core/src/types.ts:125](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L125)
+[packages/core/src/types.ts:125](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L125)

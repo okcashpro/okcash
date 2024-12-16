@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / getProviders
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / getProviders
 
 # Function: getProviders()
 
@@ -28,4 +28,4 @@ A string that concatenates the outputs of each provider.
 
 ## Defined in
 
-[packages/core/src/providers.ts:10](https://github.com/monilpat/eliza/blob/main/packages/core/src/providers.ts#L10)
+[packages/core/src/providers.ts:10](https://github.com/ai16z/eliza/blob/main/packages/core/src/providers.ts#L10)

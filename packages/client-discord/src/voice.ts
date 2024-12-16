@@ -492,7 +492,7 @@ export class VoiceManager extends EventEmitter {
                 );
 
                 // Clean all users' previous buffers
-                this.userStates.forEach((state, id) => {
+                this.userStates.forEach((state, _) => {
                     state.buffers.length = 0;
                     state.totalLength = 0;
                 });

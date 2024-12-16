@@ -2,7 +2,7 @@ import {
     composeContext,
     generateImage,
     generateText,
-    generateObjectDEPRECATED,
+    generateObjectDeprecated,
 } from "@ai16z/eliza";
 import {
     ActionExample,
@@ -148,7 +148,7 @@ export const executeCreateToken: Action = {
             template: createTokenTemplate,
         });
 
-        const response = await generateObjectDEPRECATED({
+        const response = await generateObjectDeprecated({
             runtime,
             context: createTokenContext,
             modelClass: ModelClass.LARGE,

@@ -39,11 +39,23 @@ Before getting started with Eliza, ensure you have:
     git checkout $(git describe --tags --abbrev=0)
    ```
 
-   Install dependencies
+   Install dependencies (on initial run)
 
    ```bash
-   pnpm install
+   pnpm install --no-frozen-lockfile
    ```
+
+   # Quickstart Guide Update
+
+**Important Note on pnpm Lockfile Management**
+
+By default, the `pnpm` lockfile will not be updated during installations based off of .npmrc frozen-lockfile=true. To update the lockfile, you need to run the command:
+
+```bash
+pnpm install --no-frozen-lockfile
+```
+
+Please only use this command when you initially instantiating the repo or are bumping the version of a package or adding a new package to your package.json. This practice helps maintain consistency in your project's dependencies and prevents unintended changes to the lockfile.
 
    Build the local libraries
 

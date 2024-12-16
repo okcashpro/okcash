@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Clients
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / Clients
 
 # Enumeration: Clients
 
@@ -12,7 +12,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:601](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L601)
+[packages/core/src/types.ts:610](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L610)
 
 ***
 
@@ -22,7 +22,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:602](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L602)
+[packages/core/src/types.ts:611](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L611)
 
 ***
 
@@ -32,7 +32,7 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:603](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L603)
+[packages/core/src/types.ts:612](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L612)
 
 ***
 
@@ -42,4 +42,44 @@ Available client platforms
 
 #### Defined in
 
-[packages/core/src/types.ts:604](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L604)
+[packages/core/src/types.ts:613](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L613)
+
+***
+
+### FARCASTER
+
+> **FARCASTER**: `"farcaster"`
+
+#### Defined in
+
+[packages/core/src/types.ts:614](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L614)
+
+***
+
+### LENS
+
+> **LENS**: `"lens"`
+
+#### Defined in
+
+[packages/core/src/types.ts:615](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L615)
+
+***
+
+### AUTO
+
+> **AUTO**: `"auto"`
+
+#### Defined in
+
+[packages/core/src/types.ts:616](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L616)
+
+***
+
+### SLACK
+
+> **SLACK**: `"slack"`
+
+#### Defined in
+
+[packages/core/src/types.ts:617](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L617)

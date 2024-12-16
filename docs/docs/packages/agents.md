@@ -101,20 +101,16 @@ export async function initializeClients(
   const clients = [];
   const clientTypes = character.clients?.map((str) => str.toLowerCase()) || [];
 
-  // Initialize requested clients
-  if (clientTypes.includes("discord")) {
+  if (clientTypes.includes(Clients.DISCORD)) {
     clients.push(await DiscordClientInterface.start(runtime));
   }
-
-  if (clientTypes.includes("telegram")) {
+  if (clientTypes.includes(Clients.TELEGRAM)) {
     clients.push(await TelegramClientInterface.start(runtime));
   }
-
-  if (clientTypes.includes("twitter")) {
+  if (clientTypes.includes(Clients.TWITTER)) {
     clients.push(await TwitterClientInterface.start(runtime));
   }
-
-  if (clientTypes.includes("auto")) {
+  if (clientTypes.includes(Clients.DIRECT)) {
     clients.push(await AutoClientInterface.start(runtime));
   }
 

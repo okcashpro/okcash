@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / formatActions
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / formatActions
 
 # Function: formatActions()
 
@@ -20,4 +20,4 @@ A detailed string of actions, including names and descriptions.
 
 ## Defined in
 
-[packages/core/src/actions.ts:73](https://github.com/monilpat/eliza/blob/main/packages/core/src/actions.ts#L73)
+[packages/core/src/actions.ts:73](https://github.com/ai16z/eliza/blob/main/packages/core/src/actions.ts#L73)

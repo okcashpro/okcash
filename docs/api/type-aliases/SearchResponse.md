@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / SearchResponse
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / SearchResponse
 
 # Type Alias: SearchResponse
 
@@ -32,4 +32,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:1128](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L1128)
+[packages/core/src/types.ts:1189](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1189)

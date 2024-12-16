@@ -53,7 +53,7 @@ Here is the current post text again. Remember to include an action if the curren
 {{currentPost}}
 ` + messageCompletionFooter;
 
-export const twitterShouldRespondTemplate = (targetUsersStr: string) => 
+export const twitterShouldRespondTemplate = (targetUsersStr: string) =>
     `# INSTRUCTIONS: Determine if {{agentName}} (@{{twitterUserName}}) should respond to the message and participate in the conversation. Do not comment. Just respond with "true" or "false".
 
 Response options are RESPOND, IGNORE and STOP.
@@ -89,7 +89,6 @@ Thread of Tweets You Are Replying To:
 export class TwitterInteractionClient {
     client: ClientBase;
     runtime: IAgentRuntime;
-
     constructor(client: ClientBase, runtime: IAgentRuntime) {
         this.client = client;
         this.runtime = runtime;
@@ -110,88 +109,116 @@ export class TwitterInteractionClient {
 
     async handleTwitterInteractions() {
         elizaLogger.log("Checking Twitter interactions");
-  // Read from environment variable, fallback to default list if not set
-  const targetUsersStr = this.runtime.getSetting("TWITTER_TARGET_USERS");
+        // Read from environment variable, fallback to default list if not set
+        const targetUsersStr = this.runtime.getSetting("TWITTER_TARGET_USERS");
 
-  const twitterUsername = this.client.profile.username;
-  try {
-      // Check for mentions
-      const mentionCandidates = (
-          await this.client.fetchSearchTweets(
-              `@${twitterUsername}`,
-              20,
-              SearchMode.Latest
-          )
-      ).tweets;
+        const twitterUsername = this.client.profile.username;
+        try {
+            // Check for mentions
+            const mentionCandidates = (
+                await this.client.fetchSearchTweets(
+                    `@${twitterUsername}`,
+                    20,
+                    SearchMode.Latest
+                )
+            ).tweets;
 
-      elizaLogger.log("Completed checking mentioned tweets:", mentionCandidates.length);
-      let uniqueTweetCandidates = [...mentionCandidates];
-      // Only process target users if configured
-   if (targetUsersStr && targetUsersStr.trim()) {
-        const TARGET_USERS = targetUsersStr.split(',')
-            .map(u => u.trim())
-            .filter(u => u.length > 0); // Filter out empty strings after split
+            elizaLogger.log(
+                "Completed checking mentioned tweets:",
+                mentionCandidates.length
+            );
+            let uniqueTweetCandidates = [...mentionCandidates];
+            // Only process target users if configured
+            if (targetUsersStr && targetUsersStr.trim()) {
+                const TARGET_USERS = targetUsersStr
+                    .split(",")
+                    .map((u) => u.trim())
+                    .filter((u) => u.length > 0); // Filter out empty strings after split
 
-        elizaLogger.log("Processing target users:", TARGET_USERS);
-    
-        if (TARGET_USERS.length > 0) {
-            // Create a map to store tweets by user
-            const tweetsByUser = new Map<string, Tweet[]>();
+                elizaLogger.log("Processing target users:", TARGET_USERS);
 
-            // Fetch tweets from all target users
-            for (const username of TARGET_USERS) {
-                try {
-                    const userTweets = (await this.client.twitterClient.fetchSearchTweets(
-                        `from:${username}`,  
-                        3,                   
-                        SearchMode.Latest    
-                    )).tweets;
+                if (TARGET_USERS.length > 0) {
+                    // Create a map to store tweets by user
+                    const tweetsByUser = new Map<string, Tweet[]>();
 
-                // Filter for unprocessed, non-reply, recent tweets
-                const validTweets = userTweets.filter(tweet => {
-                    const isUnprocessed = !this.client.lastCheckedTweetId || 
-                                        parseInt(tweet.id) > this.client.lastCheckedTweetId;
-                    const isRecent = (Date.now() - (tweet.timestamp * 1000)) < 2 * 60 * 60 * 1000;
-                    
-                    elizaLogger.log(`Tweet ${tweet.id} checks:`, {
-                        isUnprocessed,
-                        isRecent,
-                        isReply: tweet.isReply,
-                        isRetweet: tweet.isRetweet
-                    });
-                    
-                    return isUnprocessed && !tweet.isReply && !tweet.isRetweet && isRecent;
-                });
+                    // Fetch tweets from all target users
+                    for (const username of TARGET_USERS) {
+                        try {
+                            const userTweets = (
+                                await this.client.twitterClient.fetchSearchTweets(
+                                    `from:${username}`,
+                                    3,
+                                    SearchMode.Latest
+                                )
+                            ).tweets;
 
-                if (validTweets.length > 0) {
-                    tweetsByUser.set(username, validTweets);
-                    elizaLogger.log(`Found ${validTweets.length} valid tweets from ${username}`);
+                            // Filter for unprocessed, non-reply, recent tweets
+                            const validTweets = userTweets.filter((tweet) => {
+                                const isUnprocessed =
+                                    !this.client.lastCheckedTweetId ||
+                                    parseInt(tweet.id) >
+                                        this.client.lastCheckedTweetId;
+                                const isRecent =
+                                    Date.now() - tweet.timestamp * 1000 <
+                                    2 * 60 * 60 * 1000;
+
+                                elizaLogger.log(`Tweet ${tweet.id} checks:`, {
+                                    isUnprocessed,
+                                    isRecent,
+                                    isReply: tweet.isReply,
+                                    isRetweet: tweet.isRetweet,
+                                });
+
+                                return (
+                                    isUnprocessed &&
+                                    !tweet.isReply &&
+                                    !tweet.isRetweet &&
+                                    isRecent
+                                );
+                            });
+
+                            if (validTweets.length > 0) {
+                                tweetsByUser.set(username, validTweets);
+                                elizaLogger.log(
+                                    `Found ${validTweets.length} valid tweets from ${username}`
+                                );
+                            }
+                        } catch (error) {
+                            elizaLogger.error(
+                                `Error fetching tweets for ${username}:`,
+                                error
+                            );
+                            continue;
+                        }
+                    }
+
+                    // Select one tweet from each user that has tweets
+                    const selectedTweets: Tweet[] = [];
+                    for (const [username, tweets] of tweetsByUser) {
+                        if (tweets.length > 0) {
+                            // Randomly select one tweet from this user
+                            const randomTweet =
+                                tweets[
+                                    Math.floor(Math.random() * tweets.length)
+                                ];
+                            selectedTweets.push(randomTweet);
+                            elizaLogger.log(
+                                `Selected tweet from ${username}: ${randomTweet.text?.substring(0, 100)}`
+                            );
+                        }
+                    }
+
+                    // Add selected tweets to candidates
+                    uniqueTweetCandidates = [
+                        ...mentionCandidates,
+                        ...selectedTweets,
+                    ];
                 }
-            } catch (error) {
-                elizaLogger.error(`Error fetching tweets for ${username}:`, error);
-                continue;
+            } else {
+                elizaLogger.log(
+                    "No target users configured, processing only mentions"
+                );
             }
-        }
-
-        // Select one tweet from each user that has tweets
-        const selectedTweets: Tweet[] = [];
-        for (const [username, tweets] of tweetsByUser) {
-            if (tweets.length > 0) {
-                // Randomly select one tweet from this user
-                const randomTweet = tweets[Math.floor(Math.random() * tweets.length)];
-                selectedTweets.push(randomTweet);
-                elizaLogger.log(`Selected tweet from ${username}: ${randomTweet.text?.substring(0, 100)}`);
-            }
-        }
-
-        // Add selected tweets to candidates
-        uniqueTweetCandidates = [...mentionCandidates, ...selectedTweets];
-    }
-    } else {
-    elizaLogger.log("No target users configured, processing only mentions");
-    }
-
-  
 
             // Sort tweet candidates by ID in ascending order
             uniqueTweetCandidates
@@ -359,18 +386,23 @@ export class TwitterInteractionClient {
         const targetUsersStr = this.runtime.getSetting("TWITTER_TARGET_USERS");
 
         // 2. Process the string to get valid usernames
-        const validTargetUsersStr = targetUsersStr && targetUsersStr.trim() 
-            ? targetUsersStr.split(',')          // Split by commas: "user1,user2" -> ["user1", "user2"]
-            .map(u => u.trim())              // Remove whitespace: [" user1 ", "user2 "] -> ["user1", "user2"]
-            .filter(u => u.length > 0)       
-            .join(',')                       
-            : '';    
+        const validTargetUsersStr =
+            targetUsersStr && targetUsersStr.trim()
+                ? targetUsersStr
+                      .split(",") // Split by commas: "user1,user2" -> ["user1", "user2"]
+                      .map((u) => u.trim()) // Remove whitespace: [" user1 ", "user2 "] -> ["user1", "user2"]
+                      .filter((u) => u.length > 0)
+                      .join(",")
+                : "";
 
         const shouldRespondContext = composeContext({
             state,
-            template: this.runtime.character.templates?.twitterShouldRespondTemplate?.(validTargetUsersStr) || 
-                     this.runtime.character?.templates?.shouldRespondTemplate || 
-                     twitterShouldRespondTemplate(validTargetUsersStr),
+            template:
+                this.runtime.character.templates?.twitterShouldRespondTemplate?.(
+                    validTargetUsersStr
+                ) ||
+                this.runtime.character?.templates?.shouldRespondTemplate ||
+                twitterShouldRespondTemplate(validTargetUsersStr),
         });
 
         const shouldRespond = await generateShouldRespond({
@@ -399,7 +431,7 @@ export class TwitterInteractionClient {
         const response = await generateMessageResponse({
             runtime: this.runtime,
             context,
-            modelClass: ModelClass.MEDIUM,
+            modelClass: ModelClass.LARGE,
         });
 
         const removeQuotes = (str: string) =>
@@ -444,11 +476,11 @@ export class TwitterInteractionClient {
                     );
                 }
 
-
                 await this.runtime.processActions(
                     message,
                     responseMessages,
-                    state
+                    state,
+                    callback
                 );
 
                 const responseInfo = `Context:\n\n${context}\n\nSelected Post: ${tweet.id} - ${tweet.username}: ${tweet.text}\nAgent's Output:\n${response.text}`;
