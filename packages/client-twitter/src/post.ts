@@ -273,8 +273,11 @@ export class TwitterPostClient {
             const removeQuotes = (str: string) =>
                 str.replace(/^['"](.*)['"]$/, "$1");
 
+            const fixNewLines = (str: string) =>
+                str.replaceAll(/\\n/g, "\n");
+
             // Final cleaning
-            cleanedContent = removeQuotes(content);
+            cleanedContent = removeQuotes(fixNewLines(content));
 
             if (this.runtime.getSetting("TWITTER_DRY_RUN") === "true") {
                 elizaLogger.info(
