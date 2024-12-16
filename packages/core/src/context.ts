@@ -24,39 +24,6 @@ import { type State } from "./types.ts";
  * // Composing the context with simple string replacement will result in:
  * // "Hello, Alice! You are 30 years old."
  * const contextSimple = composeContext({ state, template });
- *
- * // Composing the context with Handlebars templating engine will also produce the same output.
- * const contextHandlebars = composeContext({ state, template, templatingEngine: 'handlebars' });
- *
- * // Handlebars provides more advanced features than simple string replacement.
- * // For example, you can use conditionals or loops right in your template:
- * const advancedTemplate = `
- *   {{#if userAge}}
- *     Hello, {{userName}}! {{#if (gt userAge 18)}}You are an adult.{{else}}You are a minor.{{/if}}
- *   {{else}}
- *     Hello! We don't know your age.
- *   {{/if}}
- *
- *   {{#each favoriteColors}}
- *     - Your favorite color: {{this}}
- *   {{/each}}
- * `;
- *
- * const advancedState = {
- *   userName: "Alice",
- *   userAge: 30,
- *   favoriteColors: ["blue", "green", "red"]
- * };
- *
- * // Using Handlebars with the more advanced template:
- * const advancedContextHandlebars = composeContext({ state: advancedState, template: advancedTemplate, templatingEngine: 'handlebars' });
- *
- * // The above will produce:
- * // "Hello, Alice! You are an adult.
- * //
- * //  - Your favorite color: blue
- * //  - Your favorite color: green
- * //  - Your favorite color: red"
  */
 export const composeContext = ({
     state,
