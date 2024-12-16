@@ -1,101 +1,85 @@
-import type { IAgentRuntime, Provider, Memory, State } from "@ai16z/eliza";
 import {
     createPublicClient,
     createWalletClient,
-    http,
     formatUnits,
-    type PublicClient,
-    type WalletClient,
-    type Chain,
-    type HttpTransport,
-    type Address,
-    Account,
+    http,
 } from "viem";
-import { mainnet, base } from "viem/chains";
-import type { SupportedChain, ChainConfig, ChainMetadata } from "../types";
 import { privateKeyToAccount } from "viem/accounts";
+import type { IAgentRuntime, Provider, Memory, State } from "@ai16z/eliza";
+import type {
+    Address,
+    WalletClient,
+    PublicClient,
+    Chain,
+    HttpTransport,
+    Account,
+    PrivateKeyAccount,
+} from "viem";
+import * as viemChains from "viem/chains";
 
-export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
-    ethereum: {
-        chainId: 1,
-        name: "Ethereum",
-        chain: mainnet,
-        rpcUrl: "https://eth.llamarpc.com",
-        nativeCurrency: {
-            name: "Ether",
-            symbol: "ETH",
-            decimals: 18,
-        },
-        blockExplorerUrl: "https://etherscan.io",
-    },
-    base: {
-        chainId: 8453,
-        name: "Base",
-        chain: base,
-        rpcUrl: "https://base.llamarpc.com",
-        nativeCurrency: {
-            name: "Ether",
-            symbol: "ETH",
-            decimals: 18,
-        },
-        blockExplorerUrl: "https://basescan.org",
-    },
-} as const;
-
-export const getChainConfigs = (runtime: IAgentRuntime) => {
-    return (
-        (runtime.character.settings.chains?.evm as ChainConfig[]) ||
-        DEFAULT_CHAIN_CONFIGS
-    );
-};
+import type { SupportedChain } from "../types";
 
 export class WalletProvider {
-    private chainConfigs: Record<SupportedChain, ChainConfig>;
-    private currentChain: SupportedChain = "ethereum";
-    private address: Address;
-    runtime: IAgentRuntime;
+    private currentChain: SupportedChain = "mainnet";
+    chains: Record<string, Chain> = { mainnet: viemChains.mainnet };
+    account: PrivateKeyAccount;
 
-    constructor(runtime: IAgentRuntime) {
-        const privateKey = runtime.getSetting("EVM_PRIVATE_KEY");
-        if (!privateKey) throw new Error("EVM_PRIVATE_KEY not configured");
+    constructor(privateKey: `0x${string}`, chains?: Record<string, Chain>) {
+        this.setAccount(privateKey);
+        this.setChains(chains);
 
-        this.runtime = runtime;
-
-        const account = privateKeyToAccount(privateKey as `0x${string}`);
-        this.address = account.address;
-
-        const createClients = (chain: SupportedChain): ChainConfig => {
-            const transport = http(getChainConfigs(runtime)[chain].rpcUrl);
-            return {
-                chain: getChainConfigs(runtime)[chain].chain,
-                publicClient: createPublicClient<HttpTransport>({
-                    chain: getChainConfigs(runtime)[chain].chain,
-                    transport,
-                }) as PublicClient<HttpTransport, Chain, Account | undefined>,
-                walletClient: createWalletClient<HttpTransport>({
-                    chain: getChainConfigs(runtime)[chain].chain,
-                    transport,
-                    account,
-                }),
-            };
-        };
-
-        this.chainConfigs = {
-            ethereum: createClients("ethereum"),
-            base: createClients("base"),
-        };
+        if (chains && Object.keys(chains).length > 0) {
+            this.setCurrentChain(Object.keys(chains)[0] as SupportedChain);
+        }
     }
 
     getAddress(): Address {
-        return this.address;
+        return this.account.address;
+    }
+
+    getCurrentChain(): Chain {
+        return this.chains[this.currentChain];
+    }
+
+    getPublicClient(
+        chainName: SupportedChain
+    ): PublicClient<HttpTransport, Chain, Account | undefined> {
+        const transport = this.createHttpTransport(chainName);
+
+        const publicClient = createPublicClient({
+            chain: this.chains[chainName],
+            transport,
+        });
+        return publicClient;
+    }
+
+    getWalletClient(chainName: SupportedChain): WalletClient {
+        const transport = this.createHttpTransport(chainName);
+
+        const walletClient = createWalletClient({
+            chain: this.chains[chainName],
+            transport,
+            account: this.account,
+        });
+
+        return walletClient;
+    }
+
+    getChainConfigs(chainName: SupportedChain): Chain {
+        const chain = viemChains[chainName];
+
+        if (!chain?.id) {
+            throw new Error("Invalid chain name");
+        }
+
+        return chain;
     }
 
     async getWalletBalance(): Promise<string | null> {
         try {
             const client = this.getPublicClient(this.currentChain);
-            const walletClient = this.getWalletClient();
             const balance = await client.getBalance({
-                address: walletClient.account.address,
+                address: this.account.address,
             });
             return formatUnits(balance, 18);
         } catch (error) {
@@ -104,70 +88,125 @@ export class WalletProvider {
         }
     }
 
-    async connect(): Promise<`0x${string}`> {
-        return this.runtime.getSetting("EVM_PRIVATE_KEY") as `0x${string}`;
+    async getWalletBalanceForChain(
+        chainName: SupportedChain
+    ): Promise<string | null> {
+        try {
+            const client = this.getPublicClient(chainName);
+            const balance = await client.getBalance({
+                address: this.account.address,
+            });
+            return formatUnits(balance, 18);
+        } catch (error) {
+            console.error("Error getting wallet balance:", error);
+            return null;
+        }
     }
 
-    async switchChain(
-        runtime: IAgentRuntime,
-        chain: SupportedChain
-    ): Promise<void> {
-        const walletClient = this.chainConfigs[this.currentChain].walletClient;
-        if (!walletClient) throw new Error("Wallet not connected");
+    addChain(chain: Record<string, Chain>) {
+        this.setChains(chain);
+    }
 
-        try {
-            await walletClient.switchChain({
-                id: getChainConfigs(runtime)[chain].chainId,
-            });
-        } catch (error: any) {
-            if (error.code === 4902) {
-                console.log(
-                    "[WalletProvider] Chain not added to wallet (error 4902) - attempting to add chain first"
-                );
-                await walletClient.addChain({
-                    chain: {
-                        ...getChainConfigs(runtime)[chain].chain,
-                        rpcUrls: {
-                            default: {
-                                http: [getChainConfigs(runtime)[chain].rpcUrl],
-                            },
-                            public: {
-                                http: [getChainConfigs(runtime)[chain].rpcUrl],
-                            },
-                        },
-                    },
-                });
-                await walletClient.switchChain({
-                    id: getChainConfigs(runtime)[chain].chainId,
-                });
-            } else {
-                throw error;
-            }
+    switchChain(chainName: SupportedChain, customRpcUrl?: string) {
+        if (!this.chains[chainName]) {
+            const chain = WalletProvider.genChainFromName(
+                chainName,
+                customRpcUrl
+            );
+            this.addChain({ [chainName]: chain });
+        }
+        this.setCurrentChain(chainName);
+    }
+
+    private setAccount = (pk: `0x${string}`) => {
+        this.account = privateKeyToAccount(pk);
+    };
+
+    private setChains = (chains?: Record<string, Chain>) => {
+        if (!chains) {
+            return;
+        }
+        Object.keys(chains).forEach((chain: string) => {
+            this.chains[chain] = chains[chain];
+        });
+    };
+
+    private setCurrentChain = (chain: SupportedChain) => {
+        this.currentChain = chain;
+    };
+
+    private createHttpTransport = (chainName: SupportedChain) => {
+        const chain = this.chains[chainName];
+
+        if (chain.rpcUrls.custom) {
+            return http(chain.rpcUrls.custom.http[0]);
+        }
+        return http(chain.rpcUrls.default.http[0]);
+    };
+
+    static genChainFromName(
+        chainName: string,
+        customRpcUrl?: string | null
+    ): Chain {
+        const baseChain = viemChains[chainName];
+
+        if (!baseChain?.id) {
+            throw new Error("Invalid chain name");
         }
 
-        this.currentChain = chain;
-    }
+        const viemChain: Chain = customRpcUrl
+            ? {
+                  ...baseChain,
+                  rpcUrls: {
+                      ...baseChain.rpcUrls,
+                      custom: {
+                          http: [customRpcUrl],
+                      },
+                  },
+              }
+            : baseChain;
 
-    getPublicClient(
-        chain: SupportedChain
-    ): PublicClient<HttpTransport, Chain, Account | undefined> {
-        return this.chainConfigs[chain].publicClient;
-    }
-
-    getWalletClient(): WalletClient {
-        const walletClient = this.chainConfigs[this.currentChain].walletClient;
-        if (!walletClient) throw new Error("Wallet not connected");
-        return walletClient;
-    }
-
-    getCurrentChain(): SupportedChain {
-        return this.currentChain;
-    }
-
-    getChainConfig(chain: SupportedChain) {
-        return getChainConfigs(this.runtime)[chain];
+        return viemChain;
     }
 }
+
+const genChainsFromRuntime = (
+    runtime: IAgentRuntime
+): Record<string, Chain> => {
+    const chainNames =
+        (runtime.character.settings.chains?.evm as SupportedChain[]) || [];
+    const chains = {};
+
+    chainNames.forEach((chainName) => {
+        const rpcUrl = runtime.getSetting(
+            "ETHEREUM_PROVIDER_" + chainName.toUpperCase()
+        );
+        const chain = WalletProvider.genChainFromName(chainName, rpcUrl);
+        chains[chainName] = chain;
+    });
+
+    const mainnet_rpcurl = runtime.getSetting("EVM_PROVIDER_URL");
+    if (mainnet_rpcurl) {
+        const chain = WalletProvider.genChainFromName(
+            "mainnet",
+            mainnet_rpcurl
+        );
+        chains["mainnet"] = chain;
+    }
+
+    return chains;
+};
+
+export const initWalletProvider = (runtime: IAgentRuntime) => {
+    const privateKey = runtime.getSetting("EVM_PRIVATE_KEY");
+    if (!privateKey) {
+        throw new Error("EVM_PRIVATE_KEY is missing");
+    }
+
+    const chains = genChainsFromRuntime(runtime);
+
+    return new WalletProvider(privateKey as `0x${string}`, chains);
+};
 
 export const evmWalletProvider: Provider = {
     async get(
@@ -175,16 +214,12 @@ export const evmWalletProvider: Provider = {
         message: Memory,
         state?: State
     ): Promise<string | null> {
-        // Check if the user has an EVM wallet
-        if (!runtime.getSetting("EVM_PRIVATE_KEY")) {
-            return null;
-        }
-
         try {
-            const walletProvider = new WalletProvider(runtime);
+            const walletProvider = initWalletProvider(runtime);
             const address = walletProvider.getAddress();
             const balance = await walletProvider.getWalletBalance();
-            return `EVM Wallet Address: ${address}\nBalance: ${balance} ETH`;
+            const chain = walletProvider.getCurrentChain();
+            return `EVM Wallet Address: ${address}\nBalance: ${balance} ${chain.nativeCurrency.symbol}\nChain ID: ${chain.id}, Name: ${chain.name}`;
         } catch (error) {
             console.error("Error in EVM wallet provider:", error);
             return null;

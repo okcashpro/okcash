@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / generateMessageResponse
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / generateMessageResponse
 
 # Function: generateMessageResponse()
 
@@ -28,4 +28,4 @@ The completed message.
 
 ## Defined in
 
-[packages/core/src/generation.ts:759](https://github.com/monilpat/eliza/blob/main/packages/core/src/generation.ts#L759)
+[packages/core/src/generation.ts:884](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L884)

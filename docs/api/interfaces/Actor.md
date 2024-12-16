@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / Actor
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / Actor
 
 # Interface: Actor
 
@@ -14,7 +14,7 @@ Display name
 
 #### Defined in
 
-[packages/core/src/types.ts:61](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L61)
+[packages/core/src/types.ts:61](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L61)
 
 ***
 
@@ -26,7 +26,7 @@ Username/handle
 
 #### Defined in
 
-[packages/core/src/types.ts:64](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L64)
+[packages/core/src/types.ts:64](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L64)
 
 ***
 
@@ -56,7 +56,7 @@ Favorite quote
 
 #### Defined in
 
-[packages/core/src/types.ts:67](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L67)
+[packages/core/src/types.ts:67](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L67)
 
 ***
 
@@ -68,4 +68,4 @@ Unique identifier
 
 #### Defined in
 
-[packages/core/src/types.ts:79](https://github.com/monilpat/eliza/blob/main/packages/core/src/types.ts#L79)
+[packages/core/src/types.ts:79](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L79)

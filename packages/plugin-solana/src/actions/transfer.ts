@@ -2,12 +2,10 @@ import {
     getAssociatedTokenAddressSync,
     createTransferInstruction,
 } from "@solana/spl-token";
-import bs58 from "bs58";
 import { elizaLogger, settings } from "@ai16z/eliza";
 
 import {
     Connection,
-    Keypair,
     PublicKey,
     TransactionMessage,
     VersionedTransaction,
@@ -24,7 +22,8 @@ import {
     type Action,
 } from "@ai16z/eliza";
 import { composeContext } from "@ai16z/eliza";
-import { generateObjectDEPRECATED } from "@ai16z/eliza";
+import { getWalletKey } from "../keypairUtils";
+import { generateObjectDeprecated } from "@ai16z/eliza";
 
 export interface TransferContent extends Content {
     tokenAddress: string;
@@ -119,7 +118,7 @@ export default {
         });
 
         // Generate transfer content
-        const content = await generateObjectDEPRECATED({
+        const content = await generateObjectDeprecated({
             runtime,
             context: transferContext,
             modelClass: ModelClass.LARGE,
@@ -138,11 +137,10 @@ export default {
         }
 
         try {
-            const privateKeyString =
-                runtime.getSetting("SOLANA_PRIVATE_KEY") ??
-                runtime.getSetting("WALLET_PRIVATE_KEY");
-            const secretKey = bs58.decode(privateKeyString);
-            const senderKeypair = Keypair.fromSecretKey(secretKey);
+            const { keypair: senderKeypair } = await getWalletKey(
+                runtime,
+                true
+            );
 
             const connection = new Connection(settings.RPC_URL!);
 

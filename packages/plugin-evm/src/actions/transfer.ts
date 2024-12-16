@@ -1,5 +1,15 @@
-import { ByteArray, parseEther, type Hex } from "viem";
-import { WalletProvider } from "../providers/wallet";
+import { ByteArray, formatEther, parseEther, type Hex } from "viem";
+import {
+    composeContext,
+    generateObjectDeprecated,
+    HandlerCallback,
+    ModelClass,
+    type IAgentRuntime,
+    type Memory,
+    type State,
+} from "@ai16z/eliza";
+
+import { initWalletProvider, WalletProvider } from "../providers/wallet";
 import type { Transaction, TransferParams } from "../types";
 import { transferTemplate } from "../templates";
 import {
@@ -16,12 +26,10 @@ export { transferTemplate };
 export class TransferAction {
     constructor(private walletProvider: WalletProvider) {}
 
-    async transfer(
-        runtime: IAgentRuntime,
-        params: TransferParams
-    ): Promise<Transaction> {
-        const walletClient = this.walletProvider.getWalletClient();
-        const [fromAddress] = await walletClient.getAddresses();
+    async transfer(params: TransferParams): Promise<Transaction> {
+        console.log(
+            `Transferring: ${params.amount} tokens to (${params.toAddress} on ${params.fromChain})`
+        );
 
         if (!params.data) {
             params.data = "0x";
@@ -31,7 +39,7 @@ export class TransferAction {
 
         try {
             const hash = await walletClient.sendTransaction({
-                account: fromAddress,
+                account: walletClient.account,
                 to: params.toAddress,
                 value: parseEther(params.amount),
                 data: params.data as Hex,
@@ -51,7 +59,7 @@ export class TransferAction {
 
             return {
                 hash,
-                from: fromAddress,
+                from: walletClient.account.address,
                 to: params.toAddress,
                 value: parseEther(params.amount),
                 data: params.data as Hex,
@@ -61,6 +69,43 @@ export class TransferAction {
         }
     }
 }
+
+const buildTransferDetails = async (
+    state: State,
+    runtime: IAgentRuntime,
+    wp: WalletProvider
+): Promise<TransferParams> => {
+    const context = composeContext({
+        state,
+        template: transferTemplate,
+    });
+
+    const chains = Object.keys(wp.chains);
+
+    const contextWithChains = context.replace(
+        "SUPPORTED_CHAINS",
+        chains.toString()
+    );
+
+    const transferDetails = (await generateObjectDeprecated({
+        runtime,
+        context: contextWithChains,
+        modelClass: ModelClass.SMALL,
+    })) as TransferParams;
+
+    const existingChain = wp.chains[transferDetails.fromChain];
+
+    if (!existingChain) {
+        throw new Error(
+            "The chain " +
+                transferDetails.fromChain +
+                " not configured yet. Add the chain or choose one from configured: " +
+                chains.toString()
+        );
+    }
+
+    return transferDetails;
+};
 
 export const transferAction = {
     name: "transfer",
@@ -101,6 +146,13 @@ export const transferAction = {
             if (callback) {
                 callback({
                     text: `Successfully transferred ${paramOptions.amount} tokens to ${paramOptions.toAddress}\nTransaction Hash: ${transferResp.hash}`,
+                    content: {
+                        success: true,
+                        hash: transferResp.hash,
+                        amount: formatEther(transferResp.value),
+                        recipient: transferResp.to,
+                        chain: content.fromChain,
+                    },
                 });
             }
             return true;

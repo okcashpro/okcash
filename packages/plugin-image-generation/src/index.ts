@@ -84,13 +84,15 @@ const imageGeneration: Action = {
         const heuristApiKeyOk = !!runtime.getSetting("HEURIST_API_KEY");
         const falApiKeyOk = !!runtime.getSetting("FAL_API_KEY");
         const openAiApiKeyOk = !!runtime.getSetting("OPENAI_API_KEY");
+        const veniceApiKeyOk = !!runtime.getSetting("VENICE_API_KEY");
 
         return (
             anthropicApiKeyOk ||
             togetherApiKeyOk ||
             heuristApiKeyOk ||
             falApiKeyOk ||
-            openAiApiKeyOk
+            openAiApiKeyOk ||
+            veniceApiKeyOk
         );
     },
     handler: async (
@@ -205,6 +207,7 @@ const imageGeneration: Action = {
                                 source: "imageGeneration",
                                 description: "...", //caption.title,
                                 text: "...", //caption.description,
+                                contentType: "image",
                             },
                         ],
                     },
