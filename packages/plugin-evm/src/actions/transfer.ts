@@ -12,17 +12,10 @@ import {
 import { initWalletProvider, WalletProvider } from "../providers/wallet";
 import type { Transaction, TransferParams } from "../types";
 import { transferTemplate } from "../templates";
-import {
-    composeContext,
-    generateObjectDEPRECATED,
-    HandlerCallback,
-    ModelClass,
-    type IAgentRuntime,
-    type Memory,
-    type State,
-} from "@ai16z/eliza";
 
 export { transferTemplate };
+
+// Exported for tests
 export class TransferAction {
     constructor(private walletProvider: WalletProvider) {}
 
@@ -35,7 +28,11 @@ export class TransferAction {
             params.data = "0x";
         }
 
-        await this.walletProvider.switchChain(runtime, params.fromChain);
+        await this.walletProvider.switchChain(params.fromChain);
+
+        const walletClient = this.walletProvider.getWalletClient(
+            params.fromChain
+        );
 
         try {
             const hash = await walletClient.sendTransaction({
@@ -118,7 +115,7 @@ export const transferAction = {
         callback?: HandlerCallback
     ) => {
         console.log("Transfer action handler called");
-        const walletProvider = new WalletProvider(runtime);
+        const walletProvider = initWalletProvider(runtime);
         const action = new TransferAction(walletProvider);
 
         // Compose transfer context
@@ -128,7 +125,7 @@ export const transferAction = {
         });
 
         // Generate transfer content
-        const content = await generateObjectDEPRECATED({
+        const content = await generateObjectDeprecated({
             runtime,
             context: transferContext,
             modelClass: ModelClass.LARGE,
@@ -142,7 +139,7 @@ export const transferAction = {
         };
 
         try {
-            const transferResp = await action.transfer(runtime, paramOptions);
+            const transferResp = await action.transfer(paramOptions);
             if (callback) {
                 callback({
                     text: `Successfully transferred ${paramOptions.amount} tokens to ${paramOptions.toAddress}\nTransaction Hash: ${transferResp.hash}`,
