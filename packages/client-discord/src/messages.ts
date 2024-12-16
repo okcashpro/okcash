@@ -687,47 +687,6 @@ export class MessageManager {
         );
     }
 
-    private _isMessageForMe(message: DiscordMessage): boolean {
-        const isMentioned = message.mentions.users?.has(
-            this.client.user?.id as string
-        );
-        const guild = message.guild;
-        const member = guild?.members.cache.get(this.client.user?.id as string);
-        const nickname = member?.nickname;
-
-        // Don't consider role mentions as direct mentions
-        const hasRoleMentionOnly =
-            message.mentions.roles.size > 0 && !isMentioned;
-
-        // If it's only a role mention and we're in team mode, let team logic handle it
-        if (
-            hasRoleMentionOnly &&
-            this.runtime.character.clientConfig?.discord?.isPartOfTeam
-        ) {
-            return false;
-        }
-
-        return (
-            isMentioned ||
-            (!this.runtime.character.clientConfig?.discord
-                ?.shouldRespondOnlyToMentions &&
-                (message.content
-                    .toLowerCase()
-                    .includes(
-                        this.client.user?.username.toLowerCase() as string
-                    ) ||
-                    message.content
-                        .toLowerCase()
-                        .includes(
-                            this.client.user?.tag.toLowerCase() as string
-                        ) ||
-                    (nickname &&
-                        message.content
-                            .toLowerCase()
-                            .includes(nickname.toLowerCase()))))
-        );
-    }
-
     private async _analyzeContextSimilarity(
         currentMessage: string,
         previousContext?: MessageContext,
@@ -1218,7 +1177,7 @@ export class MessageManager {
                 return false;
             }
         }
-          
+
         if (message.mentions.has(this.client.user?.id as string)) return true;
 
         const guild = message.guild;
