@@ -362,10 +362,6 @@ const promptConfirmation = async (): Promise<boolean> => {
     return true;
 };
 
-// Save the base64 data to a file
-// import * as fs from "fs";
-// import * as path from "path";
-
 const fomoTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 
 Example response:
@@ -482,6 +478,7 @@ export default {
         formData.append("symbol", tokenMetadata.symbol);
         formData.append("description", tokenMetadata.description);
 
+        // FIXME: does fomo.fund have an ipfs call?
         const metadataResponse = await fetch("https://pump.fun/api/ipfs", {
             method: "POST",
             body: formData,
@@ -554,7 +551,7 @@ export default {
             if (callback) {
                 if (result.success) {
                     callback({
-                        text: `Token ${tokenMetadata.name} (${tokenMetadata.symbol}) created successfully!\nContract Address: ${result.ca}\nCreator: ${result.creator}\nView at: https://pump.fun/${result.ca}`,
+                        text: `Token ${tokenMetadata.name} (${tokenMetadata.symbol}) created successfully!\nContract Address: ${result.ca}\nCreator: ${result.creator}\nView at: https://fomo.fund/token/${result.ca}`,
                         content: {
                             tokenInfo: {
                                 symbol: tokenMetadata.symbol,
@@ -604,13 +601,13 @@ export default {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Create a new token called GLITCHIZA with symbol GLITCHIZA and generate a description about it. Also come up with a description for it to use for image generation .buy 0.00069 SOL worth.",
+                    text: "Create a new token called GLITCHIZA with symbol GLITCHIZA and generate a description about it on fomo.fund. Also come up with a description for it to use for image generation .buy 0.00069 SOL worth.",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Token GLITCHIZA (GLITCHIZA) created successfully!\nContract Address: 3kD5DN4bbA3nykb1abjS66VF7cYZkKdirX8bZ6ShJjBB\nCreator: 9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa\nView at: https://pump.fun/EugPwuZ8oUMWsYHeBGERWvELfLGFmA1taDtmY8uMeX6r",
+                    text: "Token GLITCHIZA (GLITCHIZA) created successfully on fomo.fund!\nContract Address: 3kD5DN4bbA3nykb1abjS66VF7cYZkKdirX8bZ6ShJjBB\nCreator: 9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa\nView at: https://fomo.fund/EugPwuZ8oUMWsYHeBGERWvELfLGFmA1taDtmY8uMeX6r",
                     action: "CREATE_AND_BUY_TOKEN",
                     content: {
                         tokenInfo: {
