@@ -1,6 +1,6 @@
 {
   "name": "eliza-docs",
-  "version": "0.1.6-alpha.3",
+  "version": "0.1.6-alpha.4",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
