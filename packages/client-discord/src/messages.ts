@@ -28,8 +28,20 @@ import {
     discordShouldRespondTemplate,
     discordMessageHandlerTemplate,
 } from "./templates.ts";
-import { IGNORE_RESPONSE_WORDS, LOSE_INTEREST_WORDS, MESSAGE_CONSTANTS, MESSAGE_LENGTH_THRESHOLDS, RESPONSE_CHANCES, TEAM_COORDINATION, TIMING_CONSTANTS } from './constants';
-import { sendMessageInChunks, canSendMessage, cosineSimilarity } from "./utils.ts";
+import {
+    IGNORE_RESPONSE_WORDS,
+    LOSE_INTEREST_WORDS,
+    MESSAGE_CONSTANTS,
+    MESSAGE_LENGTH_THRESHOLDS,
+    RESPONSE_CHANCES,
+    TEAM_COORDINATION,
+    TIMING_CONSTANTS,
+} from "./constants";
+import {
+    sendMessageInChunks,
+    canSendMessage,
+    cosineSimilarity,
+} from "./utils.ts";
 
 interface MessageContext {
     content: string;
@@ -80,8 +92,11 @@ export class MessageManager {
         }
 
         // Check for mentions-only mode setting
-        if (this.runtime.character.clientConfig?.discord?.shouldRespondOnlyToMentions) {
-            if(!this._isMessageForMe(message)) {
+        if (
+            this.runtime.character.clientConfig?.discord
+                ?.shouldRespondOnlyToMentions
+        ) {
+            if (!this._isMessageForMe(message)) {
                 return;
             }
         }
@@ -102,33 +117,49 @@ export class MessageManager {
         const hasInterest = this._checkInterest(message.channelId);
 
         // Team handling
-        if (this.runtime.character.clientConfig?.discord?.isPartOfTeam && !this.runtime.character.clientConfig?.discord?.shouldRespondOnlyToMentions) {
+        if (
+            this.runtime.character.clientConfig?.discord?.isPartOfTeam &&
+            !this.runtime.character.clientConfig?.discord
+                ?.shouldRespondOnlyToMentions
+        ) {
             const authorId = this._getNormalizedUserId(message.author.id);
 
-            if (!this._isTeamLeader() && this._isRelevantToTeamMember(message.content, channelId)) {
+            if (
+                !this._isTeamLeader() &&
+                this._isRelevantToTeamMember(message.content, channelId)
+            ) {
                 this.interestChannels[message.channelId] = {
                     currentHandler: this.client.user?.id,
                     lastMessageSent: Date.now(),
-                    messages: []
+                    messages: [],
                 };
             }
 
-            const isTeamRequest = this._isTeamCoordinationRequest(message.content);
+            const isTeamRequest = this._isTeamCoordinationRequest(
+                message.content
+            );
             const isLeader = this._isTeamLeader();
 
             // After team-wide responses, check if we should maintain interest
             if (hasInterest && !isDirectlyMentioned) {
-                const lastSelfMemories = await this.runtime.messageManager.getMemories({
-                    roomId: stringToUuid(channelId + "-" + this.runtime.agentId),
-                    unique: false,
-                    count: 5
-                });
+                const lastSelfMemories =
+                    await this.runtime.messageManager.getMemories({
+                        roomId: stringToUuid(
+                            channelId + "-" + this.runtime.agentId
+                        ),
+                        unique: false,
+                        count: 5,
+                    });
 
-                const lastSelfSortedMemories = lastSelfMemories?.filter(m => m.userId === this.runtime.agentId).sort((a, b) =>
-                    (b.createdAt || 0) - (a.createdAt || 0)
+                const lastSelfSortedMemories = lastSelfMemories
+                    ?.filter((m) => m.userId === this.runtime.agentId)
+                    .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+                const isRelevant = this._isRelevantToTeamMember(
+                    message.content,
+                    channelId,
+                    lastSelfSortedMemories?.[0]
                 );
-
-                const isRelevant = this._isRelevantToTeamMember(message.content, channelId, lastSelfSortedMemories?.[0]);
 
                 if (!isRelevant) {
                     // Clearing interest - conversation not relevant to team member
@@ -142,35 +173,42 @@ export class MessageManager {
                     this.interestChannels[message.channelId] = {
                         currentHandler: this.client.user?.id,
                         lastMessageSent: Date.now(),
-                        messages: []
+                        messages: [],
                     };
                 } else {
                     // Set temporary interest for this response
                     this.interestChannels[message.channelId] = {
                         currentHandler: this.client.user?.id,
                         lastMessageSent: Date.now(),
-                        messages: []
+                        messages: [],
                     };
 
                     // Clear interest after this cycle unless directly mentioned
                     if (!isDirectlyMentioned) {
                         // Use existing message cycle to clear interest
-                        this.interestChannels[message.channelId].lastMessageSent = 0;
+                        this.interestChannels[
+                            message.channelId
+                        ].lastMessageSent = 0;
                     }
                 }
             }
 
             // Check for other team member mentions
-            const otherTeamMembers = this.runtime.character.clientConfig.discord.teamAgentIds.filter(
-                id => id !== this.client.user?.id
-            );
-            const mentionedTeamMember = otherTeamMembers.find(id =>
+            const otherTeamMembers =
+                this.runtime.character.clientConfig.discord.teamAgentIds.filter(
+                    (id) => id !== this.client.user?.id
+                );
+            const mentionedTeamMember = otherTeamMembers.find((id) =>
                 message.content.includes(`<@${id}>`)
             );
 
             // If another team member is mentioned, clear our interest
             if (mentionedTeamMember) {
-                if (hasInterest || this.interestChannels[message.channelId]?.currentHandler === this.client.user?.id) {
+                if (
+                    hasInterest ||
+                    this.interestChannels[message.channelId]?.currentHandler ===
+                        this.client.user?.id
+                ) {
                     delete this.interestChannels[message.channelId];
 
                     // Only return if we're not the mentioned member
@@ -185,7 +223,7 @@ export class MessageManager {
                 this.interestChannels[message.channelId] = {
                     currentHandler: this.client.user?.id,
                     lastMessageSent: Date.now(),
-                    messages: []
+                    messages: [],
                 };
             } else if (!isTeamRequest && !hasInterest) {
                 return;
@@ -195,7 +233,10 @@ export class MessageManager {
             if (message.author.bot) {
                 if (this._isTeamMember(authorId) && !isDirectlyMentioned) {
                     return;
-                } else if (this.runtime.character.clientConfig.discord.shouldIgnoreBotMessages) {
+                } else if (
+                    this.runtime.character.clientConfig.discord
+                        .shouldIgnoreBotMessages
+                ) {
                     return;
                 }
             }
@@ -274,13 +315,18 @@ export class MessageManager {
                     this.interestChannels[message.channelId].messages.push({
                         userId: userIdUUID,
                         userName: userName,
-                        content: content
+                        content: content,
                     });
 
                     // Trim to keep only recent messages
-                    if (this.interestChannels[message.channelId].messages.length > MESSAGE_CONSTANTS.MAX_MESSAGES) {
+                    if (
+                        this.interestChannels[message.channelId].messages
+                            .length > MESSAGE_CONSTANTS.MAX_MESSAGES
+                    ) {
                         this.interestChannels[message.channelId].messages =
-                            this.interestChannels[message.channelId].messages.slice(-MESSAGE_CONSTANTS.MAX_MESSAGES);
+                            this.interestChannels[
+                                message.channelId
+                            ].messages.slice(-MESSAGE_CONSTANTS.MAX_MESSAGES);
                     }
                 }
             }
@@ -461,6 +507,47 @@ export class MessageManager {
         }
     }
 
+    private _isMessageForMe(message: DiscordMessage): boolean {
+        const isMentioned = message.mentions.users?.has(
+            this.client.user?.id as string
+        );
+        const guild = message.guild;
+        const member = guild?.members.cache.get(this.client.user?.id as string);
+        const nickname = member?.nickname;
+
+        // Don't consider role mentions as direct mentions
+        const hasRoleMentionOnly =
+            message.mentions.roles.size > 0 && !isMentioned;
+
+        // If it's only a role mention and we're in team mode, let team logic handle it
+        if (
+            hasRoleMentionOnly &&
+            this.runtime.character.clientConfig?.discord?.isPartOfTeam
+        ) {
+            return false;
+        }
+
+        return (
+            isMentioned ||
+            (!this.runtime.character.clientConfig?.discord
+                ?.shouldRespondOnlyToMentions &&
+                (message.content
+                    .toLowerCase()
+                    .includes(
+                        this.client.user?.username.toLowerCase() as string
+                    ) ||
+                    message.content
+                        .toLowerCase()
+                        .includes(
+                            this.client.user?.tag.toLowerCase() as string
+                        ) ||
+                    (nickname &&
+                        message.content
+                            .toLowerCase()
+                            .includes(nickname.toLowerCase()))))
+        );
+    }
+
     async processMessageMedia(
         message: DiscordMessage
     ): Promise<{ processedContent: string; attachments: Media[] }> {
@@ -556,7 +643,7 @@ export class MessageManager {
     }
 
     private _getNormalizedUserId(id: string): string {
-        return id.toString().replace(/[^0-9]/g, '');
+        return id.toString().replace(/[^0-9]/g, "");
     }
 
     private _isTeamMember(userId: string): boolean {
@@ -565,31 +652,38 @@ export class MessageManager {
 
         const normalizedUserId = this._getNormalizedUserId(userId);
 
-        const isTeamMember = teamConfig.teamAgentIds.some(teamId =>
-            this._getNormalizedUserId(teamId) === normalizedUserId
+        const isTeamMember = teamConfig.teamAgentIds.some(
+            (teamId) => this._getNormalizedUserId(teamId) === normalizedUserId
         );
 
         return isTeamMember;
     }
 
     private _isTeamLeader(): boolean {
-        return this.client.user?.id === this.runtime.character.clientConfig?.discord?.teamLeaderId;
+        return (
+            this.client.user?.id ===
+            this.runtime.character.clientConfig?.discord?.teamLeaderId
+        );
     }
 
     private _isTeamCoordinationRequest(content: string): boolean {
         const contentLower = content.toLowerCase();
-        return TEAM_COORDINATION.KEYWORDS?.some(keyword =>
+        return TEAM_COORDINATION.KEYWORDS?.some((keyword) =>
             contentLower.includes(keyword.toLowerCase())
         );
     }
 
-    private _isRelevantToTeamMember(content: string, channelId: string, lastAgentMemory: Memory | null = null): boolean {
+    private _isRelevantToTeamMember(
+        content: string,
+        channelId: string,
+        lastAgentMemory: Memory | null = null
+    ): boolean {
         const teamConfig = this.runtime.character.clientConfig?.discord;
 
         if (this._isTeamLeader() && lastAgentMemory?.content.text) {
             const timeSinceLastMessage = Date.now() - lastAgentMemory.createdAt;
             if (timeSinceLastMessage > MESSAGE_CONSTANTS.INTEREST_DECAY_TIME) {
-                return false;  // Memory too old, not relevant
+                return false; // Memory too old, not relevant
             }
 
             const similarity = cosineSimilarity(
@@ -597,7 +691,10 @@ export class MessageManager {
                 lastAgentMemory.content.text.toLowerCase()
             );
 
-            return similarity >= MESSAGE_CONSTANTS.DEFAULT_SIMILARITY_THRESHOLD_FOLLOW_UPS;
+            return (
+                similarity >=
+                MESSAGE_CONSTANTS.DEFAULT_SIMILARITY_THRESHOLD_FOLLOW_UPS
+            );
         }
 
         // If no keywords defined, only leader maintains conversation
@@ -605,38 +702,21 @@ export class MessageManager {
             return false;
         }
 
-        return teamConfig.teamMemberInterestKeywords.some(keyword =>
+        return teamConfig.teamMemberInterestKeywords.some((keyword) =>
             content.toLowerCase().includes(keyword.toLowerCase())
         );
     }
 
-    private _isMessageForMe(message: DiscordMessage): boolean {
-        const isMentioned = message.mentions.users?.has(this.client.user?.id as string);
-        const guild = message.guild;
-        const member = guild?.members.cache.get(this.client.user?.id as string);
-        const nickname = member?.nickname;
-        const memberId = member?.id;
-
-        // Don't consider role mentions as direct mentions
-        const hasRoleMentionOnly = message.mentions.roles.size > 0 && !isMentioned;
-
-        // If it's only a role mention and we're in team mode, let team logic handle it
-        if (hasRoleMentionOnly && this.runtime.character.clientConfig?.discord?.isPartOfTeam) {
-            return false;
-        }
-
-        return isMentioned || (!this.runtime.character.clientConfig?.discord?.shouldRespondOnlyToMentions && (
-            message.content.toLowerCase().includes(this.client.user?.username.toLowerCase() as string) ||
-            message.content.toLowerCase().includes(this.client.user?.tag.toLowerCase() as string) ||
-            (nickname && message.content.toLowerCase().includes(nickname.toLowerCase()))));
-    }
-
-    private async _analyzeContextSimilarity(currentMessage: string, previousContext?: MessageContext, agentLastMessage?: string): Promise<number> {
+    private async _analyzeContextSimilarity(
+        currentMessage: string,
+        previousContext?: MessageContext,
+        agentLastMessage?: string
+    ): Promise<number> {
         if (!previousContext) return 1; // No previous context to compare against
 
         // If more than 5 minutes have passed, reduce similarity weight
         const timeDiff = Date.now() - previousContext.timestamp;
-        const timeWeight = Math.max(0, 1 - (timeDiff / (5 * 60 * 1000))); // 5 minutes threshold
+        const timeWeight = Math.max(0, 1 - timeDiff / (5 * 60 * 1000)); // 5 minutes threshold
 
         // Calculate content similarity
         const similarity = cosineSimilarity(
@@ -651,7 +731,10 @@ export class MessageManager {
         return weightedSimilarity;
     }
 
-    private async _shouldRespondBasedOnContext(message: DiscordMessage, channelState: InterestChannels[string]): Promise<boolean> {
+    private async _shouldRespondBasedOnContext(
+        message: DiscordMessage,
+        channelState: InterestChannels[string]
+    ): Promise<boolean> {
         // Always respond if directly mentioned
         if (this._isMessageForMe(message)) return true;
 
@@ -662,37 +745,39 @@ export class MessageManager {
         if (!channelState.messages?.length) return false;
 
         // Get last user message (not from the bot)
-        const lastUserMessage = [...channelState.messages]
-            .reverse()
-            .find((m, index) =>
+        const lastUserMessage = [...channelState.messages].reverse().find(
+            (m, index) =>
                 index > 0 && // Skip first message (current)
                 m.userId !== this.runtime.agentId
-            );
+        );
 
         if (!lastUserMessage) return false;
 
         const lastSelfMemories = await this.runtime.messageManager.getMemories({
-            roomId: stringToUuid(message.channel.id + "-" + this.runtime.agentId),
+            roomId: stringToUuid(
+                message.channel.id + "-" + this.runtime.agentId
+            ),
             unique: false,
-            count: 5
+            count: 5,
         });
 
-        const lastSelfSortedMemories = lastSelfMemories?.filter(m => m.userId === this.runtime.agentId).sort((a, b) =>
-            (b.createdAt || 0) - (a.createdAt || 0)
-        );
+        const lastSelfSortedMemories = lastSelfMemories
+            ?.filter((m) => m.userId === this.runtime.agentId)
+            .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
         // Calculate context similarity
         const contextSimilarity = await this._analyzeContextSimilarity(
             message.content,
             {
-                content: lastUserMessage.content.text || '',
-                timestamp: Date.now()
+                content: lastUserMessage.content.text || "",
+                timestamp: Date.now(),
             },
             lastSelfSortedMemories?.[0]?.content?.text
         );
 
         const similarityThreshold =
-            this.runtime.character.clientConfig?.discord?.messageSimilarityThreshold ||
+            this.runtime.character.clientConfig?.discord
+                ?.messageSimilarityThreshold ||
             channelState.contextSimilarityThreshold ||
             MESSAGE_CONSTANTS.DEFAULT_SIMILARITY_THRESHOLD;
 
@@ -703,26 +788,40 @@ export class MessageManager {
         const channelState = this.interestChannels[channelId];
         if (!channelState) return false;
 
-        const lastMessage = channelState.messages[channelState.messages.length - 1];
+        const lastMessage =
+            channelState.messages[channelState.messages.length - 1];
         // If it's been more than 5 minutes since last message, reduce interest
         const timeSinceLastMessage = Date.now() - channelState.lastMessageSent;
 
         if (timeSinceLastMessage > MESSAGE_CONSTANTS.INTEREST_DECAY_TIME) {
             delete this.interestChannels[channelId];
             return false;
-        } else if (timeSinceLastMessage > MESSAGE_CONSTANTS.PARTIAL_INTEREST_DECAY) {
+        } else if (
+            timeSinceLastMessage > MESSAGE_CONSTANTS.PARTIAL_INTEREST_DECAY
+        ) {
             // Require stronger relevance for continued interest
-            return this._isRelevantToTeamMember(lastMessage.content.text || '', channelId)
+            return this._isRelevantToTeamMember(
+                lastMessage.content.text || "",
+                channelId
+            );
         }
 
         // If team leader and messages exist, check for topic changes and team member responses
         if (this._isTeamLeader() && channelState.messages.length > 0) {
             // If leader's keywords don't match and another team member has responded, drop interest
-            if (!this._isRelevantToTeamMember(lastMessage.content.text || '', channelId)) {
-                const recentTeamResponses = channelState.messages.slice(-3).some(m =>
-                    m.userId !== this.client.user?.id &&
-                    this._isTeamMember(m.userId)
-                );
+            if (
+                !this._isRelevantToTeamMember(
+                    lastMessage.content.text || "",
+                    channelId
+                )
+            ) {
+                const recentTeamResponses = channelState.messages
+                    .slice(-3)
+                    .some(
+                        (m) =>
+                            m.userId !== this.client.user?.id &&
+                            this._isTeamMember(m.userId)
+                    );
 
                 if (recentTeamResponses) {
                     delete this.interestChannels[channelId];
@@ -733,11 +832,17 @@ export class MessageManager {
 
         // Check if conversation has shifted to a new topic
         if (channelState.messages.length > 0) {
-            const recentMessages = channelState.messages.slice(-MESSAGE_CONSTANTS.RECENT_MESSAGE_COUNT);
-            const differentUsers = new Set(recentMessages.map(m => m.userId)).size;
+            const recentMessages = channelState.messages.slice(
+                -MESSAGE_CONSTANTS.RECENT_MESSAGE_COUNT
+            );
+            const differentUsers = new Set(recentMessages.map((m) => m.userId))
+                .size;
 
             // If multiple users are talking and we're not involved, reduce interest
-            if (differentUsers > 1 && !recentMessages.some(m => m.userId === this.client.user?.id)) {
+            if (
+                differentUsers > 1 &&
+                !recentMessages.some((m) => m.userId === this.client.user?.id)
+            ) {
                 delete this.interestChannels[channelId];
                 return false;
             }
@@ -751,7 +856,10 @@ export class MessageManager {
         if (message.author.id === this.client.user?.id) return true;
 
         // Honor mentions-only mode
-        if (this.runtime.character.clientConfig?.discord?.shouldRespondOnlyToMentions) {
+        if (
+            this.runtime.character.clientConfig?.discord
+                ?.shouldRespondOnlyToMentions
+        ) {
             return !this._isMessageForMe(message);
         }
 
@@ -760,30 +868,46 @@ export class MessageManager {
             const authorId = this._getNormalizedUserId(message.author.id);
 
             if (this._isTeamLeader()) {
-                if(this._isTeamCoordinationRequest(message.content)) {
+                if (this._isTeamCoordinationRequest(message.content)) {
                     return false;
                 }
                 // Ignore if message is only about team member interests and not directed to leader
                 if (!this._isMessageForMe(message)) {
-                    const otherMemberInterests = this.runtime.character.clientConfig?.discord?.teamMemberInterestKeywords || [];
-                    const hasOtherInterests = otherMemberInterests.some(keyword =>
-                        message.content.toLowerCase().includes(keyword.toLowerCase())
+                    const otherMemberInterests =
+                        this.runtime.character.clientConfig?.discord
+                            ?.teamMemberInterestKeywords || [];
+                    const hasOtherInterests = otherMemberInterests.some(
+                        (keyword) =>
+                            message.content
+                                .toLowerCase()
+                                .includes(keyword.toLowerCase())
                     );
                     if (hasOtherInterests) {
                         return true;
                     }
                 }
             } else if (this._isTeamCoordinationRequest(message.content)) {
-                const randomDelay = Math.floor(Math.random() * (TIMING_CONSTANTS.TEAM_MEMBER_DELAY_MAX - TIMING_CONSTANTS.TEAM_MEMBER_DELAY_MIN)) +
-                TIMING_CONSTANTS.TEAM_MEMBER_DELAY_MIN; // 1-3 second random delay
-                await new Promise(resolve => setTimeout(resolve, randomDelay));
+                const randomDelay =
+                    Math.floor(
+                        Math.random() *
+                            (TIMING_CONSTANTS.TEAM_MEMBER_DELAY_MAX -
+                                TIMING_CONSTANTS.TEAM_MEMBER_DELAY_MIN)
+                    ) + TIMING_CONSTANTS.TEAM_MEMBER_DELAY_MIN; // 1-3 second random delay
+                await new Promise((resolve) =>
+                    setTimeout(resolve, randomDelay)
+                );
                 return false;
             }
 
             if (this._isTeamMember(authorId)) {
                 if (!this._isMessageForMe(message)) {
                     // If message contains our interests, don't ignore
-                    if (this._isRelevantToTeamMember(message.content, message.channelId)) {
+                    if (
+                        this._isRelevantToTeamMember(
+                            message.content,
+                            message.channelId
+                        )
+                    ) {
                         return false;
                     }
                     return true;
@@ -794,26 +918,33 @@ export class MessageManager {
             const channelState = this.interestChannels[message.channelId];
 
             if (channelState?.currentHandler) {
-
                 // If we're the current handler, check context
                 if (channelState.currentHandler === this.client.user?.id) {
                     //If it's our keywords, bypass context check
-                    if (this._isRelevantToTeamMember(message.content, message.channelId)) {
+                    if (
+                        this._isRelevantToTeamMember(
+                            message.content,
+                            message.channelId
+                        )
+                    ) {
                         return false;
                     }
 
-                    const shouldRespondContext = await this._shouldRespondBasedOnContext(
-                        message,
-                        channelState
-                    );
+                    const shouldRespondContext =
+                        await this._shouldRespondBasedOnContext(
+                            message,
+                            channelState
+                        );
 
                     // If context is different, ignore. If similar, don't ignore
                     return !shouldRespondContext;
                 }
 
                 // If another team member is handling and we're not mentioned or coordinating
-                else if (!this._isMessageForMe(message) &&
-                    !this._isTeamCoordinationRequest(message.content)) {
+                else if (
+                    !this._isMessageForMe(message) &&
+                    !this._isTeamCoordinationRequest(message.content)
+                ) {
                     return true;
                 }
             }
@@ -885,7 +1016,8 @@ export class MessageManager {
         }
 
         if (
-            message.content.length < MESSAGE_LENGTH_THRESHOLDS.IGNORE_RESPONSE &&
+            message.content.length <
+                MESSAGE_LENGTH_THRESHOLDS.IGNORE_RESPONSE &&
             IGNORE_RESPONSE_WORDS.some((word) =>
                 message.content.toLowerCase().includes(word)
             )
@@ -903,45 +1035,66 @@ export class MessageManager {
         // if (message.author.bot) return false;
 
         // Honor mentions-only mode
-        if (this.runtime.character.clientConfig?.discord?.shouldRespondOnlyToMentions) {
+        if (
+            this.runtime.character.clientConfig?.discord
+                ?.shouldRespondOnlyToMentions
+        ) {
             return this._isMessageForMe(message);
         }
 
         const channelState = this.interestChannels[message.channelId];
 
         // Check if team member has direct interest first
-        if (this.runtime.character.clientConfig?.discord?.isPartOfTeam &&
+        if (
+            this.runtime.character.clientConfig?.discord?.isPartOfTeam &&
             !this._isTeamLeader() &&
-            this._isRelevantToTeamMember(message.content, message.channelId)) {
+            this._isRelevantToTeamMember(message.content, message.channelId)
+        ) {
             return true;
         }
 
         try {
             // Team-based response logic
             if (this.runtime.character.clientConfig?.discord?.isPartOfTeam) {
-                const authorId = this._getNormalizedUserId(message.author.id);
-
                 // Team leader coordination
-                if (this._isTeamLeader() && this._isTeamCoordinationRequest(message.content)) {
+                if (
+                    this._isTeamLeader() &&
+                    this._isTeamCoordinationRequest(message.content)
+                ) {
                     return true;
                 }
 
-                if (!this._isTeamLeader() && this._isRelevantToTeamMember(message.content, message.channelId)) {
+                if (
+                    !this._isTeamLeader() &&
+                    this._isRelevantToTeamMember(
+                        message.content,
+                        message.channelId
+                    )
+                ) {
                     // Add small delay for non-leader responses
-                    await new Promise(resolve => setTimeout(resolve, TIMING_CONSTANTS.TEAM_MEMBER_DELAY)); //1.5 second delay
+                    await new Promise((resolve) =>
+                        setTimeout(resolve, TIMING_CONSTANTS.TEAM_MEMBER_DELAY)
+                    ); //1.5 second delay
 
                     // If leader has responded in last few seconds, reduce chance of responding
 
                     if (channelState?.messages?.length) {
-                        const recentMessages = channelState.messages.slice(-MESSAGE_CONSTANTS.RECENT_MESSAGE_COUNT);
-                        const leaderResponded = recentMessages.some(m =>
-                            m.userId === this.runtime.character.clientConfig?.discord?.teamLeaderId &&
-                            Date.now() - channelState.lastMessageSent < 3000
+                        const recentMessages = channelState.messages.slice(
+                            -MESSAGE_CONSTANTS.RECENT_MESSAGE_COUNT
+                        );
+                        const leaderResponded = recentMessages.some(
+                            (m) =>
+                                m.userId ===
+                                    this.runtime.character.clientConfig?.discord
+                                        ?.teamLeaderId &&
+                                Date.now() - channelState.lastMessageSent < 3000
                         );
 
                         if (leaderResponded) {
                             // 50% chance to respond if leader just did
-                            return Math.random() > RESPONSE_CHANCES.AFTER_LEADER;
+                            return (
+                                Math.random() > RESPONSE_CHANCES.AFTER_LEADER
+                            );
                         }
                     }
 
@@ -949,17 +1102,32 @@ export class MessageManager {
                 }
 
                 // If I'm the leader but message doesn't match my keywords, add delay and check for team responses
-                if (this._isTeamLeader() && !this._isRelevantToTeamMember(message.content, message.channelId)) {
-                    const randomDelay = Math.floor(Math.random() * (TIMING_CONSTANTS.LEADER_DELAY_MAX - TIMING_CONSTANTS.LEADER_DELAY_MIN)) +
-                    TIMING_CONSTANTS.LEADER_DELAY_MIN; // 2-4 second random delay
-                    await new Promise(resolve => setTimeout(resolve, randomDelay));
+                if (
+                    this._isTeamLeader() &&
+                    !this._isRelevantToTeamMember(
+                        message.content,
+                        message.channelId
+                    )
+                ) {
+                    const randomDelay =
+                        Math.floor(
+                            Math.random() *
+                                (TIMING_CONSTANTS.LEADER_DELAY_MAX -
+                                    TIMING_CONSTANTS.LEADER_DELAY_MIN)
+                        ) + TIMING_CONSTANTS.LEADER_DELAY_MIN; // 2-4 second random delay
+                    await new Promise((resolve) =>
+                        setTimeout(resolve, randomDelay)
+                    );
 
                     // After delay, check if another team member has already responded
                     if (channelState?.messages?.length) {
-                        const recentResponses = channelState.messages.slice(-MESSAGE_CONSTANTS.RECENT_MESSAGE_COUNT);
-                        const otherTeamMemberResponded = recentResponses.some(m =>
-                            m.userId !== this.client.user?.id &&
-                            this._isTeamMember(m.userId)
+                        const recentResponses = channelState.messages.slice(
+                            -MESSAGE_CONSTANTS.RECENT_MESSAGE_COUNT
+                        );
+                        const otherTeamMemberResponded = recentResponses.some(
+                            (m) =>
+                                m.userId !== this.client.user?.id &&
+                                this._isTeamMember(m.userId)
                         );
 
                         if (otherTeamMemberResponded) {
@@ -970,7 +1138,8 @@ export class MessageManager {
 
                 // Update current handler if we're mentioned
                 if (this._isMessageForMe(message)) {
-                    const channelState = this.interestChannels[message.channelId];
+                    const channelState =
+                        this.interestChannels[message.channelId];
                     if (channelState) {
                         channelState.currentHandler = this.client.user?.id;
                         channelState.lastMessageSent = Date.now();
@@ -980,8 +1149,10 @@ export class MessageManager {
 
                 // Don't respond if another teammate is handling the conversation
                 if (channelState?.currentHandler) {
-                    if (channelState.currentHandler !== this.client.user?.id &&
-                        this._isTeamMember(channelState.currentHandler)) {
+                    if (
+                        channelState.currentHandler !== this.client.user?.id &&
+                        this._isTeamMember(channelState.currentHandler)
+                    ) {
                         return false;
                     }
                 }
@@ -989,36 +1160,38 @@ export class MessageManager {
                 // Natural conversation cadence
                 if (!this._isMessageForMe(message) && channelState) {
                     // Count our recent messages
-                    const recentMessages = channelState.messages.slice(-MESSAGE_CONSTANTS.CHAT_HISTORY_COUNT);
-                    const ourMessageCount = recentMessages.filter(m =>
-                        m.userId === this.client.user?.id
+                    const recentMessages = channelState.messages.slice(
+                        -MESSAGE_CONSTANTS.CHAT_HISTORY_COUNT
+                    );
+                    const ourMessageCount = recentMessages.filter(
+                        (m) => m.userId === this.client.user?.id
                     ).length;
 
                     // Reduce responses if we've been talking a lot
                     if (ourMessageCount > 2) {
                         // Exponentially decrease chance to respond
-                        const responseChance = Math.pow(0.5, ourMessageCount - 2);
+                        const responseChance = Math.pow(
+                            0.5,
+                            ourMessageCount - 2
+                        );
                         if (Math.random() > responseChance) {
                             return false;
                         }
                     }
                 }
             }
-
         } catch (error) {
-            elizaLogger.error('Error in _shouldRespond team processing:', {
+            elizaLogger.error("Error in _shouldRespond team processing:", {
                 error,
                 agentId: this.runtime.agentId,
-                channelId: message.channelId
+                channelId: message.channelId,
             });
         }
 
         // Otherwise do context check
         if (channelState?.previousContext) {
-            const shouldRespondContext = await this._shouldRespondBasedOnContext(
-                message,
-                channelState
-            );
+            const shouldRespondContext =
+                await this._shouldRespondBasedOnContext(message, channelState);
             if (!shouldRespondContext) {
                 delete this.interestChannels[message.channelId];
                 return false;
@@ -1068,7 +1241,7 @@ export class MessageManager {
             if (channelState) {
                 channelState.previousContext = {
                     content: message.content,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
                 };
             }
 

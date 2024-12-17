@@ -4,5 +4,4 @@ tasks:
     init: |
       nvm install v23.3.0
       git checkout $(git describe --tags --abbrev=0)
-    command: pnpm install && pnpm run build 
-  
+    command: pnpm install && pnpm run build

@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.3](../index.md) / formatEvaluators
+[@ai16z/eliza v0.1.5-alpha.5](../index.md) / formatEvaluators
 
 # Function: formatEvaluators()
 
@@ -20,4 +20,4 @@ A string that concatenates the name and description of each evaluator, separated
 
 ## Defined in
 
-[packages/core/src/evaluators.ts:41](https://github.com/monilpat/eliza/blob/main/packages/core/src/evaluators.ts#L41)
+[packages/core/src/evaluators.ts:41](https://github.com/ai16z/eliza/blob/main/packages/core/src/evaluators.ts#L41)

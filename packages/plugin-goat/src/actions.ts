@@ -14,7 +14,7 @@ import {
     ModelClass,
     type State,
     composeContext,
-    generateObjectV2,
+    generateObject,
 } from "@ai16z/eliza";
 
 type GetOnChainActionsParams<TWalletClient extends WalletClient> = {
@@ -125,7 +125,7 @@ async function generateParameters(
     context: string,
     tool: Tool
 ): Promise<unknown> {
-    const { object } = await generateObjectV2({
+    const { object } = await generateObject({
         runtime,
         context,
         modelClass: ModelClass.LARGE,

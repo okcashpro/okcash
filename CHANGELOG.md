@@ -235,7 +235,7 @@
 - New knowledge not being ingested into agent memory after first run [\#614](https://github.com/ai16z/eliza/issues/614)
 - Tests failing - token.test.ts failing because it is commented out. Cache and goals tests are failing because jest is now switched with vitest [\#519](https://github.com/ai16z/eliza/issues/519)
 - Non node.js environments have issues building \(workers for instance\) [\#506](https://github.com/ai16z/eliza/issues/506)
-- Error when call `generateObjectV2` [\#469](https://github.com/ai16z/eliza/issues/469)
+- Error when call `generateObject` [\#469](https://github.com/ai16z/eliza/issues/469)
 - Current token.test.ts and videoGeneration.test.ts are throwing errors [\#464](https://github.com/ai16z/eliza/issues/464)
 - unable to run defaultcharacter with ModelProviderName.LLAMACLOUD local [\#271](https://github.com/ai16z/eliza/issues/271)
 - Incorrect steps in readme for starting eliza [\#270](https://github.com/ai16z/eliza/issues/270)
