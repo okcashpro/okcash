@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.1.6-alpha.4](https://github.com/ai16z/eliza/tree/v0.1.6-alpha.4) (2024-12-17)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.6-alpha.3...v0.1.6-alpha.4)
+
+**Fixed bugs:**
+
+- pnpm install fails on m1 mac \[Fixed with xcode-select reinstall\] [\#1146](https://github.com/ai16z/eliza/issues/1146)
+
+**Merged pull requests:**
+
+- chore: bump version to 0.1.6-alpha.4 [\#1159](https://github.com/ai16z/eliza/pull/1159) ([shakkernerd](https://github.com/shakkernerd))
+- fix: client twitter login and auth handler [\#1158](https://github.com/ai16z/eliza/pull/1158) ([shakkernerd](https://github.com/shakkernerd))
+
 ## [v0.1.6-alpha.3](https://github.com/ai16z/eliza/tree/v0.1.6-alpha.3) (2024-12-17)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.6-alpha.2...v0.1.6-alpha.3)
