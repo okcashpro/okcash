@@ -24,6 +24,7 @@ export const solanaPlugin: Plugin = {
     actions: [
         executeSwap,
         pumpfun,
+        fomo,
         transferToken,
         executeSwapForDAO,
         take_order,
