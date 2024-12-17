@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.1.6-alpha.3](https://github.com/ai16z/eliza/tree/v0.1.6-alpha.3) (2024-12-17)
+
+[Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.6-alpha.2...v0.1.6-alpha.3)
+
+**Merged pull requests:**
+
+- chore: develop into main [\#1155](https://github.com/ai16z/eliza/pull/1155) ([shakkernerd](https://github.com/shakkernerd))
+- fix: fix direct-client ability to start agents [\#1154](https://github.com/ai16z/eliza/pull/1154) ([odilitime](https://github.com/odilitime))
+- fix: fetch log level to debug [\#1153](https://github.com/ai16z/eliza/pull/1153) ([shakkernerd](https://github.com/shakkernerd))
+- chore: bump version to 0.1.6-alpha.3 [\#1152](https://github.com/ai16z/eliza/pull/1152) ([shakkernerd](https://github.com/shakkernerd))
+- feat: update packages version script [\#1150](https://github.com/ai16z/eliza/pull/1150) ([shakkernerd](https://github.com/shakkernerd))
+
 ## [v0.1.6-alpha.2](https://github.com/ai16z/eliza/tree/v0.1.6-alpha.2) (2024-12-17)
 
 [Full Changelog](https://github.com/ai16z/eliza/compare/v0.1.6-alpha.1...v0.1.6-alpha.2)
