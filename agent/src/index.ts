@@ -648,14 +648,15 @@ const startAgents = async () => {
     }
 
     // upload some agent functionality into directClient
-    directClient.startAgent = async character => {
-      // wrap it so we don't have to inject directClient later
-      return startAgent(character, directClient)
+    directClient.startAgent = async (character) => {
+        // wrap it so we don't have to inject directClient later
+        return startAgent(character, directClient);
     };
     directClient.start(serverPort);
 
-    elizaLogger.log("Visit the following URL to chat with your agents:");
-    elizaLogger.log(`http://localhost:5173`);
+    elizaLogger.log(
+        "Run `pnpm start:client` to start the client and visit the outputted URL (http://localhost:5173) to chat with your agents"
+    );
 };
 
 startAgents().catch((error) => {
