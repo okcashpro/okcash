@@ -1,6 +1,5 @@
 services:
     tee:
-        command: ["pnpm", "start"]
         build:
             context: .
             dockerfile: Dockerfile
