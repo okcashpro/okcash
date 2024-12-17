@@ -8,7 +8,7 @@
         "build": "tsc",
         "clean": "rimraf dist",
         "test": "jest",
-        "lint": "eslint src --ext .ts"
+        "lint": "eslint --fix  --cache ."
     },
     "dependencies": {
         "@ai16z/eliza": "workspace:*"
