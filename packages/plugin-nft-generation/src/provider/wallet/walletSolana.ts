@@ -56,7 +56,7 @@ export class WalletSolana {
     }
 
     async getBalance() {
-        let balance = await this.connection.getBalance(this.walletPublicKey);
+        const balance = await this.connection.getBalance(this.walletPublicKey);
         return {
             value: balance,
             formater: `${balance / LAMPORTS_PER_SOL} SOL`,
