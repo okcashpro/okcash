@@ -363,8 +363,8 @@ const promptConfirmation = async (): Promise<boolean> => {
 };
 
 // Save the base64 data to a file
-import * as fs from "fs";
-import * as path from "path";
+// import * as fs from "fs";
+// import * as path from "path";
 
 const fomoTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 
@@ -477,20 +477,20 @@ export default {
         const imageBuffer = Buffer.from(imageResult.data[0], "base64");
         const formData = new FormData();
         const blob = new Blob([imageBuffer], { type: "image/png" });
-        formData.append("file", blob, `${tokenMetadata.name}.png`),
-        formData.append("name", tokenMetadata.name),
-        formData.append("symbol", tokenMetadata.symbol),
+        formData.append("file", blob, `${tokenMetadata.name}.png`);
+        formData.append("name", tokenMetadata.name);
+        formData.append("symbol", tokenMetadata.symbol);
         formData.append("description", tokenMetadata.description);
 
         const metadataResponse = await fetch("https://pump.fun/api/ipfs", {
             method: "POST",
             body: formData,
         });
-        const metadataResponseJSON = await metadataResponse.json() as {
+        const metadataResponseJSON = (await metadataResponse.json()) as {
             name: string;
             symbol: string;
             metadataUri: string;
-          };
+        };
         // Add the default decimals and convert file to Blob
         const fullTokenMetadata: CreateTokenMetadata = {
             name: tokenMetadata.name,
