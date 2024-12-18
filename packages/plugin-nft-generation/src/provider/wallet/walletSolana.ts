@@ -26,7 +26,7 @@ import {
 import { getExplorerLink } from "@solana-developers/helpers";
 // import { transferSol } from "@metaplex-foundation/mpl-toolbox";
 import bs58 from "bs58";
-import { elizaLogger } from "@ai16z/eliza";
+import { okaiLogger } from "@okcashpro/okai";
 
 export class WalletSolana {
     private cache: NodeCache;
@@ -155,7 +155,7 @@ export class WalletSolana {
             const mint = generateSigner(umi);
 
             let transaction = new TransactionBuilder();
-            elizaLogger.log("collection address", collectionAddress);
+            okaiLogger.log("collection address", collectionAddress);
             const collectionAddressKey = publicKey(collectionAddress);
 
             const info = {
@@ -227,7 +227,7 @@ export class WalletSolana {
 
             await transaction.sendAndConfirm(umi);
 
-            elizaLogger.log(
+            okaiLogger.log(
                 `✅ NFT ${nftAddress} verified as member of collection ${collectionAddress}! See Explorer at ${getExplorerLink(
                     "address",
                     nftAddress,

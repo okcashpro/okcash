@@ -8,14 +8,14 @@ import {
     State,
     UUID,
     composeContext,
-    elizaLogger,
+    okaiLogger,
     getEmbeddingZeroVector,
     generateMessageResponse,
     stringToUuid,
     generateShouldRespond,
     ITranscriptionService,
     ISpeechService,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import {
     AudioPlayer,
     AudioReceiveStream,
@@ -83,7 +83,7 @@ export class AudioMonitor {
             }
         });
         this.readable.on("end", () => {
-            elizaLogger.log("AudioMonitor ended");
+            okaiLogger.log("AudioMonitor ended");
             this.ended = true;
             if (this.lastFlagged < 0) return;
             callback(this.getBufferFromStart());
@@ -91,14 +91,14 @@ export class AudioMonitor {
         });
         this.readable.on("speakingStopped", () => {
             if (this.ended) return;
-            elizaLogger.log("Speaking stopped");
+            okaiLogger.log("Speaking stopped");
             if (this.lastFlagged < 0) return;
             callback(this.getBufferFromStart());
         });
         this.readable.on("speakingStarted", () => {
             if (this.ended) return;
             onStart();
-            elizaLogger.log("Speaking started");
+            okaiLogger.log("Speaking started");
             this.reset();
         });
     }
@@ -229,18 +229,18 @@ export class VoiceManager extends EventEmitter {
             ]);
 
             // Log connection success
-            elizaLogger.log(
+            okaiLogger.log(
                 `Voice connection established in state: ${connection.state.status}`
             );
 
             // Set up ongoing state change monitoring
             connection.on("stateChange", async (oldState, newState) => {
-                elizaLogger.log(
+                okaiLogger.log(
                     `Voice connection state changed from ${oldState.status} to ${newState.status}`
                 );
 
                 if (newState.status === VoiceConnectionStatus.Disconnected) {
-                    elizaLogger.log("Handling disconnection...");
+                    okaiLogger.log("Handling disconnection...");
 
                     try {
                         // Try to reconnect if disconnected
@@ -257,10 +257,10 @@ export class VoiceManager extends EventEmitter {
                             ),
                         ]);
                         // Seems to be reconnecting to a new channel
-                        elizaLogger.log("Reconnecting to channel...");
+                        okaiLogger.log("Reconnecting to channel...");
                     } catch (e) {
                         // Seems to be a real disconnect, destroy and cleanup
-                        elizaLogger.log(
+                        okaiLogger.log(
                             "Disconnection confirmed - cleaning up..." + e
                         );
                         connection.destroy();
@@ -280,9 +280,9 @@ export class VoiceManager extends EventEmitter {
             });
 
             connection.on("error", (error) => {
-                elizaLogger.log("Voice connection error:", error);
+                okaiLogger.log("Voice connection error:", error);
                 // Don't immediately destroy - let the state change handler deal with it
-                elizaLogger.log(
+                okaiLogger.log(
                     "Connection error - will attempt to recover..."
                 );
             });
@@ -297,7 +297,7 @@ export class VoiceManager extends EventEmitter {
                     await me.voice.setDeaf(false);
                     await me.voice.setMute(false);
                 } catch (error) {
-                    elizaLogger.log("Failed to modify voice state:", error);
+                    okaiLogger.log("Failed to modify voice state:", error);
                     // Continue even if this fails
                 }
             }
@@ -324,7 +324,7 @@ export class VoiceManager extends EventEmitter {
                 }
             });
         } catch (error) {
-            elizaLogger.log("Failed to establish voice connection:", error);
+            okaiLogger.log("Failed to establish voice connection:", error);
             connection.destroy();
             this.connections.delete(channel.id);
             throw error;
@@ -479,7 +479,7 @@ export class VoiceManager extends EventEmitter {
         const DEBOUNCE_TRANSCRIPTION_THRESHOLD = 1500; // wait for 1.5 seconds of silence
 
         if (this.activeAudioPlayer?.state?.status === "idle") {
-            elizaLogger.log("Cleaning up idle audio player.");
+            okaiLogger.log("Cleaning up idle audio player.");
             this.cleanupAudioPlayer(this.activeAudioPlayer);
         }
 
@@ -896,7 +896,7 @@ export class VoiceManager extends EventEmitter {
 
     private async _shouldIgnore(message: Memory): Promise<boolean> {
         // console.log("message: ", message);
-        elizaLogger.debug("message.content: ", message.content);
+        okaiLogger.debug("message.content: ", message.content);
         // if the message is 3 characters or less, ignore it
         if ((message.content as Content).text.length < 3) {
             return true;

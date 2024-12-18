@@ -1,4 +1,4 @@
-import { elizaLogger, IAgentRuntime } from "@ai16z/eliza";
+import { okaiLogger, IAgentRuntime } from "@okcashpro/okai";
 import {
     ChatMessage,
     ChatRoom,
@@ -63,9 +63,9 @@ export class EchoChamberClient {
             // Set new watched room
             this.watchedRoom = roomId;
 
-            elizaLogger.success(`Now watching room: ${room.name}`);
+            okaiLogger.success(`Now watching room: ${room.name}`);
         } catch (error) {
-            elizaLogger.error("Error setting watched room:", error);
+            okaiLogger.error("Error setting watched room:", error);
             throw error;
         }
     }
@@ -84,7 +84,7 @@ export class EchoChamberClient {
             } catch (error) {
                 if (i === retries - 1) throw error;
                 const delay = RETRY_DELAY * Math.pow(2, i);
-                elizaLogger.warn(`Retrying operation in ${delay}ms...`);
+                okaiLogger.warn(`Retrying operation in ${delay}ms...`);
                 await new Promise((resolve) => setTimeout(resolve, delay));
             }
         }
@@ -92,11 +92,11 @@ export class EchoChamberClient {
     }
 
     public async start(): Promise<void> {
-        elizaLogger.log("🚀 Starting EchoChamber client...");
+        okaiLogger.log("🚀 Starting EchoChamber client...");
         try {
             // Verify connection by listing rooms
             await this.retryOperation(() => this.listRooms());
-            elizaLogger.success(
+            okaiLogger.success(
                 `✅ EchoChamber client successfully started for ${this.modelInfo.username}`
             );
 
@@ -105,7 +105,7 @@ export class EchoChamberClient {
                 await this.setWatchedRoom(this.config.defaultRoom);
             }
         } catch (error) {
-            elizaLogger.error("❌ Failed to start EchoChamber client:", error);
+            okaiLogger.error("❌ Failed to start EchoChamber client:", error);
             throw error;
         }
     }
@@ -121,14 +121,14 @@ export class EchoChamberClient {
             try {
                 this.watchedRoom = null;
             } catch (error) {
-                elizaLogger.error(
+                okaiLogger.error(
                     `Error leaving room ${this.watchedRoom}:`,
                     error
                 );
             }
         }
 
-        elizaLogger.log("Stopping EchoChamber client...");
+        okaiLogger.log("Stopping EchoChamber client...");
     }
 
     public async listRooms(tags?: string[]): Promise<ChatRoom[]> {
@@ -146,7 +146,7 @@ export class EchoChamberClient {
             const data = (await response.json()) as ListRoomsResponse;
             return data.rooms;
         } catch (error) {
-            elizaLogger.error("Error listing rooms:", error);
+            okaiLogger.error("Error listing rooms:", error);
             throw error;
         }
     }

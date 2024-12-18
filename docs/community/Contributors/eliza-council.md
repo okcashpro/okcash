@@ -1,7 +1,7 @@
 ---
-title: Eliza Council
+title: OKai Council
 ---
 
-# Eliza Council
+# OKai Council
 
 WIP

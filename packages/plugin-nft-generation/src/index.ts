@@ -1,12 +1,12 @@
 import {
     Action,
-    elizaLogger,
+    okaiLogger,
     HandlerCallback,
     IAgentRuntime,
     Memory,
     Plugin,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 
 import { createCollection } from "./handlers/createCollection.ts";
 import { createNFT } from "./handlers/createNFT.ts";
@@ -55,9 +55,9 @@ const nftCollectionGeneration: Action = {
         callback: HandlerCallback
     ) => {
         try {
-            elizaLogger.log("Composing state for message:", message);
+            okaiLogger.log("Composing state for message:", message);
             const userId = runtime.agentId;
-            elizaLogger.log("User ID:", userId);
+            okaiLogger.log("User ID:", userId);
 
             const collectionAddressRes = await createCollection({
                 runtime,
@@ -66,7 +66,7 @@ const nftCollectionGeneration: Action = {
 
             const collectionInfo = collectionAddressRes.collectionInfo;
 
-            elizaLogger.log("Collection Address:", collectionAddressRes);
+            okaiLogger.log("Collection Address:", collectionAddressRes);
 
             const nftRes = await createNFT({
                 runtime,
@@ -77,7 +77,7 @@ const nftCollectionGeneration: Action = {
                 tokenId: 1,
             });
 
-            elizaLogger.log("NFT Address:", nftRes);
+            okaiLogger.log("NFT Address:", nftRes);
 
 
             callback({

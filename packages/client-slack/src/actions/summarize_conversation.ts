@@ -4,9 +4,9 @@ import {
     splitChunks,
     trimTokens,
     parseJSONObjectFromText,
-} from "@ai16z/eliza";
-import { models } from "@ai16z/eliza";
-import { getActorDetails } from "@ai16z/eliza";
+} from "@okcashpro/okai";
+import { models } from "@okcashpro/okai";
+import { getActorDetails } from "@okcashpro/okai";
 import {
     Action,
     ActionExample,
@@ -17,8 +17,8 @@ import {
     Memory,
     ModelClass,
     State,
-    elizaLogger,
-} from "@ai16z/eliza";
+    okaiLogger,
+} from "@okcashpro/okai";
 import { ISlackService, SLACK_SERVICE_TYPE } from "../types/slack-types";
 
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
@@ -116,7 +116,7 @@ const getDateRange = async (
             const endTime = parseTimeString(parsedResponse.end as string);
 
             if (startTime === null || endTime === null) {
-                elizaLogger.error(
+                okaiLogger.error(
                     "Invalid time format in response",
                     parsedResponse
                 );
@@ -215,7 +215,7 @@ const summarizeAction: Action = {
         // 1. Extract date range from the message
         const dateRange = await getDateRange(runtime, message, currentState);
         if (!dateRange) {
-            elizaLogger.error("Couldn't determine date range from message");
+            okaiLogger.error("Couldn't determine date range from message");
             callbackData.text =
                 "I couldn't determine the time range to summarize. Please try asking for a specific period like 'last hour' or 'today'.";
             await callback(callbackData);
@@ -329,7 +329,7 @@ Here is a detailed summary of the conversation between ${userName} and ${runtime
             // If summary is long, upload as a file
             if (summaryContent.length > 1000) {
                 const summaryFilename = `summary_${Date.now()}.txt`;
-                elizaLogger.debug("Uploading summary file to Slack...");
+                okaiLogger.debug("Uploading summary file to Slack...");
 
                 try {
                     // Save file content
@@ -343,14 +343,14 @@ Here is a detailed summary of the conversation between ${userName} and ${runtime
                         SLACK_SERVICE_TYPE
                     ) as ISlackService;
                     if (!slackService?.client) {
-                        elizaLogger.error(
+                        okaiLogger.error(
                             "Slack service not found or not properly initialized"
                         );
                         throw new Error("Slack service not found");
                     }
 
                     // Upload file using Slack's API
-                    elizaLogger.debug(
+                    okaiLogger.debug(
                         `Uploading file ${summaryFilename} to channel ${message.roomId}`
                     );
                     const uploadResult = await slackService.client.files.upload(
@@ -364,19 +364,19 @@ Here is a detailed summary of the conversation between ${userName} and ${runtime
                     );
 
                     if (uploadResult.ok) {
-                        elizaLogger.success(
+                        okaiLogger.success(
                             "Successfully uploaded summary file to Slack"
                         );
                         callbackData.text = `I've created a summary of the conversation from ${formatDate(start)} to ${formatDate(end)}. You can find it in the thread above.`;
                     } else {
-                        elizaLogger.error(
+                        okaiLogger.error(
                             "Failed to upload file to Slack:",
                             uploadResult.error
                         );
                         throw new Error("Failed to upload file to Slack");
                     }
                 } catch (error) {
-                    elizaLogger.error("Error uploading summary file:", error);
+                    okaiLogger.error("Error uploading summary file:", error);
                     // Fallback to sending as a message
                     callbackData.text = summaryContent;
                 }
@@ -388,7 +388,7 @@ Here is a detailed summary of the conversation between ${userName} and ${runtime
             await callback(callbackData);
             return callbackData;
         } catch (error) {
-            elizaLogger.error("Error in summary generation:", error);
+            okaiLogger.error("Error in summary generation:", error);
             callbackData.text =
                 "I encountered an error while generating the summary. Please try again.";
             await callback(callbackData);

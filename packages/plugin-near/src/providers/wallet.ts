@@ -1,4 +1,4 @@
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@okcashpro/okai";
 import { KeyPair, keyStores, connect, Account, utils } from "near-api-js";
 import BigNumber from "bignumber.js";
 import { KeyPairString } from "near-api-js/lib/utils";

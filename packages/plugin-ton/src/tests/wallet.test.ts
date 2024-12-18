@@ -1,4 +1,4 @@
-import { defaultCharacter } from "@ai16z/eliza";
+import { defaultCharacter } from "@okcashpro/okai";
 
 import { describe, it, vi, expect, beforeAll, beforeEach, afterEach } from "vitest";
 import BigNumber from "bignumber.js";
@@ -77,7 +77,7 @@ describe("Wallet provider", () => {
             const totalUsd = new BigNumber(amount.toString()).times(prices.nativeToken.usd);
 
             expect(result).toEqual(
-                `Eliza\nWallet Address: ${walletProvider.getAddress()}\n` +
+                `OKai\nWallet Address: ${walletProvider.getAddress()}\n` +
                     `Total Value: $${totalUsd.toFixed(2)} (${amount.toFixed(4)} TON)\n`
             );
         });

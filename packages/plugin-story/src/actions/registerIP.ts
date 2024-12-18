@@ -1,13 +1,13 @@
 import {
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateObjectDeprecated,
     HandlerCallback,
     ModelClass,
     type IAgentRuntime,
     type Memory,
     type State,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import pinataSDK from "@pinata/sdk";
 import { RegisterIpResponse } from "@story-protocol/core-sdk";
 import { createHash } from "crypto";
@@ -82,7 +82,7 @@ export const registerIPAction = {
         options: any,
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting REGISTER_IP handler...");
+        okaiLogger.log("Starting REGISTER_IP handler...");
 
         // initialize or update state
         if (!state) {
@@ -111,7 +111,7 @@ export const registerIPAction = {
             });
             return true;
         } catch (e) {
-            elizaLogger.error("Error registering IP:", e.message);
+            okaiLogger.error("Error registering IP:", e.message);
             callback?.({ text: `Error registering IP: ${e.message}` });
             return false;
         }

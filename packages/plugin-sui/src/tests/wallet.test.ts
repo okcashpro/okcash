@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { WalletProvider } from "../providers/wallet.ts";
 
-import { defaultCharacter } from "@ai16z/eliza";
+import { defaultCharacter } from "@okcashpro/okai";
 import BigNumber from "bignumber.js";
 import { SUI_DECIMALS } from "@mysten/sui/utils";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
@@ -84,7 +84,7 @@ describe("WalletProvider", () => {
                 .toFixed(2);
 
             expect(result).toEqual(
-                `Eliza\nWallet Address: ${walletProvider.address}\n` +
+                `OKai\nWallet Address: ${walletProvider.address}\n` +
                     `Total Value: $${totalUsd} (${suiAmount} SUI)\n`
             );
         });

@@ -11,9 +11,9 @@ import {
     ModelClass,
     State,
     stringToUuid,
-    elizaLogger,
+    okaiLogger,
     getEmbeddingZeroVector,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { EchoChamberClient } from "./echoChamberClient";
 import { ChatMessage } from "./types";
 
@@ -213,7 +213,7 @@ export class InteractionClient {
     }
 
     private async handleInteractions() {
-        elizaLogger.log("Checking EchoChambers interactions");
+        okaiLogger.log("Checking EchoChambers interactions");
 
         try {
             const defaultRoom = this.runtime.getSetting(
@@ -264,9 +264,9 @@ export class InteractionClient {
                 }
             }
 
-            elizaLogger.log("Finished checking EchoChambers interactions");
+            okaiLogger.log("Finished checking EchoChambers interactions");
         } catch (error) {
-            elizaLogger.error(
+            okaiLogger.error(
                 "Error handling EchoChambers interactions:",
                 error
             );
@@ -317,7 +317,7 @@ export class InteractionClient {
                 memory.id
             );
             if (existing) {
-                elizaLogger.log(
+                okaiLogger.log(
                     `Already processed message ${message.id}, skipping`
                 );
                 return;
@@ -345,7 +345,7 @@ export class InteractionClient {
             });
 
             if (shouldRespond !== "RESPOND") {
-                elizaLogger.log(
+                okaiLogger.log(
                     `Not responding to message ${message.id}: ${shouldRespond}`
                 );
                 return;
@@ -366,7 +366,7 @@ export class InteractionClient {
             });
 
             if (!response || !response.text) {
-                elizaLogger.log("No response generated");
+                okaiLogger.log("No response generated");
                 return;
             }
 
@@ -422,7 +422,7 @@ export class InteractionClient {
             );
             await this.runtime.evaluate(memory, state, true);
         } catch (error) {
-            elizaLogger.error("Error handling message:", error);
+            okaiLogger.error("Error handling message:", error);
         }
     }
 }

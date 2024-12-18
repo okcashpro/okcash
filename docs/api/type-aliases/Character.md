@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.5](../index.md) / Character
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / Character
 
 # Type Alias: Character
 
@@ -424,4 +424,4 @@ Optional NFT prompt
 
 ## Defined in
 
-[packages/core/src/types.ts:627](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L627)
+[packages/core/src/types.ts:627](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L627)

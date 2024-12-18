@@ -1,7 +1,7 @@
-import { AwsS3Service } from "@ai16z/plugin-node";
+import { AwsS3Service } from "@okcashpro/plugin-node";
 import {
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateImage,
     generateText,
     getEmbeddingZeroVector,
@@ -10,11 +10,11 @@ import {
     ModelClass,
     ServiceType,
     stringToUuid,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import {
     saveBase64Image,
     saveHeuristImage,
-} from "@ai16z/plugin-image-generation";
+} from "@okcashpro/plugin-image-generation";
 import { PublicKey } from "@solana/web3.js";
 import WalletSolana from "../provider/wallet/walletSolana.ts";
 
@@ -49,7 +49,7 @@ export async function createNFTMetadata({
     tokenId: number;
 }) {
     const userId = runtime.agentId;
-    elizaLogger.log("User ID:", userId);
+    okaiLogger.log("User ID:", userId);
     const awsS3Service: AwsS3Service = runtime.getService(ServiceType.AWS_S3);
     const agentName = runtime.character.name;
     const roomId = stringToUuid("nft_generate_room-" + agentName);
@@ -91,12 +91,12 @@ export async function createNFTMetadata({
         },
         runtime
     );
-    elizaLogger.log("NFT Prompt:", nftPrompt);
+    okaiLogger.log("NFT Prompt:", nftPrompt);
     if (images.success && images.data && images.data.length > 0) {
         const image = images.data[0];
         const filename = `${tokenId}`;
         if (image.startsWith("http")) {
-            elizaLogger.log("Generating image url:", image);
+            okaiLogger.log("Generating image url:", image);
         }
         // Choose save function based on image data format
         const filepath = image.startsWith("http")
@@ -170,7 +170,7 @@ export async function createNFT({
             adminPublicKey: collectionAdminPublicKey,
             fee: collectionFee,
         });
-        elizaLogger.log("NFT ID:", nftAddressRes.address);
+        okaiLogger.log("NFT ID:", nftAddressRes.address);
         return {
             network: "solana",
             address: nftAddressRes.address,

@@ -6,7 +6,7 @@ export * from "./actions/getIPDetails";
 export * from "./providers/wallet";
 export * from "./types";
 
-import type { Plugin } from "@ai16z/eliza";
+import type { Plugin } from "@okcashpro/okai";
 import { storyWalletProvider } from "./providers/wallet";
 import { registerIPAction } from "./actions/registerIP";
 import { licenseIPAction } from "./actions/licenseIP";

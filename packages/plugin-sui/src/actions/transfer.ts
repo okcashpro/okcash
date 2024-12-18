@@ -7,10 +7,10 @@ import {
     ModelClass,
     State,
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateObject,
     type Action,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { z } from "zod";
 
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
@@ -92,7 +92,7 @@ export default {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting SEND_TOKEN handler...");
+        okaiLogger.log("Starting SEND_TOKEN handler...");
 
         const walletInfo = await walletProvider.get(runtime, message, state);
         state.walletInfo = walletInfo;

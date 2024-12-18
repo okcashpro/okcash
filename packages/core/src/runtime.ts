@@ -407,7 +407,7 @@ export class AgentRuntime implements IAgentRuntime {
     }
 
     async stop() {
-      elizaLogger.debug('runtime::stop - character', this.character)
+      okaiLogger.debug('runtime::stop - character', this.character)
       // stop services, they don't have a stop function
         // just initialize
 
@@ -418,7 +418,7 @@ export class AgentRuntime implements IAgentRuntime {
       // client have a start
       for(const cStr in this.clients) {
         const c = this.clients[cStr]
-        elizaLogger.log('runtime::stop - requesting', cStr, 'client stop for', this.character.name)
+        okaiLogger.log('runtime::stop - requesting', cStr, 'client stop for', this.character.name)
         c.stop()
       }
       // we don't need to unregister with directClient

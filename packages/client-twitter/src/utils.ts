@@ -5,7 +5,7 @@ import { stringToUuid } from "@okcashpro/okai";
 import { ClientBase } from "./base";
 import { okaiLogger } from "@okcashpro/okai";
 import { DEFAULT_MAX_TWEET_LENGTH } from "./environment";
-import { Media } from "@ai16z/eliza";
+import { Media } from "@okcashpro/okai";
 import fs from "fs";
 import path from "path";
 

@@ -1,5 +1,5 @@
 import {
-    elizaLogger,
+    okaiLogger,
     composeContext,
     Content,
     HandlerCallback,
@@ -8,7 +8,7 @@ import {
     type IAgentRuntime,
     type Memory,
     type State,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { z } from "zod";
 
 import {
@@ -71,7 +71,7 @@ export class TransferAction {
                     internal({
                         value: params.amount.toString(),
                         to: params.recipient,
-                        body: "eliza ton wallet plugin",
+                        body: "okai ton wallet plugin",
                     }),
                 ],
             });
@@ -138,7 +138,7 @@ export default {
         options: any,
         callback?: HandlerCallback
     ) => {
-        elizaLogger.log("Starting SEND_TOKEN handler...");
+        okaiLogger.log("Starting SEND_TOKEN handler...");
 
         const transferDetails = await buildTransferDetails(
             runtime,

@@ -2,20 +2,20 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express, { Request as ExpressRequest } from "express";
 import multer, { File } from "multer";
-import { elizaLogger, generateCaption, generateImage } from "@ai16z/eliza";
-import { composeContext } from "@ai16z/eliza";
-import { generateMessageResponse } from "@ai16z/eliza";
-import { messageCompletionFooter } from "@ai16z/eliza";
-import { AgentRuntime } from "@ai16z/eliza";
+import { okaiLogger, generateCaption, generateImage } from "@okcashpro/okai";
+import { composeContext } from "@okcashpro/okai";
+import { generateMessageResponse } from "@okcashpro/okai";
+import { messageCompletionFooter } from "@okcashpro/okai";
+import { AgentRuntime } from "@okcashpro/okai";
 import {
     Content,
     Memory,
     ModelClass,
     Client,
     IAgentRuntime,
-} from "@ai16z/eliza";
-import { stringToUuid } from "@ai16z/eliza";
-import { settings } from "@ai16z/eliza";
+} from "@okcashpro/okai";
+import { stringToUuid } from "@okcashpro/okai";
+import { settings } from "@okcashpro/okai";
 import { createApiRouter } from "./api.ts";
 import * as fs from "fs";
 import * as path from "path";
@@ -58,7 +58,7 @@ export class DirectClient {
     public startAgent: Function; // Store startAgent functor
 
     constructor() {
-        elizaLogger.log("DirectClient constructor");
+        okaiLogger.log("DirectClient constructor");
         this.app = express();
         this.app.use(cors());
         this.agents = new Map();
@@ -383,22 +383,22 @@ export class DirectClient {
 
     public start(port: number) {
         this.server = this.app.listen(port, () => {
-            elizaLogger.success(
+            okaiLogger.success(
                 `REST API bound to 0.0.0.0:${port}. If running locally, access it at http://localhost:${port}.`
             );
         });
 
         // Handle graceful shutdown
         const gracefulShutdown = () => {
-            elizaLogger.log("Received shutdown signal, closing server...");
+            okaiLogger.log("Received shutdown signal, closing server...");
             this.server.close(() => {
-                elizaLogger.success("Server closed successfully");
+                okaiLogger.success("Server closed successfully");
                 process.exit(0);
             });
 
             // Force close after 5 seconds if server hasn't closed
             setTimeout(() => {
-                elizaLogger.error(
+                okaiLogger.error(
                     "Could not close connections in time, forcefully shutting down"
                 );
                 process.exit(1);
@@ -413,7 +413,7 @@ export class DirectClient {
     public stop() {
         if (this.server) {
             this.server.close(() => {
-                elizaLogger.success("Server stopped");
+                okaiLogger.success("Server stopped");
             });
         }
     }
@@ -421,7 +421,7 @@ export class DirectClient {
 
 export const DirectClientInterface: Client = {
     start: async (_runtime: IAgentRuntime) => {
-        elizaLogger.log("DirectClientInterface start");
+        okaiLogger.log("DirectClientInterface start");
         const client = new DirectClient();
         const serverPort = parseInt(settings.SERVER_PORT || "3000");
         client.start(serverPort);

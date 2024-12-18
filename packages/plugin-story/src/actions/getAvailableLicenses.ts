@@ -1,13 +1,13 @@
 import {
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateObjectDeprecated,
     HandlerCallback,
     ModelClass,
     type IAgentRuntime,
     type Memory,
     type State,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { getAvailableLicensesTemplate, licenseIPTemplate } from "../templates";
 import { Address } from "viem";
 import { IPLicenseDetails, RESOURCE_TYPE } from "../types/api";
@@ -39,7 +39,7 @@ export class GetAvailableLicensesAction {
     async getAvailableLicenses(
         params: GetAvailableLicensesParams
     ): Promise<GetAvailableLicensesResponse> {
-        elizaLogger.log(
+        okaiLogger.log(
             "Fetching from",
             `${API_URL}/${RESOURCE_TYPE.IP_LICENSE_DETAILS}`
         );
@@ -68,10 +68,10 @@ export class GetAvailableLicensesAction {
         try {
             const text = await response.text();
             const licenseDetailsResponse = JSON.parse(text);
-            elizaLogger.log("licenseDetailsResponse", licenseDetailsResponse);
+            okaiLogger.log("licenseDetailsResponse", licenseDetailsResponse);
             return licenseDetailsResponse;
         } catch (e) {
-            elizaLogger.error("Failed to parse response");
+            okaiLogger.error("Failed to parse response");
             throw new Error(`Failed to parse JSON response: ${e.message}`);
         }
     }
@@ -106,7 +106,7 @@ export const getAvailableLicensesAction = {
         options: any,
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting GET_AVAILABLE_LICENSES handler...");
+        okaiLogger.log("Starting GET_AVAILABLE_LICENSES handler...");
 
         // Initialize or update state
         state = !state
@@ -138,7 +138,7 @@ export const getAvailableLicensesAction = {
             });
             return true;
         } catch (e) {
-            elizaLogger.error("Error fetching available licenses:", e.message);
+            okaiLogger.error("Error fetching available licenses:", e.message);
             callback?.({
                 text: `Error fetching available licenses: ${e.message}`,
             });

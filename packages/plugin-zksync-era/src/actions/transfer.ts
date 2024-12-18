@@ -7,15 +7,15 @@ import {
     ModelClass,
     State,
     type Action,
-    elizaLogger,
+    okaiLogger,
     composeContext,
     generateObject
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { validateZKsyncConfig } from "../enviroment";
 
 import {Web3} from "web3";
-import { 
-    ZKsyncPlugin, 
+import {
+    ZKsyncPlugin,
     ZKsyncWallet,
     types,
     Web3ZKsyncL2
@@ -103,7 +103,7 @@ export default {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting SEND_TOKEN handler...");
+        okaiLogger.log("Starting SEND_TOKEN handler...");
 
         // Initialize or update state
         if (!state) {
@@ -159,7 +159,7 @@ export default {
 
             const receipt = await transferTx.wait();
 
-            elizaLogger.success(
+            okaiLogger.success(
                 "Transfer completed successfully! tx: " + receipt.transactionHash
             );
             if (callback) {
@@ -173,7 +173,7 @@ export default {
 
             return true;
         } catch (error) {
-            elizaLogger.error("Error during token transfer:", error);
+            okaiLogger.error("Error during token transfer:", error);
             if (callback) {
                 callback({
                     text: `Error transferring tokens: ${error.message}`,
@@ -181,7 +181,7 @@ export default {
                 });
             }
             return false;
-        }            
+        }
     },
 
     examples: [

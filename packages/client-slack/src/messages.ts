@@ -8,15 +8,15 @@ import {
     Memory,
     Content,
     State,
-    elizaLogger,
+    okaiLogger,
     HandlerCallback,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import {
     slackMessageHandlerTemplate,
     slackShouldRespondTemplate,
 } from "./templates";
 import { WebClient } from "@slack/web-api";
-import { IAgentRuntime } from "@ai16z/eliza";
+import { IAgentRuntime } from "@okcashpro/okai";
 
 export class MessageManager {
     private client: WebClient;
@@ -74,12 +74,12 @@ export class MessageManager {
     }
 
     private cleanMessage(text: string): string {
-        elizaLogger.debug("🧹 [CLEAN] Cleaning message text:", text);
+        okaiLogger.debug("🧹 [CLEAN] Cleaning message text:", text);
         // Remove bot mention
         const cleaned = text
             .replace(new RegExp(`<@${this.botUserId}>`, "g"), "")
             .trim();
-        elizaLogger.debug("✨ [CLEAN] Cleaned result:", cleaned);
+        okaiLogger.debug("✨ [CLEAN] Cleaned result:", cleaned);
         return cleaned;
     }
 

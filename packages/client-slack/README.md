@@ -1,6 +1,6 @@
-# Eliza Slack Client
+# OKai Slack Client
 
-This package provides Slack integration for the Eliza AI agent.
+This package provides Slack integration for the OKai AI agent.
 
 ## Setup Guide
 
@@ -27,7 +27,7 @@ This package provides Slack integration for the Eliza AI agent.
 ```yaml
 display_information:
   name: eve
-  description: Eve ai16z
+  description: Eve okcashpro
   background_color: "#143187"
 features:
   app_home:
@@ -96,7 +96,7 @@ settings:
 3. Review the permissions and click "Allow"
 
 ### Step 5: Verify Installation
-1. Start your Eliza server
+1. Start your OKai server
 2. Check the logs for successful connection
 3. Test the bot:
    - In Slack, invite the bot to a channel: `/invite @eve`
@@ -147,7 +147,7 @@ If you restart ngrok, you'll get a new URL. You'll need to:
 ### Debugging
 Enable detailed logging by setting:
 ```bash
-DEBUG=eliza:*
+DEBUG=okai:*
 ```
 
 ### Adding New Features

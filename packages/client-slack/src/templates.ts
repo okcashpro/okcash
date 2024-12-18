@@ -1,4 +1,4 @@
-import { messageCompletionFooter, shouldRespondFooter } from "@ai16z/eliza";
+import { messageCompletionFooter, shouldRespondFooter } from "@okcashpro/okai";
 
 export const slackShouldRespondTemplate =
     `# Task: Decide if {{agentName}} should respond.
@@ -96,4 +96,4 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 
 # Instructions: Write the next message for {{agentName}}. Include an action, if appropriate. {{actionNames}}
 Remember to follow the conversation flow rules above.
-` + messageCompletionFooter; 
+` + messageCompletionFooter;

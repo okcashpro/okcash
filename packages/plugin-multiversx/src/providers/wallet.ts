@@ -1,4 +1,4 @@
-import { elizaLogger } from "@ai16z/eliza";
+import { okaiLogger } from "@okcashpro/okai";
 import {
     UserSigner,
     Address,
@@ -60,7 +60,7 @@ export class WalletProvider {
 
         // Set up the network provider for API interactions
         this.apiNetworkProvider = new ApiNetworkProvider(networkConfig.apiURL, {
-            clientName: "eliza-mvx",
+            clientName: "okai-mvx",
         });
     }
 
@@ -142,8 +142,8 @@ export class WalletProvider {
             const txHash =
                 await this.apiNetworkProvider.sendTransaction(transaction);
 
-            elizaLogger.log(`TxHash: ${txHash}`); // Log transaction hash
-            elizaLogger.log(
+            okaiLogger.log(`TxHash: ${txHash}`); // Log transaction hash
+            okaiLogger.log(
                 `Transaction URL: ${this.explorerURL}/transactions/${txHash}`
             ); // View Transaction
             return txHash;
@@ -215,8 +215,8 @@ export class WalletProvider {
             const txHash =
                 await this.apiNetworkProvider.sendTransaction(transaction);
 
-            elizaLogger.log(`TxHash: ${txHash}`); // Log transaction hash
-            elizaLogger.log(
+            okaiLogger.log(`TxHash: ${txHash}`); // Log transaction hash
+            okaiLogger.log(
                 `Transaction URL: ${this.explorerURL}/transactions/${txHash}`
             ); // View Transaction
             return txHash;
@@ -285,8 +285,8 @@ export class WalletProvider {
             const txHash =
                 await this.apiNetworkProvider.sendTransaction(transaction);
 
-            elizaLogger.log(`TxHash: ${txHash}`); // Log the transaction hash
-            elizaLogger.log(
+            okaiLogger.log(`TxHash: ${txHash}`); // Log the transaction hash
+            okaiLogger.log(
                 `Transaction URL: ${this.explorerURL}/transactions/${txHash}`
             ); // View Transaction
 

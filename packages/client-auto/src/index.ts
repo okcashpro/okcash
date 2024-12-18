@@ -1,4 +1,4 @@
-import { Client, IAgentRuntime, elizaLogger } from "@ai16z/eliza";
+import { Client, IAgentRuntime, okaiLogger } from "@okcashpro/okai";
 
 export class AutoClient {
     interval: NodeJS.Timeout;
@@ -10,7 +10,7 @@ export class AutoClient {
         // start a loop that runs every x seconds
         this.interval = setInterval(
             async () => {
-                elizaLogger.log("running auto client...");
+                okaiLogger.log("running auto client...");
             },
             60 * 60 * 1000
         ); // 1 hour in milliseconds

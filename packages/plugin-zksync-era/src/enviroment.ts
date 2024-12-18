@@ -1,4 +1,4 @@
-import { IAgentRuntime } from "@ai16z/eliza";
+import { IAgentRuntime } from "@okcashpro/okai";
 import { z } from "zod";
 
 export const zksyncEnvSchema = z.object({

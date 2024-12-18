@@ -1,4 +1,4 @@
-import { Service, IAgentRuntime, ServiceType } from "@ai16z/eliza";
+import { Service, IAgentRuntime, ServiceType } from "@okcashpro/okai";
 import { WebClient } from "@slack/web-api";
 import { ISlackService } from "../types/slack-types";
 
@@ -20,4 +20,4 @@ export class SlackService extends Service implements ISlackService {
         }
         this.client = new WebClient(token);
     }
-} 
+}

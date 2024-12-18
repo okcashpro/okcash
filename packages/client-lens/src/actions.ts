@@ -1,11 +1,11 @@
 import type { LensClient } from "./client";
 import {
-    elizaLogger,
+    okaiLogger,
     type Content,
     type IAgentRuntime,
     type Memory,
     type UUID,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { textOnly } from "@lens-protocol/metadata";
 import { createPublicationMemory } from "./memory";
 import { AnyPublicationFragment } from "@lens-protocol/client";

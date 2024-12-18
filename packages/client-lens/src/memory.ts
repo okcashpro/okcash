@@ -1,11 +1,11 @@
 import {
-    elizaLogger,
+    okaiLogger,
     getEmbeddingZeroVector,
     IAgentRuntime,
     stringToUuid,
     type Memory,
     type UUID,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { publicationUuid } from "./utils";
 import { LensClient } from "./client";
 import { AnyPublicationFragment } from "@lens-protocol/client";
@@ -72,7 +72,7 @@ export async function buildConversationThread({
         const memory = await runtime.messageManager.getMemoryById(roomId);
 
         if (!memory) {
-            elizaLogger.log(
+            okaiLogger.log(
                 "Creating memory for publication",
                 currentPublication.id
             );

@@ -1,5 +1,5 @@
 import { WebClient } from '@slack/web-api';
-import { Service, ServiceType } from '@ai16z/eliza';
+import { Service, ServiceType } from '@okcashpro/okai';
 
 export interface SlackConfig {
   appId: string;

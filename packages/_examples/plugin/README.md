@@ -1,9 +1,9 @@
-# Sample Plugin for Eliza
+# Sample Plugin for OKai
 
-The Sample Plugin for Eliza extends the functionality of the Eliza platform by providing additional actions, providers, evaluators, and more. This plugin is designed to be easily extendable and customizable to fit various use cases.
+The Sample Plugin for OKai extends the functionality of the OKai platform by providing additional actions, providers, evaluators, and more. This plugin is designed to be easily extendable and customizable to fit various use cases.
 
 ## Description
-The Sample Plugin offers a set of features that can be integrated into the Eliza platform to enhance its capabilities. Below is a high-level overview of the different components available in this plugin.
+The Sample Plugin offers a set of features that can be integrated into the OKai platform to enhance its capabilities. Below is a high-level overview of the different components available in this plugin.
 
 ## Actions
 - **createResourceAction**: This action enables the creation and management of generic resources. It can be customized to handle different types of resources and integrate with various data sources.
@@ -29,4 +29,4 @@ To extend the Sample Plugin, you can add new actions, providers, evaluators, ser
 4. **Services**: Add new services by defining them in the `services` array.
 5. **Clients**: Add new clients by defining them in the `clients` array.
 
-For more detailed information on how to extend the plugin, refer to the documentation provided in the Eliza platform.
+For more detailed information on how to extend the plugin, refer to the documentation provided in the OKai platform.

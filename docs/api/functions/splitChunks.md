@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.5](../index.md) / splitChunks
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / splitChunks
 
 # Function: splitChunks()
 
@@ -28,4 +28,4 @@ Promise resolving to array of text chunks with bleed sections
 
 ## Defined in
 
-[packages/core/src/generation.ts:681](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L681)
+[packages/core/src/generation.ts:681](https://github.com/okcashpro/okai/blob/main/packages/core/src/generation.ts#L681)

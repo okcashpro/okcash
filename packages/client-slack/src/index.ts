@@ -1,5 +1,5 @@
-import { Character, Client as ElizaClient, IAgentRuntime } from "@ai16z/eliza";
-import { elizaLogger } from "@ai16z/eliza";
+import { Character, Client as OKaiClient, IAgentRuntime } from "@okcashpro/okai";
+import { okaiLogger } from "@okcashpro/okai";
 import { WebClient } from "@slack/web-api";
 import express, { Request } from "express";
 import { EventEmitter } from "events";
@@ -26,7 +26,7 @@ export class SlackClient extends EventEmitter {
 
     constructor(runtime: IAgentRuntime) {
         super();
-        elizaLogger.log("🚀 Initializing SlackClient...");
+        okaiLogger.log("🚀 Initializing SlackClient...");
         this.runtime = runtime;
         this.character = runtime.character;
 
@@ -47,7 +47,7 @@ export class SlackClient extends EventEmitter {
                 try {
                     req.body = JSON.parse(req.body.toString());
                 } catch (error) {
-                    elizaLogger.error(
+                    okaiLogger.error(
                         "❌ [PARSE] Failed to parse request body:",
                         error
                     );
@@ -58,7 +58,7 @@ export class SlackClient extends EventEmitter {
     }
 
     private async handleEvent(event: any) {
-        elizaLogger.debug("🎯 [EVENT] Processing event:", {
+        okaiLogger.debug("🎯 [EVENT] Processing event:", {
             type: event.type,
             user: event.user,
             channel: event.channel,
@@ -70,12 +70,12 @@ export class SlackClient extends EventEmitter {
                 await this.messageManager.handleMessage(event);
             }
         } catch (error) {
-            elizaLogger.error("❌ [EVENT] Error handling event:", error);
+            okaiLogger.error("❌ [EVENT] Error handling event:", error);
         }
     }
 
     private async verifyPermissions() {
-        elizaLogger.debug("🔒 [PERMISSIONS] Verifying bot permissions...");
+        okaiLogger.debug("🔒 [PERMISSIONS] Verifying bot permissions...");
 
         try {
             // Test channel list access with all types
@@ -87,7 +87,7 @@ export class SlackClient extends EventEmitter {
                 throw new Error(`Failed to list channels: ${channels.error}`);
             }
 
-            elizaLogger.debug("📋 [PERMISSIONS] Channel access verified");
+            okaiLogger.debug("📋 [PERMISSIONS] Channel access verified");
 
             // Test message sending (to self)
             const testMessage = await this.client.chat.postMessage({
@@ -101,38 +101,38 @@ export class SlackClient extends EventEmitter {
                 );
             }
 
-            elizaLogger.debug("💬 [PERMISSIONS] Message sending verified");
+            okaiLogger.debug("💬 [PERMISSIONS] Message sending verified");
 
-            elizaLogger.debug("✅ [PERMISSIONS] All permissions verified");
+            okaiLogger.debug("✅ [PERMISSIONS] All permissions verified");
         } catch (error: any) {
-            elizaLogger.error(
+            okaiLogger.error(
                 "❌ [PERMISSIONS] Permission verification failed:",
                 error
             );
-            elizaLogger.error(
+            okaiLogger.error(
                 "Please ensure the following scopes are added to your Slack app:"
             );
-            elizaLogger.error("- app_mentions:read     (for mentions)");
-            elizaLogger.error("- channels:history      (for public channels)");
-            elizaLogger.error("- channels:read         (for channel info)");
-            elizaLogger.error("- chat:write            (for sending messages)");
-            elizaLogger.error("- groups:history        (for private channels)");
-            elizaLogger.error(
+            okaiLogger.error("- app_mentions:read     (for mentions)");
+            okaiLogger.error("- channels:history      (for public channels)");
+            okaiLogger.error("- channels:read         (for channel info)");
+            okaiLogger.error("- chat:write            (for sending messages)");
+            okaiLogger.error("- groups:history        (for private channels)");
+            okaiLogger.error(
                 "- groups:read           (for private channel info)"
             );
-            elizaLogger.error("- im:history            (for DMs)");
-            elizaLogger.error("- im:read               (for DM info)");
-            elizaLogger.error("- im:write              (for sending DMs)");
-            elizaLogger.error("- mpim:history          (for group DMs)");
-            elizaLogger.error("- mpim:read             (for group DM info)");
-            elizaLogger.error("- users:read            (for user info)");
+            okaiLogger.error("- im:history            (for DMs)");
+            okaiLogger.error("- im:read               (for DM info)");
+            okaiLogger.error("- im:write              (for sending DMs)");
+            okaiLogger.error("- mpim:history          (for group DMs)");
+            okaiLogger.error("- mpim:read             (for group DM info)");
+            okaiLogger.error("- users:read            (for user info)");
             throw new Error("Permission verification failed");
         }
     }
 
     async start() {
         try {
-            elizaLogger.log("Starting Slack client...");
+            okaiLogger.log("Starting Slack client...");
 
             const config = await validateSlackConfig(this.runtime);
 
@@ -146,7 +146,7 @@ export class SlackClient extends EventEmitter {
             if (!auth.ok) throw new Error("Failed to authenticate with Slack");
 
             this.botUserId = auth.user_id as string;
-            elizaLogger.debug("🤖 [INIT] Bot info:", {
+            okaiLogger.debug("🤖 [INIT] Bot info:", {
                 user_id: auth.user_id,
                 bot_id: auth.bot_id,
                 team_id: auth.team_id,
@@ -160,7 +160,7 @@ export class SlackClient extends EventEmitter {
                     user: this.botUserId,
                 });
 
-                elizaLogger.debug("👤 [BOT] Bot user details:", {
+                okaiLogger.debug("👤 [BOT] Bot user details:", {
                     name: botInfo.user?.name,
                     real_name: botInfo.user?.real_name,
                     is_bot: botInfo.user?.is_bot,
@@ -168,7 +168,7 @@ export class SlackClient extends EventEmitter {
                     status: botInfo.user?.profile?.status_text,
                 });
             } catch (error) {
-                elizaLogger.error(
+                okaiLogger.error(
                     "❌ [BOT] Failed to verify bot details:",
                     error
                 );
@@ -192,7 +192,7 @@ export class SlackClient extends EventEmitter {
 
             // Add request logging middleware
             this.server.use((req: SlackRequest, res, next) => {
-                elizaLogger.debug("🌐 [HTTP] Incoming request:", {
+                okaiLogger.debug("🌐 [HTTP] Incoming request:", {
                     method: req.method,
                     path: req.path,
                     headers: req.headers,
@@ -208,7 +208,7 @@ export class SlackClient extends EventEmitter {
                 "/slack/events",
                 async (req: SlackRequest, res) => {
                     try {
-                        elizaLogger.debug(
+                        okaiLogger.debug(
                             "📥 [REQUEST] Incoming Slack event:",
                             {
                                 type: req.body?.type,
@@ -220,7 +220,7 @@ export class SlackClient extends EventEmitter {
 
                         // Handle URL verification
                         if (req.body?.type === "url_verification") {
-                            elizaLogger.debug(
+                            okaiLogger.debug(
                                 "🔑 [VERIFICATION] Challenge received:",
                                 req.body.challenge
                             );
@@ -229,7 +229,7 @@ export class SlackClient extends EventEmitter {
 
                         // Process the event
                         if (req.body?.event) {
-                            elizaLogger.debug("🎯 [EVENT] Processing event:", {
+                            okaiLogger.debug("🎯 [EVENT] Processing event:", {
                                 type: req.body.event.type,
                                 user: req.body.event.user,
                                 text: req.body.event.text,
@@ -238,7 +238,7 @@ export class SlackClient extends EventEmitter {
                             });
                             await this.handleEvent(req.body.event);
                         } else {
-                            elizaLogger.warn(
+                            okaiLogger.warn(
                                 "⚠️ [EVENT] Received request without event data"
                             );
                         }
@@ -246,7 +246,7 @@ export class SlackClient extends EventEmitter {
                         // Acknowledge receipt
                         res.status(200).send();
                     } catch (error) {
-                        elizaLogger.error(
+                        okaiLogger.error(
                             "❌ [ERROR] Error processing request:",
                             error
                         );
@@ -262,7 +262,7 @@ export class SlackClient extends EventEmitter {
                 "/slack/interactions",
                 async (req: SlackRequest, res) => {
                     try {
-                        elizaLogger.debug(
+                        okaiLogger.debug(
                             "🔄 [INTERACTION] Incoming interaction:",
                             {
                                 type: req.body?.type,
@@ -275,7 +275,7 @@ export class SlackClient extends EventEmitter {
                         // Always acknowledge interaction
                         res.status(200).send();
                     } catch (error) {
-                        elizaLogger.error(
+                        okaiLogger.error(
                             "❌ [ERROR] Error processing interaction:",
                             error
                         );
@@ -289,41 +289,41 @@ export class SlackClient extends EventEmitter {
             // Start server
             const port = config.SLACK_SERVER_PORT;
             this.server.listen(port, () => {
-                elizaLogger.success(
+                okaiLogger.success(
                     `🚀 [SERVER] Slack event server is running on port ${port}`
                 );
-                elizaLogger.success(
+                okaiLogger.success(
                     `✅ [INIT] Slack client successfully started for character ${this.character.name}`
                 );
-                elizaLogger.success(
+                okaiLogger.success(
                     `🤖 [READY] Bot user: @${auth.user} (${this.botUserId})`
                 );
-                elizaLogger.success(
+                okaiLogger.success(
                     `📡 [EVENTS] Listening for events at: /slack/events`
                 );
-                elizaLogger.success(
+                okaiLogger.success(
                     `💡 [INTERACTIONS] Listening for interactions at: /slack/interactions`
                 );
-                elizaLogger.success(`💡 [HELP] To interact with the bot:`);
-                elizaLogger.success(
+                okaiLogger.success(`💡 [HELP] To interact with the bot:`);
+                okaiLogger.success(
                     `   1. Direct message: Find @${auth.user} in DMs`
                 );
-                elizaLogger.success(
+                okaiLogger.success(
                     `   2. Channel: Mention @${auth.user} in any channel`
                 );
             });
         } catch (error) {
-            elizaLogger.error("❌ [INIT] Failed to start Slack client:", error);
+            okaiLogger.error("❌ [INIT] Failed to start Slack client:", error);
             throw error;
         }
     }
 
     async stop() {
-        elizaLogger.log("Stopping Slack client...");
+        okaiLogger.log("Stopping Slack client...");
         if (this.server) {
             await new Promise<void>((resolve) => {
                 this.server.listen().close(() => {
-                    elizaLogger.log("Server stopped");
+                    okaiLogger.log("Server stopped");
                     resolve();
                 });
             });
@@ -331,14 +331,14 @@ export class SlackClient extends EventEmitter {
     }
 }
 
-export const SlackClientInterface: ElizaClient = {
+export const SlackClientInterface: OKaiClient = {
     start: async (runtime: IAgentRuntime) => {
         const client = new SlackClient(runtime);
         await client.start();
         return client;
     },
     stop: async (_runtime: IAgentRuntime) => {
-        elizaLogger.warn("Slack client stopping...");
+        okaiLogger.warn("Slack client stopping...");
     },
 };
 

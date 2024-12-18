@@ -969,7 +969,7 @@ export class MessageManager {
         // strip all special characters
         messageContent = messageContent.replace(/[^a-zA-Z0-9\s]/g, "");
 
-        // short responses where eliza should stop talking and disengage unless mentioned again
+        // short responses where okai should stop talking and disengage unless mentioned again
         if (
             messageContent.length < MESSAGE_LENGTH_THRESHOLDS.LOSE_INTEREST &&
             LOSE_INTEREST_WORDS.some((word) => messageContent.includes(word))
@@ -1181,7 +1181,7 @@ export class MessageManager {
                 }
             }
         } catch (error) {
-            elizaLogger.error("Error in _shouldRespond team processing:", {
+            okaiLogger.error("Error in _shouldRespond team processing:", {
                 error,
                 agentId: this.runtime.agentId,
                 channelId: message.channelId,

@@ -1,4 +1,4 @@
-import { Evaluator, IAgentRuntime, Memory, State, elizaLogger } from "@ai16z/eliza";
+import { Evaluator, IAgentRuntime, Memory, State, okaiLogger } from "@okcashpro/okai";
 
 export const sampleEvaluator: Evaluator = {
     alwaysRun: false,
@@ -22,17 +22,17 @@ export const sampleEvaluator: Evaluator = {
     ],
     handler: async (runtime: IAgentRuntime, memory: Memory, state: State) => {
         // Evaluation logic for the evaluator
-        elizaLogger.log("Evaluating data in sampleEvaluator...");
+        okaiLogger.log("Evaluating data in sampleEvaluator...");
 
         // Example evaluation logic
         if (memory.content && memory.content.includes("important")) {
-            elizaLogger.log("Important content found in memory.");
+            okaiLogger.log("Important content found in memory.");
             return {
                 score: 1,
                 reason: "Memory contains important content."
             };
         } else {
-            elizaLogger.log("No important content found in memory.");
+            okaiLogger.log("No important content found in memory.");
             return {
                 score: 0,
                 reason: "Memory does not contain important content."

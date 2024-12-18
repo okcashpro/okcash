@@ -4,7 +4,7 @@ import {
     Memory,
     Provider,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 
 import { TonClient, WalletContractV4 } from "@ton/ton";
 import { KeyPair, mnemonicToPrivateKey } from "@ton/crypto";

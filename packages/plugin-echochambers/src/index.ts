@@ -1,4 +1,4 @@
-import { elizaLogger, Client, IAgentRuntime, Plugin } from "@ai16z/eliza";
+import { okaiLogger, Client, IAgentRuntime, Plugin } from "@okcashpro/okai";
 import { EchoChamberClient } from "./echoChamberClient";
 import { InteractionClient } from "./interactions";
 import { EchoChamberConfig } from "./types";
@@ -31,7 +31,7 @@ export const EchoChamberClientInterface: Client = {
                     "general",
             };
 
-            elizaLogger.log("Starting EchoChambers client...");
+            okaiLogger.log("Starting EchoChambers client...");
 
             // Initialize the API client
             const client = new EchoChamberClient(runtime, config);
@@ -41,20 +41,20 @@ export const EchoChamberClientInterface: Client = {
             const interactionClient = new InteractionClient(client, runtime);
             await interactionClient.start();
 
-            elizaLogger.success(
+            okaiLogger.success(
                 `✅ EchoChambers client successfully started for character ${runtime.character.name}`
             );
 
             return { client, interactionClient };
         } catch (error) {
-            elizaLogger.error("Failed to start EchoChambers client:", error);
+            okaiLogger.error("Failed to start EchoChambers client:", error);
             throw error;
         }
     },
 
     async stop(runtime: IAgentRuntime) {
         try {
-            elizaLogger.warn("Stopping EchoChambers client...");
+            okaiLogger.warn("Stopping EchoChambers client...");
 
             // Get client instances if they exist
             const clients = (runtime as any).clients?.filter(
@@ -67,9 +67,9 @@ export const EchoChamberClientInterface: Client = {
                 await client.stop();
             }
 
-            elizaLogger.success("EchoChambers client stopped successfully");
+            okaiLogger.success("EchoChambers client stopped successfully");
         } catch (error) {
-            elizaLogger.error("Error stopping EchoChambers client:", error);
+            okaiLogger.error("Error stopping EchoChambers client:", error);
             throw error;
         }
     },

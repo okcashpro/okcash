@@ -1,5 +1,5 @@
 import {
-    elizaLogger,
+    okaiLogger,
     ActionExample,
     Content,
     HandlerCallback,
@@ -10,7 +10,7 @@ import {
     generateObject,
     composeContext,
     type Action,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { WalletProvider } from "../providers/wallet";
 import { validateMultiversxConfig } from "../enviroment";
 
@@ -67,7 +67,7 @@ export default {
         _options: { [key: string]: unknown },
         callback?: HandlerCallback
     ) => {
-        elizaLogger.log("Starting CREATE_TOKEN handler...");
+        okaiLogger.log("Starting CREATE_TOKEN handler...");
 
         // Initialize or update state
         if (!state) {

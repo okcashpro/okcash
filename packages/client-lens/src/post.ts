@@ -4,8 +4,8 @@ import {
     IAgentRuntime,
     ModelClass,
     stringToUuid,
-    elizaLogger,
-} from "@ai16z/eliza";
+    okaiLogger,
+} from "@okcashpro/okai";
 import { LensClient } from "./client";
 import { formatTimeline, postTemplate } from "./prompts";
 import { publicationUuid } from "./utils";
@@ -29,7 +29,7 @@ export class LensPostManager {
             try {
                 await this.generateNewPublication();
             } catch (error) {
-                elizaLogger.error(error);
+                okaiLogger.error(error);
                 return;
             }
 
@@ -47,7 +47,7 @@ export class LensPostManager {
     }
 
     private async generateNewPublication() {
-        elizaLogger.info("Generating new publication");
+        okaiLogger.info("Generating new publication");
         try {
             const profile = await this.client.getProfile(this.profileId);
             await this.runtime.ensureUserExists(
@@ -95,7 +95,7 @@ export class LensPostManager {
             });
 
             if (this.runtime.getSetting("LENS_DRY_RUN") === "true") {
-                elizaLogger.info(`Dry run: would have posted: ${content}`);
+                okaiLogger.info(`Dry run: would have posted: ${content}`);
                 return;
             }
 
@@ -122,7 +122,7 @@ export class LensPostManager {
                     roomId
                 );
 
-                elizaLogger.info(`[Lens Client] Published ${publication.id}`);
+                okaiLogger.info(`[Lens Client] Published ${publication.id}`);
 
                 await this.runtime.messageManager.createMemory(
                     createPublicationMemory({
@@ -132,10 +132,10 @@ export class LensPostManager {
                     })
                 );
             } catch (error) {
-                elizaLogger.error("Error sending publication:", error);
+                okaiLogger.error("Error sending publication:", error);
             }
         } catch (error) {
-            elizaLogger.error("Error generating new publication:", error);
+            okaiLogger.error("Error generating new publication:", error);
         }
     }
 }

@@ -1,18 +1,18 @@
-import { AwsS3Service } from "@ai16z/plugin-node";
+import { AwsS3Service } from "@okcashpro/plugin-node";
 import {
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateImage,
     getEmbeddingZeroVector,
     IAgentRuntime,
     Memory,
     ServiceType,
     stringToUuid,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import {
     saveBase64Image,
     saveHeuristImage,
-} from "@ai16z/plugin-image-generation";
+} from "@okcashpro/plugin-image-generation";
 import { PublicKey } from "@solana/web3.js";
 import WalletSolana from "../provider/wallet/walletSolana.ts";
 
@@ -30,7 +30,7 @@ export async function createCollection({
     fee?: number;
 }) {
     const userId = runtime.agentId;
-    elizaLogger.log("User ID:", userId);
+    okaiLogger.log("User ID:", userId);
     const awsS3Service: AwsS3Service = runtime.getService(ServiceType.AWS_S3);
     const agentName = runtime.character.name;
     const roomId = stringToUuid("nft_generate_room-" + agentName);
@@ -67,7 +67,7 @@ export async function createCollection({
         const image = images.data[0];
         const filename = `collection-image`;
         if (image.startsWith("http")) {
-            elizaLogger.log("Generating image url:", image);
+            okaiLogger.log("Generating image url:", image);
         }
         // Choose save function based on image data format
         const filepath = image.startsWith("http")

@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.5](../index.md) / Client
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / Client
 
 # Type Alias: Client
 
@@ -38,4 +38,4 @@ Stop client connection
 
 ## Defined in
 
-[packages/core/src/types.ts:572](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L572)
+[packages/core/src/types.ts:572](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L572)

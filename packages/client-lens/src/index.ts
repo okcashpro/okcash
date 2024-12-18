@@ -1,4 +1,4 @@
-import { Client, IAgentRuntime, elizaLogger } from "@ai16z/eliza";
+import { Client, IAgentRuntime, okaiLogger } from "@okcashpro/okai";
 import { privateKeyToAccount } from "viem/accounts";
 import { LensClient } from "./client";
 import { LensPostManager } from "./post";
@@ -35,7 +35,7 @@ export class LensAgentClient implements Client {
             profileId: this.profileId,
         });
 
-        elizaLogger.info("Lens client initialized.");
+        okaiLogger.info("Lens client initialized.");
 
         this.ipfs = new StorjProvider(runtime);
 

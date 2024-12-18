@@ -1,13 +1,13 @@
 import {
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateObjectDeprecated,
     HandlerCallback,
     ModelClass,
     type IAgentRuntime,
     type Memory,
     type State,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { getIPDetailsTemplate } from "../templates";
 import { Address } from "viem";
 import { Asset, RESOURCE_TYPE } from "../types/api";
@@ -31,7 +31,7 @@ class GetIPDetailsAction {
     async getIPDetails(
         params: GetIPDetailsParams
     ): Promise<GetIPDetailsResponse> {
-        elizaLogger.log("Fetching from", `${API_URL}/${RESOURCE_TYPE.ASSET}`);
+        okaiLogger.log("Fetching from", `${API_URL}/${RESOURCE_TYPE.ASSET}`);
         return (await getResource(
             RESOURCE_TYPE.ASSET,
             params.ipId
@@ -73,7 +73,7 @@ export const getIPDetailsAction = {
         options: any,
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting GET_IP_DETAILS handler...");
+        okaiLogger.log("Starting GET_IP_DETAILS handler...");
 
         // Initialize or update state
         state = !state
@@ -100,7 +100,7 @@ export const getIPDetailsAction = {
             });
             return true;
         } catch (e) {
-            elizaLogger.error("Error fetching IP details:", e.message);
+            okaiLogger.error("Error fetching IP details:", e.message);
             callback?.({
                 text: `Error fetching IP details: ${e.message}`,
             });

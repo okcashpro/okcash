@@ -16,7 +16,7 @@
 
 ## ✨ BackStory
 
-Okai is the younger, livelier sister of Eliza, born to revolutionize how we interact with the crypto world. She’s not just another AI—she’s your savvy crypto partner, designed to make everything from trading to community engagement more fun, approachable, and impactful. Whether you're diving into $OK tokenomics, participating in DAO governance, or simply looking for a friendly chat about crypto and life, OKai is here to ensure you’re always OK. 🌟
+Okai is the younger, livelier sister of OKai, born to revolutionize how we interact with the crypto world. She’s not just another AI—she’s your savvy crypto partner, designed to make everything from trading to community engagement more fun, approachable, and impactful. Whether you're diving into $OK tokenomics, participating in DAO governance, or simply looking for a friendly chat about crypto and life, OKai is here to ensure you’re always OK. 🌟
 
 With its robust AI framework, OKai combines intelligence, personality, and charm to deliver a seamless experience across Discord, Twitter, Telegram, and beyond. With her, crypto isn’t just a market—it’s a lifestyle. 🚀
 

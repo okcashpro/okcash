@@ -1,4 +1,4 @@
-import { generateText, trimTokens, parseJSONObjectFromText } from "@ai16z/eliza";
+import { generateText, trimTokens, parseJSONObjectFromText } from "@okcashpro/okai";
 import {
     IAgentRuntime,
     IImageDescriptionService,
@@ -8,7 +8,7 @@ import {
     Media,
     ModelClass,
     ServiceType,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { WebClient } from '@slack/web-api';
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
@@ -20,11 +20,11 @@ async function generateSummary(
     text = trimTokens(text, 100000, "gpt-4o-mini");
 
     const prompt = `Please generate a concise summary for the following text:
-  
+
   Text: """
   ${text}
   """
-  
+
   Respond with a JSON object in the following format:
   \`\`\`json
   {
@@ -92,10 +92,10 @@ export class AttachmentManager {
         }
 
         let media: Media | null = null;
-        
+
         try {
             const videoService = this.runtime.getService<IVideoService>(ServiceType.VIDEO);
-            
+
             if (file.mimetype.startsWith("application/pdf")) {
                 media = await this.processPdfAttachment(file);
             } else if (file.mimetype.startsWith("text/plain")) {
@@ -217,7 +217,7 @@ export class AttachmentManager {
         try {
             const pdfBuffer = await this.fetchFileContent(file);
             const pdfService = this.runtime.getService<IPdfService>(ServiceType.PDF);
-            
+
             if (!pdfService) {
                 throw new Error("PDF service not found");
             }
@@ -276,8 +276,8 @@ export class AttachmentManager {
             }
 
             const imageDescription = await imageService.describeImage(file.url_private) || '';
-            const descriptionText = typeof imageDescription === 'string' 
-                ? imageDescription 
+            const descriptionText = typeof imageDescription === 'string'
+                ? imageDescription
                 : 'Image description not available';
 
             return {
@@ -329,4 +329,4 @@ export class AttachmentManager {
             text: `This is a file attachment. File name: ${file.name}, Size: ${file.size} bytes, Type: ${file.mimetype}`,
         };
     }
-} 
+}

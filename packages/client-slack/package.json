@@ -1,7 +1,7 @@
 {
-  "name": "@ai16z/client-slack",
+  "name": "@okcashpro/client-slack",
   "version": "0.1.6-alpha.4",
-  "description": "Slack client plugin for Eliza framework",
+  "description": "Slack client plugin for OKai framework",
   "main": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
@@ -17,7 +17,7 @@
     "example:transcribe": "ts-node src/examples/standalone-transcribe.ts"
   },
   "dependencies": {
-    "@ai16z/eliza": "workspace:*",
+    "@okcashpro/okai": "workspace:*",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@slack/events-api": "^3.0.1",
     "@slack/web-api": "^6.8.1",

@@ -1,13 +1,13 @@
 import {
     composeContext,
-    elizaLogger,
+    okaiLogger,
     generateObjectDeprecated,
     HandlerCallback,
     ModelClass,
     type IAgentRuntime,
     type Memory,
     type State,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import { WalletProvider } from "../providers/wallet";
 import { licenseIPTemplate } from "../templates";
 import { LicenseIPParams } from "../types";
@@ -55,7 +55,7 @@ export const licenseIPAction = {
         options: any,
         callback?: HandlerCallback
     ): Promise<boolean> => {
-        elizaLogger.log("Starting LICENSE_IP handler...");
+        okaiLogger.log("Starting LICENSE_IP handler...");
 
         // initialize or update state
         if (!state) {
@@ -84,7 +84,7 @@ export const licenseIPAction = {
             });
             return true;
         } catch (e) {
-            elizaLogger.error("Error licensing IP:", e.message);
+            okaiLogger.error("Error licensing IP:", e.message);
             callback?.({ text: `Error licensing IP: ${e.message}` });
             return false;
         }

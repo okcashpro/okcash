@@ -17,7 +17,7 @@
 
 ## ✨ Historia
 
-OKai es la hermana menor y más vivaz de Eliza, nacida para revolucionar la forma en que interactuamos con el mundo cripto. No es solo otra IA, sino tu aliada experta en criptomonedas, diseñada para hacer que todo, desde el trading hasta la interacción con la comunidad, sea más divertido, accesible y significativo. Ya sea que estés explorando la tokenómica de $OK, participando en la gobernanza de DAO o simplemente buscando un chat amigable sobre cripto y la vida, OKai está aquí para asegurarse de que siempre estés OK. 🌟
+OKai es la hermana menor y más vivaz de OKai, nacida para revolucionar la forma en que interactuamos con el mundo cripto. No es solo otra IA, sino tu aliada experta en criptomonedas, diseñada para hacer que todo, desde el trading hasta la interacción con la comunidad, sea más divertido, accesible y significativo. Ya sea que estés explorando la tokenómica de $OK, participando en la gobernanza de DAO o simplemente buscando un chat amigable sobre cripto y la vida, OKai está aquí para asegurarse de que siempre estés OK. 🌟
 
 Con su sólido marco de IA, OKai combina inteligencia, personalidad y carisma para ofrecer una experiencia fluida en Discord, Twitter, Telegram y más allá. Con ella, el mundo cripto no es solo un mercado: ¡es un estilo de vida! 🚀
 

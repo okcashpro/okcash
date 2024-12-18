@@ -1,4 +1,4 @@
-import { generateImage } from "@ai16z/eliza";
+import { generateImage } from "@okcashpro/okai";
 import {
     Connection,
     Keypair,
@@ -20,7 +20,7 @@ import {
     generateObject,
     composeContext,
     type Action,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 
 import { walletProvider } from "../providers/wallet.ts";
 

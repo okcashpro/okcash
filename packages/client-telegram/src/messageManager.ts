@@ -167,7 +167,7 @@ export class MessageManager {
         this.runtime = runtime;
 
         this._initializeTeamMemberUsernames().catch(error =>
-            elizaLogger.error("Error initializing team member usernames:", error)
+            okaiLogger.error("Error initializing team member usernames:", error)
         );
     }
 
@@ -181,10 +181,10 @@ export class MessageManager {
                 const chat = await this.bot.telegram.getChat(id);
                 if ('username' in chat && chat.username) {
                     this.teamMemberUsernames.set(id, chat.username);
-                    elizaLogger.info(`Cached username for team member ${id}: ${chat.username}`);
+                    okaiLogger.info(`Cached username for team member ${id}: ${chat.username}`);
                 }
             } catch (error) {
-                elizaLogger.error(`Error getting username for team member ${id}:`, error);
+                okaiLogger.error(`Error getting username for team member ${id}:`, error);
             }
         }
     }
@@ -370,7 +370,7 @@ export class MessageManager {
         try {
             let imageUrl: string | null = null;
 
-            elizaLogger.info(`Telegram Message: ${message}`)
+            okaiLogger.info(`Telegram Message: ${message}`)
 
             if ("photo" in message && message.photo?.length > 0) {
                 const photo = message.photo[message.photo.length - 1];
@@ -419,7 +419,7 @@ export class MessageManager {
             "text" in message &&
             message.text?.includes(`@${this.bot.botInfo?.username}`)
         ) {
-            elizaLogger.info(`Bot mentioned`)
+            okaiLogger.info(`Bot mentioned`)
             return true;
         }
 

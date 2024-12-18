@@ -1,12 +1,12 @@
 {
-  "name": "@ai16z/client-discord",
+  "name": "@okcashpro/client-discord",
   "version": "0.1.6-alpha.4",
   "main": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@ai16z/eliza": "workspace:*",
-    "@ai16z/plugin-node": "workspace:*",
+    "@okcashpro/okai": "workspace:*",
+    "@okcashpro/plugin-node": "workspace:*",
     "@discordjs/opus": "github:discordjs/opus",
     "@discordjs/rest": "2.4.0",
     "@discordjs/voice": "0.17.0",

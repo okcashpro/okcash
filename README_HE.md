@@ -3,18 +3,18 @@
 # אלייזה 🤖
 
 <div align="center">
-  <img src="./docs/static/img/eliza_banner.jpg" alt="אלייזה באנר" width="100%" />
+  <img src="./docs/static/img/okai_banner.jpg" alt="אלייזה באנר" width="100%" />
 </div>
 
 <div align="center">
 
-📖 [תיעוד](https://ai16z.github.io/eliza/) | 🎯 [דוגמאות](https://github.com/thejoven/awesome-eliza)
+📖 [תיעוד](https://okcashpro.github.io/okai/) | 🎯 [דוגמאות](https://github.com/okcashpro/awesome-okai)
 </div>
 
 
 <div align="center">
 
-[中文说明](https://github.com/ai16z/Elisa/blob/main/README_CN.md) | [日本語の説明](https://github.com/ai16z/Elisa/blob/main/README_JA.md) | [한국어 설명](https://github.com/ai16z/Elisa/blob/main/README_KOR.md) | [Français](https://github.com/ai16z/Elisa/blob/main/README_FR.md) | [Português](https://github.com/ai16z/Elisa/blob/main/README_PTBR.md) | [Türkçe](TR.md) | [Русский](https://github.com/ai16z/Elisa/blob/main/README_RU.md) | [Español](https://github.com/ai16z/Elisa/blob/main/README_ES.md) | [Italiano](https://github.com/ai16z/Elisa/blob/main/README_IT.md) | [ไทย](https://github.com/ai16z/Elisa/blob/main/README_TH.md) | [Deutsch](https://github.com/ai16z/Elisa/blob/main/README_DE.md) | [עִברִית](https://github.com/ai16z/Elisa/blob/main/README_HE.md)
+[中文说明](https://github.com/okcashpro/okai/blob/main/README_CN.md) | [日本語の説明](https://github.com/okcashpro/okai/blob/main/README_JA.md) | [한국어 설명](https://github.com/okcashpro/okai/blob/main/README_KOR.md) | [Français](https://github.com/okcashpro/okai/blob/main/README_FR.md) | [Português](https://github.com/okcashpro/okai/blob/main/README_PTBR.md) | [Türkçe](TR.md) | [Русский](https://github.com/okcashpro/okai/blob/main/README_RU.md) | [Español](https://github.com/okcashpro/okai/blob/main/README_ES.md) | [Italiano](https://github.com/okcashpro/okai/blob/main/README_IT.md) | [ไทย](https://github.com/okcashpro/okai/blob/main/README_TH.md) | [Deutsch](https://github.com/okcashpro/okai/blob/main/README_DE.md) | [עִברִית](https://github.com/okcashpro/okai/blob/main/README_HE.md)
 
 </div>
 
@@ -73,7 +73,7 @@
 <div align="right" dir="ltr">
 
 ```
-git clone https://github.com/ai16z/eliza-starter.git
+git clone https://github.com/okcashpro/okai-starter.git
 
 cp .env.example .env
 
@@ -83,14 +83,14 @@ pnpm i && pnpm start
 </div>
 
 
-לאחר מכן קרא את [התיעוד](https://ai16z.github.io/eliza/) כדי ללמוד כיצד להתאים את אלייזה.
+לאחר מכן קרא את [התיעוד](https://okcashpro.github.io/okai/) כדי ללמוד כיצד להתאים את אלייזה.
 
 ### התחלה ידנית של אלייזה (מומלץ רק למי שיודע מה הוא עושה)
 <div align="right">
 
 ```
 # שכפול המאגר
-git clone https://github.com/ai16z/eliza.git
+git clone https://github.com/okcashpro/okai.git
 
 # מעבר לגרסה האחרונה
 git checkout $(git describe --tags --abbrev=0)
@@ -101,7 +101,7 @@ git checkout $(git describe --tags --abbrev=0)
 
 <div align="right">
 
-[![פתח ב-Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ai16z/eliza/tree/main)
+[![פתח ב-Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/okcashpro/okai/tree/main)
 
 </div>
 
@@ -167,23 +167,23 @@ pnpm install --include=optional sharp
 
 <div align="right">
 
-[GitHub Issues](https://github.com/ai16z/eliza/issues) מתאים ביותר עבור: באגים ופרופוזיציות לתכונות -
+[GitHub Issues](https://github.com/okcashpro/okai/issues) מתאים ביותר עבור: באגים ופרופוזיציות לתכונות -
 
-[Discord](https://discord.gg/ai16z) מתאים ביותר עבור: שיתוף היישומים שלך והשתתפות בקהילה -
+[Discord](https://discord.gg/okcashpro) מתאים ביותר עבור: שיתוף היישומים שלך והשתתפות בקהילה -
 </div>
 
 ## תורמים
 
 <!-- <div align="right"> -->
 
-<a href="https://github.com/ai16z/eliza/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ai16z/eliza" />
+<a href="https://github.com/okcashpro/okai/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=okcashpro/okai" />
 </a>
 
 <!-- </div> -->
 
 ## היסטוריית כוכבים
 
-[![תרשים היסטוריית כוכבים](https://api.star-history.com/svg?repos=ai16z/eliza&type=Date)](https://star-history.com/#ai16z/eliza&Date)
+[![תרשים היסטוריית כוכבים](https://api.star-history.com/svg?repos=okcashpro/okai&type=Date)](https://star-history.com/#okcashpro/okai&Date)
 
 </div>

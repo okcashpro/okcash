@@ -12,14 +12,14 @@ Welcome! This document is designed to help you understand how you can be part of
 
 ### For Developers
 
-1. **Extend Eliza's Capabilities**
+1. **Extend OKai's Capabilities**
     - Develop new actions, evaluators, and providers
     - Improve existing components and modules
 
-2. **Enhance Infrastructure** 
+2. **Enhance Infrastructure**
     - Review open issues and submit PRs
     - Test and update documentation
-    - Optimize performance 
+    - Optimize performance
     - Improve deployment solutions
 
 3. **Conduct Code Reviews**
@@ -50,10 +50,10 @@ Welcome! This document is designed to help you understand how you can be part of
     - Develop characters and scenarios that showcase the potential of AI agents
     - Collaborate with artists to create immersive, multimedia experiences
 
-2. **Improve Documentation**  
+2. **Improve Documentation**
     - Write clear, concise, and accessible documentation
     - Create tutorials, guides, and FAQs to help users get started
-    - Provide examples and use cases to demonstrate Eliza's capabilities
+    - Provide examples and use cases to demonstrate OKai's capabilities
 
 ### For Artists and Creators
 
@@ -76,5 +76,5 @@ Welcome! This document is designed to help you understand how you can be part of
 
 2. **Provide Support**
     - Answer questions and provide guidance to new contributors
-    - Triage issues and help prioritize bug fixes and feature requests 
+    - Triage issues and help prioritize bug fixes and feature requests
     - Act as a liaison between the community and the core development team

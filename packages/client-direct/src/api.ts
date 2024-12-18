@@ -4,9 +4,9 @@ import cors from "cors";
 
 import {
     AgentRuntime,
-    elizaLogger,
+    okaiLogger,
     validateCharacterConfig,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 
 import { REST, Routes } from "discord.js";
 
@@ -67,7 +67,7 @@ export function createApiRouter(agents: Map<string, AgentRuntime>, directClient)
         try {
           validateCharacterConfig(character)
         } catch(e) {
-          elizaLogger.error(`Error parsing character: ${e}`);
+          okaiLogger.error(`Error parsing character: ${e}`);
           res.status(400).json({
             success: false,
             message: e.message,
@@ -77,7 +77,7 @@ export function createApiRouter(agents: Map<string, AgentRuntime>, directClient)
 
         // start it up (and register it)
         agent = await directClient.startAgent(character)
-        elizaLogger.log(`${character.name} started`)
+        okaiLogger.log(`${character.name} started`)
 
         res.json({
             id: character.id,

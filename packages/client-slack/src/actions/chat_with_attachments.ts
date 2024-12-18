@@ -3,8 +3,8 @@ import {
     generateText,
     trimTokens,
     parseJSONObjectFromText,
-} from "@ai16z/eliza";
-import { models } from "@ai16z/eliza";
+} from "@okcashpro/okai";
+import { models } from "@okcashpro/okai";
 import {
     Action,
     ActionExample,
@@ -15,7 +15,7 @@ import {
     Memory,
     ModelClass,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 
 export const summarizationTemplate = `# Summarized so far (we are adding to this)
 {{currentSummary}}

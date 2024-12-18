@@ -6,7 +6,7 @@ sidebar_position: 2
 
 ## Prerequisites
 
-Before getting started with Eliza, ensure you have:
+Before getting started with OKai, ensure you have:
 - [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [pnpm 9+](https://pnpm.io/installation)
 - Git for version control
@@ -17,18 +17,18 @@ Before getting started with Eliza, ensure you have:
 
 1. **Clone and Install**
 
-   Please be sure to check what the [latest available stable version tag](https://github.com/ai16z/eliza/tags) is.
+   Please be sure to check what the [latest available stable version tag](https://github.com/okcashpro/okai/tags) is.
 
    Clone the repository
 
    ```bash
-   git clone https://github.com/ai16z/eliza.git
+   git clone https://github.com/okcashpro/okai.git
    ```
 
    Enter directory
 
    ```bash
-   cd eliza
+   cd okai
    ```
 
    Switch to latest tagged release
@@ -85,7 +85,7 @@ Please only use this command when you initially instantiating the repo or are bu
 
 ## Choose Your Model
 
-Eliza supports multiple AI models:
+OKai supports multiple AI models:
 
 - **Heurist**: Set `modelProvider: "heurist"` in your character file. Most models are uncensored.
   - LLM: Select available LLMs [here](https://docs.heurist.ai/dev-guide/supported-models#large-language-models-llms) and configure `SMALL_HEURIST_MODEL`,`MEDIUM_HEURIST_MODEL`,`LARGE_HEURIST_MODEL`
@@ -255,10 +255,10 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
    pnpm add -w -D ts-node typescript @types/node
 
    # Add dependencies to the agent package specifically
-   pnpm add -D ts-node typescript @types/node --filter "@ai16z/agent"
+   pnpm add -D ts-node typescript @types/node --filter "@okcashpro/agent"
 
    # Also add to the core package since it's needed there too
-   pnpm add -D ts-node typescript @types/node --filter "@ai16z/eliza"
+   pnpm add -D ts-node typescript @types/node --filter "@okcashpro/okai"
 
    # First clean everything
    pnpm clean
@@ -277,7 +277,7 @@ pnpm start --characters="characters/trump.character.json,characters/tate.charact
    If you see
 
    ```
-   Error starting agents: Error: The module '.../eliza-agents/dv/eliza/node_modules/better-sqlite3/build/Release/better_sqlite3.node'
+   Error starting agents: Error: The module '.../okai-agents/dv/okai/node_modules/better-sqlite3/build/Release/better_sqlite3.node'
    was compiled against a different Node.js version using
    NODE_MODULE_VERSION 131. This version of Node.js requires
    NODE_MODULE_VERSION 127. Please try re-compiling or re-installing
@@ -310,6 +310,6 @@ Once you have your agent running, explore:
 3. ⚡ [Add Custom Actions](./core/actions.md)
 4. 🔧 [Advanced Configuration](./guides/configuration.md)
 
-For detailed API documentation, troubleshooting, and advanced features, check out our [full documentation](https://ai16z.github.io/eliza/).
+For detailed API documentation, troubleshooting, and advanced features, check out our [full documentation](https://okcashpro.github.io/okai/).
 
-Join our [Discord community](https://discord.gg/ai16z) for support and updates!
+Join our [Discord community](https://discord.gg/okcashpro) for support and updates!

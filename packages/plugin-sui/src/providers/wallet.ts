@@ -4,7 +4,7 @@ import {
     Memory,
     Provider,
     State,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 
 
 import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";

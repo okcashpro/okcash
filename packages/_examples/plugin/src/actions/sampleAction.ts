@@ -7,8 +7,8 @@ import {
     composeContext,
     generateObject,
     ModelClass,
-    elizaLogger,
-} from "@ai16z/eliza";
+    okaiLogger,
+} from "@okcashpro/okai";
 
 import { CreateResourceSchema, isCreateResourceContent } from "../types";
 
@@ -67,7 +67,7 @@ Resource has been stored in memory.`,
                 []
             );
         } catch (error) {
-            elizaLogger.error("Error creating resource:", error);
+            okaiLogger.error("Error creating resource:", error);
             callback(
                 { text: "Failed to create resource. Please check the logs." },
                 []

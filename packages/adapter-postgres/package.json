@@ -1,11 +1,11 @@
 {
-  "name": "@ai16z/adapter-postgres",
+  "name": "@okcashpro/adapter-postgres",
   "version": "0.1.6-alpha.4",
   "main": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@ai16z/eliza": "workspace:*",
+    "@okcashpro/okai": "workspace:*",
     "@types/pg": "8.11.10",
     "pg": "8.13.1"
   },

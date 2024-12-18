@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.5](../index.md) / IDatabaseCacheAdapter
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / IDatabaseCacheAdapter
 
 # Interface: IDatabaseCacheAdapter
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:931](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L931)
+[packages/core/src/types.ts:931](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L931)
 
 ***
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:936](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L936)
+[packages/core/src/types.ts:936](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L936)
 
 ***
 
@@ -68,4 +68,4 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:942](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L942)
+[packages/core/src/types.ts:942](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L942)

@@ -1,4 +1,4 @@
-import { IAgentRuntime, elizaLogger } from "@ai16z/eliza";
+import { IAgentRuntime, okaiLogger } from "@okcashpro/okai";
 
 export async function validateEchoChamberConfig(
     runtime: IAgentRuntime
@@ -7,14 +7,14 @@ export async function validateEchoChamberConfig(
     const apiKey = runtime.getSetting("ECHOCHAMBERS_API_KEY");
 
     if (!apiUrl) {
-        elizaLogger.error(
+        okaiLogger.error(
             "ECHOCHAMBERS_API_URL is required. Please set it in your environment variables."
         );
         throw new Error("ECHOCHAMBERS_API_URL is required");
     }
 
     if (!apiKey) {
-        elizaLogger.error(
+        okaiLogger.error(
             "ECHOCHAMBERS_API_KEY is required. Please set it in your environment variables."
         );
         throw new Error("ECHOCHAMBERS_API_KEY is required");
@@ -24,7 +24,7 @@ export async function validateEchoChamberConfig(
     try {
         new URL(apiUrl);
     } catch (error) {
-        elizaLogger.error(
+        okaiLogger.error(
             `Invalid ECHOCHAMBERS_API_URL format: ${apiUrl}. Please provide a valid URL.`
         );
         throw new Error("Invalid ECHOCHAMBERS_API_URL format");
@@ -41,15 +41,15 @@ export async function validateEchoChamberConfig(
     );
 
     if (isNaN(pollInterval) || pollInterval < 1) {
-        elizaLogger.error(
+        okaiLogger.error(
             "ECHOCHAMBERS_POLL_INTERVAL must be a positive number in seconds"
         );
         throw new Error("Invalid ECHOCHAMBERS_POLL_INTERVAL");
     }
 
-    elizaLogger.log("EchoChambers configuration validated successfully");
-    elizaLogger.log(`API URL: ${apiUrl}`);
-    elizaLogger.log(`Username: ${username}`);
-    elizaLogger.log(`Default Room: ${defaultRoom}`);
-    elizaLogger.log(`Poll Interval: ${pollInterval}s`);
+    okaiLogger.log("EchoChambers configuration validated successfully");
+    okaiLogger.log(`API URL: ${apiUrl}`);
+    okaiLogger.log(`Username: ${username}`);
+    okaiLogger.log(`Default Room: ${defaultRoom}`);
+    okaiLogger.log(`Poll Interval: ${pollInterval}s`);
 }

@@ -5,11 +5,11 @@ import {
     Memory,
     ModelClass,
     stringToUuid,
-    elizaLogger,
+    okaiLogger,
     HandlerCallback,
     Content,
     type IAgentRuntime,
-} from "@ai16z/eliza";
+} from "@okcashpro/okai";
 import type { LensClient } from "./client";
 import { toHex } from "viem";
 import { buildConversationThread, createPublicationMemory } from "./memory";
@@ -40,7 +40,7 @@ export class LensInteractionManager {
             try {
                 await this.handleInteractions();
             } catch (error) {
-                elizaLogger.error(error);
+                okaiLogger.error(error);
                 return;
             }
 
@@ -59,7 +59,7 @@ export class LensInteractionManager {
     }
 
     private async handleInteractions() {
-        elizaLogger.info("Handle Lens interactions");
+        okaiLogger.info("Handle Lens interactions");
         // TODO: handle next() for pagination
         const { mentions } = await this.client.getMentions();
 
@@ -128,12 +128,12 @@ export class LensInteractionManager {
         thread: AnyPublicationFragment[];
     }) {
         if (publication.by.id === agent.id) {
-            elizaLogger.info("skipping cast from bot itself", publication.id);
+            okaiLogger.info("skipping cast from bot itself", publication.id);
             return;
         }
 
         if (!memory.content.text) {
-            elizaLogger.info("skipping cast with no text", publication.id);
+            okaiLogger.info("skipping cast with no text", publication.id);
             return { text: "", action: "IGNORE" };
         }
 
@@ -205,7 +205,7 @@ export class LensInteractionManager {
             shouldRespondResponse === "IGNORE" ||
             shouldRespondResponse === "STOP"
         ) {
-            elizaLogger.info(
+            okaiLogger.info(
                 `Not responding to publication because generated ShouldRespond was ${shouldRespondResponse}`
             );
             return;
@@ -230,7 +230,7 @@ export class LensInteractionManager {
         if (!responseContent.text) return;
 
         if (this.runtime.getSetting("LENS_DRY_RUN") === "true") {
-            elizaLogger.info(
+            okaiLogger.info(
                 `Dry run: would have responded to publication ${publication.id} with ${responseContent.text}`
             );
             return;

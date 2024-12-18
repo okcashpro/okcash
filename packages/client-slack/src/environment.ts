@@ -1,5 +1,5 @@
-import { IAgentRuntime } from "@ai16z/eliza";
-import { elizaLogger } from "@ai16z/eliza";
+import { IAgentRuntime } from "@okcashpro/okai";
+import { okaiLogger } from "@okcashpro/okai";
 import { z } from "zod";
 
 export const slackEnvSchema = z.object({
@@ -16,7 +16,7 @@ export type SlackConfig = z.infer<typeof slackEnvSchema>;
 
 export async function validateSlackConfig(runtime: IAgentRuntime): Promise<SlackConfig> {
     try {
-        elizaLogger.debug("Validating Slack configuration with runtime settings");
+        okaiLogger.debug("Validating Slack configuration with runtime settings");
         const config = {
             SLACK_APP_ID: runtime.getSetting("SLACK_APP_ID") || process.env.SLACK_APP_ID,
             SLACK_CLIENT_ID: runtime.getSetting("SLACK_CLIENT_ID") || process.env.SLACK_CLIENT_ID,
@@ -27,18 +27,18 @@ export async function validateSlackConfig(runtime: IAgentRuntime): Promise<Slack
             SLACK_SERVER_PORT: runtime.getSetting("SLACK_SERVER_PORT") || process.env.SLACK_SERVER_PORT,
         };
 
-        elizaLogger.debug("Parsing configuration with schema", config);
+        okaiLogger.debug("Parsing configuration with schema", config);
         const validated = slackEnvSchema.parse(config);
-        elizaLogger.debug("Configuration validated successfully");
+        okaiLogger.debug("Configuration validated successfully");
         return validated;
     } catch (error) {
         if (error instanceof z.ZodError) {
             const errorMessages = error.errors
                 .map(e => `${e.path.join('.')}: ${e.message}`)
                 .join('\n');
-            elizaLogger.error("Configuration validation failed:", errorMessages);
+            okaiLogger.error("Configuration validation failed:", errorMessages);
             throw new Error(`Slack configuration validation failed:\n${errorMessages}`);
         }
         throw error;
     }
-} 
+}

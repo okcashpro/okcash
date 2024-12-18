@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.5](../index.md) / postActionResponseFooter
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / postActionResponseFooter
 
 # Variable: postActionResponseFooter
 
@@ -6,4 +6,4 @@
 
 ## Defined in
 
-[packages/core/src/parsing.ts:151](https://github.com/ai16z/eliza/blob/main/packages/core/src/parsing.ts#L151)
+[packages/core/src/parsing.ts:151](https://github.com/okcashpro/okai/blob/main/packages/core/src/parsing.ts#L151)

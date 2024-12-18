@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.5](../index.md) / parseJsonArrayFromText
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / parseJsonArrayFromText
 
 # Function: parseJsonArrayFromText()
 
@@ -23,4 +23,4 @@ An array parsed from the JSON string if successful; otherwise, null.
 
 ## Defined in
 
-[packages/core/src/parsing.ts:61](https://github.com/ai16z/eliza/blob/main/packages/core/src/parsing.ts#L61)
+[packages/core/src/parsing.ts:61](https://github.com/okcashpro/okai/blob/main/packages/core/src/parsing.ts#L61)

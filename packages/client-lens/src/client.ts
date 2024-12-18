@@ -1,4 +1,4 @@
-import { IAgentRuntime, elizaLogger } from "@ai16z/eliza";
+import { IAgentRuntime, okaiLogger } from "@okcashpro/okai";
 import {
     AnyPublicationFragment,
     LensClient as LensClientCore,
@@ -62,7 +62,7 @@ export class LensClient {
 
             this.authenticated = true;
         } catch (error) {
-            elizaLogger.error("client-lens::client error: ", error);
+            okaiLogger.error("client-lens::client error: ", error);
             throw error;
         }
     }
@@ -75,7 +75,7 @@ export class LensClient {
         try {
             if (!this.authenticated) {
                 await this.authenticate();
-                elizaLogger.log("done authenticating");
+                okaiLogger.log("done authenticating");
             }
             let broadcastResult;
 
@@ -89,7 +89,7 @@ export class LensClient {
                     : await this.createPostMomoka(contentURI);
             }
 
-            elizaLogger.log("broadcastResult", broadcastResult);
+            okaiLogger.log("broadcastResult", broadcastResult);
 
             if (broadcastResult.id) {
                 return await this.core.publication.fetch({
@@ -107,7 +107,7 @@ export class LensClient {
                 });
             }
         } catch (error) {
-            elizaLogger.error("client-lens::client error: ", error);
+            okaiLogger.error("client-lens::client error: ", error);
             throw error;
         }
     }
@@ -201,7 +201,7 @@ export class LensClient {
             forProfileId: profileId,
         });
         if (!result?.id) {
-            elizaLogger.error("Error fetching user by profileId");
+            okaiLogger.error("Error fetching user by profileId");
 
             throw "getProfile ERROR";
         }

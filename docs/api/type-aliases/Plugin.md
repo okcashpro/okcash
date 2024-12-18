@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.5-alpha.5](../index.md) / Plugin
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / Plugin
 
 # Type Alias: Plugin
 
@@ -52,4 +52,4 @@ Optional clients
 
 ## Defined in
 
-[packages/core/src/types.ts:583](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L583)
+[packages/core/src/types.ts:583](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L583)
