@@ -58,7 +58,8 @@ jobs:
               id: release_body
               run: |
                   if [ -f CHANGELOG.md ]; then
-                    echo "body=$(cat CHANGELOG.md)" >> $GITHUB_OUTPUT
+                    body="$(awk '{printf "%s\\n", $0}' CHANGELOG.md | sed 's/"/\\"/g')"
+                    echo "body=${body}" >> $GITHUB_OUTPUT
                   else
                     echo "body=No changelog provided for this release." >> $GITHUB_OUTPUT
                   fi
