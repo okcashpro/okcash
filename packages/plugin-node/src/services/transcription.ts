@@ -14,6 +14,7 @@ import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
 import { promisify } from "util";
+import { createClient, DeepgramClient } from "@deepgram/sdk";
 
 // const __dirname = path.dirname(new URL(import.meta.url).pathname); #compatibility issues with windows
 const __filename = fileURLToPath(import.meta.url);
@@ -25,17 +26,23 @@ export class TranscriptionService
     extends Service
     implements ITranscriptionService
 {
+    private runtime: IAgentRuntime | null = null;
     static serviceType: ServiceType = ServiceType.TRANSCRIPTION;
     private CONTENT_CACHE_DIR: string;
     private DEBUG_AUDIO_DIR: string;
     private TARGET_SAMPLE_RATE = 16000; // Common sample rate for speech recognition
     private isCudaAvailable: boolean = false;
     private openai: OpenAI | null = null;
+    private deepgram?: DeepgramClient;
 
     private queue: { audioBuffer: ArrayBuffer; resolve: Function }[] = [];
     private processing: boolean = false;
 
-    async initialize(_runtime: IAgentRuntime): Promise<void> {}
+    async initialize(_runtime: IAgentRuntime): Promise<void> {
+        this.runtime = _runtime;
+        const deepgramKey = this.runtime.getSetting("DEEPGRAM_API_KEY");
+        this.deepgram = deepgramKey ? createClient(deepgramKey) : null;
+    }
 
     constructor() {
         super();
@@ -194,8 +201,9 @@ export class TranscriptionService
         while (this.queue.length > 0) {
             const { audioBuffer, resolve } = this.queue.shift()!;
             let result: string | null = null;
-
-            if (this.openai) {
+            if (this.deepgram) {
+                result = await this.transcribeWithDeepgram(audioBuffer);
+            } else if (this.openai) {
                 result = await this.transcribeWithOpenAI(audioBuffer);
             } else {
                 result = await this.transcribeLocally(audioBuffer);
@@ -205,6 +213,23 @@ export class TranscriptionService
         }
 
         this.processing = false;
+    }
+
+    private async transcribeWithDeepgram(
+        audioBuffer: ArrayBuffer
+    ): Promise<string | null> {
+        const buffer = Buffer.from(audioBuffer);
+        const response = await this.deepgram.listen.prerecorded.transcribeFile(
+            buffer,
+            {
+                model: "nova-2",
+                language: "en-US",
+                smart_format: true,
+            }
+        );
+        const result =
+            response.result.results.channels[0].alternatives[0].transcript;
+        return result;
     }
 
     private async transcribeWithOpenAI(

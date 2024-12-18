@@ -1,7 +1,11 @@
-import { getEmbeddingZeroVector } from "@okcashpro/okai";
-import { Character, Client as OKaiClient, IAgentRuntime } from "@okcashpro/okai";
-import { stringToUuid } from "@okcashpro/okai";
-import { okaiLogger } from "@okcashpro/okai";
+import {
+    getEmbeddingZeroVector,
+    stringToUuid,
+    okaiLogger,
+    Character,
+    Client as OKaiClient,
+    IAgentRuntime,
+} from "@okcashpro/okai";
 import {
     Client,
     Events,
@@ -109,6 +113,16 @@ export class DiscordClient extends EventEmitter {
             Events.InteractionCreate,
             this.handleInteractionCreate.bind(this)
         );
+    }
+
+    async stop() {
+        try {
+          // disconnect websocket
+          // this unbinds all the listeners
+          await this.client.destroy();
+        } catch(e) {
+          okaiLogger.error('client-discord instance stop err', e);
+        }
     }
 
     private async onClientReady(readyClient: { user: { tag: any; id: any } }) {
@@ -388,7 +402,13 @@ export function startDiscord(runtime: IAgentRuntime) {
 
 export const DiscordClientInterface: OKaiClient = {
     start: async (runtime: IAgentRuntime) => new DiscordClient(runtime),
-    stop: async (_runtime: IAgentRuntime) => {
-        console.warn("Discord client does not support stopping yet");
+    stop: async (runtime: IAgentRuntime) => {
+        try {
+          // stop it
+          okaiLogger.log('Stopping discord client', runtime.agentId)
+          await runtime.clients.discord.stop()
+        } catch(e) {
+          okaiLogger.error('client-discord interface stop error', e);
+        }
     },
 };

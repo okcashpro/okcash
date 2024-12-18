@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / Model
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / Model
 
 # Type Alias: Model
 
@@ -100,4 +100,4 @@ Model names by size class
 
 ## Defined in
 
-[packages/core/src/types.ts:142](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L142)
+[packages/core/src/types.ts:142](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L142)

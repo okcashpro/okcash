@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / Plugin
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / Plugin
 
 # Type Alias: Plugin
 
@@ -52,4 +52,4 @@ Optional clients
 
 ## Defined in
 
-[packages/core/src/types.ts:574](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L574)
+[packages/core/src/types.ts:583](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L583)

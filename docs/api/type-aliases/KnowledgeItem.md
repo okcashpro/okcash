@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / KnowledgeItem
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / KnowledgeItem
 
 # Type Alias: KnowledgeItem
 
@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:1154](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L1154)
+[packages/core/src/types.ts:1218](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L1218)

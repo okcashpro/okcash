@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / ActionExample
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / ActionExample
 
 # Interface: ActionExample
 
@@ -14,7 +14,7 @@ User associated with the example
 
 #### Defined in
 
-[packages/core/src/types.ts:39](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L39)
+[packages/core/src/types.ts:39](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L39)
 
 ***
 
@@ -26,4 +26,4 @@ Content of the example
 
 #### Defined in
 
-[packages/core/src/types.ts:42](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L42)
+[packages/core/src/types.ts:42](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L42)

@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / Room
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / Room
 
 # Interface: Room
 
@@ -14,7 +14,7 @@ Unique identifier
 
 #### Defined in
 
-[packages/core/src/types.ts:531](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L531)
+[packages/core/src/types.ts:537](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L537)
 
 ***
 
@@ -26,4 +26,4 @@ Room participants
 
 #### Defined in
 
-[packages/core/src/types.ts:534](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L534)
+[packages/core/src/types.ts:540](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L540)

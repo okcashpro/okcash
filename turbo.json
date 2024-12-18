@@ -5,7 +5,10 @@
             "dependsOn": ["build"]
         },
         "@okcashpro/agent#check-types": {
-            "dependsOn": ["@okcashpro/plugin-solana#build"]
+            "dependsOn": [
+                "@okcashpro/plugin-solana#build",
+                "@okcashpro/plugin-direct#build"
+            ]
         },
         "build": {
             "outputs": ["dist/**"],
@@ -14,6 +17,9 @@
         "@okcashpro/plugin-solana#build": {
             "outputs": ["dist/**"],
             "dependsOn": ["@okcashpro/plugin-trustdb#build"]
+        },
+        "@okcashpro/plugin-nft-generation#build": {
+            "dependsOn": ["@okcashpro/plugin-node#build"]
         },
         "okai-docs#build": {
             "outputs": ["build/**"]

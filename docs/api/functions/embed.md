@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / embed
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / embed
 
 # Function: embed()
 
@@ -28,4 +28,4 @@ If the API request fails
 
 ## Defined in
 
-[packages/core/src/embedding.ts:145](https://github.com/monilpat/okai/blob/main/packages/core/src/embedding.ts#L145)
+[packages/core/src/embedding.ts:145](https://github.com/okcashpro/okai/blob/main/packages/core/src/embedding.ts#L145)

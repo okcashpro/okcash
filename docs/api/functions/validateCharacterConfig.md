@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / validateCharacterConfig
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / validateCharacterConfig
 
 # Function: validateCharacterConfig()
 
@@ -16,4 +16,4 @@ Validation function
 
 ## Defined in
 
-[packages/core/src/environment.ts:133](https://github.com/monilpat/okai/blob/main/packages/core/src/environment.ts#L133)
+[packages/core/src/environment.ts:138](https://github.com/okcashpro/okai/blob/main/packages/core/src/environment.ts#L138)

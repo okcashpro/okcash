@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / createRelationship
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / createRelationship
 
 # Function: createRelationship()
 
@@ -20,4 +20,4 @@
 
 ## Defined in
 
-[packages/core/src/relationships.ts:3](https://github.com/monilpat/okai/blob/main/packages/core/src/relationships.ts#L3)
+[packages/core/src/relationships.ts:3](https://github.com/okcashpro/okai/blob/main/packages/core/src/relationships.ts#L3)

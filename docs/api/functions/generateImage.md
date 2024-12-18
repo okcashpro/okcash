@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / generateImage
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / generateImage
 
 # Function: generateImage()
 
@@ -48,4 +48,4 @@
 
 ## Defined in
 
-[packages/core/src/generation.ts:799](https://github.com/monilpat/okai/blob/main/packages/core/src/generation.ts#L799)
+[packages/core/src/generation.ts:925](https://github.com/okcashpro/okai/blob/main/packages/core/src/generation.ts#L925)

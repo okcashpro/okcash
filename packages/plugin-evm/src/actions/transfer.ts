@@ -1,25 +1,42 @@
-import { ByteArray, parseEther, type Hex } from "viem";
-import { WalletProvider } from "../providers/wallet";
+import { ByteArray, formatEther, parseEther, type Hex } from "viem";
+import {
+    composeContext,
+    generateObjectDeprecated,
+    HandlerCallback,
+    ModelClass,
+    type IAgentRuntime,
+    type Memory,
+    type State,
+} from "@okcashpro/okai";
+
+import { initWalletProvider, WalletProvider } from "../providers/wallet";
 import type { Transaction, TransferParams } from "../types";
 import { transferTemplate } from "../templates";
-import type { IAgentRuntime, Memory, State } from "@okcashpro/okai";
 
 export { transferTemplate };
+
+// Exported for tests
 export class TransferAction {
     constructor(private walletProvider: WalletProvider) {}
 
-    async transfer(
-        runtime: IAgentRuntime,
-        params: TransferParams
-    ): Promise<Transaction> {
-        const walletClient = this.walletProvider.getWalletClient();
-        const [fromAddress] = await walletClient.getAddresses();
+    async transfer(params: TransferParams): Promise<Transaction> {
+        console.log(
+            `Transferring: ${params.amount} tokens to (${params.toAddress} on ${params.fromChain})`
+        );
 
-        await this.walletProvider.switchChain(runtime, params.fromChain);
+        if (!params.data) {
+            params.data = "0x";
+        }
+
+        await this.walletProvider.switchChain(params.fromChain);
+
+        const walletClient = this.walletProvider.getWalletClient(
+            params.fromChain
+        );
 
         try {
             const hash = await walletClient.sendTransaction({
-                account: fromAddress,
+                account: walletClient.account,
                 to: params.toAddress,
                 value: parseEther(params.amount),
                 data: params.data as Hex,
@@ -39,7 +56,7 @@ export class TransferAction {
 
             return {
                 hash,
-                from: fromAddress,
+                from: walletClient.account.address,
                 to: params.toAddress,
                 value: parseEther(params.amount),
                 data: params.data as Hex,
@@ -50,6 +67,43 @@ export class TransferAction {
     }
 }
 
+const buildTransferDetails = async (
+    state: State,
+    runtime: IAgentRuntime,
+    wp: WalletProvider
+): Promise<TransferParams> => {
+    const context = composeContext({
+        state,
+        template: transferTemplate,
+    });
+
+    const chains = Object.keys(wp.chains);
+
+    const contextWithChains = context.replace(
+        "SUPPORTED_CHAINS",
+        chains.toString()
+    );
+
+    const transferDetails = (await generateObjectDeprecated({
+        runtime,
+        context: contextWithChains,
+        modelClass: ModelClass.SMALL,
+    })) as TransferParams;
+
+    const existingChain = wp.chains[transferDetails.fromChain];
+
+    if (!existingChain) {
+        throw new Error(
+            "The chain " +
+                transferDetails.fromChain +
+                " not configured yet. Add the chain or choose one from configured: " +
+                chains.toString()
+        );
+    }
+
+    return transferDetails;
+};
+
 export const transferAction = {
     name: "transfer",
     description: "Transfer tokens between addresses on the same chain",
@@ -57,11 +111,58 @@ export const transferAction = {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        options: any
+        options: any,
+        callback?: HandlerCallback
     ) => {
-        const walletProvider = new WalletProvider(runtime);
+        console.log("Transfer action handler called");
+        const walletProvider = initWalletProvider(runtime);
         const action = new TransferAction(walletProvider);
-        return action.transfer(runtime, options);
+
+        // Compose transfer context
+        const transferContext = composeContext({
+            state,
+            template: transferTemplate,
+        });
+
+        // Generate transfer content
+        const content = await generateObjectDeprecated({
+            runtime,
+            context: transferContext,
+            modelClass: ModelClass.LARGE,
+        });
+
+        const paramOptions: TransferParams = {
+            fromChain: content.fromChain,
+            toAddress: content.toAddress,
+            amount: content.amount,
+            data: content.data,
+        };
+
+        try {
+            const transferResp = await action.transfer(paramOptions);
+            if (callback) {
+                callback({
+                    text: `Successfully transferred ${paramOptions.amount} tokens to ${paramOptions.toAddress}\nTransaction Hash: ${transferResp.hash}`,
+                    content: {
+                        success: true,
+                        hash: transferResp.hash,
+                        amount: formatEther(transferResp.value),
+                        recipient: transferResp.to,
+                        chain: content.fromChain,
+                    },
+                });
+            }
+            return true;
+        } catch (error) {
+            console.error("Error during token transfer:", error);
+            if (callback) {
+                callback({
+                    text: `Error transferring tokens: ${error.message}`,
+                    content: { error: error.message },
+                });
+            }
+            return false;
+        }
     },
     template: transferTemplate,
     validate: async (runtime: IAgentRuntime) => {

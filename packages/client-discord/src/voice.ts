@@ -25,7 +25,7 @@ import {
     VoiceConnectionStatus,
     createAudioPlayer,
     createAudioResource,
-    getVoiceConnection,
+    getVoiceConnections,
     joinVoiceChannel,
     entersState,
 } from "@discordjs/voice";
@@ -46,14 +46,12 @@ import {
     discordShouldRespondTemplate,
     discordVoiceHandlerTemplate,
 } from "./templates.ts";
-import debounce from "lodash/debounce.js";
 import { getWavHeader } from "./utils.ts";
 
 // These values are chosen for compatibility with picovoice components
 const DECODE_FRAME_SIZE = 1024;
 const DECODE_SAMPLE_RATE = 16000;
 
-// Buffers all audio
 export class AudioMonitor {
     private readable: Readable;
     private buffers: Buffer[] = [];
@@ -64,6 +62,7 @@ export class AudioMonitor {
     constructor(
         readable: Readable,
         maxSize: number,
+        onStart: () => void,
         callback: (buffer: Buffer) => void
     ) {
         this.readable = readable;
@@ -98,6 +97,7 @@ export class AudioMonitor {
         });
         this.readable.on("speakingStarted", () => {
             if (this.ended) return;
+            onStart();
             okaiLogger.log("Speaking started");
             this.reset();
         });
@@ -138,6 +138,8 @@ export class AudioMonitor {
 }
 
 export class VoiceManager extends EventEmitter {
+    private processingVoice: boolean = false;
+    private transcriptionTimeout: NodeJS.Timeout | null = null;
     private userStates: Map<
         string,
         {
@@ -192,7 +194,9 @@ export class VoiceManager extends EventEmitter {
     }
 
     async joinChannel(channel: BaseGuildVoiceChannel) {
-        const oldConnection = getVoiceConnection(channel.guildId as string);
+        const oldConnection = this.getVoiceConnection(
+            channel.guildId as string
+        );
         if (oldConnection) {
             try {
                 oldConnection.destroy();
@@ -210,6 +214,7 @@ export class VoiceManager extends EventEmitter {
             adapterCreator: channel.guild.voiceAdapterCreator as any,
             selfDeaf: false,
             selfMute: false,
+            group: this.client.user.id,
         });
 
         try {
@@ -326,6 +331,17 @@ export class VoiceManager extends EventEmitter {
         }
     }
 
+    private getVoiceConnection(guildId: string) {
+        const connections = getVoiceConnections(this.client.user.id);
+        if (!connections) {
+            return;
+        }
+        const connection = [...connections.values()].find(
+            (connection) => connection.joinConfig.guildId === guildId
+        );
+        return connection;
+    }
+
     private async monitorMember(
         member: GuildMember,
         channel: BaseGuildVoiceChannel
@@ -333,7 +349,7 @@ export class VoiceManager extends EventEmitter {
         const userId = member?.id;
         const userName = member?.user?.username;
         const name = member?.user?.displayName;
-        const connection = getVoiceConnection(member?.guild?.id);
+        const connection = this.getVoiceConnection(member?.guild?.id);
         const receiveStream = connection?.receiver.subscribe(userId, {
             autoDestroy: true,
             emitClose: true,
@@ -373,6 +389,7 @@ export class VoiceManager extends EventEmitter {
                 if (avgVolume > SPEAKING_THRESHOLD) {
                     volumeBuffer.length = 0;
                     this.cleanupAudioPlayer(this.activeAudioPlayer);
+                    this.processingVoice = false;
                 }
             }
         });
@@ -453,6 +470,52 @@ export class VoiceManager extends EventEmitter {
         // this.scanGuild(guild);
     }
 
+    async debouncedProcessTranscription(
+        userId: UUID,
+        name: string,
+        userName: string,
+        channel: BaseGuildVoiceChannel
+    ) {
+        const DEBOUNCE_TRANSCRIPTION_THRESHOLD = 1500; // wait for 1.5 seconds of silence
+
+        if (this.activeAudioPlayer?.state?.status === "idle") {
+            okaiLogger.log("Cleaning up idle audio player.");
+            this.cleanupAudioPlayer(this.activeAudioPlayer);
+        }
+
+        if (this.activeAudioPlayer || this.processingVoice) {
+            const state = this.userStates.get(userId);
+            state.buffers.length = 0;
+            state.totalLength = 0;
+            return;
+        }
+
+        if (this.transcriptionTimeout) {
+            clearTimeout(this.transcriptionTimeout);
+        }
+
+        this.transcriptionTimeout = setTimeout(async () => {
+            this.processingVoice = true;
+            try {
+                await this.processTranscription(
+                    userId,
+                    channel.id,
+                    channel,
+                    name,
+                    userName
+                );
+
+                // Clean all users' previous buffers
+                this.userStates.forEach((state, _) => {
+                    state.buffers.length = 0;
+                    state.totalLength = 0;
+                });
+            } finally {
+                this.processingVoice = false;
+            }
+        }, DEBOUNCE_TRANSCRIPTION_THRESHOLD);
+    }
+
     async handleUserStream(
         userId: UUID,
         name: string,
@@ -461,7 +524,6 @@ export class VoiceManager extends EventEmitter {
         audioStream: Readable
     ) {
         console.log(`Starting audio monitor for user: ${userId}`);
-        const channelId = channel.id;
         if (!this.userStates.has(userId)) {
             this.userStates.set(userId, {
                 buffers: [],
@@ -473,25 +535,17 @@ export class VoiceManager extends EventEmitter {
 
         const state = this.userStates.get(userId);
 
-        const DEBOUNCE_TRANSCRIPTION_THRESHOLD = 2500; // wait for 1.5 seconds of silence
-
-        const debouncedProcessTranscription = debounce(async () => {
-            await this.processTranscription(
-                userId,
-                channelId,
-                channel,
-                name,
-                userName
-            );
-        }, DEBOUNCE_TRANSCRIPTION_THRESHOLD);
-
         const processBuffer = async (buffer: Buffer) => {
             try {
                 state!.buffers.push(buffer);
                 state!.totalLength += buffer.length;
                 state!.lastActive = Date.now();
-
-                debouncedProcessTranscription();
+                this.debouncedProcessTranscription(
+                    userId,
+                    name,
+                    userName,
+                    channel
+                );
             } catch (error) {
                 console.error(
                     `Error processing buffer for user ${userId}:`,
@@ -500,13 +554,22 @@ export class VoiceManager extends EventEmitter {
             }
         };
 
-        new AudioMonitor(audioStream, 10000000, async (buffer) => {
-            if (!buffer) {
-                console.error("Received empty buffer");
-                return;
+        new AudioMonitor(
+            audioStream,
+            10000000,
+            () => {
+                if (this.transcriptionTimeout) {
+                    clearTimeout(this.transcriptionTimeout);
+                }
+            },
+            async (buffer) => {
+                if (!buffer) {
+                    console.error("Received empty buffer");
+                    return;
+                }
+                await processBuffer(buffer);
             }
-            await processBuffer(buffer);
-        });
+        );
     }
 
     private async processTranscription(
@@ -520,12 +583,11 @@ export class VoiceManager extends EventEmitter {
         if (!state || state.buffers.length === 0) return;
         try {
             const inputBuffer = Buffer.concat(state.buffers, state.totalLength);
+
             state.buffers.length = 0; // Clear the buffers
             state.totalLength = 0;
-
             // Convert Opus to WAV
             const wavBuffer = await this.convertOpusToWav(inputBuffer);
-
             console.log("Starting transcription...");
 
             const transcriptionText = await this.runtime
@@ -1021,7 +1083,7 @@ export class VoiceManager extends EventEmitter {
     }
 
     async handleLeaveChannelCommand(interaction: any) {
-        const connection = getVoiceConnection(interaction.guildId as any);
+        const connection = this.getVoiceConnection(interaction.guildId as any);
 
         if (!connection) {
             await interaction.reply("Not currently in a voice channel.");
