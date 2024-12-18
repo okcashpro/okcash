@@ -1,6 +1,6 @@
 {
     "name": "@okcashpro/agent",
-    "version": "0.1.7-alpha.0",
+    "version": "0.1.7-alpha.1",
     "main": "src/index.ts",
     "type": "module",
     "scripts": {

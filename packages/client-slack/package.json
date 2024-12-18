@@ -1,6 +1,6 @@
 {
     "name": "@okcashpro/client-slack",
-    "version": "0.1.7-alpha.0",
+    "version": "0.1.7-alpha.1",
     "description": "Slack client plugin for OKai framework",
     "main": "dist/index.js",
     "type": "module",
