@@ -1,6 +1,6 @@
 # Core Package Tests
 
-This package contains a test suite for evaluating functionalities using **Jest**.
+This package contains a test suite for evaluating functionalities using **Vitest**.
 
 ## Prerequisites
 
