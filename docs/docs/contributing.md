@@ -38,11 +38,11 @@ We believe in the power of the OODA Loop - a decision-making framework that emph
 
 3. Fork the repo and create your branch from `main`.
     1. The name of the branch should start with the issue number and be descriptive of the changes you are making.
-    1. eg. 40--add-test-for-bug-123
-4. If you've added code that should be tested, add tests.
-5. Ensure the test suite passes.
-6. Make sure your code lints.
-7. Issue that pull request!
+    2. Example: 9999--add-test-for-bug-123
+3. If you've added code that should be tested, add tests.
+4. Ensure the test suite passes.
+5. Make sure your code lints.
+6. Issue that pull request!
 
 ## Styleguides
 
