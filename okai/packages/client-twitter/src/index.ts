@@ -10,24 +10,34 @@ class TwitterManager {
     post: TwitterPostClient;
     search: TwitterSearchClient;
     interaction: TwitterInteractionClient;
-    constructor(runtime: IAgentRuntime) {
+    constructor(runtime: IAgentRuntime, enableSearch:boolean) {
         this.client = new ClientBase(runtime);
         this.post = new TwitterPostClient(this.client, runtime);
-        //this.search = new TwitterSearchClient(this.client, runtime); // don't start the search client by default
-        // this searches topics from character file, but kind of violates consent of random users
-        // burns your rate limit and can get your account banned
-        // use at your own risk
+
+        if (enableSearch) {
+          // this searches topics from character file
+          okaiLogger.warn('Twitter/X client running in a mode that:')
+          okaiLogger.warn('1. violates consent of random users')
+          okaiLogger.warn('2. burns your rate limit')
+          okaiLogger.warn('3. can get your account banned')
+          okaiLogger.warn('use at your own risk')
+          this.search = new TwitterSearchClient(this.client, runtime); // don't start the search client by default
+        }
         this.interaction = new TwitterInteractionClient(this.client, runtime);
     }
 }
 
 export const TwitterClientInterface: Client = {
+
     async start(runtime: IAgentRuntime) {
         await validateTwitterConfig(runtime);
 
         okaiLogger.log("Twitter client started");
 
-        const manager = new TwitterManager(runtime);
+        // enableSearch is just set previous to this call
+        // so enableSearch can change over time
+        // and changing it won't stop the SearchClient in the existing instance
+        const manager = new TwitterManager(runtime, this.enableSearch);
 
         await manager.client.init();
 

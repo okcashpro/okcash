@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / formatActions
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / formatActions
 
 # Function: formatActions()
 
@@ -20,4 +20,4 @@ A detailed string of actions, including names and descriptions.
 
 ## Defined in
 
-[packages/core/src/actions.ts:73](https://github.com/monilpat/okai/blob/main/packages/core/src/actions.ts#L73)
+[packages/core/src/actions.ts:73](https://github.com/okcashpro/okai/blob/main/packages/core/src/actions.ts#L73)

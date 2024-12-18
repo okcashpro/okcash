@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / SearchResult
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / SearchResult
 
 # Type Alias: SearchResult
 
@@ -28,4 +28,4 @@
 
 ## Defined in
 
-[packages/core/src/types.ts:1120](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L1120)
+[packages/core/src/types.ts:1181](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L1181)

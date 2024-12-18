@@ -22,7 +22,7 @@ A `characterfile` implements the [Character](/api/type-aliases/character) type a
 ```json
 {
   "name": "trump",
-  "clients": ["DISCORD", "DIRECT"],
+  "clients": ["discord", "direct"],
   "settings": {
     "voice": { "model": "en_US-male-medium" }
   },
@@ -92,11 +92,11 @@ The character's display name for identification and in conversations.
 
 #### `modelProvider` (required)
 
-Specifies the AI model provider. Supported options from [ModelProviderName](/api/enumerations/modelprovidername) include `ANTHROPIC`, `LLAMALOCAL`, `OPENAI`, and others.
+Specifies the AI model provider. Supported options from [ModelProviderName](/api/enumerations/modelprovidername) include `anthropic`, `llama_local`, `openai`, and others.
 
 #### `clients` (required)
 
-Array of supported client types from [Clients](/api/enumerations/clients) e.g., `DISCORD`, `DIRECT`, `TWITTER`, `TELEGRAM`.
+Array of supported client types from [Clients](/api/enumerations/clients) e.g., `discord`, `direct`, `twitter`, `telegram`, `farcaster`.
 
 #### `bio`
 
@@ -207,6 +207,53 @@ The `settings` object defines additional configurations like secrets and voice m
 }
 ```
 
+### Templates Configuration
+
+The `templates` object defines customizable prompt templates used for various tasks and interactions. Below is the list of available templates:
+
+- `goalsTemplate`
+- `factsTemplate`
+- `messageHandlerTemplate`
+- `shouldRespondTemplate`
+- `continueMessageHandlerTemplate`
+- `evaluationTemplate`
+- `twitterSearchTemplate`
+- `twitterPostTemplate`
+- `twitterMessageHandlerTemplate`
+- `twitterShouldRespondTemplate`
+- `telegramMessageHandlerTemplate`
+- `telegramShouldRespondTemplate`
+- `discordVoiceHandlerTemplate`
+- `discordShouldRespondTemplate`
+- `discordMessageHandlerTemplate`
+
+### Example: Twitter Post Template
+
+Here’s an example of a `twitterPostTemplate`:
+
+```js
+templates: {
+    twitterPostTemplate: `
+# Areas of Expertise
+{{knowledge}}
+
+# About {{agentName}} (@{{twitterUserName}}):
+{{bio}}
+{{lore}}
+{{topics}}
+
+{{providers}}
+
+{{characterPostExamples}}
+
+{{postDirections}}
+
+# Task: Generate a post in the voice and style and perspective of {{agentName}} @{{twitterUserName}}.
+Write a 1-3 sentence post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}. Do not add commentary or acknowledge this request, just write the post.
+Your response should not contain any questions. Brief, concise statements only. The total character count MUST be less than {{maxTweetLength}}. No emojis. Use \\n\\n (double spaces) between statements.`,
+}
+```
+
 ---
 
 ## Example: Complete Character File
@@ -214,8 +261,8 @@ The `settings` object defines additional configurations like secrets and voice m
 ```json
 {
   "name": "TechAI",
-  "modelProvider": "ANTHROPIC",
-  "clients": ["DISCORD", "DIRECT"],
+  "modelProvider": "anthropic",
+  "clients": ["discord", "direct"],
   "bio": "AI researcher and educator focused on practical applications",
   "lore": [
     "Pioneer in open-source AI development",

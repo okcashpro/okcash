@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / addHeader
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / addHeader
 
 # Function: addHeader()
 
@@ -39,4 +39,4 @@ const text = addHeader(header, body);
 
 ## Defined in
 
-[packages/core/src/context.ts:58](https://github.com/monilpat/okai/blob/main/packages/core/src/context.ts#L58)
+[packages/core/src/context.ts:58](https://github.com/okcashpro/okai/blob/main/packages/core/src/context.ts#L58)

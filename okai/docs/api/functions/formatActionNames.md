@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / formatActionNames
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / formatActionNames
 
 # Function: formatActionNames()
 
@@ -20,4 +20,4 @@ A comma-separated string of action names.
 
 ## Defined in
 
-[packages/core/src/actions.ts:61](https://github.com/monilpat/okai/blob/main/packages/core/src/actions.ts#L61)
+[packages/core/src/actions.ts:61](https://github.com/okcashpro/okai/blob/main/packages/core/src/actions.ts#L61)

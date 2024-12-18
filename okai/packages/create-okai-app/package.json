@@ -1,6 +1,6 @@
 {
     "name": "create-okai-app",
-    "version": "0.1.5-alpha.10",
+    "version": "0.1.7-alpha.1",
     "description": "",
     "sideEffects": false,
     "files": [
@@ -12,7 +12,7 @@
     },
     "scripts": {
         "build": "unbuild",
-        "lint": "eslint . --fix",
+        "lint": "eslint --fix  --cache .",
         "start": "node ./dist/index.cjs",
         "automd": "automd"
     },

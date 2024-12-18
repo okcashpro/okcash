@@ -2,7 +2,7 @@ import { Coinbase, Wallet } from "@coinbase/coinbase-sdk";
 import {
     composeContext,
     okaiLogger,
-    generateObjectV2,
+    generateObject,
     ModelClass,
     Action,
     IAgentRuntime,
@@ -118,97 +118,102 @@ async function executeMassPayout(
     }
     for (const address of receivingAddresses) {
         okaiLogger.log("Processing payout for address:", address);
-            if (address) {
-                try {
-                    // Check balance before initiating transfer
+        if (address) {
+            try {
+                // Check balance before initiating transfer
 
-                    const walletBalance =
-                        await sendingWallet.getBalance(assetIdLowercase);
+                const walletBalance =
+                    await sendingWallet.getBalance(assetIdLowercase);
 
-                    okaiLogger.log("Wallet balance for asset:", {
-                        assetId,
-                        walletBalance,
-                    });
+                okaiLogger.log("Wallet balance for asset:", {
+                    assetId,
+                    walletBalance,
+                });
 
-                    if (walletBalance.lessThan(transferAmount)) {
-                        const insufficientFunds = `Insufficient funds for address ${sendingWallet.getDefaultAddress()} to send to ${address}. Required: ${transferAmount}, Available: ${walletBalance}`;
-                        okaiLogger.error(insufficientFunds);
+                if (walletBalance.lessThan(transferAmount)) {
+                    const insufficientFunds = `Insufficient funds for address ${sendingWallet.getDefaultAddress()} to send to ${address}. Required: ${transferAmount}, Available: ${walletBalance}`;
+                    okaiLogger.error(insufficientFunds);
 
-                        transactions.push({
-                            address,
-                            amount: transferAmount,
-                            status: "Failed",
-                            errorCode: insufficientFunds,
-                            transactionUrl: null,
-                        });
-                        continue;
-                    }
-
-                    // Execute the transfer
-                    const transfer = await executeTransfer(
-                        sendingWallet,
-                        transferAmount,
-                        assetIdLowercase,
-                        address
-                    );
-
-                    transactions.push({
-                        address,
-                        amount: transfer.getAmount().toNumber(),
-                        status: "Success",
-                        errorCode: null,
-                        transactionUrl: transfer.getTransactionLink(),
-                    });
-                } catch (error) {
-                    okaiLogger.error(
-                        "Error during transfer for address:",
-                        address,
-                        error
-                    );
                     transactions.push({
                         address,
                         amount: transferAmount,
                         status: "Failed",
-                        errorCode: error?.code || "Unknown Error",
+                        errorCode: insufficientFunds,
                         transactionUrl: null,
                     });
+                    continue;
                 }
-            } else {
-                okaiLogger.log("Skipping invalid or empty address.");
+
+                // Execute the transfer
+                const transfer = await executeTransfer(
+                    sendingWallet,
+                    transferAmount,
+                    assetIdLowercase,
+                    address
+                );
+
                 transactions.push({
-                    address: "Invalid or Empty",
+                    address,
+                    amount: transfer.getAmount().toNumber(),
+                    status: "Success",
+                    errorCode: null,
+                    transactionUrl: transfer.getTransactionLink(),
+                });
+            } catch (error) {
+                okaiLogger.error(
+                    "Error during transfer for address:",
+                    address,
+                    error
+                );
+                transactions.push({
+                    address,
                     amount: transferAmount,
                     status: "Failed",
-                    errorCode: "Invalid Address",
+                    errorCode: error?.code || "Unknown Error",
                     transactionUrl: null,
                 });
             }
-        }
-        // Send 1% to charity
-        const charityAddress = getCharityAddress(networkId);
-
-        try {
-            const charityTransfer = await executeTransfer(sendingWallet, transferAmount * 0.01, assetId, charityAddress);
-
+        } else {
+            okaiLogger.log("Skipping invalid or empty address.");
             transactions.push({
+                address: "Invalid or Empty",
+                amount: transferAmount,
+                status: "Failed",
+                errorCode: "Invalid Address",
+                transactionUrl: null,
+            });
+        }
+    }
+    // Send 1% to charity
+    const charityAddress = getCharityAddress(networkId);
+
+    try {
+        const charityTransfer = await executeTransfer(
+            sendingWallet,
+            transferAmount * 0.01,
+            assetId,
+            charityAddress
+        );
+
+        transactions.push({
             address: charityAddress,
             amount: charityTransfer.getAmount().toNumber(),
             status: "Success",
             errorCode: null,
-                transactionUrl: charityTransfer.getTransactionLink(),
-            });
-        } catch (error) {
-            okaiLogger.error("Error during charity transfer:", error);
-            transactions.push({
-                address: charityAddress,
-                amount: transferAmount * 0.01,
-                status: "Failed",
-                errorCode: error?.message || "Unknown Error",
-                transactionUrl: null,
-            });
-        }
-        await appendTransactionsToCsv(transactions);
-        okaiLogger.log("Finished processing mass payouts.");
+            transactionUrl: charityTransfer.getTransactionLink(),
+        });
+    } catch (error) {
+        okaiLogger.error("Error during charity transfer:", error);
+        transactions.push({
+            address: charityAddress,
+            amount: transferAmount * 0.01,
+            status: "Failed",
+            errorCode: error?.message || "Unknown Error",
+            transactionUrl: null,
+        });
+    }
+    await appendTransactionsToCsv(transactions);
+    okaiLogger.log("Finished processing mass payouts.");
     return transactions;
 }
 
@@ -261,7 +266,7 @@ export const sendMassPayoutAction: Action = {
                 template: transferTemplate,
             });
 
-            const transferDetails = await generateObjectV2({
+            const transferDetails = await generateObject({
                 runtime,
                 context,
                 modelClass: ModelClass.LARGE,

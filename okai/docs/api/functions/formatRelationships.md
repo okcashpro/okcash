@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / formatRelationships
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / formatRelationships
 
 # Function: formatRelationships()
 
@@ -18,4 +18,4 @@
 
 ## Defined in
 
-[packages/core/src/relationships.ts:43](https://github.com/monilpat/okai/blob/main/packages/core/src/relationships.ts#L43)
+[packages/core/src/relationships.ts:43](https://github.com/okcashpro/okai/blob/main/packages/core/src/relationships.ts#L43)

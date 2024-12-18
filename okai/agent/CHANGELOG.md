@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.7-alpha.1](https://github.com/okcashpro/okai/compare/v0.1.7-alpha.0...v0.1.7-alpha.1) (2024-12-18)
+
+**Note:** Version bump only for package @okcashpro/agent
+
+
+
+
+
+## [0.1.7-alpha.0](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.10...v0.1.7-alpha.0) (2024-12-18)
+
+
+### Bug Fixes
+
+* fetch log level to debug ([29ce2f9](https://github.com/okcashpro/okai/commit/29ce2f946f7c34bc54de3abad9c530334a33bae5))
+* fix swap ([f5f74c2](https://github.com/okcashpro/okai/commit/f5f74c21a256862bad4ab8a73db5116d0c167cb0))
+* package.json missing near ([4aebba2](https://github.com/okcashpro/okai/commit/4aebba2ebc85c8d4ac6fd99584e4c5ee113cb266))
+* print commands to start the client and remove unused --non-iteractive in dockerfile ([5eb5514](https://github.com/okcashpro/okai/commit/5eb551409e14787876be43c652663e4d3fb95882))
+
+
+### Features
+
+* Add plugin-nft-generation: support for creating Solana NFT collections. ([3ff0677](https://github.com/okcashpro/okai/commit/3ff0677f3534f11bdc9e29843f1c936662e3d299))
+* add plugin-ton ([08fc29d](https://github.com/okcashpro/okai/commit/08fc29db8e32340367b0e96c705852a1a6dba19d))
+* make NodePlugin and GoatPlugin creation conditional ([ca49c0e](https://github.com/okcashpro/okai/commit/ca49c0e68cc5df2b62eaeef8950de5786441cf67))
+* Make revisions according to review comments. ([edcf0fa](https://github.com/okcashpro/okai/commit/edcf0fadccc645f36ffcd8850059d430bc65f610)), closes [/github.com/ai16z/eliza/pull/1011#discussion_r1883158466](https://github.com//github.com/ai16z/eliza/pull/1011/issues/discussion_r1883158466) [/github.com/ai16z/eliza/pull/1011#discussion_r1883142951](https://github.com//github.com/ai16z/eliza/pull/1011/issues/discussion_r1883142951) [/github.com/ai16z/eliza/pull/1011#discussion_r1883145780](https://github.com//github.com/ai16z/eliza/pull/1011/issues/discussion_r1883145780)
+* ref swap, wallet connection, ref env variables ([913651d](https://github.com/okcashpro/okai/commit/913651d029f4edb722e0e6eba4849d2859d9036f))
+* **slack:** Complete Slack client implementation with core improvements ([a97266f](https://github.com/okcashpro/okai/commit/a97266f20d9aed13fc216851001c12c36fba9f9b))
+
+
+
+
+
 ## [0.1.5-alpha.10](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.9...v0.1.5-alpha.10) (2024-12-11)
 
 **Note:** Version bump only for package @okcashpro/agent

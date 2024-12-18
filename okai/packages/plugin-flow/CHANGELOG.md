@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.7-alpha.1](https://github.com/okcashpro/okai/compare/v0.1.7-alpha.0...v0.1.7-alpha.1) (2024-12-18)
+
+**Note:** Version bump only for package @okcashpro/plugin-flow
+
+
+
+
+
+## [0.1.7-alpha.0](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.10...v0.1.7-alpha.0) (2024-12-18)
+
+
+### Features
+
+* improve prompt ([68c2600](https://github.com/okcashpro/okai/commit/68c260003a7fa7ea8453b398c9744ef936a2c2ec))
+* update evm transaction call cdc file ([600cc10](https://github.com/okcashpro/okai/commit/600cc10f47895b99941c485dbe8f56c547ce6da3))
+* update provider output ([4af1346](https://github.com/okcashpro/okai/commit/4af13464bc0fcee4be965813cc77e55eb25843bf))
+* use generateObjectArray instead of generateObjectDEPRECATED ([e508f8d](https://github.com/okcashpro/okai/commit/e508f8d72a6187302886be0ba2097307434f227b))
+
+
+
+
+
 ## [0.1.5-alpha.10](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.9...v0.1.5-alpha.10) (2024-12-11)
 
 **Note:** Version bump only for package @okcashpro/plugin-flow

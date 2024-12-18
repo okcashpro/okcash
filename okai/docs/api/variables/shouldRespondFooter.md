@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / shouldRespondFooter
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / shouldRespondFooter
 
 # Variable: shouldRespondFooter
 
@@ -6,4 +6,4 @@
 
 ## Defined in
 
-[packages/core/src/parsing.ts:8](https://github.com/monilpat/okai/blob/main/packages/core/src/parsing.ts#L8)
+[packages/core/src/parsing.ts:9](https://github.com/okcashpro/okai/blob/main/packages/core/src/parsing.ts#L9)

@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / generateTrueOrFalse
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / generateTrueOrFalse
 
 # Function: generateTrueOrFalse()
 
@@ -28,4 +28,4 @@ Promise resolving to a boolean value parsed from the model's response
 
 ## Defined in
 
-[packages/core/src/generation.ts:584](https://github.com/monilpat/okai/blob/main/packages/core/src/generation.ts#L584)
+[packages/core/src/generation.ts:709](https://github.com/okcashpro/okai/blob/main/packages/core/src/generation.ts#L709)

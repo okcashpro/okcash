@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / messageCompletionFooter
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / messageCompletionFooter
 
 # Variable: messageCompletionFooter
 
@@ -6,4 +6,4 @@
 
 ## Defined in
 
-[packages/core/src/parsing.ts:3](https://github.com/monilpat/okai/blob/main/packages/core/src/parsing.ts#L3)
+[packages/core/src/parsing.ts:4](https://github.com/okcashpro/okai/blob/main/packages/core/src/parsing.ts#L4)

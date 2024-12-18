@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / Validator
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / Validator
 
 # Type Alias: Validator()
 
@@ -20,4 +20,4 @@ Validator function type for actions/evaluators
 
 ## Defined in
 
-[packages/core/src/types.ts:385](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L385)
+[packages/core/src/types.ts:391](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L391)

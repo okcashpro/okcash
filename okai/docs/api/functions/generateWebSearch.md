@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / generateWebSearch
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / generateWebSearch
 
 # Function: generateWebSearch()
 
@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/generation.ts:1022](https://github.com/monilpat/okai/blob/main/packages/core/src/generation.ts#L1022)
+[packages/core/src/generation.ts:1199](https://github.com/okcashpro/okai/blob/main/packages/core/src/generation.ts#L1199)

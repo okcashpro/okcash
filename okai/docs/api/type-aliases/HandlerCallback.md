@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / HandlerCallback
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / HandlerCallback
 
 # Type Alias: HandlerCallback()
 
@@ -18,4 +18,4 @@ Callback function type for handlers
 
 ## Defined in
 
-[packages/core/src/types.ts:377](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L377)
+[packages/core/src/types.ts:383](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L383)

@@ -1,6 +1,6 @@
 {
     "name": "@okcashpro/plugin-whatsapp",
-    "version": "0.1.5-alpha.10",
+    "version": "0.1.7-alpha.1",
     "description": "WhatsApp Cloud API plugin",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -8,7 +8,7 @@
         "build": "tsup --format esm --dts",
         "dev": "tsup --format esm --dts --watch",
         "test": "jest",
-        "lint": "eslint . --fix"
+        "lint": "eslint --fix  --cache ."
     },
     "dependencies": {
         "@okcashpro/okai": "workspace:*",

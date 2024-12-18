@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / generateShouldRespond
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / generateShouldRespond
 
 # Function: generateShouldRespond()
 
@@ -28,4 +28,4 @@ Promise resolving to "RESPOND", "IGNORE", "STOP" or null
 
 ## Defined in
 
-[packages/core/src/generation.ts:501](https://github.com/monilpat/okai/blob/main/packages/core/src/generation.ts#L501)
+[packages/core/src/generation.ts:626](https://github.com/okcashpro/okai/blob/main/packages/core/src/generation.ts#L626)

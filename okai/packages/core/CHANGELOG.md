@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.7-alpha.1](https://github.com/okcashpro/okai/compare/v0.1.7-alpha.0...v0.1.7-alpha.1) (2024-12-18)
+
+**Note:** Version bump only for package @okcashpro/okai
+
+
+
+
+
+## [0.1.7-alpha.0](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.10...v0.1.7-alpha.0) (2024-12-18)
+
+
+### Bug Fixes
+
+* add auto to clients in types to use client-auto ([3834c54](https://github.com/okcashpro/okai/commit/3834c543b49380db10d6fb020b03c80cdb714dc2))
+
+
+### Features
+
+* Add plugin-nft-generation: support for creating Solana NFT collections. ([3ff0677](https://github.com/okcashpro/okai/commit/3ff0677f3534f11bdc9e29843f1c936662e3d299))
+* add support for handlebars templating engine as an option ([fe71a15](https://github.com/okcashpro/okai/commit/fe71a15437e72eddf4e96dcf84d1a03f345029d1))
+* after CR, removing long example ([4b98e2b](https://github.com/okcashpro/okai/commit/4b98e2bb96381ec58178775070cb73ffec65dd71))
+* allow users to configure models for grok ([592287d](https://github.com/okcashpro/okai/commit/592287d9c831fe17047f99b9a71e20715807d274))
+* allow users to configure models for openai and anthropic ([8b5175b](https://github.com/okcashpro/okai/commit/8b5175b99d9734b4888f25b831cfd58a4f1597ea))
+* improve Twitter client with action processing ([b50a5bf](https://github.com/okcashpro/okai/commit/b50a5bf7bd0035bb9b691167b6397e0dbdebfde3))
+* **slack:** Complete Slack client implementation with core improvements ([a97266f](https://github.com/okcashpro/okai/commit/a97266f20d9aed13fc216851001c12c36fba9f9b))
+
+
+
+
+
 ## [0.1.5-alpha.10](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.9...v0.1.5-alpha.10) (2024-12-11)
 
 **Note:** Version bump only for package @okcashpro/okai

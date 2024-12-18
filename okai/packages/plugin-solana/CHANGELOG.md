@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.7-alpha.1](https://github.com/okcashpro/okai/compare/v0.1.7-alpha.0...v0.1.7-alpha.1) (2024-12-18)
+
+**Note:** Version bump only for package @okcashpro/plugin-solana
+
+
+
+
+
+## [0.1.7-alpha.0](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.10...v0.1.7-alpha.0) (2024-12-18)
+
+
+### Bug Fixes
+
+* Expected an assignment or function call and instead saw an expression ([257d3e4](https://github.com/okcashpro/okai/commit/257d3e42e8a6f14587635b7d238655702915bb50))
+* remove unused import ([3066584](https://github.com/okcashpro/okai/commit/30665843e637dc8837effa25acd8b99e8599d33d))
+
+
+
+
+
 ## [0.1.5-alpha.10](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.9...v0.1.5-alpha.10) (2024-12-11)
 
 **Note:** Version bump only for package @okcashpro/plugin-solana

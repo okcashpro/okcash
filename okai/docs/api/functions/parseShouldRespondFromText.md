@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / parseShouldRespondFromText
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / parseShouldRespondFromText
 
 # Function: parseShouldRespondFromText()
 
@@ -14,4 +14,4 @@
 
 ## Defined in
 
-[packages/core/src/parsing.ts:13](https://github.com/monilpat/okai/blob/main/packages/core/src/parsing.ts#L13)
+[packages/core/src/parsing.ts:14](https://github.com/okcashpro/okai/blob/main/packages/core/src/parsing.ts#L14)
