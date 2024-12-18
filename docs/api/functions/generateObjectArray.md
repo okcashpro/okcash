@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / generateObjectArray
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / generateObjectArray
 
 # Function: generateObjectArray()
 
@@ -20,4 +20,4 @@
 
 ## Defined in
 
-[packages/core/src/generation.ts:711](https://github.com/monilpat/okai/blob/main/packages/core/src/generation.ts#L711)
+[packages/core/src/generation.ts:836](https://github.com/okcashpro/okai/blob/main/packages/core/src/generation.ts#L836)

@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / formatPosts
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / formatPosts
 
 # Function: formatPosts()
 
@@ -20,4 +20,4 @@
 
 ## Defined in
 
-[packages/core/src/posts.ts:4](https://github.com/monilpat/okai/blob/main/packages/core/src/posts.ts#L4)
+[packages/core/src/posts.ts:4](https://github.com/okcashpro/okai/blob/main/packages/core/src/posts.ts#L4)

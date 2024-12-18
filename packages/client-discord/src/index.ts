@@ -1,7 +1,11 @@
-import { getEmbeddingZeroVector } from "@okcashpro/okai";
-import { Character, Client as OKaiClient, IAgentRuntime } from "@okcashpro/okai";
-import { stringToUuid } from "@okcashpro/okai";
-import { okaiLogger } from "@okcashpro/okai";
+import {
+    getEmbeddingZeroVector,
+    stringToUuid,
+    elizaLogger,
+    Character,
+    Client as ElizaClient,
+    IAgentRuntime,
+} from "@ai16z/eliza";
 import {
     Client,
     Events,
@@ -111,8 +115,18 @@ export class DiscordClient extends EventEmitter {
         );
     }
 
+    async stop() {
+        try {
+          // disconnect websocket
+          // this unbinds all the listeners
+          await this.client.destroy();
+        } catch(e) {
+          elizaLogger.error('client-discord instance stop err', e);
+        }
+    }
+
     private async onClientReady(readyClient: { user: { tag: any; id: any } }) {
-        okaiLogger.success(`Logged in as ${readyClient.user?.tag}`);
+        elizaLogger.success(`Logged in as ${readyClient.user?.tag}`);
 
         // Register slash commands
         const commands = [
@@ -137,7 +151,7 @@ export class DiscordClient extends EventEmitter {
 
         try {
             await this.client.application?.commands.set(commands);
-            okaiLogger.success("Slash commands registered");
+            elizaLogger.success("Slash commands registered");
         } catch (error) {
             console.error("Error registering slash commands:", error);
         }
@@ -165,8 +179,8 @@ export class DiscordClient extends EventEmitter {
             PermissionsBitField.Flags.PrioritySpeaker,
         ].reduce((a, b) => a | b, 0n);
 
-        okaiLogger.success("Use this URL to add the bot to your server:");
-        okaiLogger.success(
+        elizaLogger.success("Use this URL to add the bot to your server:");
+        elizaLogger.success(
             `https://discord.com/api/oauth2/authorize?client_id=${readyClient.user?.id}&permissions=${requiredPermissions}&scope=bot%20applications.commands`
         );
         await this.onReady();
@@ -174,11 +188,11 @@ export class DiscordClient extends EventEmitter {
 
     async handleReactionAdd(reaction: MessageReaction, user: User) {
         try {
-            okaiLogger.log("Reaction added");
+            elizaLogger.log("Reaction added");
 
             // Early returns
             if (!reaction || !user) {
-                okaiLogger.warn("Invalid reaction or user");
+                elizaLogger.warn("Invalid reaction or user");
                 return;
             }
 
@@ -193,7 +207,7 @@ export class DiscordClient extends EventEmitter {
                 try {
                     await reaction.fetch();
                 } catch (error) {
-                    okaiLogger.error(
+                    elizaLogger.error(
                         "Failed to fetch partial reaction:",
                         error
                     );
@@ -215,7 +229,7 @@ export class DiscordClient extends EventEmitter {
 
             // Validate IDs
             if (!userIdUUID || !roomId) {
-                okaiLogger.error("Invalid user ID or room ID", {
+                elizaLogger.error("Invalid user ID or room ID", {
                     userIdUUID,
                     roomId,
                 });
@@ -262,7 +276,7 @@ export class DiscordClient extends EventEmitter {
 
             try {
                 await this.runtime.messageManager.createMemory(memory);
-                okaiLogger.debug("Reaction memory created", {
+                elizaLogger.debug("Reaction memory created", {
                     reactionId: reactionUUID,
                     emoji,
                     userId: user.id,
@@ -270,7 +284,7 @@ export class DiscordClient extends EventEmitter {
             } catch (error) {
                 if (error.code === "23505") {
                     // Duplicate key error
-                    okaiLogger.warn("Duplicate reaction memory, skipping", {
+                    elizaLogger.warn("Duplicate reaction memory, skipping", {
                         reactionId: reactionUUID,
                     });
                     return;
@@ -278,12 +292,12 @@ export class DiscordClient extends EventEmitter {
                 throw error; // Re-throw other errors
             }
         } catch (error) {
-            okaiLogger.error("Error handling reaction:", error);
+            elizaLogger.error("Error handling reaction:", error);
         }
     }
 
     async handleReactionRemove(reaction: MessageReaction, user: User) {
-        okaiLogger.log("Reaction removed");
+        elizaLogger.log("Reaction removed");
         // if (user.bot) return;
 
         let emoji = reaction.emoji.name;
@@ -386,9 +400,15 @@ export function startDiscord(runtime: IAgentRuntime) {
     return new DiscordClient(runtime);
 }
 
-export const DiscordClientInterface: OKaiClient = {
+export const DiscordClientInterface: ElizaClient = {
     start: async (runtime: IAgentRuntime) => new DiscordClient(runtime),
-    stop: async (_runtime: IAgentRuntime) => {
-        console.warn("Discord client does not support stopping yet");
+    stop: async (runtime: IAgentRuntime) => {
+        try {
+          // stop it
+          elizaLogger.log('Stopping discord client', runtime.agentId)
+          await runtime.clients.discord.stop()
+        } catch(e) {
+          elizaLogger.error('client-discord interface stop error', e);
+        }
     },
 };

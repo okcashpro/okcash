@@ -2,20 +2,20 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express, { Request as ExpressRequest } from "express";
 import multer, { File } from "multer";
-import { okaiLogger, generateCaption, generateImage } from "@okcashpro/okai";
-import { composeContext } from "@okcashpro/okai";
-import { generateMessageResponse } from "@okcashpro/okai";
-import { messageCompletionFooter } from "@okcashpro/okai";
-import { AgentRuntime } from "@okcashpro/okai";
+import { elizaLogger, generateCaption, generateImage } from "@ai16z/eliza";
+import { composeContext } from "@ai16z/eliza";
+import { generateMessageResponse } from "@ai16z/eliza";
+import { messageCompletionFooter } from "@ai16z/eliza";
+import { AgentRuntime } from "@ai16z/eliza";
 import {
     Content,
     Memory,
     ModelClass,
     Client,
     IAgentRuntime,
-} from "@okcashpro/okai";
-import { stringToUuid } from "@okcashpro/okai";
-import { settings } from "@okcashpro/okai";
+} from "@ai16z/eliza";
+import { stringToUuid } from "@ai16z/eliza";
+import { settings } from "@ai16z/eliza";
 import { createApiRouter } from "./api.ts";
 import * as fs from "fs";
 import * as path from "path";
@@ -51,20 +51,14 @@ Note that {{agentName}} is capable of reading/seeing/hearing various forms of me
 # Instructions: Write the next message for {{agentName}}.
 ` + messageCompletionFooter;
 
-export interface SimliClientConfig {
-    apiKey: string;
-    faceID: string;
-    handleSilence: boolean;
-    videoRef: any;
-    audioRef: any;
-}
 export class DirectClient {
     public app: express.Application;
-    private agents: Map<string, AgentRuntime>;
+    private agents: Map<string, AgentRuntime>; // container management
     private server: any; // Store server instance
+    public startAgent: Function; // Store startAgent functor
 
     constructor() {
-        okaiLogger.log("DirectClient constructor");
+        elizaLogger.log("DirectClient constructor");
         this.app = express();
         this.app.use(cors());
         this.agents = new Map();
@@ -72,7 +66,7 @@ export class DirectClient {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
 
-        const apiRouter = createApiRouter(this.agents);
+        const apiRouter = createApiRouter(this.agents, this);
         this.app.use(apiRouter);
 
         // Define an interface that extends the Express Request interface
@@ -205,7 +199,7 @@ export class DirectClient {
                 const response = await generateMessageResponse({
                     runtime: runtime,
                     context,
-                    modelClass: ModelClass.SMALL,
+                    modelClass: ModelClass.LARGE,
                 });
 
                 // save response to memory
@@ -338,7 +332,7 @@ export class DirectClient {
                         fileResponse.headers
                             .get("content-disposition")
                             ?.split("filename=")[1]
-                            ?.replace(/"/g, "") || "default_name.txt";
+                            ?.replace(/"/g, /* " */ "") || "default_name.txt";
 
                     console.log("Saving as:", fileName);
 
@@ -378,6 +372,7 @@ export class DirectClient {
         );
     }
 
+    // agent/src/index.ts:startAgent calls this
     public registerAgent(runtime: AgentRuntime) {
         this.agents.set(runtime.agentId, runtime);
     }
@@ -388,20 +383,22 @@ export class DirectClient {
 
     public start(port: number) {
         this.server = this.app.listen(port, () => {
-            okaiLogger.success(`Server running at http://localhost:${port}/`);
+            elizaLogger.success(
+                `REST API bound to 0.0.0.0:${port}. If running locally, access it at http://localhost:${port}.`
+            );
         });
 
         // Handle graceful shutdown
         const gracefulShutdown = () => {
-            okaiLogger.log("Received shutdown signal, closing server...");
+            elizaLogger.log("Received shutdown signal, closing server...");
             this.server.close(() => {
-                okaiLogger.success("Server closed successfully");
+                elizaLogger.success("Server closed successfully");
                 process.exit(0);
             });
 
             // Force close after 5 seconds if server hasn't closed
             setTimeout(() => {
-                okaiLogger.error(
+                elizaLogger.error(
                     "Could not close connections in time, forcefully shutting down"
                 );
                 process.exit(1);
@@ -416,7 +413,7 @@ export class DirectClient {
     public stop() {
         if (this.server) {
             this.server.close(() => {
-                okaiLogger.success("Server stopped");
+                elizaLogger.success("Server stopped");
             });
         }
     }
@@ -424,13 +421,13 @@ export class DirectClient {
 
 export const DirectClientInterface: Client = {
     start: async (_runtime: IAgentRuntime) => {
-        okaiLogger.log("DirectClientInterface start");
+        elizaLogger.log("DirectClientInterface start");
         const client = new DirectClient();
         const serverPort = parseInt(settings.SERVER_PORT || "3000");
         client.start(serverPort);
         return client;
     },
-    stop: async (_runtime: IAgentRuntime, client?: any) => {
+    stop: async (_runtime: IAgentRuntime, client?: Client) => {
         if (client instanceof DirectClient) {
             client.stop();
         }

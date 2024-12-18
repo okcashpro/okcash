@@ -142,6 +142,7 @@ export class AgentRuntime implements IAgentRuntime {
     services: Map<ServiceType, Service> = new Map();
     memoryManagers: Map<string, IMemoryManager> = new Map();
     cacheManager: ICacheManager;
+    clients: Record<string, any>;
 
     registerMemoryManager(manager: IMemoryManager): void {
         if (!manager.tableName) {
@@ -403,6 +404,25 @@ export class AgentRuntime implements IAgentRuntime {
         ) {
             await this.processCharacterKnowledge(this.character.knowledge);
         }
+    }
+
+    async stop() {
+      elizaLogger.debug('runtime::stop - character', this.character)
+      // stop services, they don't have a stop function
+        // just initialize
+
+      // plugins
+        // have actions, providers, evaluators (no start/stop)
+        // services (just initialized), clients
+
+      // client have a start
+      for(const cStr in this.clients) {
+        const c = this.clients[cStr]
+        elizaLogger.log('runtime::stop - requesting', cStr, 'client stop for', this.character.name)
+        c.stop()
+      }
+      // we don't need to unregister with directClient
+      // don't need to worry about knowledge
     }
 
     /**

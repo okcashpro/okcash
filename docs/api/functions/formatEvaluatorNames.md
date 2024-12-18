@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / formatEvaluatorNames
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / formatEvaluatorNames
 
 # Function: formatEvaluatorNames()
 
@@ -20,4 +20,4 @@ A string that concatenates the names of all evaluators, each enclosed in single 
 
 ## Defined in
 
-[packages/core/src/evaluators.ts:30](https://github.com/monilpat/okai/blob/main/packages/core/src/evaluators.ts#L30)
+[packages/core/src/evaluators.ts:30](https://github.com/okcashpro/okai/blob/main/packages/core/src/evaluators.ts#L30)

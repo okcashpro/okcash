@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / createGoal
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / createGoal
 
 # Function: createGoal()
 
@@ -18,4 +18,4 @@
 
 ## Defined in
 
-[packages/core/src/goals.ts:55](https://github.com/monilpat/okai/blob/main/packages/core/src/goals.ts#L55)
+[packages/core/src/goals.ts:55](https://github.com/okcashpro/okai/blob/main/packages/core/src/goals.ts#L55)

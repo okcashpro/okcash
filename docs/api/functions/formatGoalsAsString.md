@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / formatGoalsAsString
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / formatGoalsAsString
 
 # Function: formatGoalsAsString()
 
@@ -16,4 +16,4 @@
 
 ## Defined in
 
-[packages/core/src/goals.ts:30](https://github.com/monilpat/okai/blob/main/packages/core/src/goals.ts#L30)
+[packages/core/src/goals.ts:30](https://github.com/okcashpro/okai/blob/main/packages/core/src/goals.ts#L30)

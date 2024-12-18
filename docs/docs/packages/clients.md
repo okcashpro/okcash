@@ -2,7 +2,7 @@
 
 ## Overview
 
-OKai's client packages enable integration with various platforms and services. Each client provides a standardized interface for sending and receiving messages, handling media, and interacting with platform-specific features.
+Eliza's client packages enable integration with various platforms and services. Each client provides a standardized interface for sending and receiving messages, handling media, and interacting with platform-specific features.
 
 ### Architecture Overview
 
@@ -35,11 +35,11 @@ graph TD
 
 ## Available Clients
 
-- **Discord** (`@okai/client-discord`) - Full Discord bot integration
-- **Twitter** (`@okai/client-twitter`) - Twitter bot and interaction handling
-- **Telegram** (`@okai/client-telegram`) - Telegram bot integration
-- **Direct** (`@okai/client-direct`) - Direct API interface for custom integrations
-- **Auto** (`@okai/client-auto`) - Automated trading and interaction client
+- **Discord** (`@eliza/client-discord`) - Full Discord bot integration
+- **Twitter** (`@eliza/client-twitter`) - Twitter bot and interaction handling
+- **Telegram** (`@eliza/client-telegram`) - Telegram bot integration
+- **Direct** (`@eliza/client-direct`) - Direct API interface for custom integrations
+- **Auto** (`@eliza/client-auto`) - Automated trading and interaction client
 
 ---
 
@@ -47,19 +47,19 @@ graph TD
 
 ```bash
 # Discord
-pnpm add @okai/client-discord
+pnpm add @eliza/client-discord
 
 # Twitter
-pnpm add @okai/client-twitter
+pnpm add @eliza/client-twitter
 
 # Telegram
-pnpm add @okai/client-telegram
+pnpm add @eliza/client-telegram
 
 # Direct API
-pnpm add @okai/client-direct
+pnpm add @eliza/client-direct
 
 # Auto Client
-pnpm add @okai/client-auto
+pnpm add @eliza/client-auto
 ```
 
 ---
@@ -71,7 +71,7 @@ The Discord client provides full integration with Discord's features including v
 ### Basic Setup
 
 ```typescript
-import { DiscordClientInterface } from "@okai/client-discord";
+import { DiscordClientInterface } from "@eliza/client-discord";
 
 // Initialize client
 const client = await DiscordClientInterface.start(runtime);
@@ -133,8 +133,7 @@ The Twitter client enables posting, searching, and interacting with Twitter user
 ### Basic Setup
 
 ```typescript
-import { TwitterClientInterface } from "@okai/client-twitter";
-
+import { TwitterClientInterface } from "@eliza/client-twitter";
 // Initialize client
 const client = await TwitterClientInterface.start(runtime);
 
@@ -194,7 +193,7 @@ The Telegram client provides messaging and bot functionality for Telegram.
 ### Basic Setup
 
 ```typescript
-import { TelegramClientInterface } from "@okai/client-telegram";
+import { TelegramClientInterface } from "@eliza/client-telegram";
 
 // Initialize client
 const client = await TelegramClientInterface.start(runtime);
@@ -227,7 +226,7 @@ The Direct client provides a REST API interface for custom integrations.
 ### Basic Setup
 
 ```typescript
-import { DirectClientInterface } from "@okai/client-direct";
+import { DirectClientInterface } from "@eliza/client-direct";
 
 // Initialize client
 const client = await DirectClientInterface.start(runtime);
@@ -260,7 +259,7 @@ The Auto client enables automated interactions and trading.
 ### Basic Setup
 
 ```typescript
-import { AutoClientInterface } from "@okai/client-auto";
+import { AutoClientInterface } from "@eliza/client-auto";
 
 // Initialize client
 const client = await AutoClientInterface.start(runtime);

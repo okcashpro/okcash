@@ -4,6 +4,10 @@
 
 # Visit <https://okai.builders> for support
 
+## 🌍 README Translations
+
+[中文说明](./README_CN.md) | [Français](./README_FR.md) | [ไทย](./README_TH.md)
+
 # dev branch
 
 <img src="../docs/static/img/okai_banner.png" alt="OKai Banner" width="100%" />

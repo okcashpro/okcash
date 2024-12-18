@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / configureSettings
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / configureSettings
 
 # Function: configureSettings()
 
@@ -18,4 +18,4 @@ Object containing environment variables
 
 ## Defined in
 
-[packages/core/src/settings.ts:69](https://github.com/monilpat/okai/blob/main/packages/core/src/settings.ts#L69)
+[packages/core/src/settings.ts:69](https://github.com/okcashpro/okai/blob/main/packages/core/src/settings.ts#L69)

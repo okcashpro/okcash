@@ -21,7 +21,7 @@ import {
     parseJsonArrayFromText,
     parseJSONObjectFromText,
     parseShouldRespondFromText,
-    parseActionResponseFromText
+    parseActionResponseFromText,
 } from "./parsing.ts";
 import settings from "./settings.ts";
 import {
@@ -33,7 +33,7 @@ import {
     ModelProviderName,
     ServiceType,
     SearchResponse,
-    ActionResponse
+    ActionResponse,
 } from "./types.ts";
 import { fal } from "@fal-ai/client";
 
@@ -533,6 +533,29 @@ export async function generateText({
                 break;
             }
 
+            case ModelProviderName.VENICE: {
+                okaiLogger.debug("Initializing Venice model.");
+                const venice = createOpenAI({
+                    apiKey: apiKey,
+                    baseURL: endpoint,
+                });
+
+                const { text: veniceResponse } = await aiGenerateText({
+                    model: venice.languageModel(model),
+                    prompt: context,
+                    system:
+                        runtime.character.system ??
+                        settings.SYSTEM_PROMPT ??
+                        undefined,
+                    temperature: temperature,
+                    maxTokens: max_response_length,
+                });
+
+                response = veniceResponse;
+                okaiLogger.debug("Received response from Venice model.");
+                break;
+            }
+
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
                 okaiLogger.error(errorMessage);
@@ -774,7 +797,7 @@ export async function generateTextArray({
     }
 }
 
-export async function generateObjectDEPRECATED({
+export async function generateObjectDeprecated({
     runtime,
     context,
     modelClass,
@@ -784,7 +807,7 @@ export async function generateObjectDEPRECATED({
     modelClass: string;
 }): Promise<any> {
     if (!context) {
-        okaiLogger.error("generateObjectDEPRECATED context is empty");
+        okaiLogger.error("generateObjectDeprecated context is empty");
         return null;
     }
     let retryDelay = 1000;
@@ -931,7 +954,8 @@ export const generateImage = async (
             : (runtime.getSetting("HEURIST_API_KEY") ??
               runtime.getSetting("TOGETHER_API_KEY") ??
               runtime.getSetting("FAL_API_KEY") ??
-              runtime.getSetting("OPENAI_API_KEY"));
+              runtime.getSetting("OPENAI_API_KEY") ??
+              runtime.getSetting("VENICE_API_KEY"));
 
     try {
         if (runtime.imageModelProvider === ModelProviderName.HEURIST) {
@@ -1041,7 +1065,8 @@ export const generateImage = async (
                 num_inference_steps: modelSettings?.steps ?? 50,
                 guidance_scale: data.guidanceScale || 3.5,
                 num_images: data.count,
-                enable_safety_checker: true,
+                enable_safety_checker: runtime.getSetting("FAL_AI_ENABLE_SAFETY_CHECKER") === "true",
+                safety_tolerance: Number(runtime.getSetting("FAL_AI_SAFETY_TOLERANCE") || "2"),
                 output_format: "png" as const,
                 seed: data.seed ?? 6252023,
                 ...(runtime.getSetting("FAL_AI_LORA_PATH")
@@ -1077,6 +1102,42 @@ export const generateImage = async (
             });
 
             const base64s = await Promise.all(base64Promises);
+            return { success: true, data: base64s };
+        } else if (runtime.imageModelProvider === ModelProviderName.VENICE) {
+            const response = await fetch(
+                "https://api.venice.ai/api/v1/image/generate",
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${apiKey}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        model: data.modelId || "fluently-xl",
+                        prompt: data.prompt,
+                        negative_prompt: data.negativePrompt,
+                        width: data.width || 1024,
+                        height: data.height || 1024,
+                        steps: data.numIterations || 20,
+                    }),
+                }
+            );
+
+            const result = await response.json();
+
+            if (!result.images || !Array.isArray(result.images)) {
+                throw new Error("Invalid response format from Venice AI");
+            }
+
+            const base64s = result.images.map((base64String) => {
+                if (!base64String) {
+                    throw new Error(
+                        "Empty base64 string in Venice AI response"
+                    );
+                }
+                return `data:image/png;base64,${base64String}`;
+            });
+
             return { success: true, data: base64s };
         } else {
             let targetSize = `${data.width}x${data.height}`;
@@ -1202,7 +1263,7 @@ interface ModelSettings {
  * @returns {Promise<any[]>} - A promise that resolves to an array of generated objects.
  * @throws {Error} - Throws an error if the provider is unsupported or if generation fails.
  */
-export const generateObjectV2 = async ({
+export const generateObject = async ({
     runtime,
     context,
     modelClass,
@@ -1213,7 +1274,7 @@ export const generateObjectV2 = async ({
     mode = "json",
 }: GenerationOptions): Promise<GenerateObjectResult<unknown>> => {
     if (!context) {
-        const errorMessage = "generateObjectV2 context is empty";
+        const errorMessage = "generateObject context is empty";
         console.error(errorMessage);
         throw new Error(errorMessage);
     }
@@ -1307,7 +1368,7 @@ export async function handleProvider(
         case ModelProviderName.GROQ:
             return await handleGroq(options);
         case ModelProviderName.LLAMALOCAL:
-            return await generateObjectDEPRECATED({
+            return await generateObjectDeprecated({
                 runtime,
                 context,
                 modelClass,
@@ -1568,7 +1629,10 @@ export async function generateTweetActions({
                 context,
                 modelClass,
             });
-            console.debug("Received response from generateText for tweet actions:", response);
+            console.debug(
+                "Received response from generateText for tweet actions:",
+                response
+            );
             const { actions } = parseActionResponseFromText(response.trim());
             if (actions) {
                 console.debug("Parsed tweet actions:", actions);

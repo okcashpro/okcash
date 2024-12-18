@@ -1,4 +1,4 @@
-[@okcashpro/okai v0.1.5-alpha.3](../index.md) / GoalStatus
+[@okcashpro/okai v0.1.5-alpha.5](../index.md) / GoalStatus
 
 # Enumeration: GoalStatus
 
@@ -12,7 +12,7 @@ Status enum for goals
 
 #### Defined in
 
-[packages/core/src/types.ts:100](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L100)
+[packages/core/src/types.ts:100](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L100)
 
 ***
 
@@ -22,7 +22,7 @@ Status enum for goals
 
 #### Defined in
 
-[packages/core/src/types.ts:101](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L101)
+[packages/core/src/types.ts:101](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L101)
 
 ***
 
@@ -32,4 +32,4 @@ Status enum for goals
 
 #### Defined in
 
-[packages/core/src/types.ts:102](https://github.com/monilpat/okai/blob/main/packages/core/src/types.ts#L102)
+[packages/core/src/types.ts:102](https://github.com/okcashpro/okai/blob/main/packages/core/src/types.ts#L102)
