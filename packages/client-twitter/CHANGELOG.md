@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.7-alpha.0](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.10...v0.1.7-alpha.0) (2024-12-18)
+
+
+### Bug Fixes
+
+* client twitter login and auth handler ([4111f3f](https://github.com/okcashpro/okai/commit/4111f3f557a109464b41b1533cbba2bd7106035e))
+
+
+### Features
+
+* improve Twitter client with action processing ([b50a5bf](https://github.com/okcashpro/okai/commit/b50a5bf7bd0035bb9b691167b6397e0dbdebfde3))
+* improve Twitter client with action processing + fix post interval, remove double debug logs, revert truncateToCompleteSentence function ([5fd9b40](https://github.com/okcashpro/okai/commit/5fd9b40638ac8a0bfde9df96612ee9f363bcc923))
+
+
+
+
+
 ## [0.1.5-alpha.10](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.9...v0.1.5-alpha.10) (2024-12-11)
 
 **Note:** Version bump only for package @okcashpro/client-twitter

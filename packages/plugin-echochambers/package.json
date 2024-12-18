@@ -1,15 +1,15 @@
 {
-  "name": "@okcashpro/plugin-echochambers",
-  "version": "0.1.6-alpha.4",
-  "main": "dist/index.js",
-  "type": "module",
-  "types": "dist/index.d.ts",
-  "dependencies": {
-    "@okcashpro/okai": "workspace:*",
-    "@okcashpro/plugin-node": "workspace:*"
-  },
-  "scripts": {
-    "build": "tsup --format esm --dts",
-    "dev": "tsup --format esm --dts --watch"
-  }
+    "name": "@okcashpro/plugin-echochambers",
+    "version": "0.1.7-alpha.0",
+    "main": "dist/index.js",
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "dependencies": {
+        "@okcashpro/okai": "workspace:*",
+        "@okcashpro/plugin-node": "workspace:*"
+    },
+    "scripts": {
+        "build": "tsup --format esm --dts",
+        "dev": "tsup --format esm --dts --watch"
+    }
 }

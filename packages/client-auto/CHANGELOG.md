@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.7-alpha.0](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.10...v0.1.7-alpha.0) (2024-12-18)
+
+
+### Bug Fixes
+
+* add auto to clients in types to use client-auto ([3834c54](https://github.com/okcashpro/okai/commit/3834c543b49380db10d6fb020b03c80cdb714dc2))
+
+
+
+
+
 ## [0.1.5-alpha.10](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.9...v0.1.5-alpha.10) (2024-12-11)
 
 **Note:** Version bump only for package @okcashpro/client-auto

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.7-alpha.0](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.10...v0.1.7-alpha.0) (2024-12-18)
+
+
+### Bug Fixes
+
+* discord client ci issues ([bffd2f7](https://github.com/okcashpro/okai/commit/bffd2f7f3cb8fd3bd9a3995b6a5ebcba0a507a90))
+* remove unused variable ([90be9ec](https://github.com/okcashpro/okai/commit/90be9ecc20d0570daf027edbaac1060fd453e7c2))
+
+
+
+
+
 ## [0.1.5-alpha.10](https://github.com/okcashpro/okai/compare/v0.1.5-alpha.9...v0.1.5-alpha.10) (2024-12-11)
 
 **Note:** Version bump only for package @okcashpro/client-discord

@@ -1,24 +1,24 @@
 {
-  "name": "@okcashpro/plugin-coinbase",
-  "version": "0.1.6-alpha.4",
-  "main": "dist/index.js",
-  "type": "module",
-  "types": "dist/index.d.ts",
-  "dependencies": {
-    "@okcashpro/okai": "workspace:*",
-    "coinbase-api": "1.0.5",
-    "coinbase-advanced-sdk": "file:../../packages/plugin-coinbase/advanced-sdk-ts",
-    "jsonwebtoken": "^9.0.2",
-    "@types/jsonwebtoken": "^9.0.7",
-    "node-fetch": "^2.6.1"
-  },
-  "devDependencies": {
-    "tsup": "8.3.5",
-    "@types/node": "^20.0.0"
-  },
-  "scripts": {
-    "build": "tsup --format esm --dts",
-    "dev": "tsup --format esm --dts --watch",
-    "lint": "eslint --fix  --cache ."
-  }
+    "name": "@okcashpro/plugin-coinbase",
+    "version": "0.1.7-alpha.0",
+    "main": "dist/index.js",
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "dependencies": {
+        "@okcashpro/okai": "workspace:*",
+        "@types/jsonwebtoken": "^9.0.7",
+        "coinbase-advanced-sdk": "file:../../packages/plugin-coinbase/advanced-sdk-ts",
+        "coinbase-api": "1.0.5",
+        "jsonwebtoken": "^9.0.2",
+        "node-fetch": "^2.6.1"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "tsup": "8.3.5"
+    },
+    "scripts": {
+        "build": "tsup --format esm --dts",
+        "dev": "tsup --format esm --dts --watch",
+        "lint": "eslint --fix  --cache ."
+    }
 }
